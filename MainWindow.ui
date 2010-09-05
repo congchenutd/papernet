@@ -27,6 +27,16 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <widget class="QWidget" name="tabPaperTag">
+       <attribute name="title">
+        <string>Paper-Tag</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="PaperTagPage" name="widget" native="true"/>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tabPaperList">
        <attribute name="title">
         <string>Paper List</string>
@@ -134,6 +144,12 @@
    <class>PaperNet</class>
    <extends>QWidget</extends>
    <header>PaperNet.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PaperTagPage</class>
+   <extends>QWidget</extends>
+   <header>PaperTagPage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

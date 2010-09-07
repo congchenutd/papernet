@@ -37,35 +37,11 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabPaperList">
-       <attribute name="title">
-        <string>Paper List</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="PaperList" name="widgetPaperList" native="true"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tabTagList">
-       <attribute name="title">
-        <string>Tag List</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="TagList" name="widgetTagList" native="true"/>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="tabPaperNet">
        <attribute name="title">
         <string>Paper Net</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="PaperNet" name="widgetPaperNet" native="true"/>
-        </item>
-       </layout>
+       <layout class="QHBoxLayout" name="horizontalLayout_4"/>
       </widget>
       <widget class="QWidget" name="tabTagNet">
        <attribute name="title">
@@ -128,24 +104,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>PaperList</class>
-   <extends>QWidget</extends>
-   <header>PaperList.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>TagList</class>
-   <extends>QWidget</extends>
-   <header>TagList.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PaperNet</class>
-   <extends>QWidget</extends>
-   <header>PaperNet.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>PaperTagPage</class>
    <extends>QWidget</extends>

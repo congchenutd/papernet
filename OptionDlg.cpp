@@ -19,6 +19,7 @@ OptionDlg::OptionDlg(QWidget *parent)
 		ui.sbBackupDays->setEnabled(false);
 	}
 	ui.sbBackupDays->setValue(backupDays);
+	ui.checkKeepPDF->setChecked(setting->getKeepPDF());
 }
 
 void OptionDlg::onFont()
@@ -34,6 +35,7 @@ void OptionDlg::accept()
 	// apply settings
 	qApp->setFont(setting->getFont());
 	setting->setBackupDays(ui.checkAutoBack->isChecked() ? ui.sbBackupDays->value() : 0);
+	setting->setKeepPDF(ui.checkKeepPDF->isChecked());
 
 	QDialog::accept();
 }
@@ -50,6 +52,7 @@ void UserSetting::loadDefaults()
 {
 	setFont(qApp->font());
 	setBackupDays(7);
+	setKeepPDF(false);
 }
 
 QFont UserSetting::getFont() const
@@ -62,11 +65,15 @@ QFont UserSetting::getFont() const
 int UserSetting::getBackupDays() const {
 	return value("BackupDays").toInt();
 }
-
+bool UserSetting::getKeepPDF() const {
+	return value("KeepPDF").toBool();
+}
 void UserSetting::setFont(const QFont& font) {
 	setValue("Font", font);
 }
-
 void UserSetting::setBackupDays(int days) {
 	setValue("BackupDays", days);
+}
+void UserSetting::setKeepPDF(bool keep) {
+	setValue("KeepPDF", keep);
 }

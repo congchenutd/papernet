@@ -1,7 +1,8 @@
 #include "MainWindow.h"
 #include "OptionDlg.h"
 #include "Common.h"
-#include <QtGui>
+#include <QMessageBox>
+#include <QDate>
 
 MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
@@ -25,11 +26,11 @@ void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About", 
 		tr("<h3><b>PaperNet</b></h3>"
-		"<p>Build 2010.9.6</p>"
+		"<p>Build 2010.9.8</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
 }
 
-void MainWindow::closeEvent(QCloseEvent* event)
+void MainWindow::closeEvent(QCloseEvent*)
 {
 	UserSetting* setting = MySetting<UserSetting>::getInstance();
 	if(setting->getBackupDays() > 0)

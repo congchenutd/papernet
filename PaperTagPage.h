@@ -2,14 +2,15 @@
 #define PAPERTAGPAGE_H
 
 #include <QWidget>
-#include <QtGui>
-#include <QtSql>
+#include <QSqlTableModel>
+#include <QSqlQueryModel>
 #include "ui_PaperTagPage.h"
 #include "Mode.h"
 
 class Mode;
 class PaperMode;
 class TagMode;
+class QDataWidgetMapper;
 
 class PaperTagPage : public QWidget
 {
@@ -20,8 +21,8 @@ public:
 	~PaperTagPage();
 
 private slots:
-	void onByPaper(bool checked);
-	void onByTag(bool checked);
+	void onByPaper();
+	void onByTag();
 	void onCurrentRowPaperChanged(const QModelIndex& idx);
 	void onAddPaper();
 	void onDelPaper();
@@ -34,7 +35,7 @@ private slots:
 	void onReadPDF();
 	void onSearch(const QString& target);
 	void onCancelSearch();
-	void onCurrentRowTagChanged(const QItemSelection& selection);
+	void onCurrentRowTagChanged();
 
 private:
 	void changeMode();

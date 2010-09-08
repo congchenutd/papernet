@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 #include "Common.h"
-#include <QtGui>
 
 QString dbName;
 

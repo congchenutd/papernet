@@ -1,8 +1,7 @@
 #ifndef Common_h__
 #define Common_h__
 
-#include <QtGui>
-#include <QtSql>
+#include <QString>
 
 bool openDB(const QString& name);
 void createTables();

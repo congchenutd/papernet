@@ -19,7 +19,7 @@
 			UseOfMfc="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot;,&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot;,&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot;,&quot;..\..\..\..\Qt\4.7.0\include&quot;,&quot;.&quot;,&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot;,&quot;debug&quot;,&quot;.&quot;,..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot;,&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot;,&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot;,&quot;..\..\..\..\Qt\4.6.3\include&quot;,&quot;.&quot;,&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot;,&quot;debug&quot;,&quot;.&quot;,..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008"
 				AdditionalOptions="-Zm200 -w34100 -w34189 -w34100 -w34189"
 				AssemblerListingLocation="debug\"
 				BufferSecurityCheck="false"
@@ -39,8 +39,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="c:\Qt\4.7.0\lib\qtmaind.lib c:\Qt\4.7.0\lib\QtSqld4.lib c:\Qt\4.7.0\lib\QtGuid4.lib c:\Qt\4.7.0\lib\QtCored4.lib"
-				AdditionalLibraryDirectories="c:\Qt\4.7.0\lib"
+				AdditionalDependencies="c:\Qt\4.6.3\lib\qtmaind.lib c:\Qt\4.6.3\lib\QtSqld4.lib c:\Qt\4.6.3\lib\QtGuid4.lib c:\Qt\4.6.3\lib\QtCored4.lib"
+				AdditionalLibraryDirectories="c:\Qt\4.6.3\lib"
 				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
 				GenerateDebugInformation="true"
 				IgnoreImportLibrary="true"
@@ -73,7 +73,7 @@
 			UseOfMfc="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot;,&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot;,&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot;,&quot;..\..\..\..\Qt\4.7.0\include&quot;,&quot;.&quot;,&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot;,&quot;release&quot;,&quot;.&quot;,..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot;,&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot;,&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot;,&quot;..\..\..\..\Qt\4.6.3\include&quot;,&quot;.&quot;,&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot;,&quot;release&quot;,&quot;.&quot;,..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008"
 				AdditionalOptions="-Zm200 -w34100 -w34189 -w34100 -w34189"
 				AssemblerListingLocation="release\"
 				BufferSecurityCheck="false"
@@ -93,8 +93,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="c:\Qt\4.7.0\lib\qtmain.lib c:\Qt\4.7.0\lib\QtSql4.lib c:\Qt\4.7.0\lib\QtGui4.lib c:\Qt\4.7.0\lib\QtCore4.lib"
-				AdditionalLibraryDirectories="c:\Qt\4.7.0\lib"
+				AdditionalDependencies="c:\Qt\4.6.3\lib\qtmain.lib c:\Qt\4.6.3\lib\QtSql4.lib c:\Qt\4.6.3\lib\QtGui4.lib c:\Qt\4.6.3\lib\QtCore4.lib"
+				AdditionalLibraryDirectories="c:\Qt\4.6.3\lib"
 				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
 				GenerateDebugInformation="false"
 				IgnoreImportLibrary="true"
@@ -151,7 +151,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="AddPaperTagDlg.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_AddPaperTagDlg.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddPaperTagDlg.h -o debug\moc_AddPaperTagDlg.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_AddPaperTagDlg.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddPaperTagDlg.h -o debug\moc_AddPaperTagDlg.cpp"
 						Description="MOC AddPaperTagDlg.h"
 						Outputs="debug\moc_AddPaperTagDlg.cpp"
 						Path="."/>
@@ -161,7 +161,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="AddPaperTagDlg.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_AddPaperTagDlg.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddPaperTagDlg.h -o release\moc_AddPaperTagDlg.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_AddPaperTagDlg.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddPaperTagDlg.h -o release\moc_AddPaperTagDlg.cpp"
 						Description="MOC AddPaperTagDlg.h"
 						Outputs="release\moc_AddPaperTagDlg.cpp"
 						Path="."/>
@@ -176,7 +176,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="MainWindow.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_MainWindow.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 MainWindow.h -o debug\moc_MainWindow.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_MainWindow.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 MainWindow.h -o debug\moc_MainWindow.cpp"
 						Description="MOC MainWindow.h"
 						Outputs="debug\moc_MainWindow.cpp"
 						Path="."/>
@@ -186,7 +186,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="MainWindow.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_MainWindow.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 MainWindow.h -o release\moc_MainWindow.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_MainWindow.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 MainWindow.h -o release\moc_MainWindow.cpp"
 						Description="MOC MainWindow.h"
 						Outputs="release\moc_MainWindow.cpp"
 						Path="."/>
@@ -199,7 +199,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="Mode.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_Mode.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Mode.h -o debug\moc_Mode.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_Mode.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Mode.h -o debug\moc_Mode.cpp"
 						Description="MOC Mode.h"
 						Outputs="debug\moc_Mode.cpp"
 						Path="."/>
@@ -209,7 +209,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="Mode.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_Mode.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Mode.h -o release\moc_Mode.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_Mode.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Mode.h -o release\moc_Mode.cpp"
 						Description="MOC Mode.h"
 						Outputs="release\moc_Mode.cpp"
 						Path="."/>
@@ -222,7 +222,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="OptionDlg.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_OptionDlg.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 OptionDlg.h -o debug\moc_OptionDlg.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_OptionDlg.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 OptionDlg.h -o debug\moc_OptionDlg.cpp"
 						Description="MOC OptionDlg.h"
 						Outputs="debug\moc_OptionDlg.cpp"
 						Path="."/>
@@ -232,7 +232,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="OptionDlg.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_OptionDlg.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 OptionDlg.h -o release\moc_OptionDlg.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_OptionDlg.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 OptionDlg.h -o release\moc_OptionDlg.cpp"
 						Description="MOC OptionDlg.h"
 						Outputs="release\moc_OptionDlg.cpp"
 						Path="."/>
@@ -245,7 +245,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="PaperTagPage.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_PaperTagPage.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperTagPage.h -o debug\moc_PaperTagPage.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile debug\moc_PaperTagPage.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperTagPage.h -o debug\moc_PaperTagPage.cpp"
 						Description="MOC PaperTagPage.h"
 						Outputs="debug\moc_PaperTagPage.cpp"
 						Path="."/>
@@ -255,7 +255,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="PaperTagPage.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_PaperTagPage.cpp &#x0d;&#x0a; C:\Qt\4.7.0\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.0\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.0\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.7.0\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.0\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperTagPage.h -o release\moc_PaperTagPage.cpp"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile release\moc_PaperTagPage.cpp &#x0d;&#x0a; C:\Qt\4.6.3\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.6.3\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.6.3\include&quot; -I&quot;.&quot; -I&quot;..\..\..\..\Qt\4.6.3\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.6.3\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperTagPage.h -o release\moc_PaperTagPage.cpp"
 						Description="MOC PaperTagPage.h"
 						Outputs="release\moc_PaperTagPage.cpp"
 						Path="."/>
@@ -359,7 +359,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="AddPaperTagDlg.ui;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_AddPaperTagDlg.h &#x0d;&#x0a; C:\Qt\4.7.0\bin\uic.exe AddPaperTagDlg.ui -o ui_AddPaperTagDlg.h"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_AddPaperTagDlg.h &#x0d;&#x0a; C:\Qt\4.6.3\bin\uic.exe AddPaperTagDlg.ui -o ui_AddPaperTagDlg.h"
 						Description="UIC AddPaperTagDlg.ui"
 						Outputs="ui_AddPaperTagDlg.h"
 						Path="."/>
@@ -369,7 +369,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="AddPaperTagDlg.ui;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_AddPaperTagDlg.h &#x0d;&#x0a; C:\Qt\4.7.0\bin\uic.exe AddPaperTagDlg.ui -o ui_AddPaperTagDlg.h"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_AddPaperTagDlg.h &#x0d;&#x0a; C:\Qt\4.6.3\bin\uic.exe AddPaperTagDlg.ui -o ui_AddPaperTagDlg.h"
 						Description="UIC AddPaperTagDlg.ui"
 						Outputs="ui_AddPaperTagDlg.h"
 						Path="."/>
@@ -382,7 +382,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="MainWindow.ui;PaperTagPage.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_MainWindow.h &#x0d;&#x0a; C:\Qt\4.7.0\bin\uic.exe MainWindow.ui -o ui_MainWindow.h"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_MainWindow.h &#x0d;&#x0a; C:\Qt\4.6.3\bin\uic.exe MainWindow.ui -o ui_MainWindow.h"
 						Description="UIC MainWindow.ui"
 						Outputs="ui_MainWindow.h"
 						Path="."/>
@@ -392,7 +392,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="MainWindow.ui;PaperTagPage.h;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_MainWindow.h &#x0d;&#x0a; C:\Qt\4.7.0\bin\uic.exe MainWindow.ui -o ui_MainWindow.h"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_MainWindow.h &#x0d;&#x0a; C:\Qt\4.6.3\bin\uic.exe MainWindow.ui -o ui_MainWindow.h"
 						Description="UIC MainWindow.ui"
 						Outputs="ui_MainWindow.h"
 						Path="."/>
@@ -405,7 +405,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="OptionDlg.ui;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_OptionDlg.h &#x0d;&#x0a; C:\Qt\4.7.0\bin\uic.exe OptionDlg.ui -o ui_OptionDlg.h"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_OptionDlg.h &#x0d;&#x0a; C:\Qt\4.6.3\bin\uic.exe OptionDlg.ui -o ui_OptionDlg.h"
 						Description="UIC OptionDlg.ui"
 						Outputs="ui_OptionDlg.h"
 						Path="."/>
@@ -415,7 +415,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="OptionDlg.ui;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_OptionDlg.h &#x0d;&#x0a; C:\Qt\4.7.0\bin\uic.exe OptionDlg.ui -o ui_OptionDlg.h"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_OptionDlg.h &#x0d;&#x0a; C:\Qt\4.6.3\bin\uic.exe OptionDlg.ui -o ui_OptionDlg.h"
 						Description="UIC OptionDlg.ui"
 						Outputs="ui_OptionDlg.h"
 						Path="."/>
@@ -428,7 +428,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="PaperTagPage.ui;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_PaperTagPage.h &#x0d;&#x0a; C:\Qt\4.7.0\bin\uic.exe PaperTagPage.ui -o ui_PaperTagPage.h"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_PaperTagPage.h &#x0d;&#x0a; C:\Qt\4.6.3\bin\uic.exe PaperTagPage.ui -o ui_PaperTagPage.h"
 						Description="UIC PaperTagPage.ui"
 						Outputs="ui_PaperTagPage.h"
 						Path="."/>
@@ -438,7 +438,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						AdditionalDependencies="PaperTagPage.ui;Rem"
-						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_PaperTagPage.h &#x0d;&#x0a; C:\Qt\4.7.0\bin\uic.exe PaperTagPage.ui -o ui_PaperTagPage.h"
+						CommandLine="Rem IncrediBuild_AllowRemote &#x0d;&#x0a; Rem IncrediBuild_OutputFile .\ui_PaperTagPage.h &#x0d;&#x0a; C:\Qt\4.6.3\bin\uic.exe PaperTagPage.ui -o ui_PaperTagPage.h"
 						Description="UIC PaperTagPage.ui"
 						Outputs="ui_PaperTagPage.h"
 						Path="."/>
@@ -474,21 +474,21 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						AdditionalDependencies="C:\Qt\4.7.0\bin\rcc.exe;Images\1282848050_exit.png;Images\Add.png;Images\AddFile.png;Images\AddTag.png;Images\Cancel.png;Images\DelTag.png;Images\DeleteFile.png;Images\Edit.png;Images\Import.png;Images\Options.png;Images\PDF.png;Images\Read.png;Images\Save.png;Images\Search.png;Images\Tag.png;Images\ToiletPaper.png;Images\Uncheck.png;MainWindow.qrc"
-						CommandLine="C:\Qt\4.7.0\bin\rcc.exe -name MainWindow MainWindow.qrc -o debug\qrc_MainWindow.cpp"
+						AdditionalDependencies="C:\Qt\4.6.3\bin\rcc.exe;Images\1282848050_exit.png;Images\Add.png;Images\AddFile.png;Images\AddTag.png;Images\Cancel.png;Images\DelTag.png;Images\DeleteFile.png;Images\Edit.png;Images\Import.png;Images\Options.png;Images\PDF.png;Images\Read.png;Images\Save.png;Images\Search.png;Images\Tag.png;Images\ToiletPaper.png;Images\Uncheck.png;MainWindow.qrc"
+						CommandLine="C:\Qt\4.6.3\bin\rcc.exe -name MainWindow MainWindow.qrc -o debug\qrc_MainWindow.cpp"
 						Description="RCC MainWindow.qrc"
 						Outputs="debug\qrc_MainWindow.cpp"
-						Path="c:\Qt\4.7.0\bin"/>
+						Path="c:\Qt\4.6.3\bin"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						AdditionalDependencies="C:\Qt\4.7.0\bin\rcc.exe;Images\1282848050_exit.png;Images\Add.png;Images\AddFile.png;Images\AddTag.png;Images\Cancel.png;Images\DelTag.png;Images\DeleteFile.png;Images\Edit.png;Images\Import.png;Images\Options.png;Images\PDF.png;Images\Read.png;Images\Save.png;Images\Search.png;Images\Tag.png;Images\ToiletPaper.png;Images\Uncheck.png;MainWindow.qrc"
-						CommandLine="C:\Qt\4.7.0\bin\rcc.exe -name MainWindow MainWindow.qrc -o release\qrc_MainWindow.cpp"
+						AdditionalDependencies="C:\Qt\4.6.3\bin\rcc.exe;Images\1282848050_exit.png;Images\Add.png;Images\AddFile.png;Images\AddTag.png;Images\Cancel.png;Images\DelTag.png;Images\DeleteFile.png;Images\Edit.png;Images\Import.png;Images\Options.png;Images\PDF.png;Images\Read.png;Images\Save.png;Images\Search.png;Images\Tag.png;Images\ToiletPaper.png;Images\Uncheck.png;MainWindow.qrc"
+						CommandLine="C:\Qt\4.6.3\bin\rcc.exe -name MainWindow MainWindow.qrc -o release\qrc_MainWindow.cpp"
 						Description="RCC MainWindow.qrc"
 						Outputs="release\qrc_MainWindow.cpp"
-						Path="c:\Qt\4.7.0\bin"/>
+						Path="c:\Qt\4.6.3\bin"/>
 				</FileConfiguration>
 			</File>
 			<File

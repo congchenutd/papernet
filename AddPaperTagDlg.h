@@ -2,7 +2,8 @@
 #define ADDPAPERTAGDLG_H
 
 #include <QDialog>
-#include <QtSql>
+#include <QSqlTableModel>
+#include <QList>
 #include "ui_AddPaperTagDlg.h"
 
 class AddPaperTagDlg : public QDialog

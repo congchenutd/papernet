@@ -2,7 +2,8 @@
 #include "Common.h"
 #include "AddPaperTagDlg.h"
 #include "OptionDlg.h"
-#include <QtGui>
+#include <QMessageBox>
+#include <QInputDialog>
 
 Mode::Mode(PaperTagPage* p)
 	: QWidget(p), page(p) {}

@@ -1,4 +1,10 @@
 #include "Common.h"
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QMessageBox>
+#include <QSqlError>
+#include <QVariant>
+#include <QFile>
 
 bool openDB(const QString& name)
 {

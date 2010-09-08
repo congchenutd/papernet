@@ -1,5 +1,5 @@
 #include "OptionDlg.h"
-#include <QtGui>
+#include <QFontDialog>
 
 OptionDlg::OptionDlg(QWidget *parent)
 	: QDialog(parent)

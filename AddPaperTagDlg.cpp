@@ -1,5 +1,6 @@
 #include "AddPaperTagDlg.h"
-#include <QtGui>
+#include <QItemSelectionModel>
+#include <QModelIndexList>
 
 AddPaperTagDlg::AddPaperTagDlg(QWidget *parent, const QString& tableName)
 	: QDialog(parent)

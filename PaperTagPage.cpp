@@ -1,5 +1,12 @@
 #include "PaperTagPage.h"
 #include "Common.h"
+#include <QDataWidgetMapper>
+#include <QStringList>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QMessageBox>
 
 PaperTagPage::PaperTagPage(QWidget *parent)
 	: QWidget(parent), mode(0), currentRowPaper(-1)
@@ -21,8 +28,8 @@ PaperTagPage::PaperTagPage(QWidget *parent)
 	ui.splitterHorizontal->setSizes(QList<int>() << width() * 0.9 << width() * 0.1);
 	ui.splitterPaper->setSizes(QList<int>() << height() * 0.6 << height() * 0.2 << height() * 0.2);
 
-	connect(ui.btByPaper, SIGNAL(clicked(bool)), this, SLOT(onByPaper(bool)));
-	connect(ui.btByTag,   SIGNAL(clicked(bool)), this, SLOT(onByTag(bool)));
+	connect(ui.btByPaper, SIGNAL(clicked()), this, SLOT(onByPaper()));
+	connect(ui.btByTag,   SIGNAL(clicked()), this, SLOT(onByTag()));
 	connect(ui.btAddPaper, SIGNAL(clicked()), this, SLOT(onAddPaper()));
 	connect(ui.btDelPaper, SIGNAL(clicked()), this, SLOT(onDelPaper()));
 	connect(ui.btSave,   SIGNAL(clicked()), this,   SLOT(onSubmitPaper()));
@@ -54,13 +61,13 @@ void PaperTagPage::changeMode()
 	mode->enter();
 }
 
-void PaperTagPage::onByPaper(bool checked)
+void PaperTagPage::onByPaper()
 {
 	ui.btByTag->setChecked(!ui.btByPaper->isChecked());
 	changeMode();
 }
 
-void PaperTagPage::onByTag(bool checked)
+void PaperTagPage::onByTag()
 {
 	ui.btByPaper->setChecked(!ui.btByTag->isChecked());
 	changeMode();
@@ -80,7 +87,7 @@ void PaperTagPage::resetViews()
 	connect(ui.tableViewPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
 			this, SLOT(onCurrentRowPaperChanged(QModelIndex)));
 	connect(ui.listViewTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-			this, SLOT(onCurrentRowTagChanged(QItemSelection)));
+			this, SLOT(onCurrentRowTagChanged()));
 }
 
 PaperTagPage::~PaperTagPage()
@@ -258,7 +265,7 @@ QString PaperTagPage::getPDFPath() const {
 	return modelPapers.data(modelPapers.index(currentRowPaper, PAPER_PDF)).toString();
 }
 
-void PaperTagPage::onCurrentRowTagChanged(const QItemSelection& selection)
+void PaperTagPage::onCurrentRowTagChanged()
 {
 	QModelIndexList idxList = ui.listViewTags->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();

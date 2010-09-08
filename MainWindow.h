@@ -12,7 +12,7 @@ public:
 	MainWindow(QWidget *parent = 0, Qt::WFlags flags = 0);
 
 protected:
-	virtual void closeEvent(QCloseEvent* event);
+	virtual void closeEvent(QCloseEvent*);
 
 private slots:
 	void onOptions();

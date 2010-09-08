@@ -81,7 +81,7 @@
   <action name="actionExit">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/1282848050_exit.png</normaloff>:/MainWindow/Images/1282848050_exit.png</iconset>
+     <normaloff>:/MainWindow/Images/Exit.png</normaloff>:/MainWindow/Images/Exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>

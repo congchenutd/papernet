@@ -10,8 +10,8 @@
     <file>Images/Save.png</file>
     <file>Images/Add.png</file>
     <file>Images/Uncheck.png</file>
-    <file>Images/1282848050_exit.png</file>
     <file>Images/Tag.png</file>
+    <file>Images/Exit.png</file>
     <file>Images/ToiletPaper.png</file>
   </qresource>
 </RCC>

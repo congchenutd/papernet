@@ -26,7 +26,7 @@ PaperTagPage::PaperTagPage(QWidget *parent)
 	ui.listViewRelatedTags  ->setModel(&modelRelatedTags);
 
 	ui.splitterHorizontal->setSizes(QList<int>() << width() * 0.9 << width() * 0.1);
-	ui.splitterPaper->setSizes(QList<int>() << height() * 0.6 << height() * 0.2 << height() * 0.2);
+	ui.splitterPapers->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
 
 	connect(ui.btByPaper, SIGNAL(clicked()), this, SLOT(onByPaper()));
 	connect(ui.btByTag,   SIGNAL(clicked()), this, SLOT(onByTag()));

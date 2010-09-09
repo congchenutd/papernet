@@ -6,17 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
-    <height>502</height>
+    <width>884</width>
+    <height>612</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PaperTagPage</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="horizontalSpacing">
-    <number>10</number>
-   </property>
+  <layout class="QGridLayout" name="gridLayout_2">
    <property name="margin">
     <number>0</number>
    </property>
@@ -274,7 +271,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QSplitter" name="splitterPaper">
+     <widget class="QSplitter" name="splitterPapers">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -308,7 +305,7 @@
        <property name="title">
         <string>Detail</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_2">
+       <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
          <widget class="QLabel" name="label">
           <property name="text">
@@ -339,25 +336,40 @@
         <item row="2" column="1">
          <widget class="QLineEdit" name="leJournal"/>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Abstract</string>
+        <item row="3" column="0" colspan="2">
+         <widget class="QSplitter" name="splitterRelatedPapers">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Abstract</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="teAbstract"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Related Papers</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListView" name="listViewRelatedPapers"/>
+            </item>
+           </layout>
+          </widget>
          </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QPlainTextEdit" name="teAbstract"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string>Related Papers</string>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QListView" name="listViewRelatedPapers"/>
         </item>
        </layout>
       </widget>

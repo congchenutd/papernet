@@ -211,8 +211,24 @@ QString PaperTagPage::makePDFFileName(const QString& title)
 	return result;
 }
 
-void PaperTagPage::onReadPDF() {
-	QDesktopServices::openUrl(QUrl(getPDFPath()));
+void PaperTagPage::onReadPDF()
+{
+	QString path = getPDFPath();
+	if(QFile::exists(path))
+	{
+		QDesktopServices::openUrl(QUrl(path));
+		return;
+	}
+
+	if(QMessageBox::warning(this, "Warning", "The PDF file path is not valid, do you want to find the file?", 
+		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+	{
+		onSetPDF();
+		return;
+	}
+
+	// delete pdf record
+	modelPapers.setData(modelPapers.index(currentRowPaper, PAPER_PDF), QString());
 }
 
 void PaperTagPage::onSearch(const QString& target)

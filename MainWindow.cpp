@@ -26,7 +26,7 @@ void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About", 
 		tr("<h3><b>PaperNet</b></h3>"
-		"<p>Build 2010.9.8</p>"
+		"<p>Build 2010.9.9</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
 }
 

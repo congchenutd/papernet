@@ -125,7 +125,7 @@ void PaperTagPage::onImport()
 	foreach(QString fileName, files)
 	{
 		if(fileName.endsWith(".enw", Qt::CaseInsensitive))
-			import(fileName, "%0", "%T", "%A", "%J", " ");
+			import(fileName, "%0", "%T", "%A", "%J", "NO_SUCH_HEAD");
 		else if(fileName.endsWith(".ris", Qt::CaseInsensitive))
 			import(fileName, "TY", "TI", "AU", "JA", " - ", "AB");
 		else if(fileName.endsWith(".txt", Qt::CaseInsensitive))

@@ -47,7 +47,7 @@ private:
 	void import(const QString& fileName, const QString& firstHead, 
 				const QString& titleHead, const QString& authorHead, 
 				const QString& journalHead, const QString& delimiter, 
-				const QString& abstractHead = QString());
+				const QString& abstractHead = "NO_SUCH_HEAD");
 	QString trimHead(const QString& line, const QString& delimiter) const;
 	int getCurrentPaperID() const;
 	int getCurrentTagID() const;

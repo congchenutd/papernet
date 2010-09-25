@@ -44,7 +44,7 @@ void OptionDlg::accept()
 // Setting
 UserSetting::UserSetting(const QString& fileName) : MySetting<UserSetting>(fileName)
 {
-	if(QFile(fileName).size() == 0)   // no setting
+	if(QFile(this->fileName).size() == 0)   // no setting
 		loadDefaults();
 }
 

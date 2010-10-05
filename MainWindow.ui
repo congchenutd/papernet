@@ -33,7 +33,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
-         <widget class="PaperTagPage" name="widget" native="true"/>
+         <widget class="PaperTagPage" name="widgetPaperTag" native="true"/>
         </item>
        </layout>
       </widget>
@@ -59,7 +59,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

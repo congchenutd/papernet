@@ -20,9 +20,8 @@ public:
 	PaperTagPage(QWidget *parent = 0);
 	~PaperTagPage();
 
-private slots:
-	void onByPaper();
-	void onByTag();
+public slots:
+	void onByWhat();
 	void onCurrentRowPaperChanged(const QModelIndex& idx);
 	void onAddPaper();
 	void onDelPaper();
@@ -63,6 +62,7 @@ private:
 	Ui::PaperTagPageClass ui;
 	enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_PDF};
 	enum {TAG_ID, TAG_NAME};
+	typedef enum {BY_TAG, BY_PAPER} ByWhat;
 
 	QSqlTableModel modelPapers;
 	QSqlTableModel modelTags;
@@ -72,6 +72,7 @@ private:
 	int currentRowPaper;
 	int currentRowTag;
 	QDataWidgetMapper* mapper;
+	ByWhat byWhat;
 };
 
 #endif // PAPERTAGPAGE_H

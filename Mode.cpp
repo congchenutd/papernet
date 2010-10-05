@@ -16,6 +16,7 @@ void Mode::enter()
 	page->modelPapers.select();
 	page->modelPapers.setEditStrategy(QSqlTableModel::OnFieldChange);
 	page->modelTags.setTable("Tags");
+	page->modelTags.setFilter("Name != \'\' order by Name");
 	page->modelTags.select();
 	page->resetViews();
 }
@@ -30,6 +31,8 @@ void PaperMode::enter()
 	page->ui.btImport->setEnabled(true);
 	page->ui.btAddPaper->setEnabled(true);
 	page->ui.btDelPaper->setEnabled(false);
+	page->ui.btByWhat->setText("By Paper");
+	page->ui.btByWhat->setIcon(QIcon(":/MainWindow/Images/ToiletPaper.png"));
 }
 
 void PaperMode::leave()
@@ -114,6 +117,8 @@ void TagMode::enter()
 	Mode::enter();
 
 	page->ui.btAddTag->setEnabled(true);
+	page->ui.btByWhat->setText("By Tag");
+	page->ui.btByWhat->setIcon(QIcon(":/MainWindow/Images/Tag.png"));
 }
 
 void TagMode::leave()

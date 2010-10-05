@@ -28,8 +28,7 @@ PaperTagPage::PaperTagPage(QWidget *parent)
 	ui.splitterHorizontal->setSizes(QList<int>() << width() * 0.9 << width() * 0.1);
 	ui.splitterPapers->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
 
-	connect(ui.btByPaper, SIGNAL(clicked()), this, SLOT(onByPaper()));
-	connect(ui.btByTag,   SIGNAL(clicked()), this, SLOT(onByTag()));
+	connect(ui.btByWhat, SIGNAL(clicked()), this, SLOT(onByWhat()));
 	connect(ui.btAddPaper, SIGNAL(clicked()), this, SLOT(onAddPaper()));
 	connect(ui.btDelPaper, SIGNAL(clicked()), this, SLOT(onDelPaper()));
 	connect(ui.btSave,   SIGNAL(clicked()), this,   SLOT(onSubmitPaper()));
@@ -43,33 +42,35 @@ PaperTagPage::PaperTagPage(QWidget *parent)
 	connect(ui.btEditTag, SIGNAL(clicked()), this, SLOT(onEditTag()));
 	connect(ui.btDelTag,  SIGNAL(clicked()), this, SLOT(onDelTag()));
 
-	ui.btByPaper->click();
+	mode = 0;
+//	onByWhat();
+//	changeMode();
+//	mode = new TagMode(this);
 }
 
 void PaperTagPage::changeMode()
 {
-	if(mode != 0)
+	if(mode == 0)
 	{
-		mode->leave();
-		delete mode;
+		mode = new PaperMode(this);
+		mode->enter();
+		return;
 	}
-	if(ui.btByPaper->isChecked())
+
+	mode->leave();
+	Mode* lastMode = mode;
+	if(lastMode->getName() == "TagMode")
 		mode = new PaperMode(this);
 	else
 		mode = new TagMode(this);
-
+	
+	delete lastMode;
 	mode->enter();
 }
 
-void PaperTagPage::onByPaper()
+void PaperTagPage::onByWhat()
 {
-	ui.btByTag->setChecked(!ui.btByPaper->isChecked());
-	changeMode();
-}
-
-void PaperTagPage::onByTag()
-{
-	ui.btByPaper->setChecked(!ui.btByTag->isChecked());
+//	ui.btByTag->setChecked(!ui.btByPaper->isChecked());
 	changeMode();
 }
 

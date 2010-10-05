@@ -22,6 +22,7 @@ public:
 	virtual void delTag() = 0;
 	virtual void updateTags() {}
 	virtual void updatePapers() {}
+	virtual QString getName() const = 0;
 
 protected:
 	PaperTagPage* page;
@@ -39,6 +40,7 @@ public:
 	virtual void addTag();
 	virtual void delTag();
 	virtual void updateTags();
+	virtual QString getName() const { return "PaperMode"; }
 };
 
 class TagMode : public Mode
@@ -54,6 +56,7 @@ public:
 	virtual void editTag();
 	virtual void delTag();
 	virtual void updatePapers();
+	virtual QString getName() const { return "TagMode"; }
 };
 
 #endif // MODE_H

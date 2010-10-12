@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="MainWindow">
     <file>Images/Down.png</file>
+    <file>Images/Filter.png</file>
     <file>Images/Up.png</file>
     <file>Images/Cancel.png</file>
     <file>Images/Options.png</file>

@@ -17,8 +17,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 
 	connect(ui.actionOptions, SIGNAL(triggered()), this, SLOT(onOptions()));
 	connect(ui.actionAbout,   SIGNAL(triggered()), this, SLOT(onAbout()));
-	connect(ui.actionPapers, SIGNAL(triggered()), this, SLOT(onPapers()));
-	connect(ui.actionTags,   SIGNAL(triggered()), this, SLOT(onTags()));
+	connect(ui.actionPapers,  SIGNAL(triggered()), this, SLOT(onPapers()));
+	connect(ui.actionTags,    SIGNAL(triggered()), this, SLOT(onTags()));
 
 	// load settings
 	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());

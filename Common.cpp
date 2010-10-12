@@ -27,6 +27,7 @@ void createTables()
 			   Authors varchar, \
 			   Journal varchar, \
 			   Abstract varchar, \
+			   Note     varchar, \
 			   PDF varchar)");
 
 	query.exec("create table Tags(ID int primary key, Name varchar unique)");

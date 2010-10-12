@@ -348,6 +348,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\MySetting\MySetting.h"
+				>
+			</File>
+			<File
 				RelativePath="OptionDlg.h"
 				>
 				<FileConfiguration

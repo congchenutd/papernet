@@ -19,6 +19,8 @@ private slots:
 	void onAbout();
 	void delOldBackup();
 	void backup(const QString& name = QString());
+	void onPapers();
+	void onTags();
 
 private:
 	Ui::MainWindowClass ui;

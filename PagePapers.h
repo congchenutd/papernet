@@ -5,6 +5,7 @@
 #include <QSqlTableModel>
 #include <QSqlQueryModel>
 #include "ui_PagePapers.h"
+#include "ModelPapers.h"
 
 class QDataWidgetMapper;
 
@@ -25,6 +26,7 @@ private slots:
 	void onCancelSearch();
 	void onSetPDF();
 	void onReadPDF();
+	void onSubmitPaper();
 
 	void onCurrentRowAllTagsChanged();
 	void onAddTag();
@@ -34,6 +36,7 @@ private slots:
 	void onDelTagFromPaper();
 
 	void onCurrentRowTagsChanged();
+	void onFilter(bool enabled);
 
 private:
 	int getPaperID(int row) const;
@@ -45,12 +48,14 @@ private:
 				const QStringList& journalHeads, const QString& delimiter, 
 				const QString& abstractHead = "NO_SUCH_HEAD");
 	QString trimHead(const QString& line, const QString& delimiter) const;
-	void submitPaper();
 	int idToRow(int id) const;
 	QString getCurrentPDFPath() const;
 	QString makePDFFileName(const QString& title) const;
 	void updateTags();
 	void updatePapers();
+	void updateRelatedPapers();
+	void showAllPapers();
+	void showAllTags();
 
 private:
 	enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_JOURNAL, 

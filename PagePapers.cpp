@@ -8,10 +8,14 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QInputDialog>
+#include <QSqlQuery>
 
 PagePapers::PagePapers(QWidget *parent)
 	: QWidget(parent)
 {
+	currentRowPapers = -1;
+	currentRowTags   = -1;
+
 	ui.setupUi(this);
 	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.9 << width()  * 0.1);
 	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
@@ -51,6 +55,8 @@ PagePapers::PagePapers(QWidget *parent)
 			mapper, SLOT(setCurrentModelIndex(QModelIndex)));
 	connect(ui.tableViewPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
 			this, SLOT(onCurrentRowPapersChanged(QModelIndex)));
+	connect(ui.tableViewPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
+			this, SLOT(onSubmitPaper()));
 	connect(ui.btAddPaper, SIGNAL(clicked()), this, SLOT(onAddPaper()));
 	connect(ui.btDelPaper, SIGNAL(clicked()), this, SLOT(onDelPaper()));
 	connect(ui.btImport,   SIGNAL(clicked()), this, SLOT(onImport()));
@@ -66,6 +72,7 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.btDelTag,  SIGNAL(clicked()), this, SLOT(onDelTag()));
 	connect(ui.btAddTagToPaper,   SIGNAL(clicked()), this, SLOT(onAddTagToPaper()));
 	connect(ui.btDelTagFromPaper, SIGNAL(clicked()), this, SLOT(onDelTagFromPaper()));
+	connect(ui.btFilter, SIGNAL(clicked(bool)), this, SLOT(onFilter(bool)));
 
 	connect(ui.listViewTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowTagsChanged()));
@@ -83,19 +90,20 @@ void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
 	if(valid)
 	{
 		updateTags();
-//		updateRelatedPapers();
+		updateRelatedPapers();
+//		modelPapers.setCentral(getCurrentPaperID());
 		ui.btReadPDF->setEnabled(!getCurrentPDFPath().isEmpty());
 	}
 }
 
 void PagePapers::onAddPaper()
 {
-	submitPaper();
+	onSubmitPaper();
 	int lastRow = modelPapers.rowCount();
 	modelPapers.insertRow(lastRow);
 	int nextID = getNextID("Papers", "ID");
 	modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), nextID);
-	submitPaper();
+	onSubmitPaper();
 	selectID(nextID);
 	ui.leTitle->setFocus();
 }
@@ -182,7 +190,7 @@ void PagePapers::import(const QString& fileName,    const QString& firstHead,
 			modelPapers.insertRow(currentRow);
 			int nextID = getNextID("Papers", "ID");
 			modelPapers.setData(modelPapers.index(currentRow, PAPER_ID), nextID);
-			submitPaper();
+			onSubmitPaper();
 			continue;
 		}
 
@@ -206,7 +214,7 @@ void PagePapers::import(const QString& fileName,    const QString& firstHead,
 					modelPapers.setData(modelPapers.index(currentRow, PAPER_JOURNAL), trimmed);
 		}
 	}
-	submitPaper();
+	onSubmitPaper();
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 }
 
@@ -214,12 +222,12 @@ QString PagePapers::trimHead(const QString& line, const QString& delimiter) cons
 	return line.mid(line.indexOf(delimiter) + delimiter.length());
 }
 
-void PagePapers::submitPaper() {
+void PagePapers::onSubmitPaper() {
 	modelPapers.submitAll();
 }
 
 PagePapers::~PagePapers() {
-	submitPaper();
+	onSubmitPaper();
 }
 
 void PagePapers::onSearch(const QString& target)
@@ -290,11 +298,7 @@ void PagePapers::onCurrentRowAllTagsChanged()
 	ui.btDelPaper->setEnabled(valid);
 	ui.btAddTagToPaper->setEnabled(valid);
 
-	if(valid)
-	{
-		updatePapers();
-//		updateRelatedTags();
-	}
+	updatePapers();
 }
 
 void PagePapers::onAddTag()
@@ -347,9 +351,10 @@ void PagePapers::onAddTagToPaper()
 void PagePapers::updateTags()
 {
 	int paper = getCurrentPaperID();
-	modelTags.setQuery(
-		tr("select Name from Tags where ID in \
-		   (select Tag from PaperTag where Paper = %1) order by Name").arg(paper));
+	QString thisPapersTags(tr("(select Tag from PaperTag where Paper  = %1)").arg(paper));
+	modelTags.setQuery(tr("select Name from Tags where ID in %1 order by Name").arg(thisPapersTags));
+	if(!ui.btFilter->isChecked())
+		modelAllTags.setFilter(tr("ID not in %1 order by Name").arg(thisPapersTags));
 }
 
 void PagePapers::onCurrentRowTagsChanged() {
@@ -371,6 +376,11 @@ void PagePapers::onDelTagFromPaper()
 
 void PagePapers::updatePapers()
 {
+	if(currentRowTags < 0 || !ui.btFilter->isChecked())
+	{
+		showAllPapers();
+		return;
+	}
 	QStringList tagClauses;
 	QModelIndexList idxList = ui.listViewTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
@@ -378,7 +388,38 @@ void PagePapers::updatePapers()
 	if(tagClauses.isEmpty())
 		tagClauses << tr("Tag = %1").arg(getTagID(currentRowTags));
 	modelPapers.setFilter(tr("ID in (select Paper from PaperTag where %1)")
-									.arg(tagClauses.join(" OR ")));
-	QString test = tr("ID in (select Paper from PaperTag where %1)")
-		.arg(tagClauses.join(" OR "));
+										.arg(tagClauses.join(" OR ")));
+}
+
+void PagePapers::onFilter(bool enabled)
+{
+	updatePapers();
+	if(enabled)
+		showAllTags();
+}
+
+void PagePapers::updateRelatedPapers()
+{
+	int paperID = getCurrentPaperID();
+	QSqlQuery query;
+	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
+								   where Tag in (select Tag from PaperTag where Paper = %1) \
+								   and Paper != %1 and ID = Paper \
+								   group by Paper order by Proximity desc").arg(paperID));
+	while(query.next())
+	{
+
+	}
+}
+
+void PagePapers::showAllPapers()
+{
+	modelPapers.setTable("Papers");
+	modelPapers.select();
+}
+
+void PagePapers::showAllTags()
+{
+	modelAllTags.setTable("Tags");
+	modelAllTags.select();
 }

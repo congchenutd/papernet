@@ -16,7 +16,8 @@ HEADERS += AddPaperTagDlg.h \
            Mode.h \
            OptionDlg.h \
            PagePapers.h \
-           PaperTagPage.h
+           PaperTagPage.h \
+	   ../MySetting/MySetting.h
 FORMS += AddPaperTagDlg.ui \
          MainWindow.ui \
          OptionDlg.ui \

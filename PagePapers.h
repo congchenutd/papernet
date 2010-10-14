@@ -5,7 +5,7 @@
 #include <QSqlTableModel>
 #include <QSqlQueryModel>
 #include "ui_PagePapers.h"
-#include "ModelPapers.h"
+//#include "ModelPapers.h"
 
 class QDataWidgetMapper;
 

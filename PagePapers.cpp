@@ -126,6 +126,9 @@ int PagePapers::getPaperID(int row) const {
 	return row > -1 ? modelPapers.data(modelPapers.index(row, PAPER_ID)).toInt() : -1;
 }
 int PagePapers::getTagID(int row) const {
+	return row > -1 ? modelTags.data(modelTags.index(row, TAG_ID)).toInt() : -1;
+}
+int PagePapers::getAllTagID(int row) const {
 	return row > -1 ? modelAllTags.data(modelAllTags.index(row, TAG_ID)).toInt() : -1;
 }
 int PagePapers::getCurrentPaperID() const {
@@ -233,17 +236,20 @@ PagePapers::~PagePapers() {
 void PagePapers::onSearch(const QString& target)
 {
 	if(target.isEmpty())
-		onCancelSearch();
+		resetPapers();
 	else
 		modelPapers.setFilter(
-		tr("Title like \'%%1%\' or Authors like \'%%1%\' or Journal like \'%%1%\'").arg(target));
+		tr("Title like \'%%1%\' or \
+		    Authors like \'%%1%\' or \
+			Journal like \'%%1%\' or \
+			Abstract like \'%%1%\' or \
+			Note like \'%%1%\' ").arg(target));
 }
 
-void PagePapers::onCancelSearch()
+void PagePapers::onCancelSearch() 
 {
 	ui.leSearch->clear();
-	modelPapers.setTable("Papers");
-	modelPapers.select();
+	resetPapers();
 }
 
 QString PagePapers::getCurrentPDFPath() const {
@@ -322,7 +328,7 @@ void PagePapers::onDelTag()
 	{
 		QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			::delTag(getTagID(idx.row()));
+			::delTag(getAllTagID(idx.row()));
 		modelAllTags.select();
 	}
 }
@@ -344,15 +350,17 @@ void PagePapers::onAddTagToPaper()
 	int paperID = getCurrentPaperID();
 	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
-		addPaperTag(paperID, getTagID(idx.row()));
+		addPaperTag(paperID, getAllTagID(idx.row()));
 	updateTags();
 }
 
 void PagePapers::updateTags()
 {
 	int paper = getCurrentPaperID();
-	QString thisPapersTags(tr("(select Tag from PaperTag where Paper  = %1)").arg(paper));
-	modelTags.setQuery(tr("select Name from Tags where ID in %1 order by Name").arg(thisPapersTags));
+	QString thisPapersTags(tr("(select Tag from PaperTag where Paper = %1)").arg(paper));
+	modelTags.setQuery(tr("select ID, Name from Tags where ID in %1 order by Name").arg(thisPapersTags));
+	ui.listViewTags->setModelColumn(TAG_NAME);
+
 	if(!ui.btFilter->isChecked())
 		modelAllTags.setFilter(tr("ID not in %1 order by Name").arg(thisPapersTags));
 }
@@ -378,15 +386,15 @@ void PagePapers::updatePapers()
 {
 	if(currentRowTags < 0 || !ui.btFilter->isChecked())
 	{
-		showAllPapers();
+		resetPapers();
 		return;
 	}
 	QStringList tagClauses;
-	QModelIndexList idxList = ui.listViewTags->selectionModel()->selectedRows();
+	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
-		tagClauses << tr("Tag = %1").arg(getTagID(idx.row()));
+		tagClauses << tr("Tag = %1").arg(getAllTagID(idx.row()));
 	if(tagClauses.isEmpty())
-		tagClauses << tr("Tag = %1").arg(getTagID(currentRowTags));
+		tagClauses << tr("Tag = %1").arg(getAllTagID(currentRowTags));
 	modelPapers.setFilter(tr("ID in (select Paper from PaperTag where %1)")
 										.arg(tagClauses.join(" OR ")));
 }
@@ -395,7 +403,7 @@ void PagePapers::onFilter(bool enabled)
 {
 	updatePapers();
 	if(enabled)
-		showAllTags();
+		resetAllTags();
 }
 
 void PagePapers::updateRelatedPapers()
@@ -412,13 +420,13 @@ void PagePapers::updateRelatedPapers()
 	}
 }
 
-void PagePapers::showAllPapers()
+void PagePapers::resetPapers()
 {
 	modelPapers.setTable("Papers");
 	modelPapers.select();
 }
 
-void PagePapers::showAllTags()
+void PagePapers::resetAllTags()
 {
 	modelAllTags.setTable("Tags");
 	modelAllTags.select();

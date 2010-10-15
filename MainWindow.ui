@@ -76,7 +76,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionPapers"/>
-   <addaction name="actionTags"/>
    <addaction name="separator"/>
    <addaction name="actionOptions"/>
    <addaction name="actionExit"/>
@@ -114,18 +113,6 @@
    </property>
    <property name="text">
     <string>Papers</string>
-   </property>
-  </action>
-  <action name="actionTags">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Tag.png</normaloff>:/MainWindow/Images/Tag.png</iconset>
-   </property>
-   <property name="text">
-    <string>Tags</string>
    </property>
   </action>
  </widget>

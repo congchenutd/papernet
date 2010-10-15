@@ -39,8 +39,9 @@ private slots:
 	void onFilter(bool enabled);
 
 private:
-	int getPaperID(int row) const;
-	int getTagID  (int row) const;
+	int getPaperID (int row) const;
+	int getTagID   (int row) const;
+	int getAllTagID(int row) const;
 	int getCurrentPaperID() const;
 	void selectID(int id);
 	void import(const QString& fileName, const QString& firstHead, 
@@ -54,8 +55,8 @@ private:
 	void updateTags();
 	void updatePapers();
 	void updateRelatedPapers();
-	void showAllPapers();
-	void showAllTags();
+	void resetPapers();
+	void resetAllTags();
 
 private:
 	enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_JOURNAL, 

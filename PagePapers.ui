@@ -104,7 +104,7 @@
        </property>
        <property name="icon">
         <iconset resource="MainWindow.qrc">
-         <normaloff>:/MainWindow/Images/PDF.png</normaloff>:/MainWindow/Images/PDF.png</iconset>
+         <normaloff>:/MainWindow/Images/Link.png</normaloff>:/MainWindow/Images/Link.png</iconset>
        </property>
        <property name="iconSize">
         <size>

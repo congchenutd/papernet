@@ -22,16 +22,19 @@ void createTables()
 {
 	QSqlQuery query;
 	query.exec("create table Papers( \
-			   ID int primary key, \
-			   Title varchar unique, \
-			   Authors varchar, \
-			   Journal varchar, \
+			   ID       int primary key, \
+			   Title    varchar unique, \
+			   Authors  varchar, \
+			   Journal  varchar, \
 			   Abstract varchar, \
 			   Note     varchar, \
-			   PDF varchar)");
+			   PDF      varchar)");
 
 	query.exec("create table Tags(ID int primary key, Name varchar unique)");
-	query.exec("create table PaperTag(Paper int, Tag varchar)");
+	query.exec("create table PaperTag( \
+				Paper int, \
+				Tag int, \
+				primary key (Paper, Tag))");
 }
 
 int getNextID(const QString& tableName, const QString& sectionName)

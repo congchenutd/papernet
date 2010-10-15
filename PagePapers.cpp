@@ -17,9 +17,10 @@ PagePapers::PagePapers(QWidget *parent)
 	currentRowTags   = -1;
 
 	ui.setupUi(this);
-	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.9 << width()  * 0.1);
+	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.9 << width()  * 0.5);
 	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
 	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
+	onShowSearch(false);
 
 	modelPapers.setTable("Papers");
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -60,6 +61,7 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.btAddPaper, SIGNAL(clicked()), this, SLOT(onAddPaper()));
 	connect(ui.btDelPaper, SIGNAL(clicked()), this, SLOT(onDelPaper()));
 	connect(ui.btImport,   SIGNAL(clicked()), this, SLOT(onImport()));
+	connect(ui.btSearch,   SIGNAL(toggled(bool)), this, SLOT(onShowSearch(bool)));
 	connect(ui.leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.btCancelSearch, SIGNAL(clicked()), this, SLOT(onCancelSearch()));
 	connect(ui.btSetPDF,  SIGNAL(clicked()), this, SLOT(onSetPDF()));
@@ -246,10 +248,8 @@ void PagePapers::onSearch(const QString& target)
 			Note like \'%%1%\' ").arg(target));
 }
 
-void PagePapers::onCancelSearch() 
-{
-	ui.leSearch->clear();
-	resetPapers();
+void PagePapers::onCancelSearch() {
+	ui.btSearch->setChecked(false);
 }
 
 QString PagePapers::getCurrentPDFPath() const {
@@ -430,4 +430,19 @@ void PagePapers::resetAllTags()
 {
 	modelAllTags.setTable("Tags");
 	modelAllTags.select();
+}
+
+void PagePapers::onShowSearch(bool enable)
+{
+	if(enable)
+	{
+		ui.frameSearch->show();
+		ui.leSearch->setFocus();
+	}
+	else
+	{
+		ui.leSearch->clear();
+		ui.frameSearch->hide();
+		resetPapers();
+	}
 }

@@ -22,6 +22,7 @@ private slots:
 	void onAddPaper();
 	void onDelPaper();
 	void onImport();
+	void onShowSearch(bool enable);
 	void onSearch(const QString& target);
 	void onCancelSearch();
 	void onSetPDF();

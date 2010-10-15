@@ -17,9 +17,6 @@ PagePapers::PagePapers(QWidget *parent)
 	currentRowTags   = -1;
 
 	ui.setupUi(this);
-	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.9 << width()  * 0.5);
-	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
-	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
 	onShowSearch(false);
 
 	modelPapers.setTable("Papers");
@@ -300,9 +297,7 @@ void PagePapers::onCurrentRowAllTagsChanged()
 	bool valid = !idxList.isEmpty();
 	currentRowTags = valid ? idxList.front().row() : -1;	
 	ui.btDelTag ->setEnabled(valid);
-	ui.btAddPaper->setEnabled(valid);
-	ui.btDelPaper->setEnabled(valid);
-	ui.btAddTagToPaper->setEnabled(valid);
+	ui.btAddTagToPaper->setEnabled(valid && !isFiltered());
 
 	updatePapers();
 }
@@ -361,7 +356,7 @@ void PagePapers::updateTags()
 	modelTags.setQuery(tr("select ID, Name from Tags where ID in %1 order by Name").arg(thisPapersTags));
 	ui.listViewTags->setModelColumn(TAG_NAME);
 
-	if(!ui.btFilter->isChecked())
+	if(!isFiltered())
 		modelAllTags.setFilter(tr("ID not in %1 order by Name").arg(thisPapersTags));
 }
 
@@ -384,7 +379,7 @@ void PagePapers::onDelTagFromPaper()
 
 void PagePapers::updatePapers()
 {
-	if(currentRowTags < 0 || !ui.btFilter->isChecked())
+	if(currentRowTags < 0 || !isFiltered())
 	{
 		resetPapers();
 		return;
@@ -445,4 +440,15 @@ void PagePapers::onShowSearch(bool enable)
 		ui.frameSearch->hide();
 		resetPapers();
 	}
+}
+
+bool PagePapers::isFiltered() const {
+	return ui.btFilter->isChecked();
+}
+
+void PagePapers::resizeEvent(QResizeEvent*)
+{
+	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.8 << width()  * 0.2);
+	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
+	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
 }

@@ -17,6 +17,9 @@ public:
 	PagePapers(QWidget *parent = 0);
 	~PagePapers();
 
+protected:
+	virtual void resizeEvent(QResizeEvent*);
+
 private slots:
 	void onCurrentRowPapersChanged(const QModelIndex& idx);
 	void onAddPaper();
@@ -58,6 +61,7 @@ private:
 	void updateRelatedPapers();
 	void resetPapers();
 	void resetAllTags();
+	bool isFiltered() const;
 
 private:
 	enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_JOURNAL, 

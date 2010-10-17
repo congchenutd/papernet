@@ -21,13 +21,10 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.setupUi(this);
 	onShowSearch(false);
 
-	modelPapers.setTable("Papers");
+	resetPapers();
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
-	modelPapers.select();
-	modelAllTags.setTable("Tags");
-	modelAllTags.setFilter("Name != \'\' order by Name");
+	resetAllTags();
 	modelAllTags.setEditStrategy(QSqlTableModel::OnManualSubmit);
-	modelAllTags.select();
 
 	mapper = new QDataWidgetMapper(this);
 	mapper->setModel(&modelPapers);
@@ -277,41 +274,8 @@ QString PagePapers::getCurrentPDFPath() const {
 				modelPapers.index(currentRowPapers, PAPER_PDF)).toString();
 }
 
-void PagePapers::onSetPDF()
-{
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-		".", tr("PDF file (*.pdf)"));
-	if(fileName.isEmpty())
-		return;
-	QDir(".").mkdir("PDF");
-	QString title = modelPapers.data(modelPapers.index(currentRowPapers, PAPER_TITLE)).toString();
-	QString path = ".\\PDF\\" + makePDFFileName(title) + ".pdf";
-	QFile::copy(fileName, path);
-	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_PDF), path);
-}
-
 QString PagePapers::makePDFFileName(const QString& title) const {
 	return QString(title).replace(QRegExp("[:|?|*]"), "-");
-}
-
-void PagePapers::onReadPDF()
-{
-	QString path = getCurrentPDFPath();
-	if(QFile::exists(path))
-	{
-		QDesktopServices::openUrl(QUrl(path));
-		return;
-	}
-
-	if(QMessageBox::warning(this, "Warning", "The PDF file path is not valid, do you want to find the file?", 
-		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-	{
-		onSetPDF();
-		return;
-	}
-
-	// delete pdf record
-//	modelPapers.setData(modelPapers.index(currentRowPaper, PAPER_PDF), QString());
 }
 
 void PagePapers::onCurrentRowAllTagsChanged()
@@ -447,6 +411,7 @@ void PagePapers::resetPapers()
 void PagePapers::resetAllTags()
 {
 	modelAllTags.setTable("Tags");
+//	modelAllTags.setFilter("Name != \'\' order by Name");
 	modelAllTags.select();
 }
 

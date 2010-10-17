@@ -29,8 +29,6 @@ private slots:
 	void onShowSearch(bool enable);
 	void onSearch(const QString& target);
 	void onCancelSearch();
-	void onSetPDF();
-	void onReadPDF();
 	void onSubmitPaper();
 
 	void onCurrentRowAllTagsChanged();

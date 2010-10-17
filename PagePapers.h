@@ -47,23 +47,23 @@ private:
 	int getAllTagID(int row) const;
 	int getCurrentPaperID() const;
 	void selectID(int id);
-	void import(const QString& fileName, const QString& firstHead, 
-				const QString& titleHead, const QString& authorHead, 
-				const QStringList& journalHeads, const QString& delimiter, 
-				const QString& abstractHead = "NO_SUCH_HEAD");
+	void import(const QString& fileName,       const QString& firstHead, 
+				const QStringList& titleHeads, const QString& authorHead, 
+				const QString& yearHead,       const QStringList& journalHeads, 
+				const QString& delimiter,      const QString& abstractHead = "NO_SUCH_HEAD");
 	QString trimHead(const QString& line, const QString& delimiter) const;
 	int idToRow(int id) const;
 	QString getCurrentPDFPath() const;
 	QString makePDFFileName(const QString& title) const;
 	void updateTags();
-	void updatePapers();
+	void filterPapers();
 	void updateRelatedPapers();
 	void resetPapers();
 	void resetAllTags();
 	bool isFiltered() const;
 
 private:
-	enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_JOURNAL, 
+	enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, 
 		  PAPER_ABSTRACT, PAPER_NOTE, PAPER_PDF};
 	enum {TAG_ID, TAG_NAME};
 
@@ -74,6 +74,7 @@ private:
 	QSqlQueryModel modelTags;
 	int currentRowPapers;
 	int currentRowTags;
+	int currentPaperID;
 	QDataWidgetMapper* mapper;
 };
 

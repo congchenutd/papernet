@@ -33,12 +33,12 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.tableViewPapers->setModel(&modelPapers);
 	ui.tableViewPapers->hideColumn(PAPER_ID);
+	ui.tableViewPapers->hideColumn(PAPER_JOURNAL);
 	ui.tableViewPapers->hideColumn(PAPER_ABSTRACT);
 	ui.tableViewPapers->hideColumn(PAPER_NOTE);
-	ui.tableViewPapers->hideColumn(PAPER_PDF);
-	ui.tableViewPapers->resizeColumnsToContents();
 	ui.tableViewPapers->horizontalHeader()->setStretchLastSection(true);
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	ui.tableViewPapers->resizeColumnsToContents();
 
 	ui.listViewAllTags->setModel(&modelAllTags);
 	ui.listViewAllTags->setModelColumn(TAG_NAME);
@@ -76,6 +76,7 @@ void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
 {
 	bool valid = idx.isValid();
 	currentRowPapers = valid ? idx.row() : -1;
+	currentPaperID = getCurrentPaperID();
 	ui.btDelPaper->setEnabled(valid);
 	ui.btAddTag->setEnabled(valid);
 	ui.btDelTag->setEnabled(false);
@@ -97,36 +98,38 @@ void PagePapers::onAddPaper()
 	{
 		int lastRow = modelPapers.rowCount();
 		modelPapers.insertRow(lastRow);
-		int nextID = getNextID("Papers", "ID");
-		modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), nextID);
+		currentPaperID = getNextID("Papers", "ID");
+		modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
 		modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    dlg.getTitle());
 		modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  dlg.getAuthors());
+		modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     dlg.getYear());
 		modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  dlg.getJournal());
 		modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), dlg.getAbstract());
 		modelPapers.setData(modelPapers.index(lastRow, PAPER_NOTE),     dlg.getNote());
 		onSubmitPaper();
-		selectID(nextID);
 	}
 }
 
 void PagePapers::onEditPaper()
 {
 	PaperDlg dlg(this);
-	dlg.setTitle   (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_TITLE))   .toString());
+	QString oldTitle = modelPapers.data(modelPapers.index(currentRowPapers, PAPER_TITLE)).toString();
+	dlg.setTitle(oldTitle);
 	dlg.setAuthors (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_AUTHORS)) .toString());
+	dlg.setYear    (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_YEAR))    .toInt());
 	dlg.setJournal (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_JOURNAL)) .toString());
 	dlg.setAbstract(modelPapers.data(modelPapers.index(currentRowPapers, PAPER_ABSTRACT)).toString());
 	dlg.setNote    (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_NOTE))    .toString());
 	if(dlg.exec() == QDialog::Accepted)
 	{
+		renameTitle(oldTitle, dlg.getTitle());
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_TITLE),    dlg.getTitle());
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_AUTHORS),  dlg.getAuthors());
+		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_YEAR),     dlg.getYear());
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_JOURNAL),  dlg.getJournal());
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_ABSTRACT), dlg.getAbstract());
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_NOTE),     dlg.getNote());
-		int currentID = getCurrentPaperID();
 		onSubmitPaper();
-		selectID(currentID);
 	}
 }
 
@@ -135,7 +138,9 @@ void PagePapers::onDelPaper()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		delPaper(getCurrentPaperID());
+		QModelIndexList idxList = ui.tableViewPapers->selectionModel()->selectedRows();
+		foreach(QModelIndex idx, idxList)
+			delPaper(getPaperID(idx.row()));
 		modelPapers.select();
 	}
 }
@@ -173,34 +178,70 @@ int PagePapers::idToRow(int id) const
 
 void PagePapers::onImport()
 {
+	QString lastPath = MySetting<UserSetting>::getInstance()->getLastImportPath();
 	QStringList files = QFileDialog::getOpenFileNames(
-		this, "Select one or more files to open", ".",
+		this, "Select one or more files to open", lastPath,
 		"Reference (*.enw *.ris *.txt);;All files (*.*)");
 	if(files.isEmpty())
 		return;
+
+	onSubmitPaper();
+	ui.tableViewPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
+
+	QString file = files.front();
+	MySetting<UserSetting>::getInstance()->setLastImportPath(QFileInfo(file).absolutePath());
+
 	foreach(QString fileName, files)
 	{
 		if(fileName.endsWith(".enw", Qt::CaseInsensitive))
-			import(fileName, "%0", "%T", "%A", QStringList() << "%J" << "%B", " ");
+			import(fileName, "%0", 
+					QStringList() << "%T", 
+					"%A",
+					"%D",
+					QStringList() << "%J" << "%B", 
+					" ");
 		else if(fileName.endsWith(".ris", Qt::CaseInsensitive))
-			import(fileName, "TY", "TI", "AU", QStringList() << "JA", " - ", "AB");
+			import(fileName, "TY", 
+					QStringList() << "TI" << "T1",
+					"AU", 
+					"PY",
+					QStringList() << "JA" << "T2" << "T3", 
+					" - ", 
+					"AB");
 		else if(fileName.endsWith(".txt", Qt::CaseInsensitive))
-			import(fileName, "Reference Type", "Title", "Author", QStringList() << "Journal", ": ", "Abstract");
+			import(fileName, "Reference Type", 
+					QStringList() << "Title", "Author",
+					"UNKOWN_YET!!!",
+					QStringList() << "Journal", 
+					": ",
+					"Abstract");
 		else
-			import(fileName, "TY", "TI", "AU", QStringList() << "JA", " - ", "AB");
+			import(fileName, "TY", 
+					QStringList() << "TI" << "T1",
+					"AU", 
+					"PY",
+					QStringList() << "JA" << "T2" << "T3", 
+					" - ", 
+					"AB");
 	}
+
+	onSubmitPaper();
+
+	int backup = currentPaperID;
+	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	currentPaperID = backup;
+	selectID(currentPaperID);
 }
 
-void PagePapers::import(const QString& fileName,    const QString& firstHead,
-						const QString& titleHead,   const QString& authorHead, 
-						const QStringList& journalHeads, const QString& delimiter,
-						const QString& abstractHead)
+void PagePapers::import(const QString& fileName,       const QString& firstHead,
+						const QStringList& titleHeads, const QString& authorHead, 
+						const QString& yearHead,       const QStringList& journalHeads, 
+						const QString& delimiter,      const QString& abstractHead)
 {
 	QFile file(fileName);
 	if(!file.open(QFile::ReadOnly))
 		return;
 
-	ui.tableViewPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
 	QTextStream is(&file);
 	while(!is.atEnd())
 	{
@@ -210,42 +251,65 @@ void PagePapers::import(const QString& fileName,    const QString& firstHead,
 		{
 			currentRow = modelPapers.rowCount();
 			modelPapers.insertRow(currentRow);
-			int nextID = getNextID("Papers", "ID");
-			modelPapers.setData(modelPapers.index(currentRow, PAPER_ID), nextID);
+			currentPaperID = getNextID("Papers", "ID");
+			modelPapers.setData(modelPapers.index(currentRow, PAPER_ID), currentPaperID);
 			onSubmitPaper();
 			continue;
 		}
 
 		QString trimmed = trimHead(line, delimiter);
-		if(line.startsWith(titleHead))
-			modelPapers.setData(modelPapers.index(currentRow, PAPER_TITLE), trimmed);
-		else if(line.startsWith(authorHead))
+		foreach(QString titleHead, titleHeads)
+			if(line.startsWith(titleHead))
+			{
+				modelPapers.setData(modelPapers.index(currentRow, PAPER_TITLE), trimmed);
+				continue;
+			}
+		
+		if(line.startsWith(authorHead))
 		{
 			QString authors = modelPapers.data(modelPapers.index(currentRow, PAPER_AUTHORS)).toString();
 			if(!authors.isEmpty())
 				authors.append(", ");
 			authors.append(trimmed);
 			modelPapers.setData(modelPapers.index(currentRow, PAPER_AUTHORS), authors);
+			continue;
 		}
-		else if(line.startsWith(abstractHead))
-			modelPapers.setData(modelPapers.index(currentRow, PAPER_ABSTRACT), trimmed);
-		else 
+
+		if(line.startsWith(yearHead))
 		{
-			foreach(QString journalHead, journalHeads)
-				if(line.startsWith(journalHead))
-					modelPapers.setData(modelPapers.index(currentRow, PAPER_JOURNAL), trimmed);
+			modelPapers.setData(modelPapers.index(currentRow, PAPER_YEAR), trimmed);
+			continue;
+		}
+
+		foreach(QString journalHead, journalHeads)
+			if(line.startsWith(journalHead))
+			{
+				QString journals = modelPapers.data(modelPapers.index(currentRow, PAPER_JOURNAL)).toString();
+				if(!journals.isEmpty())
+					journals.append(", ");
+				journals.append(trimmed);
+				modelPapers.setData(modelPapers.index(currentRow, PAPER_JOURNAL), journals);
+				continue;
+			}
+
+		if(line.startsWith(abstractHead))
+		{
+			modelPapers.setData(modelPapers.index(currentRow, PAPER_ABSTRACT), trimmed);
+			continue;
 		}
 	}
-	onSubmitPaper();
-	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 }
 
 QString PagePapers::trimHead(const QString& line, const QString& delimiter) const {
 	return line.mid(line.indexOf(delimiter) + delimiter.length());
 }
 
-void PagePapers::onSubmitPaper() {
+void PagePapers::onSubmitPaper() 
+{
+	int backup = currentPaperID;
 	modelPapers.submitAll();
+	currentPaperID = backup;
+	selectID(backup);
 }
 
 PagePapers::~PagePapers() {
@@ -258,11 +322,12 @@ void PagePapers::onSearch(const QString& target)
 		resetPapers();
 	else
 		modelPapers.setFilter(
-		tr("Title like \'%%1%\' or \
-		    Authors like \'%%1%\' or \
-			Journal like \'%%1%\' or \
+		tr("Title    like \'%%1%\' or \
+		    Authors  like \'%%1%\' or \
+			Year     like \'%%1%\' or \
+			Journal  like \'%%1%\' or \
 			Abstract like \'%%1%\' or \
-			Note like \'%%1%\' ").arg(target));
+			Note     like \'%%1%\' ").arg(target));
 }
 
 void PagePapers::onCancelSearch() {
@@ -286,7 +351,15 @@ void PagePapers::onCurrentRowAllTagsChanged()
 	ui.btDelTag ->setEnabled(valid);
 	ui.btAddTagToPaper->setEnabled(valid && !isFiltered());
 
-	updatePapers();
+	if(isFiltered())
+	{
+		if(currentRowTags < 0)
+		{
+			resetPapers();
+			return;
+		}
+		filterPapers();
+	}
 }
 
 void PagePapers::onAddTag()
@@ -310,7 +383,7 @@ void PagePapers::onDelTag()
 	{
 		QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			::delTag(getAllTagID(idx.row()));
+			delTag(getAllTagID(idx.row()));
 		modelAllTags.select();
 	}
 }
@@ -364,13 +437,8 @@ void PagePapers::onDelTagFromPaper()
 	}
 }
 
-void PagePapers::updatePapers()
+void PagePapers::filterPapers()
 {
-	if(currentRowTags < 0 || !isFiltered())
-	{
-		resetPapers();
-		return;
-	}
 	QStringList tagClauses;
 	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
@@ -383,9 +451,10 @@ void PagePapers::updatePapers()
 
 void PagePapers::onFilter(bool enabled)
 {
-	updatePapers();
 	if(enabled)
-		resetAllTags();
+		resetAllTags();   // show all tags
+	else
+		resetPapers();    // show all papers
 }
 
 void PagePapers::updateRelatedPapers()
@@ -406,12 +475,13 @@ void PagePapers::resetPapers()
 {
 	modelPapers.setTable("Papers");
 	modelPapers.select();
+	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 }
 
 void PagePapers::resetAllTags()
 {
 	modelAllTags.setTable("Tags");
-//	modelAllTags.setFilter("Name != \'\' order by Name");
+	modelAllTags.setFilter("Name != \'\' order by Name");
 	modelAllTags.select();
 }
 

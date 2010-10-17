@@ -23,15 +23,5 @@ int main(int argc, char *argv[])
 	MainWindow wnd;
 	wnd.showMaximized();
 
-	//QFileSystemModel model;
-	//model.setRootPath("F:\\Program\\PaperNet\\Attachments");
-	//model.setNameFilters(QStringList() << "a - *");
-	//model.setNameFilterDisables(false);
-	//QListView view;
-	//view.setViewMode(QListView::IconMode);
-	//view.setModel(&model);
-	//view.setRootIndex(model.index("F:\\Program\\PaperNet\\Attachments"));
-	//view.show();
-
 	return app.exec();
 }

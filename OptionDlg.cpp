@@ -53,6 +53,8 @@ void UserSetting::loadDefaults()
 	setFont(qApp->font());
 	setBackupDays(7);
 	setKeepAttachments(false);
+	setLastImportPath(".");
+	setLastAttachmentPath(".");
 }
 
 QFont UserSetting::getFont() const
@@ -66,8 +68,15 @@ int UserSetting::getBackupDays() const {
 	return value("BackupDays").toInt();
 }
 bool UserSetting::getKeepAttachments() const {
-	return value("KeepPDF").toBool();
+	return value("KeepAttachments").toBool();
 }
+QString UserSetting::getLastImportPath() const {
+	return value("LastImportPath").toString();
+}
+QString UserSetting::getLastAttachmentPath() const {
+	return value("LastAttachmentPath").toString();
+}
+
 void UserSetting::setFont(const QFont& font) {
 	setValue("Font", font);
 }
@@ -76,4 +85,10 @@ void UserSetting::setBackupDays(int days) {
 }
 void UserSetting::setKeepAttachments(bool keep) {
 	setValue("KeepPDF", keep);
+}
+void UserSetting::setLastImportPath(const QString& path) {
+	setValue("LastImportPath", path);
+}
+void UserSetting::setLastAttachmentPath(const QString& path) {
+	setValue("LastAttrachmentPath", path);
 }

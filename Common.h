@@ -18,11 +18,13 @@ void delAttachments(int paperID);
 bool addLink(int paperID, const QString& linkName, const QString& url);
 QString getPaperTitle(int paperID);
 QString makeValidTitle(const QString& title);
+QString getValidTitle(int paperID);
 QString getAttachmentDir(int paperID);
 void openAttachment(int paperID, const QString& attachmentName);
 QString getFilePath(int paperID, const QString& attachmentName);
-bool rename(int paperID, const QString& oldName, const QString& newName);
-bool exists(int paperID, const QString& name);
+bool renameAttachment(int paperID, const QString& oldName, const QString& newName);
+bool attachmentExists(int paperID, const QString& name);
+bool renameTitle(const QString& oldName, const QString& newName);
 
 const int MAX_PAPER_COUNT = 1000;
 

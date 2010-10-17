@@ -33,10 +33,10 @@ void createTables()
 					ID       int primary key, \
 					Title    varchar unique, \
 					Authors  varchar, \
+					Year     date,    \
 					Journal  varchar, \
 					Abstract varchar, \
-					Note     varchar, \
-					PDF      varchar)");
+					Note     varchar)");
 
 	query.exec("create table Tags(ID int primary key, Name varchar unique)");
 
@@ -119,7 +119,7 @@ void delPaperTagByTag(int tagID)
 
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName)
 {
-	if(exists(paperID, attachmentName))
+	if(attachmentExists(paperID, attachmentName))
 		return false;
 
 	QString dir = getAttachmentDir(paperID);
@@ -137,7 +137,7 @@ void delAttachment(int paperID, const QString& attachmentName)
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
 	{
 		QFile::remove(getFilePath(paperID, attachmentName));
-		QDir(attachmentDir).rmdir(getPaperTitle(paperID));    // will fail if not empty
+		QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
 	}
 
 	// delete entry
@@ -149,11 +149,11 @@ void delAttachment(int paperID, const QString& attachmentName)
 // delete the attachment dir
 void delAttachments(int paperID)
 {
-	QDir dir(attachmentDir + getPaperTitle(paperID));
+	QDir dir(getAttachmentDir(paperID));
 	QFileInfoList files = dir.entryInfoList(QDir::Files |QDir::NoDotAndDotDot);
 	foreach(QFileInfo info, files)
 		QFile::remove(info.filePath());
-	QDir(attachmentDir).rmdir(getPaperTitle(paperID));
+	QDir(attachmentDir).rmdir(getValidTitle(paperID));
 }
 
 QString getPaperTitle(int paperID)
@@ -168,13 +168,17 @@ QString makeValidTitle(const QString& title) {
 }
 
 QString getAttachmentDir(int paperID) {
-	return attachmentDir + makeValidTitle(getPaperTitle(paperID));
+	return attachmentDir + getValidTitle(paperID);
+}
+
+QString getValidTitle(int paperID) {
+	return makeValidTitle(getPaperTitle(paperID));
 }
 
 bool addLink(int paperID, const QString& link, const QString& u)
 {
 	QString linkName = link + ".url";
-	if(exists(paperID, linkName))
+	if(attachmentExists(paperID, linkName))
 		return false;
 
 	QString dir = getAttachmentDir(paperID);
@@ -200,30 +204,16 @@ bool addLink(int paperID, const QString& link, const QString& u)
 void openAttachment(int paperID, const QString& attachmentName)
 {
 	QString filePath = getFilePath(paperID, attachmentName);
-	if(filePath.endsWith(".url", Qt::CaseInsensitive))
-	{
-		QFile file(filePath);
-		if(file.open(QFile::ReadOnly))
-		{
-			QTextStream in(&file);
-			in.readLine();
-			QString url = in.readLine();
-			url = url.mid(8);
-			QDesktopServices::openUrl(QUrl(url));
-		}
-	}
-	else {
-		QDesktopServices::openUrl(QUrl(filePath));
-	}
+	QDesktopServices::openUrl(QUrl(filePath));
 }
 
 QString getFilePath(int paperID, const QString& attachmentName) {
-	return attachmentDir + getPaperTitle(paperID) + "\\" + attachmentName;
+	return attachmentDir + getValidTitle(paperID) + "\\" + attachmentName;
 }
 
-bool rename(int paperID, const QString& oldName, const QString& newName)
+bool renameAttachment(int paperID, const QString& oldName, const QString& newName)
 {
-	if(exists(paperID, newName))
+	if(attachmentExists(paperID, newName))
 		return false;
 
 	QSqlQuery query;
@@ -234,10 +224,15 @@ bool rename(int paperID, const QString& oldName, const QString& newName)
 	return true;
 }
 
-bool exists(int paperID, const QString& name)
+bool attachmentExists(int paperID, const QString& name)
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("select * from Attachments where \
 						   Paper = %1 and Attachment = \'%2\'").arg(paperID).arg(name));
 	return query.next();
+}
+
+bool renameTitle(const QString& oldName, const QString& newName) {
+	return QDir(".").rename(attachmentDir + makeValidTitle(oldName), 
+							attachmentDir + makeValidTitle(newName));
 }

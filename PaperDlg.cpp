@@ -7,19 +7,23 @@ PaperDlg::PaperDlg(QWidget *parent)
 }
 
 QString PaperDlg::getTitle() const {
-	return ui.leTitle->text();
+	return ui.leTitle->text().trimmed();
 }
 
 QString PaperDlg::getAuthors() const {
-	return ui.leAuthors->text();
+	return ui.leAuthors->text().trimmed();
+}
+
+int PaperDlg::getYear() const {
+	return ui.sbYear->value();
 }
 
 QString PaperDlg::getJournal() const {
-	return ui.leJournal->text();
+	return ui.leJournal->text().trimmed();
 }
 
 QString PaperDlg::getAbstract() const {
-	return ui.teAbstract->toPlainText();
+	return ui.teAbstract->toPlainText().trimmed();
 }
 
 QString PaperDlg::getNote() const {
@@ -46,3 +50,6 @@ void PaperDlg::setNote(const QString& note) {
 	ui.teNote->setPlainText(note);
 }
 
+void PaperDlg::setYear(int year){
+	ui.sbYear->setValue(year);
+}

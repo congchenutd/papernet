@@ -226,7 +226,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QPlainTextEdit" name="teAbstract"/>
+             <widget class="QPlainTextEdit" name="teAbstract">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -240,7 +244,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QPlainTextEdit" name="teNote"/>
+             <widget class="QPlainTextEdit" name="teNote">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>

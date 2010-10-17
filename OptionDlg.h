@@ -33,9 +33,13 @@ public:
 	QFont getFont() const;
 	int   getBackupDays() const;
 	bool  getKeepAttachments() const;
+	QString getLastImportPath() const;
+	QString getLastAttachmentPath() const;
 	void setFont(const QFont& font);
 	void setBackupDays(int days);
 	void setKeepAttachments(bool keep);
+	void setLastImportPath(const QString& path);
+	void setLastAttachmentPath(const QString& path);
 
 private:
 	void loadDefaults();

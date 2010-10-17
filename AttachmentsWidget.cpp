@@ -1,6 +1,7 @@
 #include "AttachmentsWidget.h"
 #include "Common.h"
 #include "LinkDlg.h"
+#include "OptionDlg.h"
 #include <QMenu>
 #include <QAction>
 #include <QContextMenuEvent>
@@ -58,14 +59,20 @@ void AttachmentsWidget::setPaper(int id)
 
 void AttachmentsWidget::onAddFile()
 {
+	QString lastPath = MySetting<UserSetting>::getInstance()->getLastAttachmentPath();
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-		".", tr("All files (*.*)"));
+													lastPath, tr("All files (*.*)"));
 	if(fileName.isEmpty())
 		return;
 	
+	MySetting<UserSetting>::getInstance()->setLastAttachmentPath(QFileInfo(fileName).absolutePath());
+
+	QString defaultName = QFileInfo(fileName).fileName();
+	if(fileName.endsWith(".pdf", Qt::CaseInsensitive))
+		defaultName = "Paper.pdf";
 	bool ok;
 	QString attachmentName = QInputDialog::getText(this, tr("Attachment name"), 
-		tr("Attachment name"), QLineEdit::Normal, QFileInfo(fileName).fileName(), &ok);
+		tr("Attachment name"), QLineEdit::Normal, defaultName, &ok);
 	if(!ok || attachmentName.isEmpty())
 		return;
 
@@ -125,6 +132,6 @@ void AttachmentsWidget::onRename()
 	if(!ok || newName.isEmpty())
 		return;
 
-	if(!rename(paperID, oldName, newName))
+	if(!renameAttachment(paperID, oldName, newName))
 		QMessageBox::critical(this, tr("Error"), tr("The name already exists!"));
 }

@@ -1,6 +1,7 @@
 #include "PagePapers.h"
 #include "Common.h"
 #include "OptionDlg.h"
+#include "PaperDlg.h"
 #include <QDataWidgetMapper>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -9,6 +10,7 @@
 #include <QUrl>
 #include <QInputDialog>
 #include <QSqlQuery>
+#include <QMenu>
 
 PagePapers::PagePapers(QWidget *parent)
 	: QWidget(parent)
@@ -29,9 +31,6 @@ PagePapers::PagePapers(QWidget *parent)
 
 	mapper = new QDataWidgetMapper(this);
 	mapper->setModel(&modelPapers);
-	mapper->addMapping(ui.leTitle,    PAPER_TITLE);
-	mapper->addMapping(ui.leAuthors,  PAPER_AUTHORS);
-	mapper->addMapping(ui.leJournal,  PAPER_JOURNAL);
 	mapper->addMapping(ui.teAbstract, PAPER_ABSTRACT);
 	mapper->addMapping(ui.teNote,     PAPER_NOTE);
 
@@ -56,13 +55,12 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tableViewPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
 			this, SLOT(onSubmitPaper()));
 	connect(ui.btAddPaper, SIGNAL(clicked()), this, SLOT(onAddPaper()));
+	connect(ui.tableViewPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
 	connect(ui.btDelPaper, SIGNAL(clicked()), this, SLOT(onDelPaper()));
 	connect(ui.btImport,   SIGNAL(clicked()), this, SLOT(onImport()));
 	connect(ui.btSearch,   SIGNAL(toggled(bool)), this, SLOT(onShowSearch(bool)));
 	connect(ui.leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.btCancelSearch, SIGNAL(clicked()), this, SLOT(onCancelSearch()));
-	connect(ui.btSetPDF,  SIGNAL(clicked()), this, SLOT(onSetPDF()));
-	connect(ui.btReadPDF, SIGNAL(clicked()), this, SLOT(onReadPDF()));
 
 	connect(ui.listViewAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowAllTagsChanged()));
@@ -84,27 +82,55 @@ void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
 	ui.btDelPaper->setEnabled(valid);
 	ui.btAddTag->setEnabled(valid);
 	ui.btDelTag->setEnabled(false);
-	ui.btSetPDF->setEnabled(valid);
+	ui.widgetAttachments->setPaper(getCurrentPaperID());
 
 	if(valid)
 	{
 		updateTags();
 		updateRelatedPapers();
 //		modelPapers.setCentral(getCurrentPaperID());
-		ui.btReadPDF->setEnabled(!getCurrentPDFPath().isEmpty());
 	}
 }
 
 void PagePapers::onAddPaper()
 {
 	onSubmitPaper();
-	int lastRow = modelPapers.rowCount();
-	modelPapers.insertRow(lastRow);
-	int nextID = getNextID("Papers", "ID");
-	modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), nextID);
-	onSubmitPaper();
-	selectID(nextID);
-	ui.leTitle->setFocus();
+	PaperDlg dlg(this);
+	if(dlg.exec() == QDialog::Accepted)
+	{
+		int lastRow = modelPapers.rowCount();
+		modelPapers.insertRow(lastRow);
+		int nextID = getNextID("Papers", "ID");
+		modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), nextID);
+		modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    dlg.getTitle());
+		modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  dlg.getAuthors());
+		modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  dlg.getJournal());
+		modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), dlg.getAbstract());
+		modelPapers.setData(modelPapers.index(lastRow, PAPER_NOTE),     dlg.getNote());
+		onSubmitPaper();
+		selectID(nextID);
+	}
+}
+
+void PagePapers::onEditPaper()
+{
+	PaperDlg dlg(this);
+	dlg.setTitle   (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_TITLE))   .toString());
+	dlg.setAuthors (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_AUTHORS)) .toString());
+	dlg.setJournal (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_JOURNAL)) .toString());
+	dlg.setAbstract(modelPapers.data(modelPapers.index(currentRowPapers, PAPER_ABSTRACT)).toString());
+	dlg.setNote    (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_NOTE))    .toString());
+	if(dlg.exec() == QDialog::Accepted)
+	{
+		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_TITLE),    dlg.getTitle());
+		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_AUTHORS),  dlg.getAuthors());
+		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_JOURNAL),  dlg.getJournal());
+		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_ABSTRACT), dlg.getAbstract());
+		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_NOTE),     dlg.getNote());
+		int currentID = getCurrentPaperID();
+		onSubmitPaper();
+		selectID(currentID);
+	}
 }
 
 void PagePapers::onDelPaper()
@@ -112,11 +138,7 @@ void PagePapers::onDelPaper()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		bool keepPDF = MySetting<UserSetting>::getInstance()->getKeepPDF();
-		int paperID = getCurrentPaperID();
-		if(!keepPDF)
-			delPDF(paperID);
-		::delPaper(paperID);
+		delPaper(getCurrentPaperID());
 		modelPapers.select();
 	}
 }
@@ -141,6 +163,7 @@ void PagePapers::selectID(int id)
 	{
 		currentRowPapers = row;
 		ui.tableViewPapers->selectRow(currentRowPapers);
+		ui.tableViewPapers->setFocus();
 	}
 }
 
@@ -448,7 +471,8 @@ bool PagePapers::isFiltered() const {
 
 void PagePapers::resizeEvent(QResizeEvent*)
 {
-	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.8 << width()  * 0.2);
-	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
+	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
+	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.6 << height() * 0.4);
 	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
+	ui.splitterDetails->setSizes(QList<int>() << width() * 0.45 << width() * 0.45 << width() * 0.1);
 }

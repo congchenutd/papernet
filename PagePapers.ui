@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>558</width>
-    <height>452</height>
+    <width>800</width>
+    <height>551</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -82,58 +82,6 @@
        <property name="icon">
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btSetPDF">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>50</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Set PDF</string>
-       </property>
-       <property name="icon">
-        <iconset resource="MainWindow.qrc">
-         <normaloff>:/MainWindow/Images/Link.png</normaloff>:/MainWindow/Images/Link.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btReadPDF">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>50</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Read PDF</string>
-       </property>
-       <property name="icon">
-        <iconset resource="MainWindow.qrc">
-         <normaloff>:/MainWindow/Images/Read.png</normaloff>:/MainWindow/Images/Read.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -258,43 +206,13 @@
         <bool>true</bool>
        </attribute>
       </widget>
-      <widget class="QGroupBox" name="groupBoxDetail">
+      <widget class="QGroupBox" name="groupBoxDetails">
        <property name="title">
-        <string>Detail</string>
+        <string>Details</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Title</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="leTitle"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Authors</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="leAuthors"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Journal</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="leJournal"/>
-        </item>
-        <item row="3" column="0" colspan="2">
-         <widget class="QSplitter" name="splitterDetail">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QSplitter" name="splitterDetails">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -323,6 +241,27 @@
             </item>
             <item>
              <widget class="QPlainTextEdit" name="teNote"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="layoutWidget_2">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Attachments</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="AttachmentsWidget" name="widgetAttachments" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -427,6 +366,14 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>AttachmentsWidget</class>
+   <extends>QWidget</extends>
+   <header>AttachmentsWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="MainWindow.qrc"/>
  </resources>

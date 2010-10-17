@@ -10,7 +10,8 @@ class LinkDlg : public QDialog
 
 public:
 	LinkDlg(QWidget *parent = 0);
-	~LinkDlg();
+	QString getName() const;
+	QString getUrl()  const;
 
 private:
 	Ui::LinkDlgClass ui;

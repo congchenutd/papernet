@@ -1,40 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LinkDlgClass</class>
- <widget class="QDialog" name="LinkDlgClass">
+ <class>PaperDlgClass</class>
+ <widget class="QDialog" name="PaperDlgClass">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>711</width>
-    <height>108</height>
+    <width>736</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Link</string>
+   <string>PaperDlg</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Link name</string>
+      <string>Title</string>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLineEdit" name="leName"/>
+    <widget class="QLineEdit" name="leTitle"/>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="Authors">
      <property name="text">
-      <string>Url</string>
+      <string>Authors</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="leUrl"/>
+    <widget class="QLineEdit" name="leAuthors"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Journal</string>
+     </property>
+    </widget>
    </item>
    <item row="2" column="1">
+    <widget class="QLineEdit" name="leJournal"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Abstract</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPlainTextEdit" name="teAbstract"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Note</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QPlainTextEdit" name="teNote"/>
+   </item>
+   <item row="5" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
@@ -49,32 +79,32 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>LinkDlgClass</receiver>
+   <receiver>PaperDlgClass</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>557</x>
-     <y>84</y>
+     <x>388</x>
+     <y>454</y>
     </hint>
     <hint type="destinationlabel">
-     <x>455</x>
-     <y>-22</y>
+     <x>310</x>
+     <y>-21</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>LinkDlgClass</receiver>
+   <receiver>PaperDlgClass</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>628</x>
-     <y>73</y>
+     <x>436</x>
+     <y>446</y>
     </hint>
     <hint type="destinationlabel">
-     <x>581</x>
-     <y>-27</y>
+     <x>486</x>
+     <y>-26</y>
     </hint>
    </hints>
   </connection>

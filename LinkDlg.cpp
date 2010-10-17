@@ -6,7 +6,11 @@ LinkDlg::LinkDlg(QWidget *parent)
 	ui.setupUi(this);
 }
 
-LinkDlg::~LinkDlg()
-{
-
+QString LinkDlg::getName() const {
+	return ui.leName->text();
 }
+
+QString LinkDlg::getUrl() const {
+	return ui.leUrl->text();
+}
+

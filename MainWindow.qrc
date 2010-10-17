@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="MainWindow">
-    <file>Images/Link.png</file>
+    <file>Images/Rename.png</file>
     <file>Images/Down.png</file>
     <file>Images/Filter.png</file>
     <file>Images/Up.png</file>
@@ -8,6 +8,8 @@
     <file>Images/Options.png</file>
     <file>Images/Search.png</file>
     <file>Images/Read.png</file>
+    <file>Images/AddFile.png</file>
+    <file>Images/AddLink.png</file>
     <file>Images/PDF.png</file>
     <file>Images/Import.png</file>
     <file>Images/Edit.png</file>

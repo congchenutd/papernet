@@ -32,10 +32,10 @@ public:
 
 	QFont getFont() const;
 	int   getBackupDays() const;
-	bool  getKeepPDF() const;
+	bool  getKeepAttachments() const;
 	void setFont(const QFont& font);
 	void setBackupDays(int days);
-	void setKeepPDF(bool keep);
+	void setKeepAttachments(bool keep);
 
 private:
 	void loadDefaults();

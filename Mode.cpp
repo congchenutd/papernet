@@ -61,16 +61,16 @@ void PaperMode::delPaper()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", QMessageBox::Yes | QMessageBox::No) 
 		== QMessageBox::Yes)
 	{
-		bool keepPDF = MySetting<UserSetting>::getInstance()->getKeepPDF();
-		QModelIndexList idxList = page->ui.tableViewPapers->selectionModel()->selectedRows();
-		foreach(QModelIndex idx, idxList)
-		{
-			int paperID = page->getPaperID(idx.row());
-			if(!keepPDF)
-				delPDF(paperID);
-			::delPaper(paperID);
-		}
-		page->modelPapers.select();
+		//bool keepPDF = MySetting<UserSetting>::getInstance()->getKeepPDF();
+		//QModelIndexList idxList = page->ui.tableViewPapers->selectionModel()->selectedRows();
+		//foreach(QModelIndex idx, idxList)
+		//{
+		//	int paperID = page->getPaperID(idx.row());
+		//	if(!keepPDF)
+		//		delPDF(paperID);
+		//	::delPaper(paperID);
+		//}
+		//page->modelPapers.select();
 	}
 }
 

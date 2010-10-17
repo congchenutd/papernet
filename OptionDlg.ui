@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
+    <width>306</width>
     <height>143</height>
    </rect>
   </property>
@@ -22,9 +22,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkKeepPDF">
+    <widget class="QCheckBox" name="checkKeepAttachments">
      <property name="text">
-      <string>Keep PDF when the paper is deleted</string>
+      <string>Keep attached files when the entry is deleted</string>
      </property>
     </widget>
    </item>

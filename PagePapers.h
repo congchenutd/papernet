@@ -23,6 +23,7 @@ protected:
 private slots:
 	void onCurrentRowPapersChanged(const QModelIndex& idx);
 	void onAddPaper();
+	void onEditPaper();
 	void onDelPaper();
 	void onImport();
 	void onShowSearch(bool enable);

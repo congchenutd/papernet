@@ -459,12 +459,11 @@ void PagePapers::onFilter(bool enabled)
 
 void PagePapers::updateRelatedPapers()
 {
-	int paperID = getCurrentPaperID();
 	QSqlQuery query;
 	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
 								   where Tag in (select Tag from PaperTag where Paper = %1) \
 								   and Paper != %1 and ID = Paper \
-								   group by Paper order by Proximity desc").arg(paperID));
+								   group by Paper order by Proximity desc").arg(currentPaperID));
 	while(query.next())
 	{
 

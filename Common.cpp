@@ -29,6 +29,7 @@ bool openDB(const QString& name)
 void createTables()
 {
 	QSqlQuery query;
+	query.exec("PRAGMA foreign_keys = ON");
 	query.exec("create table Papers( \
 					ID       int primary key, \
 					Title    varchar unique, \
@@ -36,19 +37,25 @@ void createTables()
 					Year     date,    \
 					Journal  varchar, \
 					Abstract varchar, \
-					Note     varchar)");
+					Note     varchar \
+				)");
 
-	query.exec("create table Tags(ID int primary key, Name varchar unique)");
+	query.exec("create table Tags( \
+					ID int primary key, \
+					Name varchar unique \
+				)");
 
 	query.exec("create table PaperTag( \
-					Paper int, \
-					Tag int, \
-					primary key (Paper, Tag))");
+					Paper int references Papers(ID) on delete cascade on update cascade, \
+					Tag   int references Tags  (ID) on delete cascade on update cascade, \
+					primary key (Paper, Tag) \
+				)");
 
 	query.exec("create table Attachments( \
 					Paper      int, \
 					Attachment varchar, \
-					primary key (Paper, Attachment))");
+					primary key (Paper, Attachment) \
+				)");
 }
 
 int getNextID(const QString& tableName, const QString& sectionName)

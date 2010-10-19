@@ -1,9 +1,11 @@
 #include "PaperDlg.h"
+#include <QDate>
 
 PaperDlg::PaperDlg(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+	ui.sbYear->setValue(QDate::currentDate().year());
 }
 
 QString PaperDlg::getTitle() const {

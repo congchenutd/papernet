@@ -65,13 +65,11 @@ void delPaper(int paperID)
 {
 	// delete attached files
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
-		delAttachments(paperID);
+		if(!delAttachments(paperID))
+			QMessageBox::critical(0, QObject::tr("Error"), QObject::tr("Attachments cannot be deleted!"));
 
-	// delete paper-tag entries
+	// delete db entry	
 	QSqlQuery query;
-	//delPaperTagByPaper(paperID);
-
-	// delete db entry
 	query.exec(QObject::tr("delete from Papers where ID = %1").arg(paperID));
 }
 
@@ -79,8 +77,6 @@ void delTag(int tagID)
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Tags where ID = %1").arg(tagID));
-	
-	//delPaperTagByTag(tagID);  // paper-tag entries
 }
 
 void addPaperTag(int paperID, int tagID)
@@ -108,23 +104,25 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 	return QFile::copy(fileName, dir + "\\" + attachmentName);
 }
 
-void delAttachment(int paperID, const QString& attachmentName)
+bool delAttachment(int paperID, const QString& attachmentName)
 {
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
 	{
 		QFile::remove(getFilePath(paperID, attachmentName));
-		QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
+		return QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
 	}
+	return true;
 }
 
 // delete the attachment dir
-void delAttachments(int paperID)
+bool delAttachments(int paperID)
 {
 	QDir dir(getAttachmentDir(paperID));
 	QFileInfoList files = dir.entryInfoList(QDir::Files |QDir::NoDotAndDotDot);
 	foreach(QFileInfo info, files)
-		QFile::remove(info.filePath());
-	QDir(attachmentDir).rmdir(getValidTitle(paperID));
+		if(!QFile::remove(info.filePath()))
+			return false;
+	return QDir(attachmentDir).rmdir(getValidTitle(paperID));
 }
 
 QString getPaperTitle(int paperID)

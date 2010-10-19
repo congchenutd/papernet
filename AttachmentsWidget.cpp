@@ -25,8 +25,6 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	ui.listView->setModel(&model);
 	ui.listView->setRootIndex(model.index(emptyDir));
 
-	connect(ui.listView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-			this, SLOT(onCurrentChanged(QModelIndex)));
 	connect(ui.actionAddFile, SIGNAL(triggered()), this, SLOT(onAddFile()));
 	connect(ui.actionAddLink, SIGNAL(triggered()), this, SLOT(onAddLink()));
 	connect(ui.actionRename,  SIGNAL(triggered()), this, SLOT(onRename()));
@@ -36,7 +34,8 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 
 void AttachmentsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
-	bool valid = ui.listView->indexAt(event->pos()).isValid();
+	currentIndex = ui.listView->indexAt(event->pos());
+	bool valid = currentIndex.isValid();
 	ui.actionAddFile->setEnabled(paperID > -1);
 	ui.actionAddLink->setEnabled(paperID > -1);
 	ui.actionRename->setEnabled(valid);
@@ -97,7 +96,8 @@ void AttachmentsWidget::onDel()
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QString attachmentName = model.data(currentIndex).toString();
-		delAttachment(paperID, attachmentName);
+		if(!delAttachment(paperID, attachmentName))
+			QMessageBox::critical(this, tr("Error"), tr("Attachment cannot be deleted!"));
 		update();
 	}
 }

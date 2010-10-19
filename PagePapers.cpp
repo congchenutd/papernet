@@ -139,7 +139,7 @@ void PagePapers::onDelPaper()
 	{
 		QModelIndexList idxList = ui.tableViewPapers->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delPaper(getPaperID(idx.row()));
+			delPaper(currentPaperID);
 		modelPapers.select();
 	}
 }
@@ -152,9 +152,6 @@ int PagePapers::getTagID(int row) const {
 }
 int PagePapers::getAllTagID(int row) const {
 	return row > -1 ? modelAllTags.data(modelAllTags.index(row, TAG_ID)).toInt() : -1;
-}
-int PagePapers::getCurrentPaperID() const {
-	return getPaperID(currentRowPapers);
 }
 
 void PagePapers::selectID(int id)
@@ -394,18 +391,18 @@ void PagePapers::onEditTag()
 
 void PagePapers::onAddTagToPaper()
 {
-	int paperID = getCurrentPaperID();
 	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
-		addPaperTag(paperID, getAllTagID(idx.row()));
+		addPaperTag(currentPaperID, getAllTagID(idx.row()));
 	updateTags();
 }
 
 void PagePapers::updateTags()
 {
-	int paper = getCurrentPaperID();
-	QString thisPapersTags(tr("(select Tag from PaperTag where Paper = %1)").arg(paper));
-	modelTags.setQuery(tr("select ID, Name from Tags where ID in %1 order by Name").arg(thisPapersTags));
+	QString thisPapersTags(tr("(select Tag from PaperTag where Paper = %1)")
+																.arg(currentPaperID));
+	modelTags.setQuery(tr("select ID, Name from Tags where ID in %1 order by Name")
+																.arg(thisPapersTags));
 	ui.listViewTags->setModelColumn(TAG_NAME);
 
 	if(!isFiltered())
@@ -421,10 +418,9 @@ void PagePapers::onDelTagFromPaper()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		int id = getCurrentPaperID();
 		QModelIndexList idxList = ui.listViewTags->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delPaperTag(id, getTagID(idx.row()));
+			delPaperTag(currentPaperID, getTagID(idx.row()));
 		updateTags();
 	}
 }
@@ -448,7 +444,10 @@ void PagePapers::onFilter(bool enabled)
 	if(enabled)
 		resetAllTags();   // show all tags
 	else
+	{
 		resetPapers();    // show all papers
+		selectID(currentPaperID);
+	}
 }
 
 void PagePapers::resetPapers()
@@ -497,13 +496,14 @@ void PagePapers::resizeEvent(QResizeEvent*)
 void PagePapers::onClicked(const QModelIndex& idx)
 {
 	currentRowPapers = idx.row();
-	currentPaperID = getCurrentPaperID();
+	currentPaperID = getPaperID(currentRowPapers);
 	updateTags();
 	ui.widgetAttachments->setPaper(currentPaperID);
 }
 
 void PagePapers::onShowRelated()
 {
+	hideCoauthor();
 	QSqlDatabase::database().transaction();
 	QSqlQuery query, subQuery;
 	query.exec(tr("update Papers set Proximity = 0"));
@@ -536,6 +536,7 @@ void PagePapers::hideRelated()
 
 void PagePapers::onShowCoauthored()
 {
+	hideRelated();
 	QSqlDatabase::database().transaction();
 	QSqlQuery query;	
 	query.exec(tr("update Papers set Coauthor = 0"));

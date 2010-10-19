@@ -5,7 +5,7 @@
 #include <QSqlTableModel>
 #include <QSqlQueryModel>
 #include "ui_PagePapers.h"
-//#include "ModelPapers.h"
+#include "PaperModel.h"
 
 class QDataWidgetMapper;
 
@@ -19,6 +19,7 @@ public:
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
+	virtual void contextMenuEvent(QContextMenuEvent* event);
 
 private slots:
 	void onCurrentRowPapersChanged(const QModelIndex& idx);
@@ -30,6 +31,8 @@ private slots:
 	void onSearch(const QString& target);
 	void onCancelSearch();
 	void onSubmitPaper();
+	void onClicked(const QModelIndex& idx);
+	void onShowRelated();
 
 	void onCurrentRowAllTagsChanged();
 	void onAddTag();
@@ -53,23 +56,22 @@ private:
 				const QString& delimiter,      const QString& abstractHead = "NO_SUCH_HEAD");
 	QString trimHead(const QString& line, const QString& delimiter) const;
 	int idToRow(int id) const;
-	QString getCurrentPDFPath() const;
-	QString makePDFFileName(const QString& title) const;
 	void updateTags();
 	void filterPapers();
-	void updateRelatedPapers();
 	void resetPapers();
 	void resetAllTags();
 	bool isFiltered() const;
+	void hideRelated();
 
-private:
+public:
 	enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, 
-		  PAPER_ABSTRACT, PAPER_NOTE, PAPER_PDF};
+		  PAPER_ABSTRACT, PAPER_NOTE, PAPER_PROXIMITY};
 	enum {TAG_ID, TAG_NAME};
 
+private:
 	Ui::PagePapersClass ui;
 
-	QSqlTableModel modelPapers;
+	PaperModel modelPapers;
 	QSqlTableModel modelAllTags;
 	QSqlQueryModel modelTags;
 	int currentRowPapers;

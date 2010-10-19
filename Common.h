@@ -10,8 +10,6 @@ void delPaper(int paperID);
 void delTag  (int tagID);
 void addPaperTag(int paperID, int tagID);
 void delPaperTag(int paperID, int tagID);
-void delPaperTagByPaper(int paperID);
-void delPaperTagByTag(int tagID);
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName);
 void delAttachment(int paperID, const QString& attachmentName);
 void delAttachments(int paperID);
@@ -25,6 +23,7 @@ QString getFilePath(int paperID, const QString& attachmentName);
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName);
 bool attachmentExists(int paperID, const QString& name);
 bool renameTitle(const QString& oldName, const QString& newName);
+int getMaxProximity();
 
 const int MAX_PAPER_COUNT = 1000;
 

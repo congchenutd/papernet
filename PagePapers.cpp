@@ -36,9 +36,10 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tableViewPapers->hideColumn(PAPER_JOURNAL);
 	ui.tableViewPapers->hideColumn(PAPER_ABSTRACT);
 	ui.tableViewPapers->hideColumn(PAPER_NOTE);
+	ui.tableViewPapers->hideColumn(PAPER_PROXIMITY);
 	ui.tableViewPapers->horizontalHeader()->setStretchLastSection(true);
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
-	ui.tableViewPapers->resizeColumnsToContents();
+	ui.tableViewPapers->resizeColumnToContents(PAPER_TITLE);
 
 	ui.listViewAllTags->setModel(&modelAllTags);
 	ui.listViewAllTags->setModelColumn(TAG_NAME);
@@ -53,11 +54,13 @@ PagePapers::PagePapers(QWidget *parent)
 			this, SLOT(onSubmitPaper()));
 	connect(ui.btAddPaper, SIGNAL(clicked()), this, SLOT(onAddPaper()));
 	connect(ui.tableViewPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
+	connect(ui.tableViewPapers, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 	connect(ui.btDelPaper, SIGNAL(clicked()), this, SLOT(onDelPaper()));
 	connect(ui.btImport,   SIGNAL(clicked()), this, SLOT(onImport()));
 	connect(ui.btSearch,   SIGNAL(toggled(bool)), this, SLOT(onShowSearch(bool)));
 	connect(ui.leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.btCancelSearch, SIGNAL(clicked()), this, SLOT(onCancelSearch()));
+	connect(ui.actionShowRelated, SIGNAL(triggered()), this, SLOT(onShowRelated()));
 
 	connect(ui.listViewAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowAllTagsChanged()));
@@ -75,19 +78,12 @@ PagePapers::PagePapers(QWidget *parent)
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
 {
 	bool valid = idx.isValid();
-	currentRowPapers = valid ? idx.row() : -1;
-	currentPaperID = getCurrentPaperID();
 	ui.btDelPaper->setEnabled(valid);
 	ui.btAddTag->setEnabled(valid);
 	ui.btDelTag->setEnabled(false);
-	ui.widgetAttachments->setPaper(getCurrentPaperID());
 
 	if(valid)
-	{
-		updateTags();
-		updateRelatedPapers();
-//		modelPapers.setCentral(getCurrentPaperID());
-	}
+		onClicked(idx);
 }
 
 void PagePapers::onAddPaper()
@@ -306,6 +302,7 @@ QString PagePapers::trimHead(const QString& line, const QString& delimiter) cons
 
 void PagePapers::onSubmitPaper() 
 {
+	hideRelated();
 	int backup = currentPaperID;
 	modelPapers.submitAll();
 	currentPaperID = backup;
@@ -332,15 +329,6 @@ void PagePapers::onSearch(const QString& target)
 
 void PagePapers::onCancelSearch() {
 	ui.btSearch->setChecked(false);
-}
-
-QString PagePapers::getCurrentPDFPath() const {
-	return modelPapers.data(
-				modelPapers.index(currentRowPapers, PAPER_PDF)).toString();
-}
-
-QString PagePapers::makePDFFileName(const QString& title) const {
-	return QString(title).replace(QRegExp("[:|?|*]"), "-");
 }
 
 void PagePapers::onCurrentRowAllTagsChanged()
@@ -439,6 +427,7 @@ void PagePapers::onDelTagFromPaper()
 
 void PagePapers::filterPapers()
 {
+	hideRelated();
 	QStringList tagClauses;
 	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
@@ -457,24 +446,12 @@ void PagePapers::onFilter(bool enabled)
 		resetPapers();    // show all papers
 }
 
-void PagePapers::updateRelatedPapers()
-{
-	QSqlQuery query;
-	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
-								   where Tag in (select Tag from PaperTag where Paper = %1) \
-								   and Paper != %1 and ID = Paper \
-								   group by Paper order by Proximity desc").arg(currentPaperID));
-	while(query.next())
-	{
-
-	}
-}
-
 void PagePapers::resetPapers()
 {
 	modelPapers.setTable("Papers");
 	modelPapers.select();
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	hideRelated();
 }
 
 void PagePapers::resetAllTags()
@@ -509,4 +486,49 @@ void PagePapers::resizeEvent(QResizeEvent*)
 	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.6 << height() * 0.4);
 	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
 	ui.splitterDetails->setSizes(QList<int>() << width() * 0.45 << width() * 0.45 << width() * 0.1);
+}
+
+void PagePapers::onClicked(const QModelIndex& idx)
+{
+	currentRowPapers = idx.row();
+	currentPaperID = getCurrentPaperID();
+	updateTags();
+	ui.widgetAttachments->setPaper(currentPaperID);
+}
+
+void PagePapers::contextMenuEvent(QContextMenuEvent* event)
+{
+	QMenu menu(this);
+	menu.addAction(ui.actionShowRelated);
+	menu.exec(event->globalPos());
+}
+
+void PagePapers::onShowRelated()
+{
+	QSqlDatabase::database().transaction();
+	QSqlQuery query, subQuery;
+	query.exec(tr("update Papers set Proximity = 0"));
+	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
+				  where Tag in (select Tag from PaperTag where Paper = %1) \
+				  and Paper != %1 and ID = Paper \
+				  group by Paper").arg(currentPaperID));
+
+	while(query.next()) {
+		subQuery.exec(tr("update Papers set Proximity = %1 where ID = %2")
+			.arg(query.value(1).toInt())
+			.arg(query.value(0).toInt()));
+	}
+
+	query.exec(tr("update Papers set Proximity = (select max(Proximity)+1 from Papers) \
+				  where ID = %1").arg(currentPaperID));
+	QSqlDatabase::database().commit();
+
+	ui.tableViewPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
+	selectID(currentPaperID);
+}
+
+void PagePapers::hideRelated()
+{
+	QSqlQuery query;
+	query.exec(tr("update Papers set Proximity = 0"));
 }

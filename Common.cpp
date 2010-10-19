@@ -37,7 +37,8 @@ void createTables()
 					Year     date,    \
 					Journal  varchar, \
 					Abstract varchar, \
-					Note     varchar \
+					Note     varchar, \
+					Proximity int \
 				)");
 
 	query.exec("create table Tags( \
@@ -49,12 +50,6 @@ void createTables()
 					Paper int references Papers(ID) on delete cascade on update cascade, \
 					Tag   int references Tags  (ID) on delete cascade on update cascade, \
 					primary key (Paper, Tag) \
-				)");
-
-	query.exec("create table Attachments( \
-					Paper      int, \
-					Attachment varchar, \
-					primary key (Paper, Attachment) \
 				)");
 }
 
@@ -73,10 +68,7 @@ void delPaper(int paperID)
 
 	// delete paper-tag entries
 	QSqlQuery query;
-	delPaperTagByPaper(paperID);
-
-	// delete attachments entry
-	query.exec(QObject::tr("delete from Attachments where Paper = %1").arg(paperID));
+	//delPaperTagByPaper(paperID);
 
 	// delete db entry
 	query.exec(QObject::tr("delete from Papers where ID = %1").arg(paperID));
@@ -87,7 +79,7 @@ void delTag(int tagID)
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Tags where ID = %1").arg(tagID));
 	
-	delPaperTagByTag(tagID);  // paper-tag entries
+	//delPaperTagByTag(tagID);  // paper-tag entries
 }
 
 void addPaperTag(int paperID, int tagID)
@@ -108,49 +100,20 @@ void delPaperTag(int paperID, int tagID)
 		QMessageBox::critical(0, "error", query.lastError().text());
 }
 
-void delPaperTagByPaper(int paperID)
-{
-	QSqlQuery query;
-	bool result = query.exec(QObject::tr("delete from PaperTag where Paper=%1").arg(paperID));
-	if(!result)
-		QMessageBox::critical(0, "error", query.lastError().text());
-}
-
-void delPaperTagByTag(int tagID)
-{
-	QSqlQuery query;
-	bool result = query.exec(QObject::tr("delete from PaperTag where Tag=%1").arg(tagID));
-	if(!result)
-		QMessageBox::critical(0, "error", query.lastError().text());
-}
-
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName)
 {
-	if(attachmentExists(paperID, attachmentName))
-		return false;
-
 	QString dir = getAttachmentDir(paperID);
 	QDir(".").mkdir(dir);
-	QFile::copy(fileName, dir + "\\" + attachmentName);
-
-	QSqlQuery query;
-	return query.exec(QObject::tr("insert into Attachments values (%1, \'%2\')")
-					.arg(paperID).arg(attachmentName));
+	return QFile::copy(fileName, dir + "\\" + attachmentName);
 }
 
 void delAttachment(int paperID, const QString& attachmentName)
 {
-	// delete attached file
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
 	{
 		QFile::remove(getFilePath(paperID, attachmentName));
 		QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
 	}
-
-	// delete entry
-	QSqlQuery query;
-	query.exec(QObject::tr("delete from Attachments where \
-			Paper = %1 and Attachment = \'%2\'").arg(paperID).arg(attachmentName));
 }
 
 // delete the attachment dir
@@ -201,11 +164,9 @@ bool addLink(int paperID, const QString& link, const QString& u)
 			<< "BASEURL="  << url << "\r\n"
 			<< "[InternetShortcut]" << "\r\n"
 			<< "URL=" << url;
+		return true;
 	}
-
-	QSqlQuery query;
-	return query.exec(QObject::tr("insert into Attachments values (%1, \'%2\')")
-		.arg(paperID).arg(linkName));
+	return false;
 }
 
 void openAttachment(int paperID, const QString& attachmentName)
@@ -218,28 +179,22 @@ QString getFilePath(int paperID, const QString& attachmentName) {
 	return attachmentDir + getValidTitle(paperID) + "\\" + attachmentName;
 }
 
-bool renameAttachment(int paperID, const QString& oldName, const QString& newName)
-{
-	if(attachmentExists(paperID, newName))
-		return false;
-
-	QSqlQuery query;
-	QFile::rename(getFilePath(paperID, oldName), getFilePath(paperID, newName));
-	query.exec(QObject::tr("update Attachments set Attachment = \'%1\'  \
-			where Paper = %2 and Attachment = \'%3\'")
-			.arg(newName).arg(paperID).arg(oldName));
-	return true;
+bool renameAttachment(int paperID, const QString& oldName, const QString& newName) {
+	return QFile::rename(getFilePath(paperID, oldName), getFilePath(paperID, newName));
 }
 
-bool attachmentExists(int paperID, const QString& name)
-{
-	QSqlQuery query;
-	query.exec(QObject::tr("select * from Attachments where \
-						   Paper = %1 and Attachment = \'%2\'").arg(paperID).arg(name));
-	return query.next();
+bool attachmentExists(int paperID, const QString& name) {
+	return QFile::exists(getFilePath(paperID, name));
 }
 
 bool renameTitle(const QString& oldName, const QString& newName) {
 	return QDir(".").rename(attachmentDir + makeValidTitle(oldName), 
 							attachmentDir + makeValidTitle(newName));
+}
+
+int getMaxProximity()
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("select max(Proximity) from Papers"));
+	return query.next() ? query.value(0).toInt() : 0;
 }

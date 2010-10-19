@@ -13,7 +13,6 @@ public:
 	AttachmentsWidget(QWidget *parent = 0);
 
 	void setPaper(int id);
-
 	void update();
 
 protected:

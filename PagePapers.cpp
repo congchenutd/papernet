@@ -37,6 +37,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tableViewPapers->hideColumn(PAPER_ABSTRACT);
 	ui.tableViewPapers->hideColumn(PAPER_NOTE);
 	ui.tableViewPapers->hideColumn(PAPER_PROXIMITY);
+	ui.tableViewPapers->hideColumn(PAPER_COAUTHOR);
 	ui.tableViewPapers->horizontalHeader()->setStretchLastSection(true);
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	ui.tableViewPapers->resizeColumnToContents(PAPER_TITLE);
@@ -60,8 +61,6 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.btSearch,   SIGNAL(toggled(bool)), this, SLOT(onShowSearch(bool)));
 	connect(ui.leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.btCancelSearch, SIGNAL(clicked()), this, SLOT(onCancelSearch()));
-	connect(ui.actionShowRelated,    SIGNAL(triggered()), this, SLOT(onShowRelated()));
-	connect(ui.actionShowCoauthored, SIGNAL(triggered()), this, SLOT(onShowCoauthored()));
 
 	connect(ui.listViewAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowAllTagsChanged()));
@@ -75,8 +74,8 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.listViewTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowTagsChanged()));
 
-	connect(ui.tableViewPapers, SIGNAL(showRelated()),   this, SLOT(onShowRelated()));
-	connect(ui.tableViewPapers, SIGNAL(showCoauthord()), this, SLOT(onShowCoauthord()));
+	connect(ui.tableViewPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
+	connect(ui.tableViewPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
@@ -269,7 +268,7 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 		{
 			QString authors = modelPapers.data(modelPapers.index(currentRow, PAPER_AUTHORS)).toString();
 			if(!authors.isEmpty())
-				authors.append(", ");
+				authors.append("; ");
 			authors.append(trimmed);
 			modelPapers.setData(modelPapers.index(currentRow, PAPER_AUTHORS), authors);
 			continue;
@@ -286,7 +285,7 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 			{
 				QString journals = modelPapers.data(modelPapers.index(currentRow, PAPER_JOURNAL)).toString();
 				if(!journals.isEmpty())
-					journals.append(", ");
+					journals.append("; ");
 				journals.append(trimmed);
 				modelPapers.setData(modelPapers.index(currentRow, PAPER_JOURNAL), journals);
 				continue;
@@ -307,6 +306,7 @@ QString PagePapers::trimHead(const QString& line, const QString& delimiter) cons
 void PagePapers::onSubmitPaper() 
 {
 	hideRelated();
+	hideCoauthor();
 	int backup = currentPaperID;
 	modelPapers.submitAll();
 	currentPaperID = backup;
@@ -432,6 +432,7 @@ void PagePapers::onDelTagFromPaper()
 void PagePapers::filterPapers()
 {
 	hideRelated();
+	hideCoauthor();
 	QStringList tagClauses;
 	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
@@ -456,6 +457,7 @@ void PagePapers::resetPapers()
 	modelPapers.select();
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	hideRelated();
+	hideCoauthor();
 }
 
 void PagePapers::resetAllTags()
@@ -526,11 +528,33 @@ void PagePapers::onShowRelated()
 
 void PagePapers::hideRelated()
 {
+	QSqlDatabase::database().transaction();
 	QSqlQuery query;
 	query.exec(tr("update Papers set Proximity = 0"));
+	QSqlDatabase::database().commit();
 }
 
 void PagePapers::onShowCoauthored()
 {
+	QSqlDatabase::database().transaction();
+	QSqlQuery query;	
+	query.exec(tr("update Papers set Coauthor = 0"));
+	QStringList authors = modelPapers.data(modelPapers.index(currentRowPapers, PAPER_AUTHORS)).toString().split(";");
+	foreach(QString author, authors)
+		query.exec(tr("update Papers set Coauthor = Coauthor + 1 where Authors like \'%%1%\'")
+															.arg(author.trimmed()));
+	query.exec(tr("update Papers set Coauthor = (select max(Coauthor)+1 from Papers) \
+													where ID = %1").arg(currentPaperID));
+	QSqlDatabase::database().commit();
 
+	ui.tableViewPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);
+	selectID(currentPaperID);
+}
+
+void PagePapers::hideCoauthor()
+{
+	QSqlDatabase::database().transaction();
+	QSqlQuery query;
+	query.exec(tr("update Papers set Coauthor = 0"));
+	QSqlDatabase::database().commit();
 }

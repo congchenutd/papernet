@@ -38,7 +38,8 @@ void createTables()
 					Journal  varchar, \
 					Abstract varchar, \
 					Note     varchar, \
-					Proximity int \
+					Proximity int, \
+					Coauthor  int \
 				)");
 
 	query.exec("create table Tags( \
@@ -196,5 +197,12 @@ int getMaxProximity()
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("select max(Proximity) from Papers"));
+	return query.next() ? query.value(0).toInt() : 0;
+}
+
+int getMaxCoauthor()
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("select max(Coauthor) from Papers"));
 	return query.next() ? query.value(0).toInt() : 0;
 }

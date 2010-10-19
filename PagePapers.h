@@ -62,10 +62,11 @@ private:
 	void resetAllTags();
 	bool isFiltered() const;
 	void hideRelated();
+	void hideCoauthor();
 
 public:
 	enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, 
-		  PAPER_ABSTRACT, PAPER_NOTE, PAPER_PROXIMITY};
+		  PAPER_ABSTRACT, PAPER_NOTE, PAPER_PROXIMITY, PAPER_COAUTHOR};
 	enum {TAG_ID, TAG_NAME};
 
 private:

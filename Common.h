@@ -24,6 +24,7 @@ bool renameAttachment(int paperID, const QString& oldName, const QString& newNam
 bool attachmentExists(int paperID, const QString& name);
 bool renameTitle(const QString& oldName, const QString& newName);
 int getMaxProximity();
+int getMaxCoauthor();
 
 const int MAX_PAPER_COUNT = 1000;
 

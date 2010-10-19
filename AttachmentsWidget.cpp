@@ -36,8 +36,7 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 
 void AttachmentsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
-	currentIndex = ui.listView->indexAt(event->pos());
-	bool valid = currentIndex.isValid();
+	bool valid = ui.listView->indexAt(event->pos()).isValid();
 	ui.actionAddFile->setEnabled(paperID > -1);
 	ui.actionAddLink->setEnabled(paperID > -1);
 	ui.actionRename->setEnabled(valid);

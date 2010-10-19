@@ -19,7 +19,6 @@ public:
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
-	virtual void contextMenuEvent(QContextMenuEvent* event);
 
 private slots:
 	void onCurrentRowPapersChanged(const QModelIndex& idx);
@@ -33,6 +32,7 @@ private slots:
 	void onSubmitPaper();
 	void onClicked(const QModelIndex& idx);
 	void onShowRelated();
+	void onShowCoauthored();
 
 	void onCurrentRowAllTagsChanged();
 	void onAddTag();

@@ -60,7 +60,8 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.btSearch,   SIGNAL(toggled(bool)), this, SLOT(onShowSearch(bool)));
 	connect(ui.leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.btCancelSearch, SIGNAL(clicked()), this, SLOT(onCancelSearch()));
-	connect(ui.actionShowRelated, SIGNAL(triggered()), this, SLOT(onShowRelated()));
+	connect(ui.actionShowRelated,    SIGNAL(triggered()), this, SLOT(onShowRelated()));
+	connect(ui.actionShowCoauthored, SIGNAL(triggered()), this, SLOT(onShowCoauthored()));
 
 	connect(ui.listViewAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowAllTagsChanged()));
@@ -73,6 +74,9 @@ PagePapers::PagePapers(QWidget *parent)
 
 	connect(ui.listViewTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowTagsChanged()));
+
+	connect(ui.tableViewPapers, SIGNAL(showRelated()),   this, SLOT(onShowRelated()));
+	connect(ui.tableViewPapers, SIGNAL(showCoauthord()), this, SLOT(onShowCoauthord()));
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
@@ -496,13 +500,6 @@ void PagePapers::onClicked(const QModelIndex& idx)
 	ui.widgetAttachments->setPaper(currentPaperID);
 }
 
-void PagePapers::contextMenuEvent(QContextMenuEvent* event)
-{
-	QMenu menu(this);
-	menu.addAction(ui.actionShowRelated);
-	menu.exec(event->globalPos());
-}
-
 void PagePapers::onShowRelated()
 {
 	QSqlDatabase::database().transaction();
@@ -531,4 +528,9 @@ void PagePapers::hideRelated()
 {
 	QSqlQuery query;
 	query.exec(tr("update Papers set Proximity = 0"));
+}
+
+void PagePapers::onShowCoauthored()
+{
+
 }

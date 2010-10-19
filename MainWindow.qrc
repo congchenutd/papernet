@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="MainWindow">
+    <file>Images/Coauthor.png</file>
     <file>Images/Related.png</file>
     <file>Images/Rename.png</file>
     <file>Images/Down.png</file>

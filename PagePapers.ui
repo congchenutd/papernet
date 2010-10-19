@@ -186,7 +186,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QTableView" name="tableViewPapers">
+      <widget class="PaperTableView" name="tableViewPapers">
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
@@ -381,6 +381,15 @@
     <string>Show related</string>
    </property>
   </action>
+  <action name="actionShowCoauthored">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/MainWindow/Images/Coauthor.png</normaloff>:/MainWindow/Images/Coauthor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show coauthored</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -389,6 +398,11 @@
    <extends>QWidget</extends>
    <header>AttachmentsWidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PaperTableView</class>
+   <extends>QTableView</extends>
+   <header>PaperTableView.h</header>
   </customwidget>
  </customwidgets>
  <resources>

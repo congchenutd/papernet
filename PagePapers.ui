@@ -22,9 +22,6 @@
    </property>
    <item row="0" column="0" rowspan="2">
     <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>9</number>
-     </property>
      <item>
       <widget class="QPushButton" name="btImport">
        <property name="toolTip">
@@ -33,6 +30,12 @@
        <property name="icon">
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Import.png</normaloff>:/MainWindow/Images/Import.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
        </property>
        <property name="shortcut">
         <string>Ctrl+I</string>
@@ -48,6 +51,12 @@
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item>
@@ -62,6 +71,12 @@
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item>
@@ -69,6 +84,12 @@
        <property name="icon">
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Search.png</normaloff>:/MainWindow/Images/Search.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
        </property>
        <property name="shortcut">
         <string>Ctrl+F</string>

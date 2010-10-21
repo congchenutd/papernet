@@ -110,8 +110,9 @@ bool delAttachment(int paperID, const QString& attachmentName)
 {
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
 	{
-		QFile::remove(getFilePath(paperID, attachmentName));
-		return QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
+		bool result = QFile::remove(getFilePath(paperID, attachmentName));
+		QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
+		return result;
 	}
 	return true;
 }
@@ -148,7 +149,9 @@ QString getValidTitle(int paperID) {
 
 bool addLink(int paperID, const QString& link, const QString& u)
 {
-	QString linkName = link + ".url";
+	QString linkName = link;
+	if(linkName.endsWith(".url", Qt::CaseInsensitive))
+		linkName.append(".url");
 	if(attachmentExists(paperID, linkName))
 		return false;
 
@@ -173,11 +176,25 @@ bool addLink(int paperID, const QString& link, const QString& u)
 void openAttachment(int paperID, const QString& attachmentName)
 {
 	QString filePath = getFilePath(paperID, attachmentName);
-    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+#ifdef Q_WS_WIN
+	QDesktopServices::openUrl(QUrl(filePath));
+#endif
+
+#ifdef Q_WS_MAC
+	QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+#endif
 }
 
-QString getFilePath(int paperID, const QString& attachmentName) {
-    return attachmentDir + getValidTitle(paperID) + "/" + attachmentName;
+QString getFilePath(int paperID, const QString& attachmentName) 
+{
+	QString path = attachmentDir + getValidTitle(paperID) + "/" + attachmentName;
+#ifdef Q_WS_WIN
+	return path.replace("/", "\\");
+#endif
+
+#ifdef Q_WS_MAC
+	return path;
+#endif
 }
 
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName) {

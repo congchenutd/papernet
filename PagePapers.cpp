@@ -47,6 +47,13 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.listViewTags->setModel(&modelTags);
 
+#ifdef Q_WS_MAC
+    ui.btImport  ->setIconSize(QSize(16, 16));
+    ui.btAddPaper->setIconSize(QSize(16, 16));
+    ui.btDelPaper->setIconSize(QSize(16, 16));
+    ui.btSearch  ->setIconSize(QSize(16, 16));
+#endif
+
 	connect(ui.tableViewPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
 			mapper, SLOT(setCurrentModelIndex(QModelIndex)));
 	connect(ui.tableViewPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),

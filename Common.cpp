@@ -10,7 +10,9 @@
 #include <QTextStream>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDebug>
 
+QString dbName;
 QString attachmentDir;
 QString emptyDir;
 
@@ -100,8 +102,8 @@ void delPaperTag(int paperID, int tagID)
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName)
 {
 	QString dir = getAttachmentDir(paperID);
-	QDir(".").mkdir(dir);
-	return QFile::copy(fileName, dir + "\\" + attachmentName);
+    QDir::current().mkdir(dir);
+    return QFile::copy(fileName, dir + "/" + attachmentName);
 }
 
 bool delAttachment(int paperID, const QString& attachmentName)
@@ -152,7 +154,7 @@ bool addLink(int paperID, const QString& link, const QString& u)
 
 	QString dir = getAttachmentDir(paperID);
 	QDir(".").mkdir(dir);
-	QFile file(dir + "\\" + linkName);
+    QFile file(dir + "/" + linkName);
 	if(file.open(QFile::WriteOnly | QFile::Truncate)) 
 	{
 		QString url(u);
@@ -171,11 +173,11 @@ bool addLink(int paperID, const QString& link, const QString& u)
 void openAttachment(int paperID, const QString& attachmentName)
 {
 	QString filePath = getFilePath(paperID, attachmentName);
-	QDesktopServices::openUrl(QUrl(filePath));
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 }
 
 QString getFilePath(int paperID, const QString& attachmentName) {
-	return attachmentDir + getValidTitle(paperID) + "\\" + attachmentName;
+    return attachmentDir + getValidTitle(paperID) + "/" + attachmentName;
 }
 
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName) {

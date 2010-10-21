@@ -242,7 +242,7 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 	while(!is.atEnd())
 	{
 		QString line = is.readLine();
-		int currentRow;
+        int currentRow = -1;
 		if(line.startsWith(firstHead))
 		{
 			currentRow = modelPapers.rowCount();
@@ -490,7 +490,7 @@ void PagePapers::resizeEvent(QResizeEvent*)
 	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
 	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.6 << height() * 0.4);
 	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
-	ui.splitterDetails->setSizes(QList<int>() << width() * 0.45 << width() * 0.45 << width() * 0.1);
+    ui.splitterDetails->setSizes(QList<int>() << width() * 0.5 << width() * 0.4 << width() * 0.1);
 }
 
 void PagePapers::onClicked(const QModelIndex& idx)

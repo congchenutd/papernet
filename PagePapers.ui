@@ -6,36 +6,33 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>551</height>
+    <width>720</width>
+    <height>488</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PagePapers</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
+   <property name="margin">
+    <number>5</number>
+   </property>
+   <property name="spacing">
+    <number>3</number>
+   </property>
    <item row="0" column="0" rowspan="2">
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>9</number>
+     </property>
      <item>
       <widget class="QPushButton" name="btImport">
-       <property name="maximumSize">
-        <size>
-         <width>50</width>
-         <height>16777215</height>
-        </size>
-       </property>
        <property name="toolTip">
         <string>Import Papers</string>
        </property>
        <property name="icon">
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Import.png</normaloff>:/MainWindow/Images/Import.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
        </property>
        <property name="shortcut">
         <string>Ctrl+I</string>
@@ -44,24 +41,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btAddPaper">
-       <property name="maximumSize">
-        <size>
-         <width>50</width>
-         <height>16777215</height>
-        </size>
-       </property>
        <property name="toolTip">
         <string>Add Papers</string>
        </property>
        <property name="icon">
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -70,24 +55,12 @@
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>50</width>
-         <height>16777215</height>
-        </size>
-       </property>
        <property name="toolTip">
         <string>Delete Papers</string>
        </property>
        <property name="icon">
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -96,12 +69,6 @@
        <property name="icon">
         <iconset resource="MainWindow.qrc">
          <normaloff>:/MainWindow/Images/Search.png</normaloff>:/MainWindow/Images/Search.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
        </property>
        <property name="shortcut">
         <string>Ctrl+F</string>
@@ -135,6 +102,12 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
       <property name="topMargin">
        <number>0</number>
       </property>
@@ -211,6 +184,9 @@
         <string>Details</string>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="margin">
+         <number>5</number>
+        </property>
         <item>
          <widget class="QSplitter" name="splitterDetails">
           <property name="orientation">
@@ -298,6 +274,12 @@
         <string>All tags</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
+        <property name="margin">
+         <number>5</number>
+        </property>
+        <property name="spacing">
+         <number>5</number>
+        </property>
         <item row="0" column="0">
          <widget class="QPushButton" name="btFilter">
           <property name="icon">

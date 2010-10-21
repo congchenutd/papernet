@@ -48,3 +48,4 @@ SOURCES += AddPaperTagDlg.cpp \
            PaperTagPage.cpp
 RESOURCES += MainWindow.qrc
 RC_FILE = PaperNet.rc
+ICON = Images/ToiletPaper.icns

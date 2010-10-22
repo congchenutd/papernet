@@ -19,6 +19,7 @@ OptionDlg::OptionDlg(QWidget *parent)
 		ui.sbBackupDays->setEnabled(false);
 	}
 	ui.sbBackupDays->setValue(backupDays);
+    bool test = setting->getKeepAttachments();
 	ui.checkKeepAttachments->setChecked(setting->getKeepAttachments());
 }
 
@@ -84,11 +85,11 @@ void UserSetting::setBackupDays(int days) {
 	setValue("BackupDays", days);
 }
 void UserSetting::setKeepAttachments(bool keep) {
-	setValue("KeepPDF", keep);
+    setValue("KeepAttachments", keep);
 }
 void UserSetting::setLastImportPath(const QString& path) {
 	setValue("LastImportPath", path);
 }
 void UserSetting::setLastAttachmentPath(const QString& path) {
-	setValue("LastAttrachmentPath", path);
+    setValue("LastAttachmentPath", path);
 }

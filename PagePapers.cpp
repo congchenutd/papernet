@@ -256,7 +256,7 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 			modelPapers.insertRow(currentRow);
 			currentPaperID = getNextID("Papers", "ID");
 			modelPapers.setData(modelPapers.index(currentRow, PAPER_ID), currentPaperID);
-			onSubmitPaper();
+//			onSubmitPaper();
 			continue;
 		}
 

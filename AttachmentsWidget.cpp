@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QDebug>
 
 extern QString attachmentDir;
 extern QString emptyDir;

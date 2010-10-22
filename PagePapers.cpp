@@ -245,11 +245,11 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 	if(!file.open(QFile::ReadOnly))
 		return;
 
+    int currentRow = -1;
 	QTextStream is(&file);
 	while(!is.atEnd())
 	{
 		QString line = is.readLine();
-        int currentRow = -1;
 		if(line.startsWith(firstHead))
 		{
 			currentRow = modelPapers.rowCount();

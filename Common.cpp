@@ -150,7 +150,7 @@ QString getValidTitle(int paperID) {
 bool addLink(int paperID, const QString& link, const QString& u)
 {
 	QString linkName = link;
-	if(linkName.endsWith(".url", Qt::CaseInsensitive))
+    if(!linkName.endsWith(".url", Qt::CaseInsensitive))
 		linkName.append(".url");
 	if(attachmentExists(paperID, linkName))
 		return false;
@@ -181,7 +181,20 @@ void openAttachment(int paperID, const QString& attachmentName)
 #endif
 
 #ifdef Q_WS_MAC
-	QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+    if(attachmentName.endsWith(".url", Qt::CaseInsensitive))
+    {
+        QFile file(filePath);
+        if(file.open(QFile::ReadOnly))
+        {
+            QTextStream is(&file);
+            is.readLine();
+            QString url = is.readLine(); // second line is url
+            url.remove("BASEURL=");
+            QDesktopServices::openUrl(QUrl(url));
+        }
+    }
+    else
+        QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 #endif
 }
 

@@ -304,7 +304,7 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 }
 
 QString PagePapers::trimHead(const QString& line, const QString& delimiter) const {
-	return line.mid(line.indexOf(delimiter) + delimiter.length());
+    return line.mid(line.indexOf(delimiter) + delimiter.length()).trimmed();
 }
 
 void PagePapers::onSubmitPaper() 

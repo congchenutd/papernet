@@ -19,7 +19,6 @@ OptionDlg::OptionDlg(QWidget *parent)
 		ui.sbBackupDays->setEnabled(false);
 	}
 	ui.sbBackupDays->setValue(backupDays);
-    bool test = setting->getKeepAttachments();
 	ui.checkKeepAttachments->setChecked(setting->getKeepAttachments());
 }
 

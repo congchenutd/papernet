@@ -256,7 +256,6 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 			modelPapers.insertRow(currentRow);
 			currentPaperID = getNextID("Papers", "ID");
 			modelPapers.setData(modelPapers.index(currentRow, PAPER_ID), currentPaperID);
-//			onSubmitPaper();
 			continue;
 		}
 
@@ -264,6 +263,12 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 		foreach(QString titleHead, titleHeads)
 			if(line.startsWith(titleHead))
 			{
+                if(titleExists(trimmed))
+                {
+                    modelPapers.revertAll();
+                    return;
+                }
+
 				modelPapers.setData(modelPapers.index(currentRow, PAPER_TITLE), trimmed);
 				continue;
 			}
@@ -301,6 +306,7 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 			continue;
 		}
 	}
+    onSubmitPaper();
 }
 
 QString PagePapers::trimHead(const QString& line, const QString& delimiter) const {

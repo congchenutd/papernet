@@ -67,8 +67,7 @@ void delPaper(int paperID)
 {
 	// delete attached files
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
-		if(!delAttachments(paperID))
-			QMessageBox::critical(0, QObject::tr("Error"), QObject::tr("Attachments cannot be deleted!"));
+        delAttachments(paperID);
 
 	// delete db entry	
 	QSqlQuery query;
@@ -106,26 +105,23 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
     return QFile::copy(fileName, dir + "/" + attachmentName);
 }
 
-bool delAttachment(int paperID, const QString& attachmentName)
+void delAttachment(int paperID, const QString& attachmentName)
 {
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
 	{
-		bool result = QFile::remove(getFilePath(paperID, attachmentName));
+        QFile::remove(getFilePath(paperID, attachmentName));
 		QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
-		return result;
 	}
-	return true;
 }
 
 // delete the attachment dir
-bool delAttachments(int paperID)
+void delAttachments(int paperID)
 {
 	QDir dir(getAttachmentDir(paperID));
 	QFileInfoList files = dir.entryInfoList(QDir::Files |QDir::NoDotAndDotDot);
 	foreach(QFileInfo info, files)
-		if(!QFile::remove(info.filePath()))
-			return false;
-	return QDir(attachmentDir).rmdir(getValidTitle(paperID));
+        QFile::remove(info.filePath());
+    QDir(attachmentDir).rmdir(getValidTitle(paperID));
 }
 
 QString getPaperTitle(int paperID)
@@ -219,8 +215,8 @@ bool attachmentExists(int paperID, const QString& name) {
 }
 
 bool renameTitle(const QString& oldName, const QString& newName) {
-	return QDir(".").rename(attachmentDir + makeValidTitle(oldName), 
-							attachmentDir + makeValidTitle(newName));
+    return QDir(".").rename(attachmentDir + makeValidTitle(oldName),
+                            attachmentDir + makeValidTitle(newName));
 }
 
 int getMaxProximity()
@@ -235,4 +231,11 @@ int getMaxCoauthor()
 	QSqlQuery query;
 	query.exec(QObject::tr("select max(Coauthor) from Papers"));
 	return query.next() ? query.value(0).toInt() : 0;
+}
+
+bool titleExists(const QString &title)
+{
+    QSqlQuery query;
+    query.exec(QObject::tr("select * from Papers where Title = \'%1\'").arg(title));
+    return query.next();
 }

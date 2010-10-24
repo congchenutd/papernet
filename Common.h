@@ -11,8 +11,8 @@ void delTag  (int tagID);
 void addPaperTag(int paperID, int tagID);
 void delPaperTag(int paperID, int tagID);
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName);
-bool delAttachment(int paperID, const QString& attachmentName);
-bool delAttachments(int paperID);
+void delAttachment(int paperID, const QString& attachmentName);
+void delAttachments(int paperID);
 bool addLink(int paperID, const QString& linkName, const QString& url);
 QString getPaperTitle(int paperID);
 QString makeValidTitle(const QString& title);
@@ -25,6 +25,7 @@ bool attachmentExists(int paperID, const QString& name);
 bool renameTitle(const QString& oldName, const QString& newName);
 int getMaxProximity();
 int getMaxCoauthor();
+bool titleExists(const QString& title);
 
 const int MAX_PAPER_COUNT = 1000;
 

@@ -97,8 +97,7 @@ void AttachmentsWidget::onDel()
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QString attachmentName = model.data(currentIndex).toString();
-		if(!delAttachment(paperID, attachmentName))
-			QMessageBox::critical(this, tr("Error"), tr("Attachment cannot be deleted!"));
+        delAttachment(paperID, attachmentName);
 		update();
 	}
 }

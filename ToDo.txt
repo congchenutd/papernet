@@ -1,2 +1,2 @@
-fuzzy matching of authors' names
-paper snippets
+fuzzy matching of names
+weights of tags

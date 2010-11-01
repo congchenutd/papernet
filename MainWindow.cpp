@@ -13,10 +13,12 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 
 	QActionGroup* actionGroup = new QActionGroup(this);
 	actionGroup->addAction(ui.actionPapers);
+	actionGroup->addAction(ui.actionSnippets);
 
-	connect(ui.actionOptions, SIGNAL(triggered()), this, SLOT(onOptions()));
-	connect(ui.actionAbout,   SIGNAL(triggered()), this, SLOT(onAbout()));
-	connect(ui.actionPapers,  SIGNAL(triggered()), this, SLOT(onPapers()));
+	connect(ui.actionOptions,  SIGNAL(triggered()), this, SLOT(onOptions()));
+	connect(ui.actionAbout,    SIGNAL(triggered()), this, SLOT(onAbout()));
+	connect(ui.actionPapers,   SIGNAL(triggered()), this, SLOT(onPapers()));
+	connect(ui.actionSnippets, SIGNAL(triggered()), this, SLOT(onSnippets()));
 
 	// load settings
 	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());
@@ -76,4 +78,8 @@ void MainWindow::backup(const QString& name)
 
 void MainWindow::onPapers() {
 	ui.stackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::onSnippets() {
+	ui.stackedWidget->setCurrentIndex(1);
 }

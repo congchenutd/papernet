@@ -375,24 +375,6 @@
     </widget>
    </item>
   </layout>
-  <action name="actionShowRelated">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Related.png</normaloff>:/MainWindow/Images/Related.png</iconset>
-   </property>
-   <property name="text">
-    <string>Show related</string>
-   </property>
-  </action>
-  <action name="actionShowCoauthored">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Coauthor.png</normaloff>:/MainWindow/Images/Coauthor.png</iconset>
-   </property>
-   <property name="text">
-    <string>Show coauthored</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

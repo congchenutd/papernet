@@ -54,6 +54,17 @@ void createTables()
 					Tag   int references Tags  (ID) on delete cascade on update cascade, \
 					primary key (Paper, Tag) \
 				)");
+
+	query.exec("create table Snippets( \
+					ID int primary key, \
+					Content varchar \
+				)");
+
+	query.exec("create table PaperSnippet( \
+					Paper   int references Papers  (ID) on delete cascade on update cascade, \
+					Snippet int references Snippets(ID) on delete cascade on update cascade, \
+					primary key (Paper, Reference) \
+			   )");
 }
 
 int getNextID(const QString& tableName, const QString& sectionName)

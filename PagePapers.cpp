@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "OptionDlg.h"
 #include "PaperDlg.h"
+#include "AddSnippetDlg.h"
 #include <QDataWidgetMapper>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -83,6 +84,7 @@ PagePapers::PagePapers(QWidget *parent)
 
 	connect(ui.tableViewPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
 	connect(ui.tableViewPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
+	connect(ui.tableViewPapers, SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
@@ -571,4 +573,12 @@ void PagePapers::hideCoauthor()
 	QSqlQuery query;
 	query.exec(tr("update Papers set Coauthor = 0"));
 	QSqlDatabase::database().commit();
+}
+
+void PagePapers::onAddSnippet()
+{
+	AddSnippetDlg dlg(this);
+	dlg.setPaperID(getPaperID(currentPaperID));
+	dlg.setSnippetID(getNextID("Snippets", "ID"));
+	dlg.exec();
 }

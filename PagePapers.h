@@ -33,6 +33,7 @@ private slots:
 	void onClicked(const QModelIndex& idx);
 	void onShowRelated();
 	void onShowCoauthored();
+	void onAddSnippet();
 
 	void onCurrentRowAllTagsChanged();
 	void onAddTag();
@@ -48,7 +49,6 @@ private:
 	int getPaperID (int row) const;
 	int getTagID   (int row) const;
 	int getAllTagID(int row) const;
-	int getCurrentPaperID() const;
 	void selectID(int id);
 	void import(const QString& fileName,       const QString& firstHead, 
 				const QStringList& titleHeads, const QString& authorHead, 

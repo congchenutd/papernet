@@ -28,7 +28,7 @@ private:
 
 private:
 	Ui::PageSnippetsClass ui;
-	enum {SNIPPET_ID, SNIPPET_SNIPPET};
+	enum {SNIPPET_ID, SNIPPET_TITLE, SNIPPET_SNIPPET};
 
 	QSqlTableModel model;
 	int currentRow;

@@ -238,7 +238,7 @@ void PaperTagPage::onSearch(const QString& target)
 		onCancelSearch();
 	else
 		modelPapers.setFilter(
-			tr("Title like \'%%1%\' or Authors like \'%%1%\' or Journal like \'%%1%\'").arg(target));
+			tr("Title like \"%%1%\" or Authors like \"%%1%\" or Journal like \"%%1%\"").arg(target));
 }
 
 void PaperTagPage::onCancelSearch()

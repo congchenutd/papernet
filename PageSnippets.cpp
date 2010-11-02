@@ -44,7 +44,8 @@ void PageSnippets::onSearch(const QString& target)
 	if(target.isEmpty())
 		resetSnippets();
 	else
-		model.setFilter(tr("Snippet like \'%%1%\' ").arg(target));
+		model.setFilter(tr("Snippet like \"%%1%\" or \
+						    Note    like \"%%1%\" ").arg(target));
 }
 
 void PageSnippets::onCurrentRowChanged()
@@ -60,9 +61,15 @@ void PageSnippets::onAdd()
 	AddSnippetDlg dlg(this);
 	dlg.setSnippetID(getNextID("Snippets", "ID"));
 	if(dlg.exec() == QDialog::Accepted)
-	{
 		model.select();
-	}
+}
+
+void PageSnippets::onEdit()
+{
+	AddSnippetDlg dlg(this);
+	dlg.setSnippetID(getID(currentRow));
+	if(dlg.exec() == QDialog::Accepted)
+		model.select();
 }
 
 void PageSnippets::onDel()
@@ -81,18 +88,7 @@ void PageSnippets::resetSnippets()
 {
 	model.setTable("Snippets");
 	model.select();
-	ui.tableView->sortByColumn(SNIPPET_SNIPPET, Qt::AscendingOrder);
-}
-
-void PageSnippets::onEdit()
-{
-	AddSnippetDlg dlg(this);
-	dlg.setSnippetID(getID(currentRow));
-	dlg.setSnippet(model.data(model.index(currentRow, SNIPPET_SNIPPET)).toString());
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		model.select();
-	}
+	ui.tableView->sortByColumn(SNIPPET_TITLE, Qt::AscendingOrder);
 }
 
 int PageSnippets::getID(int row) const {

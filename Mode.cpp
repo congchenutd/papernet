@@ -16,7 +16,7 @@ void Mode::enter()
 	page->modelPapers.select();
 	page->modelPapers.setEditStrategy(QSqlTableModel::OnFieldChange);
 	page->modelTags.setTable("Tags");
-	page->modelTags.setFilter("Name != \'\' order by Name");
+	page->modelTags.setFilter("Name != \"\" order by Name");
 	page->modelTags.select();
 	page->resetViews();
 }

@@ -55,7 +55,7 @@ void AddSnippetDlg::accept()
 	}
 
 	QSqlDatabase::database().transaction();
-	updateSnippet(snippetID, ui.teContent->toPlainText());
+	updateSnippet(snippetID, ui.leTitle->text(), ui.teContent->toPlainText());
 
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from PaperSnippet where Snippet = %1").arg(snippetID));
@@ -86,15 +86,21 @@ void AddSnippetDlg::addPaper(const QString& title)
 	model.sort(0);
 }
 
-void AddSnippetDlg::setSnippet(const QString& snippet) {
-	ui.teContent->setPlainText(snippet);
-}
-
 void AddSnippetDlg::setSnippetID(int id)
 {
 	snippetID = id;
-	model.setStringList(getPaperList(snippetID));
-	model.sort(0);
+
+	QSqlQuery query;
+	query.exec(tr("select Title, Snippet from Snippets where ID = %1").arg(id));
+	if(query.next())
+	{
+		ui.leTitle  ->setText     (query.value(0).toString());
+		ui.teContent->setPlainText(query.value(1).toString());
+	}
+
+	query.exec(tr("select Paper from PaperSnippet where Snippet = %1").arg(id));
+	while(query.next())
+		addPaper(getPaperTitle(query.value(0).toInt()));
 }
 
 void AddSnippetDlg::onSelect()

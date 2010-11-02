@@ -57,7 +57,8 @@ void createTables()
 
 	query.exec("create table Snippets( \
 					ID int primary key, \
-					Snippet varchar\
+					Title   varchar, \
+					Snippet varchar  \
 				)");
 
 	query.exec("create table PaperSnippet( \
@@ -146,7 +147,7 @@ QString makeValidTitle(const QString& title)
 {
 	QString result = title;
 	result.replace(QRegExp("[:|?|*]"), "-");
-	result.remove('\'');
+	result.remove('\"');
 	result.remove('\"');
 	return result;
 }
@@ -253,22 +254,22 @@ bool titleExists(const QString &title) {
 	return getPaperID(title) > -1;
 }
 
-void updateSnippet(int id, const QString& content)
+void updateSnippet(int id, const QString& title, const QString& content)
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("select * from Snippets where ID = %1").arg(id));
 	if(query.next())
-		query.exec(QObject::tr("update Snippets set Snippet =\'%1\' where ID = %2")
-															.arg(id).arg(content));
+		query.exec(QObject::tr("update Snippets set Title = \"%2\", Snippet =\"%1\" \
+							   where ID = %3").arg(title).arg(content).arg(id));
 	else
-		query.exec(QObject::tr("insert into Snippets values (%1, \'%2\')")
-															.arg(id).arg(content));
+		query.exec(QObject::tr("insert into Snippets values (%1, \"%2\", \"%3\")")
+										.arg(id).arg(title).arg(content));
 }
 
 int getPaperID(const QString& title)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from Papers where Title = \'%1\'").arg(title));
+	query.exec(QObject::tr("select ID from Papers where Title = \"%1\"").arg(title));
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
@@ -282,7 +283,7 @@ void addPaperSnippet(int paperID, int snippetID)
 void addPaper(int id, const QString& title)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("insert into Papers(ID, Title) values (%1, \'%2\')")
+	query.exec(QObject::tr("insert into Papers(ID, Title) values (%1, \"%2\")")
 													.arg(id).arg(title));
 }
 

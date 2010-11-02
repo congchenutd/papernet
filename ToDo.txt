@@ -1,2 +1,5 @@
 fuzzy matching of namesweights of tags
-untagged
+untagged, attached
+import to existing unfinished papers
+open ref
+show snippets of a paper

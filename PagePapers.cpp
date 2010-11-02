@@ -149,7 +149,7 @@ void PagePapers::onDelPaper()
 	{
 		QModelIndexList idxList = ui.tableViewPapers->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delPaper(currentPaperID);
+			delPaper(getPaperID(idx.row()));
 		modelPapers.select();
 	}
 }
@@ -337,12 +337,12 @@ void PagePapers::onSearch(const QString& target)
 		resetPapers();
 	else
 		modelPapers.setFilter(
-		tr("Title    like \'%%1%\' or \
-		    Authors  like \'%%1%\' or \
-			Year     like \'%%1%\' or \
-			Journal  like \'%%1%\' or \
-			Abstract like \'%%1%\' or \
-			Note     like \'%%1%\' ").arg(target));
+		tr("Title    like \"%%1%\" or \
+		    Authors  like \"%%1%\" or \
+			Year     like \"%%1%\" or \
+			Journal  like \"%%1%\" or \
+			Abstract like \"%%1%\" or \
+			Note     like \"%%1%\" ").arg(target));
 }
 
 void PagePapers::onCancelSearch() {
@@ -477,7 +477,7 @@ void PagePapers::resetPapers()
 void PagePapers::resetAllTags()
 {
 	modelAllTags.setTable("Tags");
-	modelAllTags.setFilter("Name != \'\' order by Name");
+	modelAllTags.setFilter("Name != \"\" order by Name");
 	modelAllTags.select();
 }
 
@@ -505,7 +505,7 @@ void PagePapers::resizeEvent(QResizeEvent*)
 	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
 	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.6 << height() * 0.4);
 	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
-    ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.4 << width() * 0.1);
+    ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.35 << width() * 0.15);
 }
 
 void PagePapers::onClicked(const QModelIndex& idx)
@@ -557,7 +557,7 @@ void PagePapers::onShowCoauthored()
 	query.exec(tr("update Papers set Coauthor = 0"));
 	QStringList authors = modelPapers.data(modelPapers.index(currentRowPapers, PAPER_AUTHORS)).toString().split(";");
 	foreach(QString author, authors)
-		query.exec(tr("update Papers set Coauthor = Coauthor + 1 where Authors like \'%%1%\'")
+		query.exec(tr("update Papers set Coauthor = Coauthor + 1 where Authors like \"%%1%\"")
 															.arg(author.trimmed()));
 	query.exec(tr("update Papers set Coauthor = (select max(Coauthor)+1 from Papers) \
 													where ID = %1").arg(currentPaperID));

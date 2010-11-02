@@ -14,9 +14,6 @@ public:
 
 	void setSnippetID(int id);
 	void addPaper(const QString& title);
-	void setSnippet(const QString& snippet);
-	QString getContent() const;
-	QStringList getReferences() const;
 
 private slots:
 	void onCurrentRowChanged();

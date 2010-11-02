@@ -13,6 +13,9 @@ public:
 	PaperList(QWidget *parent = 0);
 	QStringList getSelected() const;
 
+private slots:
+	void onSearch(const QString& target);
+
 private:
 	Ui::PaperListClass ui;
 	QSqlTableModel model;

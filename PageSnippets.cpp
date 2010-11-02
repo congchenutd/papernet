@@ -16,10 +16,11 @@ PageSnippets::PageSnippets(QWidget *parent)
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
-	connect(ui.btAdd, SIGNAL(clicked()), this, SLOT(onAdd()));
-	connect(ui.btDel, SIGNAL(clicked()), this, SLOT(onDel()));
-	connect(ui.btSearch, SIGNAL(toggled(bool)),       this, SLOT(onShowSearch(bool)));
-	connect(ui.leSearch, SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
+	connect(ui.btAdd,          SIGNAL(clicked()),     this, SLOT(onAdd()));
+	connect(ui.btDel,          SIGNAL(clicked()),     this, SLOT(onDel()));
+	connect(ui.btSearch,       SIGNAL(toggled(bool)), this, SLOT(onShowSearch(bool)));
+	connect(ui.btCancelSearch, SIGNAL(clicked()),     this, SLOT(onCancelSearch()));
+	connect(ui.leSearch,  SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 }
 
@@ -34,13 +35,16 @@ void PageSnippets::onShowSearch(bool enable)
 	{
 		ui.leSearch->clear();
 		ui.frameSearch->hide();
-//		resetPapers();
+		resetSnippets();
 	}
 }
 
 void PageSnippets::onSearch(const QString& target)
 {
-
+	if(target.isEmpty())
+		resetSnippets();
+	else
+		model.setFilter(tr("Snippet like \'%%1%\' ").arg(target));
 }
 
 void PageSnippets::onCurrentRowChanged()
@@ -97,4 +101,8 @@ int PageSnippets::getID(int row) const {
 
 void PageSnippets::enter() {
 	model.select();
+}
+
+void PageSnippets::onCancelSearch() {
+	ui.btSearch->setChecked(false);
 }

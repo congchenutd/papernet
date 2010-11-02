@@ -33,6 +33,7 @@ void AddSnippetDlg::onDel()
 			QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
+		qSort(idxList.begin(), idxList.end(), qGreater<QModelIndex>());
 		foreach(QModelIndex idx, idxList)
 			model.removeRow(idx.row());
 	}
@@ -55,6 +56,10 @@ void AddSnippetDlg::accept()
 
 	QSqlDatabase::database().transaction();
 	updateSnippet(snippetID, ui.teContent->toPlainText());
+
+	QSqlQuery query;
+	query.exec(QObject::tr("delete from PaperSnippet where Snippet = %1").arg(snippetID));
+
 	QStringList list = model.stringList();
 	foreach(QString title, list)
 	{
@@ -64,10 +69,10 @@ void AddSnippetDlg::accept()
 			paperID = getNextID("Papers", "ID");
 			::addPaper(paperID, title);
 		}
-		updatePaperSnippet(paperID, snippetID);
+		addPaperSnippet(paperID, snippetID);
 	}
-	QSqlDatabase::database().commit();
 
+	QSqlDatabase::database().commit();
 	return QDialog::accept();
 }
 
@@ -78,6 +83,7 @@ void AddSnippetDlg::addPaper(const QString& title)
 	int lastRow = model.rowCount();
 	model.insertRow(lastRow);
 	model.setData(model.index(lastRow, 0), title);
+	model.sort(0);
 }
 
 void AddSnippetDlg::setSnippet(const QString& snippet) {
@@ -88,6 +94,7 @@ void AddSnippetDlg::setSnippetID(int id)
 {
 	snippetID = id;
 	model.setStringList(getPaperList(snippetID));
+	model.sort(0);
 }
 
 void AddSnippetDlg::onSelect()

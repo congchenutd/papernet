@@ -17,6 +17,7 @@ private slots:
 	void onCurrentRowChanged();
 	void onShowSearch(bool enable);
 	void onSearch(const QString& target);
+	void onCancelSearch();
 	void onAdd();
 	void onDel();
 	void onEdit();

@@ -28,7 +28,7 @@ int getMaxCoauthor();
 bool titleExists(const QString& title);
 void updateSnippet(int id, const QString& content);
 int getPaperID(const QString& title);
-void updatePaperSnippet(int paperID, int snippetID);
+void addPaperSnippet(int paperID, int snippetID);
 void addPaper(int id, const QString& title);
 void delSnippet(int id);
 QStringList getPaperList(int snippetID);

@@ -272,11 +272,9 @@ int getPaperID(const QString& title)
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
-void updatePaperSnippet(int paperID, int snippetID)
+void addPaperSnippet(int paperID, int snippetID)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("delete from PaperSnippet where Paper = %1 and Snippet = %2")
-										.arg(paperID).arg(snippetID));
 	query.exec(QObject::tr("insert into PaperSnippet values (%1, %2)")
 										.arg(paperID).arg(snippetID));
 }

@@ -15,10 +15,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	actionGroup->addAction(ui.actionPapers);
 	actionGroup->addAction(ui.actionSnippets);
 
-	connect(ui.actionOptions,  SIGNAL(triggered()), this, SLOT(onOptions()));
-	connect(ui.actionAbout,    SIGNAL(triggered()), this, SLOT(onAbout()));
-	connect(ui.actionPapers,   SIGNAL(triggered()), this, SLOT(onPapers()));
-	connect(ui.actionSnippets, SIGNAL(triggered()), this, SLOT(onSnippets()));
+	connect(ui.actionOptions,     SIGNAL(triggered()), this, SLOT(onOptions()));
+	connect(ui.actionAbout,       SIGNAL(triggered()), this, SLOT(onAbout()));
+	connect(ui.actionPapers,      SIGNAL(triggered()), this, SLOT(onPapers()));
+	connect(ui.actionSnippets,    SIGNAL(triggered()), this, SLOT(onSnippets()));
 
 	// load settings
 	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());

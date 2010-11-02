@@ -55,6 +55,8 @@ void UserSetting::loadDefaults()
 	setKeepAttachments(false);
 	setLastImportPath(".");
 	setLastAttachmentPath(".");
+	setValue("SmallIcon", false);
+	setValue("ShowText",  false);
 }
 
 QFont UserSetting::getFont() const

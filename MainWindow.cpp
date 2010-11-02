@@ -80,6 +80,8 @@ void MainWindow::onPapers() {
 	ui.stackedWidget->setCurrentIndex(0);
 }
 
-void MainWindow::onSnippets() {
+void MainWindow::onSnippets() 
+{
 	ui.stackedWidget->setCurrentIndex(1);
+	static_cast<PageSnippets*>(ui.stackedWidget->widget(1))->enter();
 }

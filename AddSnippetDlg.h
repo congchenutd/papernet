@@ -12,8 +12,9 @@ class AddSnippetDlg : public QDialog
 public:
 	AddSnippetDlg(QWidget *parent = 0);
 
-	void setPaperID  (int paper);
-	void setSnippetID(int id)    { snippetID = id;    }
+	void setSnippetID(int id);
+	void addPaper(const QString& title);
+	void setSnippet(const QString& snippet);
 	QString getContent() const;
 	QStringList getReferences() const;
 
@@ -21,15 +22,14 @@ private slots:
 	void onCurrentRowChanged();
 	void onAdd();
 	void onDel();
+	void onSelect();
 	virtual void accept();
 
 private:
-	void addPaper(const QString& title);
 
 private:
 	Ui::AddSnippetDlgClass ui;
 	QStringListModel model;
-	int paperID;
 	int snippetID;
 };
 

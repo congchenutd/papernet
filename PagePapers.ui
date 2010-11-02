@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>488</height>
+    <width>645</width>
+    <height>428</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -123,9 +123,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>0</number>
-      </property>
       <property name="leftMargin">
        <number>5</number>
       </property>

@@ -57,13 +57,13 @@ void createTables()
 
 	query.exec("create table Snippets( \
 					ID int primary key, \
-					Content varchar \
+					Snippet varchar\
 				)");
 
 	query.exec("create table PaperSnippet( \
 					Paper   int references Papers  (ID) on delete cascade on update cascade, \
 					Snippet int references Snippets(ID) on delete cascade on update cascade, \
-					primary key (Paper, Reference) \
+					primary key (Paper, Snippet) \
 			   )");
 }
 
@@ -142,8 +142,13 @@ QString getPaperTitle(int paperID)
 	return query.next() ? query.value(0).toString() : QString("Error") ;
 }
 
-QString makeValidTitle(const QString& title) {
-	return QString(title).replace(QRegExp("[:|?|*]"), "-");
+QString makeValidTitle(const QString& title) 
+{
+	QString result = title;
+	result.replace(QRegExp("[:|?|*]"), "-");
+	result.remove('\'');
+	result.remove('\"');
+	return result;
 }
 
 QString getAttachmentDir(int paperID) {
@@ -244,9 +249,57 @@ int getMaxCoauthor()
 	return query.next() ? query.value(0).toInt() : 0;
 }
 
-bool titleExists(const QString &title)
+bool titleExists(const QString &title) {
+	return getPaperID(title) > -1;
+}
+
+void updateSnippet(int id, const QString& content)
 {
-    QSqlQuery query;
-    query.exec(QObject::tr("select * from Papers where Title = \'%1\'").arg(title));
-    return query.next();
+	QSqlQuery query;
+	query.exec(QObject::tr("select * from Snippets where ID = %1").arg(id));
+	if(query.next())
+		query.exec(QObject::tr("update Snippets set Snippet =\'%1\' where ID = %2")
+															.arg(id).arg(content));
+	else
+		query.exec(QObject::tr("insert into Snippets values (%1, \'%2\')")
+															.arg(id).arg(content));
+}
+
+int getPaperID(const QString& title)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("select ID from Papers where Title = \'%1\'").arg(title));
+	return query.next() ? query.value(0).toInt() : -1;
+}
+
+void updatePaperSnippet(int paperID, int snippetID)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("delete from PaperSnippet where Paper = %1 and Snippet = %2")
+										.arg(paperID).arg(snippetID));
+	query.exec(QObject::tr("insert into PaperSnippet values (%1, %2)")
+										.arg(paperID).arg(snippetID));
+}
+
+void addPaper(int id, const QString& title)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("insert into Papers(ID, Title) values (%1, \'%2\')")
+													.arg(id).arg(title));
+}
+
+void delSnippet(int id)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("delete from Snippets where ID = %1").arg(id));
+}
+
+QStringList getPaperList(int snippetID)
+{
+	QStringList result;
+	QSqlQuery query;
+	query.exec(QObject::tr("select Paper from PaperSnippet where Snippet = %1").arg(snippetID));
+	while(query.next())
+		result << getPaperTitle(query.value(0).toInt());
+	return result;
 }

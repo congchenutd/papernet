@@ -26,7 +26,11 @@ bool renameTitle(const QString& oldName, const QString& newName);
 int getMaxProximity();
 int getMaxCoauthor();
 bool titleExists(const QString& title);
-
-const int MAX_PAPER_COUNT = 1000;
+void updateSnippet(int id, const QString& content);
+int getPaperID(const QString& title);
+void updatePaperSnippet(int paperID, int snippetID);
+void addPaper(int id, const QString& title);
+void delSnippet(int id);
+QStringList getPaperList(int snippetID);
 
 #endif // Common_h__

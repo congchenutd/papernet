@@ -12,6 +12,7 @@
 #include <QInputDialog>
 #include <QSqlQuery>
 #include <QMenu>
+#include <QFileInfo>
 
 PagePapers::PagePapers(QWidget *parent)
 	: QWidget(parent)
@@ -308,7 +309,8 @@ void PagePapers::import(const QString& fileName,       const QString& firstHead,
 			continue;
 		}
 	}
-    onSubmitPaper();
+	onSubmitPaper();
+	addAttachment(currentPaperID, "EndNote." + QFileInfo(fileName).suffix(), fileName);
 }
 
 QString PagePapers::trimHead(const QString& line, const QString& delimiter) const {
@@ -459,10 +461,7 @@ void PagePapers::onFilter(bool enabled)
 	if(enabled)
 		resetAllTags();   // show all tags
 	else
-	{
 		resetPapers();    // show all papers
-		selectID(currentPaperID);
-	}
 }
 
 void PagePapers::resetPapers()
@@ -472,6 +471,7 @@ void PagePapers::resetPapers()
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	hideRelated();
 	hideCoauthor();
+	selectID(currentPaperID);
 }
 
 void PagePapers::resetAllTags()
@@ -505,7 +505,7 @@ void PagePapers::resizeEvent(QResizeEvent*)
 	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
 	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.6 << height() * 0.4);
 	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
-    ui.splitterDetails->setSizes(QList<int>() << width() * 0.5 << width() * 0.4 << width() * 0.1);
+    ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.4 << width() * 0.1);
 }
 
 void PagePapers::onClicked(const QModelIndex& idx)
@@ -578,7 +578,10 @@ void PagePapers::hideCoauthor()
 void PagePapers::onAddSnippet()
 {
 	AddSnippetDlg dlg(this);
-	dlg.setPaperID(getPaperID(currentPaperID));
 	dlg.setSnippetID(getNextID("Snippets", "ID"));
-	dlg.exec();
+	dlg.addPaper(getPaperTitle(currentPaperID));
+	if(dlg.exec() == QDialog::Accepted)
+	{
+		resetPapers();
+	}
 }

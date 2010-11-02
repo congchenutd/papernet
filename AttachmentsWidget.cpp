@@ -65,13 +65,10 @@ void AttachmentsWidget::onAddFile()
 		return;
 	
 	MySetting<UserSetting>::getInstance()->setLastAttachmentPath(QFileInfo(fileName).absolutePath());
-
-	QString defaultName = QFileInfo(fileName).fileName();
-	if(fileName.endsWith(".pdf", Qt::CaseInsensitive))
-		defaultName = "Paper.pdf";
+	
 	bool ok;
 	QString attachmentName = QInputDialog::getText(this, tr("Attachment name"), 
-		tr("Attachment name"), QLineEdit::Normal, defaultName, &ok);
+		tr("Attachment name"), QLineEdit::Normal, guessName(fileName), &ok);
 	if(!ok || attachmentName.isEmpty())
 		return;
 
@@ -133,4 +130,16 @@ void AttachmentsWidget::onRename()
 
 	if(!renameAttachment(paperID, oldName, newName))
 		QMessageBox::critical(this, tr("Error"), tr("The name already exists!"));
+}
+
+QString AttachmentsWidget::guessName(const QString &fileName)
+{
+	QString result = QFileInfo(fileName).fileName();
+	if(fileName.endsWith(".pdf", Qt::CaseInsensitive))
+		result = "Paper.pdf";
+	else if(fileName.endsWith(".ris", Qt::CaseInsensitive))
+		result = "EndNote.ris";
+	else if(fileName.endsWith(".enw", Qt::CaseInsensitive))
+		result = "EndNote.enw";	
+	return result;
 }

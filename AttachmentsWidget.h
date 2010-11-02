@@ -26,6 +26,9 @@ private slots:
 	void onOpen(const QModelIndex& idx);
 
 private:
+	QString guessName(const QString &fileName);
+
+private:
 	Ui::AttachmentsWidgetClass ui;
 
 	int paperID;

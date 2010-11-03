@@ -92,7 +92,6 @@ void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
 {
 	bool valid = idx.isValid();
 	ui.btDelPaper->setEnabled(valid);
-	ui.btAddTag->setEnabled(valid);
 	ui.btDelTag->setEnabled(false);
 
 	if(valid)

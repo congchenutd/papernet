@@ -103,6 +103,7 @@ void PagePapers::onAddPaper()
 {
 	onSubmitPaper();
 	PaperDlg dlg(this);
+	dlg.setWindowTitle(tr("Add Paper"));
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		int lastRow = modelPapers.rowCount();
@@ -122,6 +123,7 @@ void PagePapers::onAddPaper()
 void PagePapers::onEditPaper()
 {
 	PaperDlg dlg(this);
+	dlg.setWindowTitle(tr("Edit Paper"));
 	QString oldTitle = modelPapers.data(modelPapers.index(currentRowPapers, PAPER_TITLE)).toString();
 	dlg.setTitle(oldTitle);
 	dlg.setAuthors (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_AUTHORS)) .toString());
@@ -578,6 +580,7 @@ void PagePapers::hideCoauthor()
 void PagePapers::onAddSnippet()
 {
 	AddSnippetDlg dlg(this);
+	dlg.setWindowTitle(tr("Add Snippet"));
 	dlg.setSnippetID(getNextID("Snippets", "ID"));
 	dlg.addPaper(getPaperTitle(currentPaperID));
 	if(dlg.exec() == QDialog::Accepted)

@@ -20,6 +20,7 @@ PaperList::PaperList(QWidget *parent)
 	ui.tableView->resizeColumnToContents(PagePapers::PAPER_TITLE);
 
 	connect(ui.leSearch, SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
+	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(accept()));
 }
 
 QStringList PaperList::getSelected() const

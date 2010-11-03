@@ -9,10 +9,10 @@ PageSnippets::PageSnippets(QWidget *parent)
 	ui.setupUi(this);
 	onShowSearch(false);
 
-	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
 	resetSnippets();
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(SNIPPET_ID);
+	ui.tableView->resizeColumnToContents(SNIPPET_TITLE);
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
@@ -44,8 +44,8 @@ void PageSnippets::onSearch(const QString& target)
 	if(target.isEmpty())
 		resetSnippets();
 	else
-		model.setFilter(tr("Snippet like \"%%1%\" or \
-						    Note    like \"%%1%\" ").arg(target));
+		model.setFilter(tr("Title   like \"%%1%\" or \
+						    Snippet like \"%%1%\" ").arg(target));
 }
 
 void PageSnippets::onCurrentRowChanged()
@@ -59,6 +59,7 @@ void PageSnippets::onCurrentRowChanged()
 void PageSnippets::onAdd()
 {
 	AddSnippetDlg dlg(this);
+	dlg.setWindowTitle(tr("Add Snippet"));
 	dlg.setSnippetID(getNextID("Snippets", "ID"));
 	if(dlg.exec() == QDialog::Accepted)
 		model.select();
@@ -67,6 +68,7 @@ void PageSnippets::onAdd()
 void PageSnippets::onEdit()
 {
 	AddSnippetDlg dlg(this);
+	dlg.setWindowTitle(tr("Edit Snippet"));
 	dlg.setSnippetID(getID(currentRow));
 	if(dlg.exec() == QDialog::Accepted)
 		model.select();

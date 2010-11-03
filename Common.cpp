@@ -259,7 +259,7 @@ void updateSnippet(int id, const QString& title, const QString& content)
 	QSqlQuery query;
 	query.exec(QObject::tr("select * from Snippets where ID = %1").arg(id));
 	if(query.next())
-		query.exec(QObject::tr("update Snippets set Title = \"%2\", Snippet =\"%1\" \
+		query.exec(QObject::tr("update Snippets set Title = \"%1\", Snippet =\"%2\" \
 							   where ID = %3").arg(title).arg(content).arg(id));
 	else
 		query.exec(QObject::tr("insert into Snippets values (%1, \"%2\", \"%3\")")

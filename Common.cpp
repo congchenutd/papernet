@@ -306,3 +306,14 @@ QStringList getPaperList(int snippetID)
 		result << getPaperTitle(query.value(0).toInt());
 	return result;
 }
+
+bool isTagged(int paperID)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("select * from PaperTag where Paper = %1").arg(paperID));
+	return query.next();
+}
+
+bool isAttached(int paperID) {
+	return !getAttachmentDir(paperID).isEmpty();
+}

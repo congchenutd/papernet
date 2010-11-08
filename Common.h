@@ -32,5 +32,7 @@ void addPaperSnippet(int paperID, int snippetID);
 void addPaper(int id, const QString& title);
 void delSnippet(int id);
 QStringList getPaperList(int snippetID);
+bool isTagged(int paperID);
+bool isAttached(int paperID);
 
 #endif // Common_h__

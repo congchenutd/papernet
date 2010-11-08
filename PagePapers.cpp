@@ -38,22 +38,19 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.tableViewPapers->setModel(&modelPapers);
 	ui.tableViewPapers->hideColumn(PAPER_ID);
+	ui.tableViewPapers->hideColumn(PAPER_READ);
 	ui.tableViewPapers->hideColumn(PAPER_JOURNAL);
 	ui.tableViewPapers->hideColumn(PAPER_ABSTRACT);
 	ui.tableViewPapers->hideColumn(PAPER_NOTE);
 	ui.tableViewPapers->hideColumn(PAPER_PROXIMITY);
 	ui.tableViewPapers->hideColumn(PAPER_COAUTHOR);
 	ui.tableViewPapers->hideColumn(PAPER_ADDEDTIME);
-//	ui.tableViewPapers->horizontalHeader()->setStretchLastSection(true);
-	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
-	ui.tableViewPapers->resizeColumnToContents(PAPER_READ);
-	ui.tableViewPapers->resizeColumnToContents(PAPER_TAGGED);
-	ui.tableViewPapers->resizeColumnToContents(PAPER_ATTACHED);
 	ui.tableViewPapers->resizeColumnToContents(PAPER_TITLE);
+	ui.tableViewPapers->setColumnWidth(PAPER_TAGGED,   24);
+	ui.tableViewPapers->setColumnWidth(PAPER_ATTACHED, 24);
 
 	ui.listViewAllTags->setModel(&modelAllTags);
 	ui.listViewAllTags->setModelColumn(TAG_NAME);
-
 	ui.listViewTags->setModel(&modelTags);
 
 #ifdef Q_WS_MAC
@@ -586,7 +583,5 @@ void PagePapers::onAddSnippet()
 	dlg.setSnippetID(getNextID("Snippets", "ID"));
 	dlg.addPaper(getPaperTitle(currentPaperID));
 	if(dlg.exec() == QDialog::Accepted)
-	{
 		resetPapers();
-	}
 }

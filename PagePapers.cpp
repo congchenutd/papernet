@@ -25,6 +25,9 @@ PagePapers::PagePapers(QWidget *parent)
 
 	resetPapers();
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
+	modelPapers.setHeaderData(PAPER_READ,     Qt::Horizontal, "R");
+	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
+	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 	resetAllTags();
 	modelAllTags.setEditStrategy(QSqlTableModel::OnManualSubmit);
 
@@ -40,8 +43,12 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tableViewPapers->hideColumn(PAPER_NOTE);
 	ui.tableViewPapers->hideColumn(PAPER_PROXIMITY);
 	ui.tableViewPapers->hideColumn(PAPER_COAUTHOR);
-	ui.tableViewPapers->horizontalHeader()->setStretchLastSection(true);
+	ui.tableViewPapers->hideColumn(PAPER_ADDEDTIME);
+//	ui.tableViewPapers->horizontalHeader()->setStretchLastSection(true);
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	ui.tableViewPapers->resizeColumnToContents(PAPER_READ);
+	ui.tableViewPapers->resizeColumnToContents(PAPER_TAGGED);
+	ui.tableViewPapers->resizeColumnToContents(PAPER_ATTACHED);
 	ui.tableViewPapers->resizeColumnToContents(PAPER_TITLE);
 
 	ui.listViewAllTags->setModel(&modelAllTags);
@@ -233,11 +240,7 @@ void PagePapers::onImport()
 	}
 
 	onSubmitPaper();
-
-	int backup = currentPaperID;
-	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
-	currentPaperID = backup;
-	selectID(currentPaperID);
+	resetPapers();
 }
 
 void PagePapers::import(const QString& fileName,       const QString& firstHead,

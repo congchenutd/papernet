@@ -34,6 +34,9 @@ void createTables()
 	query.exec("PRAGMA foreign_keys = ON");
 	query.exec("create table Papers( \
 					ID       int primary key, \
+					Read     bool, \
+					Tagged   bool, \
+					Attached bool, \
 					Title    varchar unique, \
 					Authors  varchar, \
 					Year     date,    \
@@ -41,7 +44,8 @@ void createTables()
 					Abstract varchar, \
 					Note     varchar, \
 					Proximity int, \
-					Coauthor  int \
+					Coauthor  int, \
+					AddedTime date \
 				)");
 
 	query.exec("create table Tags( \

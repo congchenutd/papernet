@@ -103,6 +103,8 @@ void AttachmentsWidget::onOpen(const QModelIndex& idx)
 {
 	QString attachmentName = model.data(idx).toString();
 	openAttachment(paperID, attachmentName);
+	setRead(paperID);
+	emit paperRead();   // let papers refresh
 }
 
 void AttachmentsWidget::update()

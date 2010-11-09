@@ -34,5 +34,6 @@ void delSnippet(int id);
 QStringList getPaperList(int snippetID);
 bool isTagged(int paperID);
 bool isAttached(int paperID);
+void setRead(int paperID);
 
 #endif // Common_h__

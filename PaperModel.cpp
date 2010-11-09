@@ -2,10 +2,7 @@
 #include "PagePapers.h"
 #include "Common.h"
 
-PaperModel::PaperModel(QObject *parent)
-	: QSqlTableModel(parent) {
-	icon.addFile(":/MainWindow/Images/Tick.png");
-}
+PaperModel::PaperModel(QObject *parent) : QSqlTableModel(parent) {}
 
 QVariant PaperModel::data(const QModelIndex& idx, int role) const
 {
@@ -35,8 +32,7 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 	// make new paper's title bold
 	if(idx.column() == PagePapers::PAPER_TITLE)
 	{
-		if(role == Qt::FontRole && 
-			QSqlTableModel::data(index(idx.row(), PagePapers::PAPER_READ), Qt::DisplayRole).toBool())
+		if(role == Qt::FontRole && !data(index(idx.row(), PagePapers::PAPER_READ)).toBool())
 		{
 			QFont f = qApp->font();
 			f.setBold(true);
@@ -50,9 +46,9 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 			return QString();
 		if(role == Qt::DecorationRole)
 		{
-			
-			//&& QSqlTableModel::data(idx, Qt::DisplayRole).toBool())
-			return QIcon(":/MainWindow/Images/Tag.png");
+			int paperID = data(index(idx.row(), PagePapers::PAPER_ID), Qt::DisplayRole).toInt();
+			if(isTagged(paperID))
+				return QIcon(":/MainWindow/Images/Tag.png");
 		}
 	}
 	// attached
@@ -60,8 +56,12 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 	{
 		if(role == Qt::DisplayRole)
 			return QString();
-		if(role == Qt::DecorationRole && QSqlTableModel::data(idx, Qt::DisplayRole).toBool())
-			return QIcon(":/MainWindow/Images/Attach2.png");
+		if(role == Qt::DecorationRole)
+		{
+			int paperID = data(index(idx.row(), PagePapers::PAPER_ID), Qt::DisplayRole).toInt();
+			if(isAttached(paperID))
+				return QIcon(":/MainWindow/Images/Attach2.png");
+		}
 	}
 
 	return QSqlTableModel::data(idx, role);

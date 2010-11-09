@@ -23,11 +23,8 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.setupUi(this);
 	onShowSearch(false);
 
-	resetPapers();
+	onResetPapers();
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
-	modelPapers.setHeaderData(PAPER_READ,     Qt::Horizontal, "R");
-	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
-	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 	resetAllTags();
 	modelAllTags.setEditStrategy(QSqlTableModel::OnManualSubmit);
 
@@ -46,8 +43,8 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tableViewPapers->hideColumn(PAPER_COAUTHOR);
 	ui.tableViewPapers->hideColumn(PAPER_ADDEDTIME);
 	ui.tableViewPapers->resizeColumnToContents(PAPER_TITLE);
-	ui.tableViewPapers->setColumnWidth(PAPER_TAGGED,   24);
-	ui.tableViewPapers->setColumnWidth(PAPER_ATTACHED, 24);
+	ui.tableViewPapers->setColumnWidth(PAPER_TAGGED,   32);
+	ui.tableViewPapers->setColumnWidth(PAPER_ATTACHED, 32);
 
 	ui.listViewAllTags->setModel(&modelAllTags);
 	ui.listViewAllTags->setModelColumn(TAG_NAME);
@@ -90,6 +87,8 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tableViewPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
 	connect(ui.tableViewPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
 	connect(ui.tableViewPapers, SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
+
+	connect(ui.widgetAttachments, SIGNAL(paperRead()), this, SLOT(onResetPapers()));
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
@@ -143,6 +142,8 @@ void PagePapers::onEditPaper()
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_JOURNAL),  dlg.getJournal());
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_ABSTRACT), dlg.getAbstract());
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_NOTE),     dlg.getNote());
+		if(!dlg.getNote().isEmpty())
+			setRead(currentPaperID);
 		onSubmitPaper();
 	}
 }
@@ -237,7 +238,7 @@ void PagePapers::onImport()
 	}
 
 	onSubmitPaper();
-	resetPapers();
+	onResetPapers();
 }
 
 void PagePapers::import(const QString& fileName,       const QString& firstHead,
@@ -335,7 +336,7 @@ PagePapers::~PagePapers() {
 void PagePapers::onSearch(const QString& target)
 {
 	if(target.isEmpty())
-		resetPapers();
+		onResetPapers();
 	else
 		modelPapers.setFilter(
 		tr("Title    like \"%%1%\" or \
@@ -361,10 +362,7 @@ void PagePapers::onCurrentRowAllTagsChanged()
 	if(isFiltered())
 	{
 		if(currentRowTags < 0)
-		{
-			resetPapers();
-			return;
-		}
+			return onResetPapers();   // no selected tags, show all papers
 		filterPapers();
 	}
 }
@@ -462,13 +460,17 @@ void PagePapers::onFilter(bool enabled)
 	if(enabled)
 		resetAllTags();   // show all tags
 	else
-		resetPapers();    // show all papers
+		onResetPapers();    // show all papers
 }
 
-void PagePapers::resetPapers()
+void PagePapers::onResetPapers()
 {
 	modelPapers.setTable("Papers");
 	modelPapers.select();
+	modelPapers.setHeaderData(PAPER_READ,     Qt::Horizontal, "R");
+	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
+	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
+
 	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	hideRelated();
 	hideCoauthor();
@@ -493,7 +495,7 @@ void PagePapers::onShowSearch(bool enable)
 	{
 		ui.leSearch->clear();
 		ui.frameSearch->hide();
-		resetPapers();
+		onResetPapers();
 	}
 }
 
@@ -553,6 +555,7 @@ void PagePapers::hideRelated()
 void PagePapers::onShowCoauthored()
 {
 	hideRelated();
+
 	QSqlDatabase::database().transaction();
 	QSqlQuery query;	
 	query.exec(tr("update Papers set Coauthor = 0"));
@@ -560,6 +563,7 @@ void PagePapers::onShowCoauthored()
 	foreach(QString author, authors)
 		query.exec(tr("update Papers set Coauthor = Coauthor + 1 where Authors like \"%%1%\"")
 															.arg(author.trimmed()));
+	// set itself to max
 	query.exec(tr("update Papers set Coauthor = (select max(Coauthor)+1 from Papers) \
 													where ID = %1").arg(currentPaperID));
 	QSqlDatabase::database().commit();
@@ -583,5 +587,5 @@ void PagePapers::onAddSnippet()
 	dlg.setSnippetID(getNextID("Snippets", "ID"));
 	dlg.addPaper(getPaperTitle(currentPaperID));
 	if(dlg.exec() == QDialog::Accepted)
-		resetPapers();
+		onResetPapers();
 }

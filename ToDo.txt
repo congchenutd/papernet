@@ -1,8 +1,6 @@
 fuzzy matching of names
 weights of tags
-untagged, attached
 import to existing unfinished papers
 open ref
 show snippets of a paper
 move search bar to toolbar
-show multiple/recently imported

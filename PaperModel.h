@@ -11,9 +11,6 @@ class PaperModel : public QSqlTableModel
 public:
 	PaperModel(QObject* parent = 0);
 	QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
-
-private:
-	QIcon icon;
 };
 
 #endif // PAPERMODEL_H

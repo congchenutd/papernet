@@ -28,6 +28,9 @@ private slots:
 private:
 	QString guessName(const QString &fileName);
 
+signals:
+	void paperRead();
+
 private:
 	Ui::AttachmentsWidgetClass ui;
 

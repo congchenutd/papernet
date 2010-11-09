@@ -44,8 +44,7 @@ void createTables()
 					Abstract varchar, \
 					Note     varchar, \
 					Proximity int, \
-					Coauthor  int, \
-					AddedTime date \
+					Coauthor  int  \
 				)");
 
 	query.exec("create table Tags( \
@@ -193,6 +192,7 @@ bool addLink(int paperID, const QString& link, const QString& u)
 void openAttachment(int paperID, const QString& attachmentName)
 {
 	QString filePath = getFilePath(paperID, attachmentName);
+
 #ifdef Q_WS_WIN
 	QDesktopServices::openUrl(QUrl(filePath));
 #endif
@@ -315,5 +315,12 @@ bool isTagged(int paperID)
 }
 
 bool isAttached(int paperID) {
-	return !getAttachmentDir(paperID).isEmpty();
+	return !QDir(getAttachmentDir(paperID))
+					.entryList(QStringList() << "*.pdf" << "*.ppt", QDir::Files).isEmpty();
+}
+
+void setRead(int paperID)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("update Papers set Read = \'true\' where ID = %1").arg(paperID));
 }

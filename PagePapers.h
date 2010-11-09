@@ -34,6 +34,7 @@ private slots:
 	void onShowRelated();
 	void onShowCoauthored();
 	void onAddSnippet();
+	void onResetPapers();
 
 	void onCurrentRowAllTagsChanged();
 	void onAddTag();
@@ -58,7 +59,6 @@ private:
 	int idToRow(int id) const;
 	void updateTags();
 	void filterPapers();
-	void resetPapers();
 	void resetAllTags();
 	bool isFiltered() const;
 	void hideRelated();

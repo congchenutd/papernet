@@ -87,6 +87,12 @@ void delPaper(int paperID)
 	// delete db entry	
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Papers where ID = %1").arg(paperID));
+
+	// delete papertag entry
+	query.exec(QObject::tr("delete from PaperTag where Paper = %1").arg(paperID));
+
+	// delete papersnippet entry
+	query.exec(QObject::tr("delete from PaperSnippet where Paper = %1").arg(paperID));
 }
 
 void delTag(int tagID)
@@ -156,7 +162,7 @@ QString makeValidTitle(const QString& title)
 }
 
 QString getAttachmentDir(int paperID) {
-	return attachmentDir + getValidTitle(paperID);
+	return paperID > -1 ? attachmentDir + getValidTitle(paperID) : emptyDir;
 }
 
 QString getValidTitle(int paperID) {
@@ -314,13 +320,45 @@ bool isTagged(int paperID)
 	return query.next();
 }
 
-bool isAttached(int paperID) {
-	return !QDir(getAttachmentDir(paperID))
-					.entryList(QStringList() << "*.pdf" << "*.ppt", QDir::Files).isEmpty();
+AttachmentStatus isAttached(int paperID) 
+{
+	QFileInfoList infos = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
+	if(infos.isEmpty())
+		return ATTACH_NONE;
+
+	QSet<QString> suffixes;
+	foreach(QFileInfo info, infos)
+		suffixes << info.suffix().toLower();
+
+	QSet<QString> citations;
+	citations << "enw" << "ris";
+
+	QSet<QString> suffixes2 = suffixes;
+	if(!suffixes.intersect(citations).isEmpty())      // has endnote files
+	{
+		if(!suffixes2.subtract(citations).isEmpty())  // has more than endnote files
+			return ATTACH_ALL;
+		return ATTACH_ENDNOTE;
+	}
+	return ATTACH_PAPER;
 }
 
 void setRead(int paperID)
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("update Papers set Read = \'true\' where ID = %1").arg(paperID));
+}
+
+void updateTagged(int paperID)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("update Papers set Tagged = %1 where ID = %2")
+								.arg(isTagged(paperID)).arg(paperID));
+}
+
+void updateAttached(int paperID)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("update Papers set Attached = %1 where ID = %2")
+								.arg(isAttached(paperID)).arg(paperID));
 }

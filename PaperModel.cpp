@@ -59,8 +59,13 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 		if(role == Qt::DecorationRole)
 		{
 			int paperID = data(index(idx.row(), PagePapers::PAPER_ID), Qt::DisplayRole).toInt();
-			if(isAttached(paperID))
-				return QIcon(":/MainWindow/Images/Attach.png");
+			AttachmentStatus attachmentStatus = isAttached(paperID);
+			if(attachmentStatus == ATTACH_ENDNOTE)
+				return QIcon(":/MainWindow/Images/AttachEndNote.png");
+			else if(attachmentStatus == ATTACH_PAPER)
+				return QIcon(":/MainWindow/Images/AttachPaper.png");
+			else if(attachmentStatus == ATTACH_ALL)
+				return QIcon(":/MainWindow/Images/AttachAll.png");
 		}
 	}
 

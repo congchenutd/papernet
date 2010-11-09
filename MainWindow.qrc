@@ -1,7 +1,9 @@
 <RCC>
   <qresource prefix="MainWindow">
     <file>Images/Snippet.png</file>
-    <file>Images/Attach.png</file>
+    <file>Images/AttachAll.png</file>
+    <file>Images/AttachEndNote.png</file>
+    <file>Images/AttachPaper.png</file>
     <file>Images/Coauthor.png</file>
     <file>Images/Related.png</file>
     <file>Images/Rename.png</file>

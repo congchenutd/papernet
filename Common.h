@@ -33,7 +33,12 @@ void addPaper(int id, const QString& title);
 void delSnippet(int id);
 QStringList getPaperList(int snippetID);
 bool isTagged(int paperID);
-bool isAttached(int paperID);
+
 void setRead(int paperID);
+void updateTagged(int paperID);
+void updateAttached(int paperID);
+
+typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
+AttachmentStatus isAttached(int paperID);
 
 #endif // Common_h__

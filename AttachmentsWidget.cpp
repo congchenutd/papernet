@@ -73,8 +73,13 @@ void AttachmentsWidget::onAddFile()
 		return;
 
 	if(!addAttachment(paperID, attachmentName, fileName))
+	{
 		QMessageBox::critical(this, tr("Error"), tr("The name already exists!"));
+		return;
+	}
+
 	update();
+	updateAttached(paperID);
 }
 
 void AttachmentsWidget::onAddLink()
@@ -83,8 +88,13 @@ void AttachmentsWidget::onAddLink()
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		if(!addLink(paperID, dlg.getName(), dlg.getUrl()))
+		{
 			QMessageBox::critical(this, tr("Error"), tr("The name already exists!"));
+			return;
+		}
+
 		update();
+		updateAttached(paperID);
 	}
 }
 
@@ -96,6 +106,7 @@ void AttachmentsWidget::onDel()
 		QString attachmentName = model.data(currentIndex).toString();
         delAttachment(paperID, attachmentName);
 		update();
+		updateAttached(paperID);
 	}
 }
 
@@ -109,16 +120,10 @@ void AttachmentsWidget::onOpen(const QModelIndex& idx)
 
 void AttachmentsWidget::update()
 {
-	if(paperID > -1)
-	{
-		QString dir = getAttachmentDir(paperID);
-		if(QDir(dir).entryList().isEmpty())
-			dir = emptyDir;
-		ui.listView->setRootIndex(model.index(dir));
-	}
-	else {
-		ui.listView->setRootIndex(model.index(emptyDir));
-	}
+	QString dir = getAttachmentDir(paperID);
+	if(QDir(dir).entryList().isEmpty())
+		dir = emptyDir;
+	ui.listView->setRootIndex(model.index(dir));
 }
 
 void AttachmentsWidget::onRename()

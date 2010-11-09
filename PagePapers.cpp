@@ -44,6 +44,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tableViewPapers->resizeColumnToContents(PAPER_TITLE);
 	ui.tableViewPapers->setColumnWidth(PAPER_TAGGED,   32);
 	ui.tableViewPapers->setColumnWidth(PAPER_ATTACHED, 32);
+	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
 	ui.listViewAllTags->setModel(&modelAllTags);
 	ui.listViewAllTags->setModelColumn(TAG_NAME);
@@ -150,8 +151,10 @@ void PagePapers::onDelPaper()
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tableViewPapers->selectionModel()->selectedRows();
+		QSqlDatabase::database().transaction();
 		foreach(QModelIndex idx, idxList)
 			delPaper(getPaperID(idx.row()));
+		QSqlDatabase::database().commit();
 		modelPapers.select();
 	}
 }
@@ -331,6 +334,15 @@ PagePapers::~PagePapers() {
 
 void PagePapers::onSearch(const QString& target)
 {
+	//QSqlDatabase::database().transaction();
+	//for(int i=0; i<modelPapers.rowCount(); ++i)
+	//{
+	//	int id = modelPapers.data(modelPapers.index(i, 0)).toInt();
+	//	updateAttached(i);
+	//	updateTagged(i);
+	//}
+	//QSqlDatabase::database().commit();
+
 	if(target.isEmpty())
 		onResetPapers();
 	else
@@ -379,8 +391,10 @@ void PagePapers::onDelTag()
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
+		QSqlDatabase::database().transaction();
 		foreach(QModelIndex idx, idxList)
 			delTag(getAllTagID(idx.row()));
+		QSqlDatabase::database().commit();
 		modelAllTags.select();
 	}
 }

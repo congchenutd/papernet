@@ -4,6 +4,9 @@
 #include <QtGui/QMainWindow>
 #include "ui_MainWindow.h"
 
+class PagePapers;
+class PageSnippets;
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -24,6 +27,9 @@ private slots:
 
 private:
 	Ui::MainWindowClass ui;
+
+	PagePapers*   pagePapers;
+	PageSnippets* pageSnippets;
 };
 
 #endif // MAINWINDOW_H

@@ -60,7 +60,7 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 		{
 			int paperID = data(index(idx.row(), PagePapers::PAPER_ID), Qt::DisplayRole).toInt();
 			if(isAttached(paperID))
-				return QIcon(":/MainWindow/Images/Attach2.png");
+				return QIcon(":/MainWindow/Images/Attach.png");
 		}
 	}
 

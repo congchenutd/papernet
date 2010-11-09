@@ -26,9 +26,7 @@ private slots:
 	void onEditPaper();
 	void onDelPaper();
 	void onImport();
-	void onShowSearch(bool enable);
 	void onSearch(const QString& target);
-	void onCancelSearch();
 	void onSubmitPaper();
 	void onClicked(const QModelIndex& idx);
 	void onShowRelated();

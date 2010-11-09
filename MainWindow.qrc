@@ -1,7 +1,5 @@
 <RCC>
   <qresource prefix="MainWindow">
-    <file>Images/Attach2.png</file>
-    <file>Images/TagSmall.png</file>
     <file>Images/Snippet.png</file>
     <file>Images/Attach.png</file>
     <file>Images/Coauthor.png</file>

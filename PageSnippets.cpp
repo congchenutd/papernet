@@ -7,7 +7,6 @@ PageSnippets::PageSnippets(QWidget *parent)
 	: QWidget(parent), currentRow(-1)
 {
 	ui.setupUi(this);
-	onShowSearch(false);
 
 	resetSnippets();
 	ui.tableView->setModel(&model);
@@ -18,25 +17,7 @@ PageSnippets::PageSnippets(QWidget *parent)
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.btAdd,          SIGNAL(clicked()),     this, SLOT(onAdd()));
 	connect(ui.btDel,          SIGNAL(clicked()),     this, SLOT(onDel()));
-	connect(ui.btSearch,       SIGNAL(toggled(bool)), this, SLOT(onShowSearch(bool)));
-	connect(ui.btCancelSearch, SIGNAL(clicked()),     this, SLOT(onCancelSearch()));
-	connect(ui.leSearch,  SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
-}
-
-void PageSnippets::onShowSearch(bool enable)
-{
-	if(enable)
-	{
-		ui.frameSearch->show();
-		ui.leSearch->setFocus();
-	}
-	else
-	{
-		ui.leSearch->clear();
-		ui.frameSearch->hide();
-		resetSnippets();
-	}
 }
 
 void PageSnippets::onSearch(const QString& target)
@@ -95,12 +76,4 @@ void PageSnippets::resetSnippets()
 
 int PageSnippets::getID(int row) const {
 	return model.data(model.index(row, SNIPPET_ID)).toInt();
-}
-
-void PageSnippets::enter() {
-	model.select();
-}
-
-void PageSnippets::onCancelSearch() {
-	ui.btSearch->setChecked(false);
 }

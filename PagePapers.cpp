@@ -21,7 +21,6 @@ PagePapers::PagePapers(QWidget *parent)
 	currentRowTags   = -1;
 
 	ui.setupUi(this);
-	onShowSearch(false);
 
 	onResetPapers();
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -68,9 +67,6 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tableViewPapers, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 	connect(ui.btDelPaper, SIGNAL(clicked()), this, SLOT(onDelPaper()));
 	connect(ui.btImport,   SIGNAL(clicked()), this, SLOT(onImport()));
-	connect(ui.btSearch,   SIGNAL(toggled(bool)), this, SLOT(onShowSearch(bool)));
-	connect(ui.leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
-	connect(ui.btCancelSearch, SIGNAL(clicked()), this, SLOT(onCancelSearch()));
 
 	connect(ui.listViewAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowAllTagsChanged()));
@@ -347,10 +343,6 @@ void PagePapers::onSearch(const QString& target)
 			Note     like \"%%1%\" ").arg(target));
 }
 
-void PagePapers::onCancelSearch() {
-	ui.btSearch->setChecked(false);
-}
-
 void PagePapers::onCurrentRowAllTagsChanged()
 {
 	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
@@ -482,21 +474,6 @@ void PagePapers::resetAllTags()
 	modelAllTags.setTable("Tags");
 	modelAllTags.setFilter("Name != \"\" order by Name");
 	modelAllTags.select();
-}
-
-void PagePapers::onShowSearch(bool enable)
-{
-	if(enable)
-	{
-		ui.frameSearch->show();
-		ui.leSearch->setFocus();
-	}
-	else
-	{
-		ui.leSearch->clear();
-		ui.frameSearch->hide();
-		onResetPapers();
-	}
 }
 
 bool PagePapers::isFiltered() const {

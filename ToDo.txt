@@ -4,3 +4,4 @@ import to existing unfinished papers
 open ref
 show snippets of a paper
 move search bar to toolbar
+bug: read 之后会刷新

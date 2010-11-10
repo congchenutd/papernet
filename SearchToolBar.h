@@ -15,6 +15,7 @@ public:
 
 public slots:
 	void onClear();
+    void onFocus();
 
 signals:
 	void search(const QString& target);

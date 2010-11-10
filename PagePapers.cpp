@@ -54,7 +54,6 @@ PagePapers::PagePapers(QWidget *parent)
     ui.btImport  ->setIconSize(QSize(16, 16));
     ui.btAddPaper->setIconSize(QSize(16, 16));
     ui.btDelPaper->setIconSize(QSize(16, 16));
-    ui.btSearch  ->setIconSize(QSize(16, 16));
 #endif
 
 	connect(ui.tableViewPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),

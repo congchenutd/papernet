@@ -13,6 +13,11 @@ PageSnippets::PageSnippets(QWidget *parent)
 	ui.tableView->hideColumn(SNIPPET_ID);
 	ui.tableView->resizeColumnToContents(SNIPPET_TITLE);
 
+#ifdef Q_WS_MAC
+    ui.btAdd   ->setIconSize(QSize(16, 16));
+    ui.btDel   ->setIconSize(QSize(16, 16));
+#endif
+
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.btAdd,          SIGNAL(clicked()),     this, SLOT(onAdd()));

@@ -83,8 +83,6 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tableViewPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
 	connect(ui.tableViewPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
 	connect(ui.tableViewPapers, SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
-
-	connect(ui.widgetAttachments, SIGNAL(paperRead()), this, SLOT(onResetPapers()));
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
@@ -333,15 +331,6 @@ PagePapers::~PagePapers() {
 
 void PagePapers::onSearch(const QString& target)
 {
-	//QSqlDatabase::database().transaction();
-	//for(int i=0; i<modelPapers.rowCount(); ++i)
-	//{
-	//	int id = modelPapers.data(modelPapers.index(i, 0)).toInt();
-	//	updateAttached(i);
-	//	updateTagged(i);
-	//}
-	//QSqlDatabase::database().commit();
-
 	if(target.isEmpty())
 		onResetPapers();
 	else

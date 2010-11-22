@@ -14,6 +14,7 @@
 #include <QSqlQuery>
 #include <QMenu>
 #include <QFileInfo>
+#include <QSqlError>
 
 PagePapers::PagePapers(QWidget *parent)
 	: QWidget(parent)
@@ -232,13 +233,14 @@ void PagePapers::insertRecord(const ImportResult &record)
 {
     int lastRow = modelPapers.rowCount();
     modelPapers.insertRow(lastRow);
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), getNextID("Paper", "ID"));
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), getNextID("Papers", "ID"));
     modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    record.title);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  record.authors);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  record.journal);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     record.year);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), record.abstract);
     modelPapers.submitAll();
+	QString err = modelPapers.lastError().text();
 }
 
 void PagePapers::mergeRecord(int row, const ImportResult &record)

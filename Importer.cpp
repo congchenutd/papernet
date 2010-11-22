@@ -35,10 +35,7 @@ bool NonXmlImporter::import(const QString& fileName)
 
 		foreach(QString titleHead, getTitleHeads())
 			if(line.startsWith(titleHead))
-			{
 				currentResult->title = trimHead(line, titleHead);
-				continue;
-			}
 
 		foreach(QString authorHead, getAuthorHeads())
 			if(line.startsWith(authorHead))
@@ -48,33 +45,19 @@ bool NonXmlImporter::import(const QString& fileName)
 					currentResult->authors = author;
 				else
 					currentResult->authors.append("; " + author);
-				continue;
 			}
 
 		foreach(QString journalHead, getJournalHeads())
 			if(line.startsWith(journalHead))
-			{
-				QString journal = trimHead(line, journalHead);
-				if(currentResult->journal.isEmpty())
-					currentResult->journal = journal;
-				else
-					currentResult->journal.append("; " + journal);
-				continue;
-			}
+				currentResult->journal = trimHead(line, journalHead);
 
 		foreach(QString yearHead, getYearHeads())
 			if(line.startsWith(yearHead))
-			{
 				currentResult->year = trimHead(line, yearHead).toInt();
-				continue;
-			}
 
 		foreach(QString abstractHead, getAbstractHeads())
 			if(line.startsWith(abstractHead))
-			{
 				currentResult->abstract = trimHead(line, abstractHead);
-				continue;
-			}
 	}
 	return true;
 }
@@ -130,25 +113,25 @@ bool XmlImporter::import(const QString& fileName)
 	QFile file(fileName);
 	if(!file.open(QIODevice::ReadOnly))
 		return false;
-	if(!doc.setContent(file.readAll().toLower()))
+	if(!doc.setContent(&file))
 	{
 		file.close();
 		return false;
 	}
 	file.close();
 
-	QDomNodeList records = doc.elementsByTagName("record");
+	QDomNodeList records = doc.elementsByTagName("RECORD");
 	for(int i=0; i<records.count(); ++i)
 	{
 		QDomNode record = records.item(i);
 		ImportResult result;
 
-		QDomNodeList title = record.toElement().elementsByTagName("title");
+		QDomNodeList title = record.toElement().elementsByTagName("TITLE");
 		if(title.isEmpty())
 			return false;
 		result.title = title.item(0).toElement().text();
 
-		QDomNodeList authors = record.toElement().elementsByTagName("author");
+		QDomNodeList authors = record.toElement().elementsByTagName("AUTHOR");
 		for(int j=0; j<authors.count(); ++j)
 		{
 			QDomNode author = authors.item(j);
@@ -158,7 +141,7 @@ bool XmlImporter::import(const QString& fileName)
 				result.authors.append("; " + author.toElement().text());
 		}
 
-		QDomNodeList journal = record.toElement().elementsByTagName("secondary-title");
+		QDomNodeList journal = record.toElement().elementsByTagName("SECONDARY-TITLE");
 		if(!journal.isEmpty())
 		{
 			if(result.journal.isEmpty())
@@ -167,7 +150,7 @@ bool XmlImporter::import(const QString& fileName)
 				result.journal.append("; " + journal.item(0).toElement().text());
 		}
 
-		journal = record.toElement().elementsByTagName("alt-title");
+		journal = record.toElement().elementsByTagName("ALT-TITLE");
 		if(!journal.isEmpty())
 		{
 			if(result.journal.isEmpty())
@@ -176,11 +159,11 @@ bool XmlImporter::import(const QString& fileName)
 				result.journal.append("; " + journal.item(0).toElement().text());
 		}
 
-		QDomNodeList year = record.toElement().elementsByTagName("year");
+		QDomNodeList year = record.toElement().elementsByTagName("YEAR");
 		if(!year.isEmpty())
 			result.year = year.item(0).toElement().text().toInt();
 
-		QDomNodeList abstract = record.toElement().elementsByTagName("abstract");
+		QDomNodeList abstract = record.toElement().elementsByTagName("ABSTRACT");
 		if(!abstract.isEmpty())
 			result.abstract = abstract.item(0).toElement().text();
 

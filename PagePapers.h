@@ -8,6 +8,7 @@
 #include "PaperModel.h"
 
 class QDataWidgetMapper;
+struct ImportResult;
 
 class PagePapers : public QWidget
 {
@@ -49,11 +50,6 @@ private:
 	int getTagID   (int row) const;
 	int getAllTagID(int row) const;
 	void selectID(int id);
-	void import(const QString& fileName,       const QString& firstHead, 
-				const QStringList& titleHeads, const QString& authorHead, 
-				const QString& yearHead,       const QStringList& journalHeads, 
-				const QString& delimiter,      const QString& abstractHead = "NO_SUCH_HEAD");
-	QString trimHead(const QString& line, const QString& delimiter) const;
 	int idToRow(int id) const;
 	void updateTags();
 	void filterPapers();
@@ -61,6 +57,8 @@ private:
 	bool isFiltered() const;
 	void hideRelated();
 	void hideCoauthor();
+    void mergeRecord(int row, const ImportResult& record);
+    void insertRecord(const ImportResult& record);
 
 public:
 	enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE, 

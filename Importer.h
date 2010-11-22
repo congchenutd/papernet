@@ -23,6 +23,7 @@ struct ImportResult
 
 class Importer : public QObject
 {
+protected:
 	typedef QList<ImportResult> Results;
 
 public:

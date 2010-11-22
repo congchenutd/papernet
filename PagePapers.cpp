@@ -199,49 +199,27 @@ void PagePapers::onImport()
 
 	QString file = files.front();
 	MySetting<UserSetting>::getInstance()->setLastImportPath(QFileInfo(file).absolutePath());
-/*
-	foreach(QString fileName, files)
-	{
-		if(fileName.endsWith(".enw", Qt::CaseInsensitive))
-			import(fileName, "%0", 
-					QStringList() << "%T", 
-					"%A",
-					"%D",
-					QStringList() << "%J" << "%B", 
-					" ");
-		else if(fileName.endsWith(".ris", Qt::CaseInsensitive))
-			import(fileName, "TY", 
-					QStringList() << "TI" << "T1",
-					"AU", 
-					"PY",
-					QStringList() << "JA" << "T2" << "T3", 
-					" - ", 
-					"AB");
-		else if(fileName.endsWith(".txt", Qt::CaseInsensitive))
-			import(fileName, "Reference Type", 
-					QStringList() << "Title", "Author",
-					"UNKOWN_YET!!!",
-					QStringList() << "Journal", 
-					": ",
-					"Abstract");
-		else
-			import(fileName, "TY", 
-					QStringList() << "TI" << "T1",
-					"AU", 
-					"PY",
-					QStringList() << "JA" << "T2" << "T3", 
-					" - ", 
-					"AB");
-	}
-
-*/
 
 	foreach(QString fileName, files)
 	{
 		Importer* importer = ImporterFactory::getImporter(fileName);
 		if(importer->import(fileName))
 		{
-			QList<ImportResult> results = importer->getResults();
+            QList<ImportResult> results = importer->getResults();  // one file may have multiple records
+            foreach(ImportResult result, results)
+            {
+                int id = ::getPaperID(result.title);
+                if(id > -1)
+                {
+                    if(QMessageBox::warning(this, tr("Title exists"), tr("Do you want to merge into the existing record?"),
+                            QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+                        mergeRecord(idToRow(id), result);
+                    }
+                }
+                else {
+                    insertRecord(result);
+                }
+            }
 		}
 		delete importer;
 	}
@@ -250,82 +228,44 @@ void PagePapers::onImport()
 	onResetPapers();
 }
 
-void PagePapers::import(const QString& fileName,       const QString& firstHead,
-						const QStringList& titleHeads, const QString& authorHead, 
-						const QString& yearHead,       const QStringList& journalHeads, 
-						const QString& delimiter,      const QString& abstractHead)
+void PagePapers::insertRecord(const ImportResult &record)
 {
-	QFile file(fileName);
-	if(!file.open(QFile::ReadOnly))
-		return;
-
-    int currentRow = -1;
-	QTextStream is(&file);
-	while(!is.atEnd())
-	{
-		QString line = is.readLine();
-		if(line.startsWith(firstHead))
-		{
-			currentRow = modelPapers.rowCount();
-			modelPapers.insertRow(currentRow);
-			currentPaperID = getNextID("Papers", "ID");
-			modelPapers.setData(modelPapers.index(currentRow, PAPER_ID), currentPaperID);
-			continue;
-		}
-
-		QString trimmed = trimHead(line, delimiter);
-		foreach(QString titleHead, titleHeads)
-			if(line.startsWith(titleHead))
-			{
-                if(titleExists(trimmed))
-                {
-                    modelPapers.revertAll();
-                    return;
-                }
-
-				modelPapers.setData(modelPapers.index(currentRow, PAPER_TITLE), trimmed);
-				continue;
-			}
-		
-		if(line.startsWith(authorHead))
-		{
-			QString authors = modelPapers.data(modelPapers.index(currentRow, PAPER_AUTHORS)).toString();
-			if(!authors.isEmpty())
-				authors.append("; ");
-			authors.append(trimmed);
-			modelPapers.setData(modelPapers.index(currentRow, PAPER_AUTHORS), authors);
-			continue;
-		}
-
-		if(line.startsWith(yearHead))
-		{
-			modelPapers.setData(modelPapers.index(currentRow, PAPER_YEAR), trimmed);
-			continue;
-		}
-
-		foreach(QString journalHead, journalHeads)
-			if(line.startsWith(journalHead))
-			{
-				QString journals = modelPapers.data(modelPapers.index(currentRow, PAPER_JOURNAL)).toString();
-				if(!journals.isEmpty())
-					journals.append("; ");
-				journals.append(trimmed);
-				modelPapers.setData(modelPapers.index(currentRow, PAPER_JOURNAL), journals);
-				continue;
-			}
-
-		if(line.startsWith(abstractHead))
-		{
-			modelPapers.setData(modelPapers.index(currentRow, PAPER_ABSTRACT), trimmed);
-			continue;
-		}
-	}
-	onSubmitPaper();
-	addAttachment(currentPaperID, "EndNote." + QFileInfo(fileName).suffix(), fileName);
+    int lastRow = modelPapers.rowCount();
+    modelPapers.insertRow(lastRow);
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), getNextID("Paper", "ID"));
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    record.title);
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  record.authors);
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  record.journal);
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     record.year);
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), record.abstract);
+    modelPapers.submitAll();
 }
 
-QString PagePapers::trimHead(const QString& line, const QString& delimiter) const {
-    return line.mid(line.indexOf(delimiter) + delimiter.length()).trimmed();
+void PagePapers::mergeRecord(int row, const ImportResult &record)
+{
+    QString title = modelPapers.data(modelPapers.index(row, PAPER_TITLE)).toString();
+    if(!title.isEmpty())
+        title += "; " + record.title;
+    modelPapers.setData(modelPapers.index(row, PAPER_TITLE), title);
+
+    QString authors = modelPapers.data(modelPapers.index(row, PAPER_AUTHORS)).toString();
+    if(!authors.isEmpty())
+        authors += "; " + record.authors;
+    modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS), authors);
+
+    QString journal = modelPapers.data(modelPapers.index(row, PAPER_JOURNAL)).toString();
+    if(!journal.isEmpty())
+        journal += "; " + record.journal;
+    modelPapers.setData(modelPapers.index(row, PAPER_JOURNAL), journal);
+
+    modelPapers.setData(modelPapers.index(row, PAPER_YEAR), record.year);
+
+    QString abstract = modelPapers.data(modelPapers.index(row, PAPER_ABSTRACT)).toString();
+    if(!abstract.isEmpty())
+        abstract += "\r\n\r\n" + record.abstract;
+    modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT), abstract);
+
+    modelPapers.submitAll();
 }
 
 void PagePapers::onSubmitPaper() 

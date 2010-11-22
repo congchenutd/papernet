@@ -9,6 +9,8 @@ Importer* ImporterFactory::getImporter(const QString& fileName)
 		return new EnwImporter();
 	if(fileName.endsWith(".ris", Qt::CaseInsensitive))
 		return new RisImporter();
+	if(fileName.endsWith(".xml", Qt::CaseInsensitive))
+		return new XmlImporter();
 	return 0;
 }
 

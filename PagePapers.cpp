@@ -3,6 +3,7 @@
 #include "OptionDlg.h"
 #include "PaperDlg.h"
 #include "AddSnippetDlg.h"
+#include "Importer.h"
 #include <QDataWidgetMapper>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -189,7 +190,7 @@ void PagePapers::onImport()
 	QString lastPath = MySetting<UserSetting>::getInstance()->getLastImportPath();
 	QStringList files = QFileDialog::getOpenFileNames(
 		this, "Select one or more files to open", lastPath,
-		"Reference (*.enw *.ris *.txt);;All files (*.*)");
+		"Reference (*.enw *.ris *.xml);;All files (*.*)");
 	if(files.isEmpty())
 		return;
 
@@ -198,7 +199,7 @@ void PagePapers::onImport()
 
 	QString file = files.front();
 	MySetting<UserSetting>::getInstance()->setLastImportPath(QFileInfo(file).absolutePath());
-
+/*
 	foreach(QString fileName, files)
 	{
 		if(fileName.endsWith(".enw", Qt::CaseInsensitive))
@@ -231,6 +232,18 @@ void PagePapers::onImport()
 					QStringList() << "JA" << "T2" << "T3", 
 					" - ", 
 					"AB");
+	}
+
+*/
+
+	foreach(QString fileName, files)
+	{
+		Importer* importer = ImporterFactory::getImporter(fileName);
+		if(importer->import(fileName))
+		{
+			QList<ImportResult> results = importer->getResults();
+		}
+		delete importer;
 	}
 
 	onSubmitPaper();

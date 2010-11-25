@@ -217,8 +217,12 @@ void PagePapers::onImport()
                         mergeRecord(idToRow(id), result);
                     }
                 }
-                else {
+                else
+				{
                     insertRecord(result);
+
+					// Fix it: this works only when there is one record
+					addAttachment(currentPaperID, "EndNote." + QFileInfo(fileName).suffix(), fileName);
                 }
             }
 		}
@@ -233,14 +237,15 @@ void PagePapers::insertRecord(const ImportResult &record)
 {
     int lastRow = modelPapers.rowCount();
     modelPapers.insertRow(lastRow);
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), getNextID("Papers", "ID"));
+	currentPaperID = getNextID("Papers", "ID");
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    record.title);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  record.authors);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  record.journal);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     record.year);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), record.abstract);
     modelPapers.submitAll();
-	QString err = modelPapers.lastError().text();
+//	QString err = modelPapers.lastError().text();
 }
 
 void PagePapers::mergeRecord(int row, const ImportResult &record)

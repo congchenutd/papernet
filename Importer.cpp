@@ -66,6 +66,14 @@ QString NonXmlImporter::trimHead(const QString& line, const QString head) const 
 	return line.mid(line.indexOf(head) + head.length()).trimmed();
 }
 
+bool NonXmlImporter::recordCount() const
+{
+	QFile file(fileName);
+	if(!file.open(QFile::ReadOnly))
+		return -1;
+
+}
+
 //////////////////////////////////////////////////////////////////////////
 QString EnwImporter::getFirstHead() const {
 	return "%0 ";
@@ -141,7 +149,7 @@ bool XmlImporter::import(const QString& fileName)
 				result.authors.append("; " + author.toElement().text());
 		}
 
-		QDomNodeList journal = record.toElement().elementsByTagName("SECONDARY-TITLE");
+		QDomNodeList journal = record.toElement().elementsByTagName("SECONDARY_TITLE");
 		if(!journal.isEmpty())
 		{
 			if(result.journal.isEmpty())

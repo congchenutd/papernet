@@ -66,13 +66,13 @@ QString NonXmlImporter::trimHead(const QString& line, const QString head) const 
 	return line.mid(line.indexOf(head) + head.length()).trimmed();
 }
 
-bool NonXmlImporter::recordCount() const
-{
-	QFile file(fileName);
-	if(!file.open(QFile::ReadOnly))
-		return -1;
+//bool NonXmlImporter::recordCount() const
+//{
+//	QFile file(fileName);
+//	if(!file.open(QFile::ReadOnly))
+//		return -1;
 
-}
+//}
 
 //////////////////////////////////////////////////////////////////////////
 QString EnwImporter::getFirstHead() const {

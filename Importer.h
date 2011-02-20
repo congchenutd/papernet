@@ -30,7 +30,7 @@ public:
 	virtual ~Importer() {}
 
 	virtual bool import(const QString& fileName) = 0;
-	virtual bool recordCount() const = 0;
+//	virtual bool recordCount() const = 0;
 	Results getResults() { return results; }
 
 protected:
@@ -41,7 +41,7 @@ class NonXmlImporter : public Importer
 {
 public:
 	virtual bool import(const QString& fileName);
-	virtual bool recordCount() const;
+//	virtual bool recordCount() const;
 
 protected:
 	virtual QString     getFirstHead()     const = 0;

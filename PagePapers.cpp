@@ -4,6 +4,7 @@
 #include "PaperDlg.h"
 #include "AddSnippetDlg.h"
 #include "Importer.h"
+#include "../EnglishName/EnglishName.h"
 #include <QDataWidgetMapper>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -421,6 +422,8 @@ void PagePapers::onResetPapers()
 {
 	modelPapers.setTable("Papers");
 	modelPapers.select();
+	while(modelPapers.canFetchMore())
+		modelPapers.fetchMore();
 	modelPapers.setHeaderData(PAPER_READ,     Qt::Horizontal, "R");
 	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
@@ -494,18 +497,22 @@ void PagePapers::hideRelated()
 void PagePapers::onShowCoauthored()
 {
 	hideRelated();
+	hideCoauthor();
 
-	QSqlDatabase::database().transaction();
-	QSqlQuery query;	
-	query.exec(tr("update Papers set Coauthor = 0"));
-	QStringList authors = modelPapers.data(modelPapers.index(currentRowPapers, PAPER_AUTHORS)).toString().split(";");
+	QStringList authors = modelPapers.data(
+		modelPapers.index(currentRowPapers, PAPER_AUTHORS)).toString().split(";");
 	foreach(QString author, authors)
-		query.exec(tr("update Papers set Coauthor = Coauthor + 1 where Authors like \"%%1%\"")
-															.arg(author.trimmed()));
-	// set itself to max
-	query.exec(tr("update Papers set Coauthor = (select max(Coauthor)+1 from Papers) \
-													where ID = %1").arg(currentPaperID));
-	QSqlDatabase::database().commit();
+		for(int row=0; row<modelPapers.rowCount(); ++row)
+		{
+			QStringList names = modelPapers.data(modelPapers.index(row, PAPER_AUTHORS)).toString().split(";");
+			foreach(QString name, names)
+				if(EnglishName::compare(name, author))
+				{
+					int coauthor = modelPapers.data(modelPapers.index(row, PAPER_COAUTHOR)).toInt();
+					modelPapers.setData(modelPapers.index(row, PAPER_COAUTHOR), coauthor+1);
+				}
+		}
+	modelPapers.submitAll();
 
 	ui.tableViewPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);
 	selectID(currentPaperID);

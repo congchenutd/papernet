@@ -76,6 +76,8 @@ void PageSnippets::resetSnippets()
 {
 	model.setTable("Snippets");
 	model.select();
+	while(model.canFetchMore())
+		model.fetchMore();
 	ui.tableView->sortByColumn(SNIPPET_TITLE, Qt::AscendingOrder);
 }
 

@@ -86,6 +86,8 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tableViewPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
 	connect(ui.tableViewPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
 	connect(ui.tableViewPapers, SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
+
+	connect(ui.btTags, SIGNAL(clicked(bool)), this, SLOT(onShowTags(bool)));
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
@@ -447,10 +449,10 @@ bool PagePapers::isFiltered() const {
 
 void PagePapers::resizeEvent(QResizeEvent*)
 {
-	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
-	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.6 << height() * 0.4);
-	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
-    ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.35 << width() * 0.15);
+	//ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
+	//ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.6 << height() * 0.4);
+	//ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
+ //   ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.35 << width() * 0.15);
 }
 
 void PagePapers::onClicked(const QModelIndex& idx)
@@ -534,4 +536,12 @@ void PagePapers::onAddSnippet()
 	dlg.addPaper(getPaperTitle(currentPaperID));
 	if(dlg.exec() == QDialog::Accepted)
 		onResetPapers();
+}
+
+void PagePapers::onShowTags(bool show)
+{
+	//if(!show)
+	//	ui.splitterHorizontal->setSizes(QList<int>() << width() << 0);
+	//else
+	//	ui.splitterHorizontal->setSizes(QList<int>() << width() * 0.85 << width() * 0.15);
 }

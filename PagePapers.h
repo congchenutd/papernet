@@ -45,6 +45,8 @@ private slots:
 	void onCurrentRowTagsChanged();
 	void onFilter(bool enabled);
 
+	void onShowTags(bool show);
+
 private:
 	int getPaperID (int row) const;
 	int getTagID   (int row) const;

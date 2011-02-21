@@ -11,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	ui.setupUi(this);
 	ui.actionPapers->setChecked(true);
 
-	pagePapers   = static_cast<PagePapers*>  (ui.stackedWidget->widget(0));
-	pageSnippets = static_cast<PageSnippets*>(ui.stackedWidget->widget(1));
+	//pagePapers   = static_cast<PagePapers*>  (ui.stackedWidget->widget(0));
+	//pageSnippets = static_cast<PageSnippets*>(ui.stackedWidget->widget(1));
 
 	QActionGroup* actionGroup = new QActionGroup(this);
 	actionGroup->addAction(ui.actionPapers);
@@ -22,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(ui.actionAbout,       SIGNAL(triggered()), this, SLOT(onAbout()));
 	connect(ui.actionPapers,      SIGNAL(triggered()), this, SLOT(onPapers()));
 	connect(ui.actionSnippets,    SIGNAL(triggered()), this, SLOT(onSnippets()));
-	connect(ui.toolBarSearch, SIGNAL(search(QString)), pagePapers,   SLOT(onSearch(QString)));
-	connect(ui.toolBarSearch, SIGNAL(search(QString)), pageSnippets, SLOT(onSearch(QString)));
+	//connect(ui.toolBarSearch, SIGNAL(search(QString)), pagePapers,   SLOT(onSearch(QString)));
+	//connect(ui.toolBarSearch, SIGNAL(search(QString)), pageSnippets, SLOT(onSearch(QString)));
 
 	// load settings
 	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());
@@ -84,12 +84,12 @@ void MainWindow::backup(const QString& name)
 
 void MainWindow::onPapers() 
 {
-	ui.stackedWidget->setCurrentIndex(0);
+	//ui.stackedWidget->setCurrentIndex(0);
 	ui.toolBarSearch->onClear();
 }
 
 void MainWindow::onSnippets() 
 {
-	ui.stackedWidget->setCurrentIndex(1);
+	//ui.stackedWidget->setCurrentIndex(1);
 	ui.toolBarSearch->onClear();
 }

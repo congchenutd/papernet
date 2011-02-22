@@ -2,6 +2,9 @@
 #include "OptionDlg.h"
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
 
 ToolBar::ToolBar(QWidget *parent)
 	: QToolBar(parent)
@@ -36,4 +39,40 @@ void ToolBar::onShowText(bool show)
 	setToolButtonStyle(show ? Qt::ToolButtonTextUnderIcon : Qt::ToolButtonIconOnly);
 	actionShowText->setChecked(show);
 	MySetting<UserSetting>::getInstance()->setValue("ShowText", show);
+}
+
+void ToolBar::initSearchBar()
+{
+    addSeparator();
+    addWidget(new QLabel(tr(" Search ")));
+    addWidget(leSearch = new QLineEdit(this));
+    QPushButton* btClear = new QPushButton(QIcon(":/MainWindow/Images/Cancel.png"), QString(), this);
+    btClear->setShortcut(QKeySequence(Qt::Key_Escape));
+    addWidget(btClear);
+    QPushButton* btFocus = new QPushButton("Focus", this);
+    btFocus->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
+    btFocus->setMaximumWidth(0);    // "hide" it
+    addWidget(btFocus);
+
+    connect(leSearch, SIGNAL(textEdited(QString)), this, SIGNAL(search(QString)));
+    connect(btClear,  SIGNAL(clicked()),           this, SLOT(onClear()));
+    connect(btFocus,  SIGNAL(clicked()),           this, SLOT(onFocus()));
+}
+
+void ToolBar::onClear()
+{
+    leSearch->clearFocus();
+    leSearch->clear();
+    emit search(QString());
+}
+
+void ToolBar::onFocus()
+{
+    if(leSearch->hasFocus())
+    {
+        onClear();
+        leSearch->clearFocus();
+    }
+    else
+        leSearch->setFocus();
 }

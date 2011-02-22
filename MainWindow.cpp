@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
 {
 	ui.setupUi(this);
+    ui.toolBarMain->initSearchBar();
 	ui.actionPapers->setChecked(true);
 	onPapers();
 
@@ -23,8 +24,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(ui.actionAbout,       SIGNAL(triggered()), this, SLOT(onAbout()));
 	connect(ui.actionPapers,      SIGNAL(triggered()), this, SLOT(onPapers()));
 	connect(ui.actionSnippets,    SIGNAL(triggered()), this, SLOT(onSnippets()));
-	connect(ui.toolBarSearch, SIGNAL(search(QString)), pagePapers,   SLOT(onSearch(QString)));
-	connect(ui.toolBarSearch, SIGNAL(search(QString)), pageSnippets, SLOT(onSearch(QString)));
+    connect(ui.toolBarMain, SIGNAL(search(QString)), pagePapers,   SLOT(onSearch(QString)));
+    connect(ui.toolBarMain, SIGNAL(search(QString)), pageSnippets, SLOT(onSearch(QString)));
 	connect(ui.actionImportPaper, SIGNAL(triggered()), pagePapers,   SLOT(onImport()));
 	connect(ui.actionAddPaper,    SIGNAL(triggered()), pagePapers,   SLOT(onAddPaper()));
 	connect(ui.actionDelPaper,    SIGNAL(triggered()), pagePapers,   SLOT(onDelPaper()));
@@ -93,7 +94,7 @@ void MainWindow::backup(const QString& name)
 void MainWindow::onPapers() 
 {
 	ui.stackedWidget->setCurrentIndex(0);
-	ui.toolBarSearch->onClear();
+    ui.toolBarMain->onClear();
 	ui.actionImportPaper->setVisible(true);
 	ui.actionAddPaper->setVisible(true);
 	ui.actionDelPaper->setVisible(true);
@@ -104,7 +105,7 @@ void MainWindow::onPapers()
 void MainWindow::onSnippets() 
 {
 	ui.stackedWidget->setCurrentIndex(1);
-	ui.toolBarSearch->onClear();
+    ui.toolBarMain->onClear();
 	ui.actionImportPaper->setVisible(false);
 	ui.actionAddPaper->setVisible(false);
 	ui.actionDelPaper->setVisible(false);

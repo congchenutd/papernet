@@ -306,7 +306,7 @@ void PagePapers::onCurrentRowAllTagsChanged()
 	ui.btDelTag ->setEnabled(valid);
 	ui.btAddTagToPaper->setEnabled(valid && !isFiltered());
 
-	if(isFiltered())
+	if(isFiltered())  
 	{
 		if(currentRowTags < 0)
 			return onResetPapers();   // no selected tags, show all papers
@@ -564,4 +564,19 @@ int PagePapers::getSnippetID(const QModelIndex& idx) const {
 
 void PagePapers::jumpToPaper(const QString& title) {
 	selectID(::getPaperID(title));
+}
+
+void PagePapers::onFullTextSearch(const QString& target)
+{
+	onResetPapers();
+	if(target.isEmpty())
+		return;
+	for(int row = currentRowPapers; row < modelPapers.rowCount(); ++row)
+		if(fullTextSearch(getPaperID(row), target))
+		{
+			onResetPapers();
+			selectID(getPaperID(row));
+			return;
+		}
+	QMessageBox::information(this, tr("Full text search"), tr("No such paper!"));
 }

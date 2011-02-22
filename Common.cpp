@@ -1,5 +1,7 @@
 #include "Common.h"
 #include "OptionDlg.h"
+#include "Pdf2Text.h"
+#include "windows.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
@@ -123,14 +125,27 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 {
 	QString dir = getAttachmentDir(paperID);
     QDir::current().mkdir(dir);
-    return QFile::copy(fileName, dir + "/" + attachmentName);
+	QString targetFilePath = dir + "/" + attachmentName;
+    bool result = QFile::copy(fileName, targetFilePath);
+	if(!result)
+		return false;
+
+	// create fulltext file for pdf
+	if(targetFilePath.endsWith(".pdf", Qt::CaseInsensitive))
+	{
+		QString fullTextFilePath = dir + "/" + "fulltext.txt";
+		Pdf2Text(targetFilePath.toAscii(), fullTextFilePath.toAscii());
+		hideFile(fullTextFilePath);
+	}
+
+	return true;
 }
 
 void delAttachment(int paperID, const QString& attachmentName)
 {
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
 	{
-        QFile::remove(getFilePath(paperID, attachmentName));
+        QFile::remove(getAttachmentPath(paperID, attachmentName));
 		QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
 	}
 }
@@ -197,7 +212,7 @@ bool addLink(int paperID, const QString& link, const QString& u)
 
 void openAttachment(int paperID, const QString& attachmentName)
 {
-	QString filePath = getFilePath(paperID, attachmentName);
+	QString filePath = getAttachmentPath(paperID, attachmentName);
 
 #ifdef Q_WS_WIN
 	QDesktopServices::openUrl(QUrl(filePath));
@@ -221,7 +236,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 #endif
 }
 
-QString getFilePath(int paperID, const QString& attachmentName) 
+QString getAttachmentPath(int paperID, const QString& attachmentName) 
 {
 	QString path = attachmentDir + getValidTitle(paperID) + "/" + attachmentName;
 #ifdef Q_WS_WIN
@@ -234,11 +249,11 @@ QString getFilePath(int paperID, const QString& attachmentName)
 }
 
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName) {
-	return QFile::rename(getFilePath(paperID, oldName), getFilePath(paperID, newName));
+	return QFile::rename(getAttachmentPath(paperID, oldName), getAttachmentPath(paperID, newName));
 }
 
 bool attachmentExists(int paperID, const QString& name) {
-	return QFile::exists(getFilePath(paperID, name));
+	return QFile::exists(getAttachmentPath(paperID, name));
 }
 
 bool renameTitle(const QString& oldName, const QString& newName) {
@@ -368,4 +383,25 @@ int getSnippetID(const QString& title)
 	QSqlQuery query;
 	query.exec(QObject::tr("select ID from Snippets where Title = \"%1\"").arg(title));
 	return query.next() ? query.value(0).toInt() : -1;
+}
+
+void hideFile(const QString& filePath)
+{
+#ifdef Q_WS_WIN
+	SetFileAttributesA(filePath.toAscii(), FILE_ATTRIBUTE_HIDDEN);
+#endif
+
+#ifdef Q_WS_MAC
+#endif
+}
+
+bool fullTextSearch(int paperID, const QString& target)
+{
+	QString fullTextFilePath = getAttachmentDir(paperID) + "/fulltext.txt";
+	QFile file(fullTextFilePath);
+	if(file.open(QFile::ReadOnly))
+		while(!file.atEnd())
+			if(file.readLine().indexOf(target) > -1)
+				return true;
+	return false;
 }

@@ -48,7 +48,8 @@ void ToolBar::initSearchBar()
     addWidget(new QLabel(tr(" Search ")));
     addWidget(leSearch = new QLineEdit(this));
 	addWidget(new QLabel(" "));
-	addWidget(cbFullText = new QCheckBox("Full text "));
+	btFullText = new QPushButton(QIcon(":/MainWindow/Images/FullText.png"), QString());
+	addWidget(btFullText);
 	QPushButton* btClear = new QPushButton(QIcon(":/MainWindow/Images/Cancel.png"), QString(), this);
     btClear->setShortcut(QKeySequence(Qt::Key_Escape));
     addWidget(btClear);
@@ -57,9 +58,10 @@ void ToolBar::initSearchBar()
     btFocus->setMaximumWidth(0);    // "hide" it
     addWidget(btFocus);
 
-    connect(leSearch, SIGNAL(textEdited(QString)), this, SIGNAL(search(QString)));
-    connect(btClear,  SIGNAL(clicked()),           this, SLOT(onClear()));
-    connect(btFocus,  SIGNAL(clicked()),           this, SLOT(onFocus()));
+    connect(leSearch,   SIGNAL(textEdited(QString)), this, SIGNAL(search(QString)));
+	connect(btFullText, SIGNAL(clicked()),           this, SLOT(onFullTextSearch()));
+    connect(btClear,  SIGNAL(clicked()), this, SLOT(onClear()));
+    connect(btFocus,  SIGNAL(clicked()), this, SLOT(onFocus()));
 }
 
 void ToolBar::onClear()
@@ -78,4 +80,8 @@ void ToolBar::onFocus()
     }
     else
         leSearch->setFocus();
+}
+
+void ToolBar::onFullTextSearch() {
+	emit fullTextSearch(leSearch->text());
 }

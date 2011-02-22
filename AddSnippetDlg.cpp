@@ -129,10 +129,10 @@ void AddSnippetDlg::onSwitchToPapers()
 	QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
 	QString paper = idxList.isEmpty() 
 				  ? QString() : model.data(idxList.front(), Qt::DisplayRole).toString();
-	MainWindow::getInstance().jumpToPaper(paper);
+	MainWindow::getInstance()->jumpToPaper(paper);
 }
 
 void AddSnippetDlg::onSwitchToSnippets() {
-	MainWindow::getInstance().jumpToSnippet(snippetID);
+	MainWindow::getInstance()->jumpToSnippet(snippetID);
 }
 

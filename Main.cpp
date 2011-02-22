@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 		return 1;
 	createTables();
 
-	MainWindow& wnd = MainWindow::getInstance();
+	MainWindow wnd;
 	wnd.showMaximized();
 
 	return app.exec();

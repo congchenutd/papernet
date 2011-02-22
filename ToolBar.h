@@ -21,9 +21,11 @@ protected:
 
 signals:
     void search(const QString& target);
+	void fullTextSearch(const QString& target);
 
 public slots:
     void onClear();
+	void onFullTextSearch();
 
 private slots:
 	void onSmallIcon(bool small);
@@ -34,7 +36,7 @@ private:
     QAction*   actionSmallIcon;
     QAction*   actionShowText;
     QLineEdit* leSearch;
-	QCheckBox* cbFullText;
+	QPushButton* btFullText;
 };
 
 #endif // TOOLBAR_H

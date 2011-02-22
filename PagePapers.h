@@ -31,6 +31,7 @@ private slots:
 	void onCurrentRowPapersChanged(const QModelIndex& idx);
 	void onEditPaper();
 	void onSearch(const QString& target);
+	void onFullTextSearch(const QString& target);
 	void onSubmitPaper();
 	void onClicked(const QModelIndex& idx);
 	void onShowRelated();

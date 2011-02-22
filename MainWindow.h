@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
 
 public:
 	MainWindow(QWidget *parent = 0, Qt::WFlags flags = 0);
-	static MainWindow& getInstance();
+	static MainWindow* getInstance();
 	void jumpToPaper  (const QString& title);
 	void jumpToSnippet(int snippetID);
 
@@ -30,7 +30,8 @@ private slots:
 
 private:
 	Ui::MainWindowClass ui;
-
+	
+	static MainWindow* instance;
 	PagePapers*   pagePapers;
 	PageSnippets* pageSnippets;
 };

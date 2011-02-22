@@ -8,6 +8,8 @@
 MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
 {
+	instance = this;
+
 	ui.setupUi(this);
     ui.toolBarMain->initSearchBar();
 	ui.actionPapers->setChecked(true);
@@ -26,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(ui.actionSnippets,    SIGNAL(triggered()), this, SLOT(onSnippets()));
     connect(ui.toolBarMain, SIGNAL(search(QString)), pagePapers,   SLOT(onSearch(QString)));
     connect(ui.toolBarMain, SIGNAL(search(QString)), pageSnippets, SLOT(onSearch(QString)));
+	connect(ui.toolBarMain, SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
 	connect(ui.actionImportPaper, SIGNAL(triggered()), pagePapers,   SLOT(onImport()));
 	connect(ui.actionAddPaper,    SIGNAL(triggered()), pagePapers,   SLOT(onAddPaper()));
 	connect(ui.actionDelPaper,    SIGNAL(triggered()), pagePapers,   SLOT(onDelPaper()));
@@ -36,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 
 	// load settings
 	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());
-
 }
 
 void MainWindow::onOptions()
@@ -49,7 +51,7 @@ void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About", 
 		tr("<h3><b>PaperNet: a better paper manager</b></h3>"
-		"<p>Build 2011.2.21</p>"
+		"<p>Build 2011.2.22</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
 }
 
@@ -127,8 +129,8 @@ void MainWindow::jumpToSnippet(int snippetID)
 	pageSnippets->jumpToSnippet(snippetID);
 }
 
-MainWindow& MainWindow::getInstance()
-{
-	static MainWindow instance;
+MainWindow* MainWindow::getInstance() {
 	return instance;
 }
+
+MainWindow* MainWindow::instance = 0;

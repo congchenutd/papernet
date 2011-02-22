@@ -19,7 +19,7 @@ QString makeValidTitle(const QString& title);
 QString getValidTitle(int paperID);
 QString getAttachmentDir(int paperID);
 void openAttachment(int paperID, const QString& attachmentName);
-QString getFilePath(int paperID, const QString& attachmentName);
+QString getAttachmentPath(int paperID, const QString& attachmentName);
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName);
 bool attachmentExists(int paperID, const QString& name);
 bool renameTitle(const QString& oldName, const QString& newName);
@@ -34,10 +34,11 @@ void delSnippet(int id);
 QStringList getPaperList(int snippetID);
 bool isTagged(int paperID);
 int getSnippetID(const QString& title);
-
 void setRead(int paperID);
 void updateTagged(int paperID);
 void updateAttached(int paperID);
+void hideFile(const QString& filePath);
+bool fullTextSearch(int paperID, const QString& target);
 
 typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 AttachmentStatus isAttached(int paperID);

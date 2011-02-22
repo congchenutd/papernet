@@ -442,7 +442,7 @@ bool PagePapers::isFiltered() const {
 void PagePapers::resizeEvent(QResizeEvent*)
 {
 	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
-//	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
+    ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.55 << height() * 0.45);
 //	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
     ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.35 << width() * 0.15);
 }

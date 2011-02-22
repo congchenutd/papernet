@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QCheckBox>
 
 ToolBar::ToolBar(QWidget *parent)
 	: QToolBar(parent)
@@ -46,7 +47,9 @@ void ToolBar::initSearchBar()
     addSeparator();
     addWidget(new QLabel(tr(" Search ")));
     addWidget(leSearch = new QLineEdit(this));
-    QPushButton* btClear = new QPushButton(QIcon(":/MainWindow/Images/Cancel.png"), QString(), this);
+	addWidget(new QLabel(" "));
+	addWidget(cbFullText = new QCheckBox("Full text "));
+	QPushButton* btClear = new QPushButton(QIcon(":/MainWindow/Images/Cancel.png"), QString(), this);
     btClear->setShortcut(QKeySequence(Qt::Key_Escape));
     addWidget(btClear);
     QPushButton* btFocus = new QPushButton("Focus", this);

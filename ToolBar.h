@@ -6,6 +6,7 @@
 class QAction;
 class QLineEdit;
 class QPushButton;
+class QCheckBox;
 
 class ToolBar : public QToolBar
 {
@@ -33,6 +34,7 @@ private:
     QAction*   actionSmallIcon;
     QAction*   actionShowText;
     QLineEdit* leSearch;
+	QCheckBox* cbFullText;
 };
 
 #endif // TOOLBAR_H

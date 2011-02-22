@@ -11,6 +11,7 @@ class PageSnippets : public QWidget
 
 public:
 	PageSnippets(QWidget *parent = 0);
+	void jumpToSnippet(int snippetID);
 
 public slots:
 	void onAdd();
@@ -20,6 +21,7 @@ private slots:
 	void onCurrentRowChanged();
 	void onSearch(const QString& target);
 	void onEdit();
+	void onAccepted();
 
 signals:
 	void tableValid(bool);

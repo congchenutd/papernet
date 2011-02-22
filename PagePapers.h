@@ -17,6 +17,7 @@ class PagePapers : public QWidget
 public:
 	PagePapers(QWidget *parent = 0);
 	~PagePapers();
+	void jumpToPaper(const QString& title);
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);

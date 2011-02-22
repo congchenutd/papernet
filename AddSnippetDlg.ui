@@ -35,8 +35,17 @@
        <string>References</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <property name="margin">
+        <number>5</number>
+       </property>
+       <property name="spacing">
+        <number>5</number>
+       </property>
        <item row="0" column="0">
         <widget class="QPushButton" name="btAdd">
+         <property name="toolTip">
+          <string>Add new reference</string>
+         </property>
          <property name="icon">
           <iconset resource="MainWindow.qrc">
            <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
@@ -48,26 +57,16 @@
          <property name="enabled">
           <bool>false</bool>
          </property>
+         <property name="toolTip">
+          <string>Remove reference</string>
+         </property>
          <property name="icon">
           <iconset resource="MainWindow.qrc">
            <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0" colspan="4">
+       <item row="1" column="0" colspan="7">
         <widget class="QListView" name="listView">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -85,11 +84,49 @@
        </item>
        <item row="0" column="1">
         <widget class="QPushButton" name="btSelect">
+         <property name="toolTip">
+          <string>Select existing reference</string>
+         </property>
+         <property name="icon">
+          <iconset resource="MainWindow.qrc">
+           <normaloff>:/MainWindow/Images/Open.png</normaloff>:/MainWindow/Images/Open.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QPushButton" name="btSwitchToPapers">
+         <property name="toolTip">
+          <string>Switch to papers</string>
+         </property>
          <property name="icon">
           <iconset resource="MainWindow.qrc">
            <normaloff>:/MainWindow/Images/ToiletPaper.png</normaloff>:/MainWindow/Images/ToiletPaper.png</iconset>
          </property>
         </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QPushButton" name="btSwitchToSnippets">
+         <property name="toolTip">
+          <string>Switch to snippets</string>
+         </property>
+         <property name="icon">
+          <iconset resource="MainWindow.qrc">
+           <normaloff>:/MainWindow/Images/Snippet.png</normaloff>:/MainWindow/Images/Snippet.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

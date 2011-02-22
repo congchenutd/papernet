@@ -523,16 +523,15 @@ void PagePapers::hideCoauthor()
 
 void PagePapers::onAddSnippet()
 {
-	AddSnippetDlg dlg(this);
-	dlg.setWindowTitle(tr("Add Snippet"));
-	dlg.setSnippetID(getNextID("Snippets", "ID"));
-	dlg.addPaper(getPaperTitle(currentPaperID));
-	if(dlg.exec() == QDialog::Accepted)
-		onResetPapers();
+	AddSnippetDlg* dlg = new AddSnippetDlg(this);
+	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
+	dlg->setWindowTitle(tr("Add Snippet"));
+	dlg->setSnippetID(getNextID("Snippets", "ID"));
+	dlg->addPaper(getPaperTitle(currentPaperID));
+	dlg->show();
 }
 
-void PagePapers::updateSnippets()
-{
+void PagePapers::updateSnippets() {
 	modelSnippets.setQuery(tr("select Title, Snippet from Snippets where id in \
 							  (select Snippet from PaperSnippet where Paper = %1)")
 							  .arg(currentPaperID));
@@ -540,11 +539,11 @@ void PagePapers::updateSnippets()
 
 void PagePapers::onEditSnippet(const QModelIndex& idx)
 {
-	AddSnippetDlg dlg(this);
-	dlg.setWindowTitle(tr("Edit Snippet"));
-	dlg.setSnippetID(getSnippetID(idx));
-	if(dlg.exec() == QDialog::Accepted)
-		onResetPapers();
+	AddSnippetDlg* dlg = new AddSnippetDlg(this);
+	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
+	dlg->setWindowTitle(tr("Edit Snippet"));
+	dlg->setSnippetID(getSnippetID(idx));
+	dlg->show();
 }
 
 void PagePapers::onDelSnippets()
@@ -561,4 +560,8 @@ void PagePapers::onDelSnippets()
 
 int PagePapers::getSnippetID(const QModelIndex& idx) const {
 	return ::getSnippetID(modelSnippets.data(modelSnippets.index(idx.row(), 0)).toString());
+}
+
+void PagePapers::jumpToPaper(const QString& title) {
+	selectID(::getPaperID(title));
 }

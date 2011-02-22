@@ -1,6 +1,7 @@
 #include "AddSnippetDlg.h"
 #include "PaperList.h"
 #include "Common.h"
+#include "MainWindow.h"
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QSqlQuery>
@@ -16,6 +17,9 @@ AddSnippetDlg::AddSnippetDlg(QWidget *parent)
 	connect(ui.btAdd,    SIGNAL(clicked()), this, SLOT(onAdd()));
 	connect(ui.btDel,    SIGNAL(clicked()), this, SLOT(onDel()));
 	connect(ui.btSelect, SIGNAL(clicked()), this, SLOT(onSelect()));
+	connect(ui.btSwitchToPapers,   SIGNAL(clicked()), this, SLOT(onSwitchToPapers()));
+	connect(ui.btSwitchToSnippets, SIGNAL(clicked()), this, SLOT(onSwitchToSnippets()));
+	connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onSwitchToPapers()));
 }
 
 void AddSnippetDlg::onAdd()
@@ -73,6 +77,8 @@ void AddSnippetDlg::accept()
 	}
 
 	QSqlDatabase::database().commit();
+	
+	deleteLater();
 	return QDialog::accept();
 }
 
@@ -116,5 +122,17 @@ void AddSnippetDlg::onSelect()
 
 void AddSnippetDlg::resizeEvent(QResizeEvent*) {
 	ui.splitter->setSizes(QList<int>() << height()  * 0.6 << height()  * 0.4);
+}
+
+void AddSnippetDlg::onSwitchToPapers()
+{
+	QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
+	QString paper = idxList.isEmpty() 
+				  ? QString() : model.data(idxList.front(), Qt::DisplayRole).toString();
+	MainWindow::getInstance().jumpToPaper(paper);
+}
+
+void AddSnippetDlg::onSwitchToSnippets() {
+	MainWindow::getInstance().jumpToSnippet(snippetID);
 }
 

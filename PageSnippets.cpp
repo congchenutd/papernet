@@ -37,20 +37,20 @@ void PageSnippets::onCurrentRowChanged()
 
 void PageSnippets::onAdd()
 {
-	AddSnippetDlg dlg(this);
-	dlg.setWindowTitle(tr("Add Snippet"));
-	dlg.setSnippetID(getNextID("Snippets", "ID"));
-	if(dlg.exec() == QDialog::Accepted)
-		model.select();
+	AddSnippetDlg* dlg = new AddSnippetDlg(this);
+	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
+	dlg->setWindowTitle(tr("Add Snippet"));
+	dlg->setSnippetID(getNextID("Snippets", "ID"));
+	dlg->show();
 }
 
 void PageSnippets::onEdit()
 {
-	AddSnippetDlg dlg(this);
-	dlg.setWindowTitle(tr("Edit Snippet"));
-	dlg.setSnippetID(getID(currentRow));
-	if(dlg.exec() == QDialog::Accepted)
-		model.select();
+	AddSnippetDlg* dlg = new AddSnippetDlg(this);
+	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
+	dlg->setWindowTitle(tr("Edit Snippet"));
+	dlg->setSnippetID(getID(currentRow));
+	dlg->show();
 }
 
 void PageSnippets::onDel()
@@ -76,4 +76,19 @@ void PageSnippets::resetSnippets()
 
 int PageSnippets::getID(int row) const {
 	return model.data(model.index(row, SNIPPET_ID)).toInt();
+}
+
+void PageSnippets::onAccepted() {
+	model.select();
+}
+
+void PageSnippets::jumpToSnippet(int snippetID)
+{
+	QModelIndexList indexes = model.match(
+		model.index(0, SNIPPET_ID), Qt::DisplayRole, snippetID, 1, Qt::MatchExactly | Qt::MatchWrap);
+	if(!indexes.isEmpty())
+	{
+		ui.tableView->selectRow(indexes.at(0).row());
+		ui.tableView->setFocus();
+	}
 }

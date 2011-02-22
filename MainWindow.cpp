@@ -112,3 +112,23 @@ void MainWindow::onSnippets()
 	ui.actionAddSnippet->setVisible(true);
 	ui.actionDelSnippet->setVisible(true);
 }
+
+void MainWindow::jumpToPaper(const QString& title)
+{
+	ui.actionPapers->setChecked(true);
+	onPapers();
+	pagePapers->jumpToPaper(title);
+}
+
+void MainWindow::jumpToSnippet(int snippetID)
+{
+	ui.actionSnippets->setChecked(true);
+	onSnippets();
+	pageSnippets->jumpToSnippet(snippetID);
+}
+
+MainWindow& MainWindow::getInstance()
+{
+	static MainWindow instance;
+	return instance;
+}

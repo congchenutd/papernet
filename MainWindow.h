@@ -13,6 +13,9 @@ class MainWindow : public QMainWindow
 
 public:
 	MainWindow(QWidget *parent = 0, Qt::WFlags flags = 0);
+	static MainWindow& getInstance();
+	void jumpToPaper  (const QString& title);
+	void jumpToSnippet(int snippetID);
 
 protected:
 	virtual void closeEvent(QCloseEvent*);

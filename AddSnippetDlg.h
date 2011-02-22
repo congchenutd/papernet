@@ -24,8 +24,8 @@ private slots:
 	void onDel();
 	void onSelect();
 	virtual void accept();
-
-private:
+	void onSwitchToPapers();
+	void onSwitchToSnippets();
 
 private:
 	Ui::AddSnippetDlgClass ui;

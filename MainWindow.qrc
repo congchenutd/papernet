@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/MainWindow">
+    <file>Images/Open.png</file>
     <file>Images/Uncheck.png</file>
     <file>Images/Snippet.png</file>
     <file>Images/AttachAll.png</file>

@@ -12,12 +12,17 @@ class PageSnippets : public QWidget
 public:
 	PageSnippets(QWidget *parent = 0);
 
+public slots:
+	void onAdd();
+	void onDel();	
+
 private slots:
 	void onCurrentRowChanged();
 	void onSearch(const QString& target);
-	void onAdd();
-	void onDel();
 	void onEdit();
+
+signals:
+	void tableValid(bool);
 
 private:
 	void resetSnippets();
@@ -25,7 +30,6 @@ private:
 
 private:
 	Ui::PageSnippetsClass ui;
-	enum {SNIPPET_ID, SNIPPET_TITLE, SNIPPET_SNIPPET};
 
 	QSqlTableModel model;
 	int currentRow;

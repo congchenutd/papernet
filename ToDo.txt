@@ -2,7 +2,7 @@
 weights of tags
 import to existing unfinished papers
 open ref
-show snippets of a paper
+(done) show snippets of a paper
 auto-hidden side window
-use splitter in ref edit dialog
+(done) use splitter in ref edit dialog
 save a textual copy of pdf to support full-text search

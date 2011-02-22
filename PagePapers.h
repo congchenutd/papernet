@@ -4,10 +4,10 @@
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QSqlQueryModel>
+#include <QDataWidgetMapper>
 #include "ui_PagePapers.h"
 #include "PaperModel.h"
 
-class QDataWidgetMapper;
 struct ImportResult;
 
 class PagePapers : public QWidget
@@ -21,18 +21,19 @@ public:
 protected:
 	virtual void resizeEvent(QResizeEvent*);
 
-private slots:
-	void onCurrentRowPapersChanged(const QModelIndex& idx);
+public slots:
 	void onAddPaper();
-	void onEditPaper();
 	void onDelPaper();
 	void onImport();
+
+private slots:
+	void onCurrentRowPapersChanged(const QModelIndex& idx);
+	void onEditPaper();
 	void onSearch(const QString& target);
 	void onSubmitPaper();
 	void onClicked(const QModelIndex& idx);
 	void onShowRelated();
 	void onShowCoauthored();
-	void onAddSnippet();
 	void onResetPapers();
 
 	void onCurrentRowAllTagsChanged();
@@ -45,7 +46,12 @@ private slots:
 	void onCurrentRowTagsChanged();
 	void onFilter(bool enabled);
 
-	void onShowTags(bool show);
+	void onAddSnippet();
+	void onEditSnippet(const QModelIndex& idx);
+	void onDelSnippets();
+
+signals:
+	void tableValid(bool);
 
 private:
 	int getPaperID (int row) const;
@@ -61,12 +67,8 @@ private:
 	void hideCoauthor();
     void mergeRecord(int row, const ImportResult& record);
     void insertRecord(const ImportResult& record);
-
-public:
-	enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE, 
-		  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE, 
-		  PAPER_PROXIMITY, PAPER_COAUTHOR, PAPER_ADDEDTIME};
-	enum {TAG_ID, TAG_NAME};
+	void updateSnippets();
+	int  getSnippetID(const QModelIndex& idx) const;
 
 private:
 	Ui::PagePapersClass ui;
@@ -77,7 +79,8 @@ private:
 	int currentRowPapers;
 	int currentRowTags;
 	int currentPaperID;
-	QDataWidgetMapper* mapper;
+	QDataWidgetMapper mapper;
+	QSqlQueryModel modelSnippets;
 };
 
 #endif // PAGEPAPERS_H

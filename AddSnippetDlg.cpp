@@ -114,3 +114,7 @@ void AddSnippetDlg::onSelect()
 	}
 }
 
+void AddSnippetDlg::resizeEvent(QResizeEvent*) {
+	ui.splitter->setSizes(QList<int>() << height()  * 0.6 << height()  * 0.4);
+}
+

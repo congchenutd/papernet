@@ -1,5 +1,5 @@
 #include "PaperList.h"
-#include "PagePapers.h"
+#include "common.h"
 
 PaperList::PaperList(QWidget *parent)
 	: QDialog(parent)
@@ -10,14 +10,17 @@ PaperList::PaperList(QWidget *parent)
 	model.select();
 
 	ui.tableView->setModel(&model);
-	ui.tableView->sortByColumn(PagePapers::PAPER_TITLE, Qt::AscendingOrder);
-	ui.tableView->hideColumn(PagePapers::PAPER_ID);
-	ui.tableView->hideColumn(PagePapers::PAPER_JOURNAL);
-	ui.tableView->hideColumn(PagePapers::PAPER_ABSTRACT);
-	ui.tableView->hideColumn(PagePapers::PAPER_NOTE);
-	ui.tableView->hideColumn(PagePapers::PAPER_PROXIMITY);
-	ui.tableView->hideColumn(PagePapers::PAPER_COAUTHOR);
-	ui.tableView->resizeColumnToContents(PagePapers::PAPER_TITLE);
+	ui.tableView->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	ui.tableView->hideColumn(PAPER_ID);
+	ui.tableView->hideColumn(PAPER_JOURNAL);
+	ui.tableView->hideColumn(PAPER_ABSTRACT);
+	ui.tableView->hideColumn(PAPER_NOTE);
+	ui.tableView->hideColumn(PAPER_PROXIMITY);
+	ui.tableView->hideColumn(PAPER_COAUTHOR);
+	ui.tableView->hideColumn(PAPER_READ);
+	ui.tableView->hideColumn(PAPER_TAGGED);
+	ui.tableView->hideColumn(PAPER_ATTACHED);
+	ui.tableView->resizeColumnToContents(PAPER_TITLE);
 
 	connect(ui.leSearch, SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(accept()));
@@ -28,7 +31,7 @@ QStringList PaperList::getSelected() const
 	QStringList result;
 	QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
-		result << model.data(model.index(idx.row(), PagePapers::PAPER_TITLE)).toString();
+		result << model.data(model.index(idx.row(), PAPER_TITLE)).toString();
 	return result;
 }
 

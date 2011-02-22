@@ -5,7 +5,6 @@
 #include "AddSnippetDlg.h"
 #include "Importer.h"
 #include "../EnglishName/EnglishName.h"
-#include <QDataWidgetMapper>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextStream>
@@ -30,71 +29,64 @@ PagePapers::PagePapers(QWidget *parent)
 	resetAllTags();
 	modelAllTags.setEditStrategy(QSqlTableModel::OnManualSubmit);
 
-	mapper = new QDataWidgetMapper(this);
-	mapper->setModel(&modelPapers);
-	mapper->addMapping(ui.teAbstract, PAPER_ABSTRACT);
-	mapper->addMapping(ui.teNote,     PAPER_NOTE);
+	mapper.setModel(&modelPapers);
+	mapper.addMapping(ui.teAbstract, PAPER_ABSTRACT);
+	mapper.addMapping(ui.teNote,     PAPER_NOTE);
 
-	ui.tableViewPapers->setModel(&modelPapers);
-	ui.tableViewPapers->hideColumn(PAPER_ID);
-	ui.tableViewPapers->hideColumn(PAPER_READ);
-	ui.tableViewPapers->hideColumn(PAPER_JOURNAL);
-	ui.tableViewPapers->hideColumn(PAPER_ABSTRACT);
-	ui.tableViewPapers->hideColumn(PAPER_NOTE);
-	ui.tableViewPapers->hideColumn(PAPER_PROXIMITY);
-	ui.tableViewPapers->hideColumn(PAPER_COAUTHOR);
-	ui.tableViewPapers->hideColumn(PAPER_ADDEDTIME);
-	ui.tableViewPapers->resizeColumnToContents(PAPER_TITLE);
-	ui.tableViewPapers->setColumnWidth(PAPER_TAGGED,   32);
-	ui.tableViewPapers->setColumnWidth(PAPER_ATTACHED, 32);
-	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	ui.tvPapers->setModel(&modelPapers);
+	ui.tvPapers->hideColumn(PAPER_ID);
+	ui.tvPapers->hideColumn(PAPER_READ);
+	ui.tvPapers->hideColumn(PAPER_JOURNAL);
+	ui.tvPapers->hideColumn(PAPER_ABSTRACT);
+	ui.tvPapers->hideColumn(PAPER_NOTE);
+	ui.tvPapers->hideColumn(PAPER_PROXIMITY);
+	ui.tvPapers->hideColumn(PAPER_COAUTHOR);
+	ui.tvPapers->hideColumn(PAPER_ADDEDTIME);
+	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
+	ui.tvPapers->setColumnWidth(PAPER_TAGGED,   32);
+	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
+	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
-	ui.listViewAllTags->setModel(&modelAllTags);
-	ui.listViewAllTags->setModelColumn(TAG_NAME);
-	ui.listViewTags->setModel(&modelTags);
+	ui.lvAllTags->setModel(&modelAllTags);
+	ui.lvAllTags->setModelColumn(TAG_NAME);
+	ui.lvTags->setModel(&modelTags);
 
-#ifdef Q_WS_MAC
-    ui.btImport  ->setIconSize(QSize(16, 16));
-    ui.btAddPaper->setIconSize(QSize(16, 16));
-    ui.btDelPaper->setIconSize(QSize(16, 16));
-#endif
-
-	connect(ui.tableViewPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-			mapper, SLOT(setCurrentModelIndex(QModelIndex)));
-	connect(ui.tableViewPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
+	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+			&mapper, SLOT(setCurrentModelIndex(QModelIndex)));
+	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
 			this, SLOT(onCurrentRowPapersChanged(QModelIndex)));
-	connect(ui.tableViewPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
+	connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
 			this, SLOT(onSubmitPaper()));
-	connect(ui.btAddPaper, SIGNAL(clicked()), this, SLOT(onAddPaper()));
-	connect(ui.tableViewPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
-	connect(ui.tableViewPapers, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
-	connect(ui.btDelPaper, SIGNAL(clicked()), this, SLOT(onDelPaper()));
-	connect(ui.btImport,   SIGNAL(clicked()), this, SLOT(onImport()));
+	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
+	connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 
-	connect(ui.listViewAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+	connect(ui.lvAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowAllTagsChanged()));
 	connect(ui.btAddTag,  SIGNAL(clicked()), this, SLOT(onAddTag()));
-	connect(ui.listViewAllTags, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditTag()));
+	connect(ui.lvAllTags, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditTag()));
 	connect(ui.btDelTag,  SIGNAL(clicked()), this, SLOT(onDelTag()));
 	connect(ui.btAddTagToPaper,   SIGNAL(clicked()), this, SLOT(onAddTagToPaper()));
 	connect(ui.btDelTagFromPaper, SIGNAL(clicked()), this, SLOT(onDelTagFromPaper()));
 	connect(ui.btFilter, SIGNAL(clicked(bool)), this, SLOT(onFilter(bool)));
 
-	connect(ui.listViewTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+	connect(ui.lvTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowTagsChanged()));
 
-	connect(ui.tableViewPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
-	connect(ui.tableViewPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
-	connect(ui.tableViewPapers, SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
+	connect(ui.tvPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
+	connect(ui.tvPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
+	connect(ui.tvPapers,   SIGNAL(addSnippet()),   this, SLOT(onAddSnippet()));
+	connect(ui.tvSnippets, SIGNAL(addSnippet()),   this, SLOT(onAddSnippet()));
+	connect(ui.tvSnippets, SIGNAL(delSnippets()),  this, SLOT(onDelSnippets()));
+	connect(ui.tvSnippets, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditSnippet(QModelIndex)));
 
-	connect(ui.btTags, SIGNAL(clicked(bool)), this, SLOT(onShowTags(bool)));
+	ui.tvSnippets->setModel(&modelSnippets);
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
 {
 	bool valid = idx.isValid();
-	ui.btDelPaper->setEnabled(valid);
-	ui.btDelTag->setEnabled(false);
+	ui.btDelTag->setEnabled(valid);
+	emit tableValid(valid);
 
 	if(valid)
 		onClicked(idx);
@@ -152,7 +144,7 @@ void PagePapers::onDelPaper()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		QModelIndexList idxList = ui.tableViewPapers->selectionModel()->selectedRows();
+		QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
 		QSqlDatabase::database().transaction();
 		foreach(QModelIndex idx, idxList)
 			delPaper(getPaperID(idx.row()));
@@ -177,8 +169,8 @@ void PagePapers::selectID(int id)
 	if(row > -1)
 	{
 		currentRowPapers = row;
-		ui.tableViewPapers->selectRow(currentRowPapers);
-		ui.tableViewPapers->setFocus();
+		ui.tvPapers->selectRow(currentRowPapers);
+		ui.tvPapers->setFocus();
 	}
 }
 
@@ -199,7 +191,7 @@ void PagePapers::onImport()
 		return;
 
 	onSubmitPaper();
-	ui.tableViewPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
+	ui.tvPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
 
 	QString file = files.front();
 	MySetting<UserSetting>::getInstance()->setLastImportPath(QFileInfo(file).absolutePath());
@@ -308,7 +300,7 @@ void PagePapers::onSearch(const QString& target)
 
 void PagePapers::onCurrentRowAllTagsChanged()
 {
-	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
+	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();
 	currentRowTags = valid ? idxList.front().row() : -1;	
 	ui.btDelTag ->setEnabled(valid);
@@ -341,7 +333,7 @@ void PagePapers::onDelTag()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
+		QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
 		QSqlDatabase::database().transaction();
 		foreach(QModelIndex idx, idxList)
 			delTag(getAllTagID(idx.row()));
@@ -364,7 +356,7 @@ void PagePapers::onEditTag()
 
 void PagePapers::onAddTagToPaper()
 {
-	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
+	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
 		addPaperTag(currentPaperID, getAllTagID(idx.row()));
 	updateTags();
@@ -376,14 +368,14 @@ void PagePapers::updateTags()
 																.arg(currentPaperID));
 	modelTags.setQuery(tr("select ID, Name from Tags where ID in %1 order by Name")
 																.arg(thisPapersTags));
-	ui.listViewTags->setModelColumn(TAG_NAME);
+	ui.lvTags->setModelColumn(TAG_NAME);
 
 	if(!isFiltered())
 		modelAllTags.setFilter(tr("ID not in %1 order by Name").arg(thisPapersTags));
 }
 
 void PagePapers::onCurrentRowTagsChanged() {
-	ui.btDelTagFromPaper->setEnabled(!ui.listViewTags->selectionModel()->selectedRows().isEmpty());
+	ui.btDelTagFromPaper->setEnabled(!ui.lvTags->selectionModel()->selectedRows().isEmpty());
 }
 
 void PagePapers::onDelTagFromPaper()
@@ -391,7 +383,7 @@ void PagePapers::onDelTagFromPaper()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		QModelIndexList idxList = ui.listViewTags->selectionModel()->selectedRows();
+		QModelIndexList idxList = ui.lvTags->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
 			delPaperTag(currentPaperID, getTagID(idx.row()));
 		updateTags();
@@ -403,7 +395,7 @@ void PagePapers::filterPapers()
 	hideRelated();
 	hideCoauthor();
 	QStringList tagClauses;
-	QModelIndexList idxList = ui.listViewAllTags->selectionModel()->selectedRows();
+	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
 		tagClauses << tr("Tag = %1").arg(getAllTagID(idx.row()));
 	if(tagClauses.isEmpty())
@@ -430,7 +422,7 @@ void PagePapers::onResetPapers()
 	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
-	ui.tableViewPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	hideRelated();
 	hideCoauthor();
 	selectID(currentPaperID);
@@ -449,10 +441,10 @@ bool PagePapers::isFiltered() const {
 
 void PagePapers::resizeEvent(QResizeEvent*)
 {
-	//ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
-	//ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.6 << height() * 0.4);
-	//ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
- //   ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.35 << width() * 0.15);
+	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
+//	ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
+//	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
+    ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.35 << width() * 0.15);
 }
 
 void PagePapers::onClicked(const QModelIndex& idx)
@@ -461,6 +453,7 @@ void PagePapers::onClicked(const QModelIndex& idx)
 	currentPaperID = getPaperID(currentRowPapers);
 	updateTags();
 	ui.widgetAttachments->setPaper(currentPaperID);
+	updateSnippets();
 }
 
 void PagePapers::onShowRelated()
@@ -484,7 +477,7 @@ void PagePapers::onShowRelated()
 				  where ID = %1").arg(currentPaperID));
 	QSqlDatabase::database().commit();
 
-	ui.tableViewPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
+	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
 	selectID(currentPaperID);
 }
 
@@ -516,7 +509,7 @@ void PagePapers::onShowCoauthored()
 		}
 	modelPapers.submitAll();
 
-	ui.tableViewPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);
+	ui.tvPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);
 	selectID(currentPaperID);
 }
 
@@ -538,10 +531,34 @@ void PagePapers::onAddSnippet()
 		onResetPapers();
 }
 
-void PagePapers::onShowTags(bool show)
+void PagePapers::updateSnippets()
 {
-	//if(!show)
-	//	ui.splitterHorizontal->setSizes(QList<int>() << width() << 0);
-	//else
-	//	ui.splitterHorizontal->setSizes(QList<int>() << width() * 0.85 << width() * 0.15);
+	modelSnippets.setQuery(tr("select Title, Snippet from Snippets where id in \
+							  (select Snippet from PaperSnippet where Paper = %1)")
+							  .arg(currentPaperID));
+}
+
+void PagePapers::onEditSnippet(const QModelIndex& idx)
+{
+	AddSnippetDlg dlg(this);
+	dlg.setWindowTitle(tr("Edit Snippet"));
+	dlg.setSnippetID(getSnippetID(idx));
+	if(dlg.exec() == QDialog::Accepted)
+		onResetPapers();
+}
+
+void PagePapers::onDelSnippets()
+{
+	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
+		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+	{
+		QModelIndexList idxList = ui.tvSnippets->selectionModel()->selectedRows();
+		foreach(QModelIndex idx, idxList)
+			delSnippet(getSnippetID(idx));
+		onResetPapers();
+	}
+}
+
+int PagePapers::getSnippetID(const QModelIndex& idx) const {
+	return ::getSnippetID(modelSnippets.data(modelSnippets.index(idx.row(), 0)).toString());
 }

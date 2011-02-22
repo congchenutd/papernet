@@ -33,6 +33,7 @@ void addPaper(int id, const QString& title);
 void delSnippet(int id);
 QStringList getPaperList(int snippetID);
 bool isTagged(int paperID);
+int getSnippetID(const QString& title);
 
 void setRead(int paperID);
 void updateTagged(int paperID);
@@ -40,5 +41,10 @@ void updateAttached(int paperID);
 
 typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 AttachmentStatus isAttached(int paperID);
+enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE, 
+	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE, 
+	  PAPER_PROXIMITY, PAPER_COAUTHOR, PAPER_ADDEDTIME};
+enum {TAG_ID, TAG_NAME};
+enum {SNIPPET_ID, SNIPPET_TITLE, SNIPPET_SNIPPET};
 
 #endif // Common_h__

@@ -15,7 +15,7 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 		float maxProximity = getMaxProximity();
 		if(maxProximity > 0)
 		{
-			float proximity = data(index(idx.row(), PagePapers::PAPER_PROXIMITY)).toInt();
+			float proximity = data(index(idx.row(), PAPER_PROXIMITY)).toInt();
 			float red = (maxProximity - proximity)/maxProximity*55 + 200;
 			return QBrush(QColor(red, red, 255));
 		}
@@ -23,16 +23,16 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 		float maxCoauthor = getMaxCoauthor();
 		if(maxCoauthor > 0)
 		{
-			float coauthor = data(index(idx.row(), PagePapers::PAPER_COAUTHOR)).toInt();
+			float coauthor = data(index(idx.row(), PAPER_COAUTHOR)).toInt();
 			float green = (maxCoauthor - coauthor)/maxCoauthor*55 + 200;
 			return QBrush(QColor(255, green, green));
 		}
 	}
 
 	// make new paper's title bold
-	if(idx.column() == PagePapers::PAPER_TITLE)
+	if(idx.column() == PAPER_TITLE)
 	{
-		if(role == Qt::FontRole && !data(index(idx.row(), PagePapers::PAPER_READ)).toBool())
+		if(role == Qt::FontRole && !data(index(idx.row(), PAPER_READ)).toBool())
 		{
 			QFont f = qApp->font();
 			f.setBold(true);
@@ -40,25 +40,25 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 		}
 	}
 	// tagged
-	else if(idx.column() == PagePapers::PAPER_TAGGED)
+	else if(idx.column() == PAPER_TAGGED)
 	{
 		if(role == Qt::DisplayRole)
 			return QString();
 		if(role == Qt::DecorationRole)
 		{
-			int paperID = data(index(idx.row(), PagePapers::PAPER_ID), Qt::DisplayRole).toInt();
+			int paperID = data(index(idx.row(), PAPER_ID), Qt::DisplayRole).toInt();
 			if(isTagged(paperID))
 				return QIcon(":/MainWindow/Images/Tag.png");
 		}
 	}
 	// attached
-	else if(idx.column() == PagePapers::PAPER_ATTACHED)
+	else if(idx.column() == PAPER_ATTACHED)
 	{
 		if(role == Qt::DisplayRole)
 			return QString();
 		if(role == Qt::DecorationRole)
 		{
-			int paperID = data(index(idx.row(), PagePapers::PAPER_ID), Qt::DisplayRole).toInt();
+			int paperID = data(index(idx.row(), PAPER_ID), Qt::DisplayRole).toInt();
 			AttachmentStatus attachmentStatus = isAttached(paperID);
 			if(attachmentStatus == ATTACH_ENDNOTE)
 				return QIcon(":/MainWindow/Images/AttachEndNote.png");

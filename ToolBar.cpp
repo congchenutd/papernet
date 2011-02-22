@@ -26,7 +26,7 @@ void ToolBar::contextMenuEvent(QContextMenuEvent* event)
 
 void ToolBar::onSmallIcon(bool small)
 {
-	setIconSize(small ? QSize(48, 32) : QSize(64, 48));
+	setIconSize(small ? QSize(24, 24) : QSize(48, 32));
 	actionSmallIcon->setChecked(small);
 	MySetting<UserSetting>::getInstance()->setValue("SmallIcon", small);
 }

@@ -362,3 +362,10 @@ void updateAttached(int paperID)
 	query.exec(QObject::tr("update Papers set Attached = %1 where ID = %2")
 								.arg(isAttached(paperID)).arg(paperID));
 }
+
+int getSnippetID(const QString& title)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("select ID from Snippets where Title = \"%1\"").arg(title));
+	return query.next() ? query.value(0).toInt() : -1;
+}

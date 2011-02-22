@@ -15,6 +15,9 @@ public:
 	void setSnippetID(int id);
 	void addPaper(const QString& title);
 
+protected:
+	virtual void resizeEvent(QResizeEvent*);
+
 private slots:
 	void onCurrentRowChanged();
 	void onAdd();

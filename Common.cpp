@@ -13,6 +13,10 @@
 #include <QUrl>
 #include <QDebug>
 
+#ifdef Q_WS_WIN
+#include "windows.h"
+#endif
+
 QString dbName;
 QString attachmentDir;
 QString emptyDir;
@@ -134,6 +138,7 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 	{
 		QString fullTextFilePath = dir + "/" + "fulltext.txt";
 		Pdf2Text(targetFilePath.toAscii(), fullTextFilePath.toAscii());
+		hideFile(fullTextFilePath);
 	}
 
 	return true;
@@ -409,6 +414,17 @@ void makeFullTextFiles()
 		{
 			QString fullText = dir + "/" + "fulltext.txt";
 			Pdf2Text(pdf.toAscii(), fullText.toAscii());
+			hideFile(fullText);
 		}
 	}
+}
+
+void hideFile(const QString& filePath)
+{
+#ifdef Q_WS_WIN
+	SetFileAttributesA(filePath.toAscii(), FILE_ATTRIBUTE_HIDDEN);
+#endif
+
+#ifdef Q_WS_MAC
+#endif
 }

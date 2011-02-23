@@ -7,6 +7,7 @@ PageSnippets::PageSnippets(QWidget *parent)
 	: QWidget(parent), currentRow(-1)
 {
 	ui.setupUi(this);
+	ui.tableView->init("PageSnippets");
 
 	resetSnippets();
 	ui.tableView->setModel(&model);
@@ -91,4 +92,8 @@ void PageSnippets::jumpToSnippet(int snippetID)
 		ui.tableView->selectRow(indexes.at(0).row());
 		ui.tableView->setFocus();
 	}
+}
+
+void PageSnippets::saveSectionSizes() {
+	ui.tableView->saveSectionSizes();
 }

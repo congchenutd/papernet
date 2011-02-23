@@ -18,9 +18,8 @@ public:
 	PagePapers(QWidget *parent = 0);
 	~PagePapers();
 	void jumpToPaper(const QString& title);
-
-protected:
-	virtual void resizeEvent(QResizeEvent*);
+	void saveSectionSizes();
+	void saveSplitterSizes();
 
 private slots:
 	void onAddPaper();
@@ -69,6 +68,7 @@ private:
     void insertRecord(const ImportResult& record);
 	void updateSnippets();
 	int  getSnippetID(const QModelIndex& idx) const;
+	void loadSplitterSizes();
 
 private:
 	Ui::PagePapersClass ui;
@@ -81,6 +81,7 @@ private:
 	int currentPaperID;
 	QDataWidgetMapper mapper;
 	QSqlQueryModel modelSnippets;
+	UserSetting* setting;
 };
 
 #endif // PAGEPAPERS_H

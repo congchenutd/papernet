@@ -18,7 +18,7 @@
     <number>5</number>
    </property>
    <item>
-    <widget class="QTableView" name="tableView">
+    <widget class="AutoSizeTableView" name="tableView">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -36,6 +36,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>AutoSizeTableView</class>
+   <extends>QTableView</extends>
+   <header>AutoSizeTableView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="MainWindow.qrc"/>
  </resources>

@@ -12,6 +12,7 @@ class PageSnippets : public QWidget
 public:
 	PageSnippets(QWidget *parent = 0);
 	void jumpToSnippet(int snippetID);
+	void saveSectionSizes();
 
 public slots:
 	void onAdd();

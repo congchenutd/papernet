@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
+    <width>514</width>
     <height>428</height>
    </rect>
   </property>
@@ -139,9 +139,6 @@
            </property>
            <property name="selectionBehavior">
             <enum>QAbstractItemView::SelectRows</enum>
-           </property>
-           <property name="sortingEnabled">
-            <bool>true</bool>
            </property>
            <attribute name="horizontalHeaderStretchLastSection">
             <bool>true</bool>

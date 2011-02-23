@@ -22,8 +22,10 @@ PagePapers::PagePapers(QWidget *parent)
 {
 	currentRowPapers = -1;
 	currentRowTags   = -1;
+	setting = MySetting<UserSetting>::getInstance();
 
 	ui.setupUi(this);
+	ui.tvPapers->init("PagePapers");
 
 	onResetPapers();
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -52,6 +54,10 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.lvAllTags->setModelColumn(TAG_NAME);
 	ui.lvTags->setModel(&modelTags);
 
+	ui.tvSnippets->setModel(&modelSnippets);
+
+	loadSplitterSizes();
+
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
 			&mapper, SLOT(setCurrentModelIndex(QModelIndex)));
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
@@ -79,8 +85,6 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvSnippets, SIGNAL(addSnippet()),   this, SLOT(onAddSnippet()));
 	connect(ui.tvSnippets, SIGNAL(delSnippets()),  this, SLOT(onDelSnippets()));
 	connect(ui.tvSnippets, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditSnippet(QModelIndex)));
-
-	ui.tvSnippets->setModel(&modelSnippets);
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
@@ -184,7 +188,7 @@ int PagePapers::idToRow(int id) const
 
 void PagePapers::onImport()
 {
-	QString lastPath = MySetting<UserSetting>::getInstance()->getLastImportPath();
+	QString lastPath = setting->getLastImportPath();
 	QStringList files = QFileDialog::getOpenFileNames(
 		this, "Select one or more files to open", lastPath,
 		"Reference (*.enw *.ris *.xml);;All files (*.*)");
@@ -195,7 +199,7 @@ void PagePapers::onImport()
 	ui.tvPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
 
 	QString file = files.front();
-	MySetting<UserSetting>::getInstance()->setLastImportPath(QFileInfo(file).absolutePath());
+	setting->setLastImportPath(QFileInfo(file).absolutePath());
 
 	foreach(QString fileName, files)
 	{
@@ -440,14 +444,6 @@ bool PagePapers::isFiltered() const {
 	return ui.btFilter->isChecked();
 }
 
-void PagePapers::resizeEvent(QResizeEvent*)
-{
-	ui.splitterHorizontal->setSizes(QList<int>() << width()  * 0.85 << width()  * 0.15);
-    ui.splitterPapers    ->setSizes(QList<int>() << height() * 0.55 << height() * 0.45);
-//	ui.splitterTags      ->setSizes(QList<int>() << height() * 0.5 << height() * 0.5);
-    ui.splitterDetails   ->setSizes(QList<int>() << width() * 0.5 << width() * 0.35 << width() * 0.15);
-}
-
 void PagePapers::onClicked(const QModelIndex& idx)
 {
 	currentRowPapers = idx.row();
@@ -532,10 +528,12 @@ void PagePapers::onAddSnippet()
 	dlg->show();
 }
 
-void PagePapers::updateSnippets() {
+void PagePapers::updateSnippets()
+{
 	modelSnippets.setQuery(tr("select Title, Snippet from Snippets where id in \
-							  (select Snippet from PaperSnippet where Paper = %1)")
+							  (select Snippet from PaperSnippet where Paper = %1) order by Title")
 							  .arg(currentPaperID));
+	ui.tvSnippets->resizeColumnToContents(0);
 }
 
 void PagePapers::onEditSnippet(const QModelIndex& idx)
@@ -591,4 +589,24 @@ void PagePapers::onFullTextSearch(const QString& target)
 		QMessageBox::information(this, tr("Full text search"), tr("No such paper!"));
 	else
 		modelPapers.setFilter(filter.join(" OR "));
+}
+
+void PagePapers::saveSectionSizes() {
+	ui.tvPapers->saveSectionSizes();
+}
+
+void PagePapers::loadSplitterSizes()
+{
+	ui.splitterHorizontal->restoreState(setting->value("SplitterHorizontal").toByteArray());
+	ui.splitterPapers    ->restoreState(setting->value("SplitterPapers")    .toByteArray());
+	ui.splitterDetails   ->restoreState(setting->value("SplitterDetails")   .toByteArray());
+	ui.splitterTags      ->restoreState(setting->value("SplitterTags")      .toByteArray());
+}
+
+void PagePapers::saveSplitterSizes()
+{
+	setting->setValue("SplitterHorizontal", ui.splitterHorizontal->saveState());
+	setting->setValue("SplitterPapers",     ui.splitterPapers->saveState());
+	setting->setValue("SplitterDetails",    ui.splitterDetails->saveState());
+	setting->setValue("SplitterTags",       ui.splitterTags->saveState());
 }

@@ -51,7 +51,7 @@ void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About", 
 		tr("<h3><b>PaperNet: a better paper manager</b></h3>"
-		"<p>Build 2011.2.22</p>"
+		"<p>Build 2011.2.23</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
 }
 
@@ -63,6 +63,9 @@ void MainWindow::closeEvent(QCloseEvent*)
 		delOldBackup();
 		backup();
 	}
+	pagePapers->saveSectionSizes();
+	pagePapers->saveSplitterSizes();
+	pageSnippets->saveSectionSizes();
 	setting->destroySettingManager();
 }
 

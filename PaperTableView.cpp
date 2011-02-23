@@ -23,4 +23,3 @@ void PaperTableView::contextMenuEvent(QContextMenuEvent* event)
 	menu.addAction(&actionAddSnippet);
 	menu.exec(event->globalPos());
 }
-

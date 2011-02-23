@@ -10,10 +10,10 @@ class AutoSizeTableView : public QTableView
 
 public:
 	AutoSizeTableView(QWidget *parent);
+	void saveSectionSizes();
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
-	virtual void closeEvent(QCloseEvent*);
 
 private:
 	QMap<int, double> sectionSizes;

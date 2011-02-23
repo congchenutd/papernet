@@ -15,6 +15,7 @@
 #include <QMenu>
 #include <QFileInfo>
 #include <QSqlError>
+#include <QProgressDialog>
 
 PagePapers::PagePapers(QWidget *parent)
 	: QWidget(parent)
@@ -571,12 +572,23 @@ void PagePapers::onFullTextSearch(const QString& target)
 	onResetPapers();
 	if(target.isEmpty())
 		return;
-	for(int row = currentRowPapers; row < modelPapers.rowCount(); ++row)
+
+	int rowCount = modelPapers.rowCount();
+	QProgressDialog progress(tr("Searching..."), tr("Abort"), 0, rowCount, this);
+	progress.setWindowModality(Qt::WindowModal);
+
+	QStringList filter;
+	for(int row = 0; row < rowCount; ++row)
+	{
+		progress.setValue(row);
 		if(fullTextSearch(getPaperID(row), target))
-		{
-			onResetPapers();
-			selectID(getPaperID(row));
-			return;
-		}
-	QMessageBox::information(this, tr("Full text search"), tr("No such paper!"));
+			filter << tr("ID = %1").arg(getPaperID(row));
+		if (progress.wasCanceled())
+			break;
+	}
+
+	if(filter.isEmpty())
+		QMessageBox::information(this, tr("Full text search"), tr("No such paper!"));
+	else
+		modelPapers.setFilter(filter.join(" OR "));
 }

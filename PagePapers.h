@@ -22,12 +22,10 @@ public:
 protected:
 	virtual void resizeEvent(QResizeEvent*);
 
-public slots:
+private slots:
 	void onAddPaper();
 	void onDelPaper();
 	void onImport();
-
-private slots:
 	void onCurrentRowPapersChanged(const QModelIndex& idx);
 	void onEditPaper();
 	void onSearch(const QString& target);

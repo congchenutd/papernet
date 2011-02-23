@@ -5,4 +5,4 @@ import to existing unfinished papers
 (done) show snippets of a paper
 auto-hidden side window
 (done) use splitter in ref edit dialog
-save a textual copy of pdf to support full-text search
+(done) save a textual copy of pdf to support full-text search

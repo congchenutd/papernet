@@ -146,6 +146,8 @@ void delAttachment(int paperID, const QString& attachmentName)
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
 	{
         QFile::remove(getAttachmentPath(paperID, attachmentName));
+		if(attachmentName.endsWith(".pdf", Qt::CaseInsensitive))  // full text
+			QFile::remove(getAttachmentDir(paperID) + "/" + "fulltext.txt");
 		QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
 	}
 }
@@ -404,4 +406,22 @@ bool fullTextSearch(int paperID, const QString& target)
 			if(file.readLine().indexOf(target) > -1)
 				return true;
 	return false;
+}
+
+void makeFullTextFiles()
+{
+	QSqlQuery query;
+	query.exec("select ID from Papers");
+	while(query.next())
+	{
+		int id = query.value(0).toInt();
+		QString dir = getAttachmentDir(id);
+		QString pdf = getAttachmentPath(id, "Paper.pdf");
+		if(QFile::exists(pdf))
+		{
+			QString fullText = dir + "/" + "fulltext.txt";
+			Pdf2Text(pdf.toAscii(), fullText.toAscii());
+			hideFile(fullText);
+		}
+	}
 }

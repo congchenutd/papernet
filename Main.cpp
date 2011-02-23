@@ -22,5 +22,7 @@ int main(int argc, char *argv[])
 	MainWindow wnd;
 	wnd.showMaximized();
 
+//	makeFullTextFiles();
+
 	return app.exec();
 }

@@ -2,8 +2,9 @@
 #define PAPERTABLEVIEW_H
 
 #include <QTableView>
+#include "AutoSizeTableView.h"
 
-class PaperTableView : public QTableView
+class PaperTableView : public AutoSizeTableView
 {
 	Q_OBJECT
 

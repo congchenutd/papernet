@@ -3,7 +3,7 @@
 #include <QContextMenuEvent>
 
 PaperTableView::PaperTableView(QWidget *parent)
-	: QTableView(parent) {}
+	: AutoSizeTableView(parent) {}
 
 void PaperTableView::contextMenuEvent(QContextMenuEvent* event)
 {

@@ -37,7 +37,6 @@ int getSnippetID(const QString& title);
 void setRead(int paperID);
 void updateTagged(int paperID);
 void updateAttached(int paperID);
-void hideFile(const QString& filePath);
 bool fullTextSearch(int paperID, const QString& target);
 void makeFullTextFiles();
 

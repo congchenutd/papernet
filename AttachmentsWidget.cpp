@@ -23,6 +23,8 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	QDir(".").mkdir(emptyDir);
 
 	model.setRootPath(attachmentDir);
+    model.setNameFilters(QStringList() << "*.pdf");
+    model.setNameFilterDisables(false);
 	ui.listView->setModel(&model);
 	ui.listView->setRootIndex(model.index(emptyDir));
 

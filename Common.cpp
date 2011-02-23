@@ -1,7 +1,6 @@
 #include "Common.h"
 #include "OptionDlg.h"
 #include "Pdf2Text.h"
-#include "windows.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
@@ -135,7 +134,6 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 	{
 		QString fullTextFilePath = dir + "/" + "fulltext.txt";
 		Pdf2Text(targetFilePath.toAscii(), fullTextFilePath.toAscii());
-		hideFile(fullTextFilePath);
 	}
 
 	return true;
@@ -387,16 +385,6 @@ int getSnippetID(const QString& title)
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
-void hideFile(const QString& filePath)
-{
-#ifdef Q_WS_WIN
-	SetFileAttributesA(filePath.toAscii(), FILE_ATTRIBUTE_HIDDEN);
-#endif
-
-#ifdef Q_WS_MAC
-#endif
-}
-
 bool fullTextSearch(int paperID, const QString& target)
 {
 	QString fullTextFilePath = getAttachmentDir(paperID) + "/fulltext.txt";
@@ -421,7 +409,6 @@ void makeFullTextFiles()
 		{
 			QString fullText = dir + "/" + "fulltext.txt";
 			Pdf2Text(pdf.toAscii(), fullText.toAscii());
-			hideFile(fullText);
 		}
 	}
 }

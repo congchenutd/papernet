@@ -1,5 +1,7 @@
 #include "OptionDlg.h"
 #include <QFontDialog>
+#include <QFileDialog>
+#include <cstdlib>
 
 OptionDlg::OptionDlg(QWidget *parent)
 	: QDialog(parent)
@@ -7,6 +9,7 @@ OptionDlg::OptionDlg(QWidget *parent)
 	ui.setupUi(this);
 
 	connect(ui.btFont, SIGNAL(clicked()), this, SLOT(onFont()));
+	connect(ui.btTemp, SIGNAL(clicked()), this, SLOT(onTempLocation()));
 
 	setting = MySetting<UserSetting>::getInstance();
 
@@ -20,6 +23,7 @@ OptionDlg::OptionDlg(QWidget *parent)
 	}
 	ui.sbBackupDays->setValue(backupDays);
 	ui.checkKeepAttachments->setChecked(setting->getKeepAttachments());
+	ui.leTemp->setText(setting->getTempLocation());
 }
 
 void OptionDlg::onFont()
@@ -36,8 +40,17 @@ void OptionDlg::accept()
 	qApp->setFont(setting->getFont());
 	setting->setBackupDays(ui.checkAutoBack->isChecked() ? ui.sbBackupDays->value() : 0);
 	setting->setKeepAttachments(ui.checkKeepAttachments->isChecked());
+	setting->setTempLocation(ui.leTemp->text());
 
 	QDialog::accept();
+}
+
+void OptionDlg::onTempLocation()
+{
+	QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+		setting->getTempLocation(),	QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	if(!dir.isEmpty())
+		ui.leTemp->setText(dir);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -57,6 +70,8 @@ void UserSetting::loadDefaults()
 	setLastAttachmentPath(".");
 	setValue("SmallIcon", false);
 	setValue("ShowText",  false);
+	char* temp = getenv("TMP");
+	setTempLocation(temp == 0 ? "." : temp);
 }
 
 QFont UserSetting::getFont() const
@@ -78,6 +93,9 @@ QString UserSetting::getLastImportPath() const {
 QString UserSetting::getLastAttachmentPath() const {
 	return value("LastAttachmentPath").toString();
 }
+QString UserSetting::getTempLocation() const {
+	return value("TempLocation").toString();
+}
 
 void UserSetting::setFont(const QFont& font) {
 	setValue("Font", font);
@@ -93,4 +111,7 @@ void UserSetting::setLastImportPath(const QString& path) {
 }
 void UserSetting::setLastAttachmentPath(const QString& path) {
     setValue("LastAttachmentPath", path);
+}
+void UserSetting::setTempLocation(const QString& temp) {
+	setValue("TempLocation", temp);
 }

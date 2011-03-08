@@ -17,6 +17,7 @@ public:
 
 private slots:
 	void onFont();
+	void onTempLocation();
 
 private:
 	Ui::OptionDlgClass ui;
@@ -35,11 +36,13 @@ public:
 	bool  getKeepAttachments() const;
 	QString getLastImportPath() const;
 	QString getLastAttachmentPath() const;
+	QString getTempLocation() const;
 	void setFont(const QFont& font);
 	void setBackupDays(int days);
 	void setKeepAttachments(bool keep);
 	void setLastImportPath(const QString& path);
 	void setLastAttachmentPath(const QString& path);
+	void setTempLocation(const QString& temp);
 
 private:
 	void loadDefaults();

@@ -1,15 +1,41 @@
 #include "MainWindow.h"
 #include "Common.h"
+#include "OptionDlg.h"
 
+extern QString userName;
 extern QString dbName;
 extern QString attachmentDir;
 extern QString emptyDir;
+
+void overwritingCopy(const QString& src, const QString& dest)
+{
+	QFile::remove(dest);
+	QFile::copy(src, dest);
+}
+
+void loadDB()
+{
+	QString temp = MySetting<UserSetting>::getInstance()->getTempLocation();
+	if(temp == ".")
+		return;
+	dbName = temp + "/PaperNet.db";
+	overwritingCopy("PaperNet.db", dbName);
+}
+
+void saveDB()
+{
+	UserSetting* setting = MySetting<UserSetting>::getInstance();
+	QString temp = setting->getTempLocation();
+	if(temp == ".")
+		return;
+	overwritingCopy(dbName, "PaperNet.db");
+}
 
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 
-	dbName = "PaperNet.db";
+	loadDB();
     attachmentDir = "./Attachments/";
 	emptyDir = attachmentDir + "Empty";
 
@@ -24,5 +50,7 @@ int main(int argc, char *argv[])
 
 //	makeFullTextFiles();
 
-	return app.exec();
+	int result = app.exec();
+	saveDB();
+	return result;
 }

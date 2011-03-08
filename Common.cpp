@@ -17,6 +17,7 @@
 #include "windows.h"
 #endif
 
+QString userName;
 QString dbName;
 QString attachmentDir;
 QString emptyDir;

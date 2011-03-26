@@ -19,7 +19,7 @@ void loadDB()
 	if(temp == ".")
 		return;
 	dbName = temp + "/PaperNet.db";
-	overwritingCopy("PaperNet.db", dbName);
+	overwritingCopy("PaperNet.db", dbName);   // make a working copy, in case of conflict
 }
 
 void saveDB()
@@ -28,7 +28,7 @@ void saveDB()
 	QString temp = setting->getTempLocation();
 	if(temp == ".")
 		return;
-	overwritingCopy(dbName, "PaperNet.db");
+	overwritingCopy(dbName, "PaperNet.db");   // save the working copy
 }
 
 int main(int argc, char *argv[])

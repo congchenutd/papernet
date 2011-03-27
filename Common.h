@@ -40,6 +40,8 @@ void updateAttached(int paperID);
 bool fullTextSearch(int paperID, const QString& target);
 void makeFullTextFiles();
 void hideFile(const QString& filePath);
+QString getPDFPath(int paperID);
+void foo();
 
 typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 AttachmentStatus isAttached(int paperID);

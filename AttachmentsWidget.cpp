@@ -23,6 +23,7 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	QDir(".").mkdir(emptyDir);
 
 	model.setRootPath(attachmentDir);
+//	model.setResolveSymlinks(false);
 //    model.setNameFilters(QStringList() << "*.pdf" << "*.ris" << "*.enw" << "*.xml");
 //    model.setNameFilterDisables(false);
 	ui.listView->setModel(&model);
@@ -60,21 +61,22 @@ void AttachmentsWidget::setPaper(int id)
 
 void AttachmentsWidget::onAddFile()
 {
-	QString lastPath = MySetting<UserSetting>::getInstance()->getLastAttachmentPath();
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+	UserSetting* setting = MySetting<UserSetting>::getInstance();
+	QString lastPath = setting->getLastAttachmentPath();
+	QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"),
 													lastPath, tr("All files (*.*)"));
-	if(fileName.isEmpty())
+	if(filePath.isEmpty())
 		return;
 	
-	MySetting<UserSetting>::getInstance()->setLastAttachmentPath(QFileInfo(fileName).absolutePath());
+	setting->setLastAttachmentPath(QFileInfo(filePath).absolutePath());
 	
 	bool ok;
 	QString attachmentName = QInputDialog::getText(this, tr("Attachment name"), 
-		tr("Attachment name"), QLineEdit::Normal, guessName(fileName), &ok);
+		tr("Attachment name"), QLineEdit::Normal, guessName(filePath), &ok);
 	if(!ok || attachmentName.isEmpty())
 		return;
 
-	if(!addAttachment(paperID, attachmentName, fileName))
+	if(!addAttachment(paperID, attachmentName, filePath))
 	{
 		QMessageBox::critical(this, tr("Error"), tr("The name already exists!"));
 		return;
@@ -105,8 +107,7 @@ void AttachmentsWidget::onDel()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		QString attachmentName = model.data(currentIndex).toString();
-        delAttachment(paperID, attachmentName);
+        delAttachment(paperID, model.filePath(currentIndex));
 		update();
 		updateAttached(paperID);
 	}
@@ -120,7 +121,7 @@ void AttachmentsWidget::onOpen(const QModelIndex& idx)
 	emit paperRead();   // let papers refresh
 }
 
-void AttachmentsWidget::update()
+void AttachmentsWidget::update()   // refresh
 {
 	QString dir = getAttachmentDir(paperID);
 	if(QDir(dir).entryList().isEmpty())

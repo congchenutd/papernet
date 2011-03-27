@@ -12,6 +12,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QDebug>
+#include <QProcess>
 
 #ifdef Q_WS_WIN
 #include "windows.h"
@@ -21,6 +22,7 @@ QString userName;
 QString dbName;
 QString attachmentDir;
 QString emptyDir;
+QString pdfDir;
 
 bool openDB(const QString& name)
 {
@@ -125,38 +127,47 @@ void delPaperTag(int paperID, int tagID)
 		QMessageBox::critical(0, "error", query.lastError().text());
 }
 
-bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName)
+bool addAttachment(int paperID, const QString& attachmentName, const QString& filePath)
 {
 	QString dir = getAttachmentDir(paperID);
-    QDir::current().mkdir(dir);
-	QString targetFilePath = dir + "/" + attachmentName;
-    bool result = QFile::copy(fileName, targetFilePath);
-	if(!result)
-		return false;
+	QDir::current().mkdir(dir);  // make attachment dir for this paper
 
-	// create fulltext file for pdf
-	if(targetFilePath.endsWith(".pdf", Qt::CaseInsensitive))
+	QString targetFilePath;
+	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)   // pdf
 	{
+		targetFilePath = getPDFPath(paperID);
+
+		// create shortcut
+		QProcess::execute(QObject::tr("Shortcut.exe /f:\"%1\" /a:c /t:\"%2\"")
+								.arg(dir + "/Paper.pdf.lnk").arg(filePath));
+
+		// create full text
 		QString fullTextFilePath = dir + "/" + "fulltext.txt";
-		Pdf2Text(targetFilePath.toAscii(), fullTextFilePath.toAscii());
+		Pdf2Text(filePath.toAscii(), fullTextFilePath.toAscii());
 		hideFile(fullTextFilePath);
 	}
-
-	return true;
-}
-
-void delAttachment(int paperID, const QString& attachmentName)
-{
-	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
-	{
-        QFile::remove(getAttachmentPath(paperID, attachmentName));
-		if(attachmentName.endsWith(".pdf", Qt::CaseInsensitive))  // full text
-			QFile::remove(getAttachmentDir(paperID) + "/" + "fulltext.txt");
-		QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
+	else {
+		targetFilePath = dir + "/" + attachmentName;
 	}
+
+	return QFile::copy(filePath, targetFilePath);
 }
 
-// delete the attachment dir
+void delAttachment(int paperID, const QString& attachmentPath)
+{
+	if(MySetting<UserSetting>::getInstance()->getKeepAttachments())
+		return;
+
+    QFile::remove(attachmentPath);
+	if(attachmentPath.endsWith(".pdf.lnk", Qt::CaseInsensitive))
+	{
+		QFile::remove(getPDFPath(paperID));                               // remove pdf file
+		QFile::remove(getAttachmentDir(paperID) + "/" + "fulltext.txt");  // remove full text file
+	}
+	QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
+}
+
+// delete the attachment dir and its contents
 void delAttachments(int paperID)
 {
 	QDir dir(getAttachmentDir(paperID));
@@ -370,14 +381,14 @@ void setRead(int paperID)
 	query.exec(QObject::tr("update Papers set Read = \'true\' where ID = %1").arg(paperID));
 }
 
-void updateTagged(int paperID)
+void updateTagged(int paperID)  // update Tagged section of Papers table
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("update Papers set Tagged = %1 where ID = %2")
 								.arg(isTagged(paperID)).arg(paperID));
 }
 
-void updateAttached(int paperID)
+void updateAttached(int paperID)  // update Attached section of Papers table
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("update Papers set Attached = %1 where ID = %2")
@@ -396,9 +407,8 @@ bool fullTextSearch(int paperID, const QString& target)
 	QString fullTextFilePath = getAttachmentDir(paperID) + "/fulltext.txt";
 	QFile file(fullTextFilePath);
 	if(file.open(QFile::ReadOnly))
-		while(!file.atEnd())
-			if(file.readLine().indexOf(target) > -1)
-				return true;
+		if(file.readAll().indexOf(target) > -1)
+			return true;
 	return false;
 }
 
@@ -428,4 +438,25 @@ void hideFile(const QString& filePath)
 
 #ifdef Q_WS_MAC
 #endif
+}
+
+QString getPDFPath(int paperID) {
+	return pdfDir + "/" + getPaperTitle(paperID) + ".pdf";
+}
+
+void foo()
+{
+	QFileInfoList infos = QDir(attachmentDir).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+	foreach(QFileInfo info, infos)
+	{
+		QString fileName = info.fileName();
+		if(QFile::exists(attachmentDir + "/" + fileName + "/Paper.pdf"))
+		{
+			QFile::copy(attachmentDir + "/" + fileName + "/Paper.pdf", pdfDir + "/" + fileName + ".pdf");
+			QProcess::execute(QObject::tr("Shortcut.exe /f:\"%1\" /a:c /t:\"%2\"")
+				.arg(attachmentDir + "/" + fileName + "/Paper.pdf.lnk")
+				.arg(pdfDir + "/" + fileName + ".pdf"));
+			QFile::remove(attachmentDir + "/" + fileName + "/Paper.pdf");
+		}
+	}
 }

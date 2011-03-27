@@ -6,6 +6,7 @@ extern QString userName;
 extern QString dbName;
 extern QString attachmentDir;
 extern QString emptyDir;
+extern QString pdfDir;
 
 void overwritingCopy(const QString& src, const QString& dest)
 {
@@ -36,10 +37,12 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 
 	loadDB();
-    attachmentDir = "./Attachments/";
+	attachmentDir = QDir::currentPath() + "/Attachments/";
 	emptyDir = attachmentDir + "Empty";
+	pdfDir = attachmentDir + "PDF";
 
     QDir::current().mkdir(attachmentDir);
+	QDir::current().mkdir(pdfDir);
 
 	if(!openDB(dbName))
 		return 1;
@@ -49,6 +52,7 @@ int main(int argc, char *argv[])
 	wnd.showMaximized();
 
 //	makeFullTextFiles();
+//	foo();
 
 	int result = app.exec();
 	saveDB();

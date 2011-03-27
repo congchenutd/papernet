@@ -131,26 +131,29 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 {
 	QString dir = getAttachmentDir(paperID);
 	QDir::current().mkdir(dir);  // make attachment dir for this paper
+	bool result;
 
-	QString targetFilePath;
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)   // pdf
 	{
-		targetFilePath = getPDFPath(paperID);
+		QString targetFilePath = QFileInfo(getPDFPath(paperID)).absoluteFilePath();
+		result = QFile::copy(filePath, targetFilePath);
 
-		// create shortcut
+		// create shortcut, need absolute path
 		QProcess::execute(QObject::tr("Shortcut.exe /f:\"%1\" /a:c /t:\"%2\"")
-								.arg(dir + "/Paper.pdf.lnk").arg(filePath));
+								.arg(dir + "/Paper.pdf.lnk").arg(targetFilePath));
 
 		// create full text
 		QString fullTextFilePath = dir + "/" + "fulltext.txt";
 		Pdf2Text(filePath.toAscii(), fullTextFilePath.toAscii());
 		hideFile(fullTextFilePath);
 	}
-	else {
-		targetFilePath = dir + "/" + attachmentName;
+	else
+	{
+		QString targetFilePath = dir + "/" + attachmentName;
+		result = QFile::copy(filePath, targetFilePath);
 	}
 
-	return QFile::copy(filePath, targetFilePath);
+	return result;
 }
 
 void delAttachment(int paperID, const QString& attachmentPath)
@@ -441,7 +444,7 @@ void hideFile(const QString& filePath)
 }
 
 QString getPDFPath(int paperID) {
-	return pdfDir + "/" + getPaperTitle(paperID) + ".pdf";
+	return pdfDir + "/" + getValidTitle(paperID) + ".pdf";
 }
 
 void foo()
@@ -455,7 +458,7 @@ void foo()
 			QFile::copy(attachmentDir + "/" + fileName + "/Paper.pdf", pdfDir + "/" + fileName + ".pdf");
 			QProcess::execute(QObject::tr("Shortcut.exe /f:\"%1\" /a:c /t:\"%2\"")
 				.arg(attachmentDir + "/" + fileName + "/Paper.pdf.lnk")
-				.arg(pdfDir + "/" + fileName + ".pdf"));
+				.arg(QFileInfo(pdfDir + "/" + fileName + ".pdf").absoluteFilePath()));
 			QFile::remove(attachmentDir + "/" + fileName + "/Paper.pdf");
 		}
 	}

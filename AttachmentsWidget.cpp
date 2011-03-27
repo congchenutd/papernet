@@ -23,7 +23,7 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	QDir(".").mkdir(emptyDir);
 
 	model.setRootPath(attachmentDir);
-//	model.setResolveSymlinks(false);
+	model.setResolveSymlinks(false);
 //    model.setNameFilters(QStringList() << "*.pdf" << "*.ris" << "*.enw" << "*.xml");
 //    model.setNameFilterDisables(false);
 	ui.listView->setModel(&model);

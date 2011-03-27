@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "Common.h"
 #include "OptionDlg.h"
+#include <QDesktopServices>
+#include <QUrl>
 
 extern QString userName;
 extern QString dbName;
@@ -37,7 +39,7 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 
 	loadDB();
-	attachmentDir = QDir::currentPath() + "/Attachments/";
+	attachmentDir = "./Attachments/";
 	emptyDir = attachmentDir + "Empty";
 	pdfDir = attachmentDir + "PDF";
 
@@ -52,7 +54,6 @@ int main(int argc, char *argv[])
 	wnd.showMaximized();
 
 //	makeFullTextFiles();
-//	foo();
 
 	int result = app.exec();
 	saveDB();

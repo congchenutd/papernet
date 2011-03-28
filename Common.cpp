@@ -221,18 +221,22 @@ bool addLink(int paperID, const QString& link, const QString& u)
 	return false;
 }
 
+void openUrl(const QString& url)
+{
+#ifdef Q_WS_WIN
+    QDesktopServices::openUrl(QUrl(url));
+#endif
+#ifdef Q_WS_MAC
+    QDesktopServices::openUrl(QUrl::fromLocalFile(url));
+#endif
+}
+
 void openAttachment(int paperID, const QString& attachmentName)
 {
 	QString filePath = getAttachmentPath(paperID, attachmentName);
+    QString url = filePath;
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
-	{
-        QDesktopServices::openUrl(QUrl::fromLocalFile(convertLink(getPDFPath(paperID))));
-		return;
-	}
-
-#ifdef Q_WS_WIN
-	QDesktopServices::openUrl(QUrl(filePath));
-#endif
+        url = convertLink(getPDFPath(paperID));
 
 #ifdef Q_WS_MAC
     if(attachmentName.endsWith(".url", Qt::CaseInsensitive))
@@ -242,14 +246,13 @@ void openAttachment(int paperID, const QString& attachmentName)
         {
             QTextStream is(&file);
             is.readLine();
-            QString url = is.readLine(); // second line is url
+            url = is.readLine(); // second line is url
             url.remove("BASEURL=");
-            QDesktopServices::openUrl(QUrl(url));
         }
     }
-    else
-        QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 #endif
+
+    openUrl(url);
 }
 
 QString getAttachmentPath(int paperID, const QString& attachmentName) {
@@ -262,10 +265,6 @@ QString convertLink(const QString& link)
 
 #ifdef Q_WS_WIN
 	return result.replace("/", "\\");
-#endif
-
-#ifdef Q_WS_MAC
-	return result;
 #endif
 
 	return result;

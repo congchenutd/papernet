@@ -42,6 +42,7 @@ void hideFile(const QString& filePath);
 QString getPDFPath(int paperID);
 void foo();
 QString convertLink(const QString& link);
+void openUrl(const QString& url);
 
 typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 AttachmentStatus isAttached(int paperID);

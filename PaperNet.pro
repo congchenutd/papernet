@@ -16,6 +16,7 @@ ICON = Images/ToiletPaper.icns
 HEADERS += AddPaperTagDlg.h \
            AddSnippetDlg.h \
            AttachmentsWidget.h \
+           AutoSizeTableView.h \
            Common.h \
            Importer.h \
            LinkDlg.h \
@@ -49,6 +50,7 @@ FORMS += AddPaperTagDlg.ui \
 SOURCES += AddPaperTagDlg.cpp \
            AddSnippetDlg.cpp \
            AttachmentsWidget.cpp \
+           AutoSizeTableView.cpp \
            Common.cpp \
            Importer.cpp \
            LinkDlg.cpp \

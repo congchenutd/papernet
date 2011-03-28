@@ -226,7 +226,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 	QString filePath = getAttachmentPath(paperID, attachmentName);
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
 	{
-		QDesktopServices::openUrl(QUrl(convertLink(getPDFPath(paperID))));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(convertLink(getPDFPath(paperID))));
 		return;
 	}
 

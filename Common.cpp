@@ -92,14 +92,10 @@ void delPaper(int paperID)
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
         delAttachments(paperID);
 
-	// delete db entry	
+	// delete db entries	
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Papers where ID = %1").arg(paperID));
-
-	// delete papertag entry
 	query.exec(QObject::tr("delete from PaperTag where Paper = %1").arg(paperID));
-
-	// delete papersnippet entry
 	query.exec(QObject::tr("delete from PaperSnippet where Paper = %1").arg(paperID));
 }
 
@@ -140,7 +136,6 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 		QFile link(dir + "/Paper.pdf");
 		if(!link.open(QFile::WriteOnly | QFile::Truncate))
 			return false;
-		link.write(targetFilePath.toUtf8());
 
 		// create full text
 		QString fullTextFilePath = dir + "/" + "fulltext.txt";
@@ -154,13 +149,13 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 	return QFile::copy(filePath, targetFilePath);
 }
 
-void delAttachment(int paperID, const QString& attachmentPath)
+void delAttachment(int paperID, const QString& attachmentName)
 {
 	if(MySetting<UserSetting>::getInstance()->getKeepAttachments())
 		return;
 
-    QFile::remove(attachmentPath);
-	if(attachmentPath.endsWith(".pdf.lnk", Qt::CaseInsensitive))
+    QFile::remove(getAttachmentPath(paperID, attachmentName));
+	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
 	{
 		QFile::remove(getPDFPath(paperID));                               // remove pdf file
 		QFile::remove(getAttachmentDir(paperID) + "/" + "fulltext.txt");  // remove full text file
@@ -171,11 +166,11 @@ void delAttachment(int paperID, const QString& attachmentPath)
 // delete the attachment dir and its contents
 void delAttachments(int paperID)
 {
-	QDir dir(getAttachmentDir(paperID));
-	QFileInfoList files = dir.entryInfoList(QDir::Files |QDir::NoDotAndDotDot);
+	QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::Hidden);
 	foreach(QFileInfo info, files)
         QFile::remove(info.filePath());
-    QDir(attachmentDir).rmdir(getValidTitle(paperID));
+	QDir(attachmentDir).rmdir(getValidTitle(paperID));
+	QFile::remove(getPDFPath(paperID));
 }
 
 QString getPaperTitle(int paperID)
@@ -231,9 +226,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 	QString filePath = getAttachmentPath(paperID, attachmentName);
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
 	{
-		QFile link(filePath);
-		if(link.open(QFile::ReadOnly))
-			QDesktopServices::openUrl(QUrl(convertLink(link.readLine())));
+		QDesktopServices::openUrl(QUrl(convertLink(getPDFPath(paperID))));
 		return;
 	}
 
@@ -463,8 +456,7 @@ void foo()
 		if(QFile::exists(pdfDir + "/" + fileName + ".pdf"))
 		{
 			QFile link(attachmentDir + "/" + fileName + "/Paper.pdf");
-			if(link.open(QFile::WriteOnly | QFile::Truncate))
-				link.write(QString(pdfDir + "/" + fileName + ".pdf").toUtf8());
+			link.open(QFile::WriteOnly | QFile::Truncate);
 		}
 	}
 }

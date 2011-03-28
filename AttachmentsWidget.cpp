@@ -109,7 +109,7 @@ void AttachmentsWidget::onDel()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-        delAttachment(paperID, model.filePath(currentIndex));
+        delAttachment(paperID, model.fileName(currentIndex));
 		update();
 		updateAttached(paperID);
 	}

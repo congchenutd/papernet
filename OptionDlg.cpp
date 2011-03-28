@@ -2,6 +2,7 @@
 #include <QFontDialog>
 #include <QFileDialog>
 #include <cstdlib>
+#include <QProcessEnvironment>
 
 OptionDlg::OptionDlg(QWidget *parent)
 	: QDialog(parent)
@@ -70,8 +71,7 @@ void UserSetting::loadDefaults()
 	setLastAttachmentPath(".");
 	setValue("SmallIcon", false);
 	setValue("ShowText",  false);
-	char* temp = getenv("TMP");
-	setTempLocation(temp == 0 ? "." : temp);
+	setTempLocation(QProcessEnvironment::systemEnvironment().value("TMP", "."));
 }
 
 QFont UserSetting::getFont() const

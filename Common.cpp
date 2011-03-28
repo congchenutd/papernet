@@ -131,29 +131,27 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 {
 	QString dir = getAttachmentDir(paperID);
 	QDir::current().mkdir(dir);  // make attachment dir for this paper
-	bool result;
-
+	QString targetFilePath;
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)   // pdf
 	{
-		QString targetFilePath = QFileInfo(getPDFPath(paperID)).absoluteFilePath();
-		result = QFile::copy(filePath, targetFilePath);
+		targetFilePath = getPDFPath(paperID);
 
-		// create shortcut, need absolute path
-		QProcess::execute(QObject::tr("Shortcut.exe /f:\"%1\" /a:c /t:\"%2\"")
-								.arg(dir + "/Paper.pdf.lnk").arg(targetFilePath));
+		// create shortcut
+		QFile link(dir + "/Paper.pdf");
+		if(!link.open(QFile::WriteOnly | QFile::Truncate))
+			return false;
+		link.write(targetFilePath.toUtf8());
 
 		// create full text
 		QString fullTextFilePath = dir + "/" + "fulltext.txt";
 		Pdf2Text(filePath.toAscii(), fullTextFilePath.toAscii());
 		hideFile(fullTextFilePath);
 	}
-	else
-	{
-		QString targetFilePath = dir + "/" + attachmentName;
-		result = QFile::copy(filePath, targetFilePath);
+	else {
+		targetFilePath = dir + "/" + attachmentName;
 	}
 
-	return result;
+	return QFile::copy(filePath, targetFilePath);
 }
 
 void delAttachment(int paperID, const QString& attachmentPath)
@@ -209,8 +207,6 @@ bool addLink(int paperID, const QString& link, const QString& u)
 	QString linkName = link;
     if(!linkName.endsWith(".url", Qt::CaseInsensitive))
 		linkName.append(".url");
-	if(attachmentExists(paperID, linkName))
-		return false;
 
 	QString dir = getAttachmentDir(paperID);
 	QDir(".").mkdir(dir);
@@ -233,6 +229,13 @@ bool addLink(int paperID, const QString& link, const QString& u)
 void openAttachment(int paperID, const QString& attachmentName)
 {
 	QString filePath = getAttachmentPath(paperID, attachmentName);
+	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
+	{
+		QFile link(filePath);
+		if(link.open(QFile::ReadOnly))
+			QDesktopServices::openUrl(QUrl(convertLink(link.readLine())));
+		return;
+	}
 
 #ifdef Q_WS_WIN
 	QDesktopServices::openUrl(QUrl(filePath));
@@ -256,24 +259,28 @@ void openAttachment(int paperID, const QString& attachmentName)
 #endif
 }
 
-QString getAttachmentPath(int paperID, const QString& attachmentName) 
+QString getAttachmentPath(int paperID, const QString& attachmentName) {
+	return convertLink(attachmentDir + getValidTitle(paperID) + "/" + attachmentName);
+}
+
+QString convertLink(const QString& link)
 {
-	QString path = attachmentDir + getValidTitle(paperID) + "/" + attachmentName;
+	QString result = link;
+
 #ifdef Q_WS_WIN
-	return path.replace("/", "\\");
+	return result.replace("/", "\\");
 #endif
 
 #ifdef Q_WS_MAC
-	return path;
+	return result;
 #endif
+
+	return result;
 }
+
 
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName) {
 	return QFile::rename(getAttachmentPath(paperID, oldName), getAttachmentPath(paperID, newName));
-}
-
-bool attachmentExists(int paperID, const QString& name) {
-	return QFile::exists(getAttachmentPath(paperID, name));
 }
 
 bool renameTitle(const QString& oldName, const QString& newName) {
@@ -378,7 +385,7 @@ AttachmentStatus isAttached(int paperID)
 	return ATTACH_PAPER;
 }
 
-void setRead(int paperID)
+void setPaperRead(int paperID)
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("update Papers set Read = \'true\' where ID = %1").arg(paperID));
@@ -452,14 +459,12 @@ void foo()
 	QFileInfoList infos = QDir(attachmentDir).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 	foreach(QFileInfo info, infos)
 	{
-		QString fileName = info.fileName();
-		if(QFile::exists(attachmentDir + "/" + fileName + "/Paper.pdf"))
+		QString fileName = info.fileName();  // also dir name
+		if(QFile::exists(pdfDir + "/" + fileName + ".pdf"))
 		{
-			QFile::copy(attachmentDir + "/" + fileName + "/Paper.pdf", pdfDir + "/" + fileName + ".pdf");
-			QProcess::execute(QObject::tr("Shortcut.exe /f:\"%1\" /a:c /t:\"%2\"")
-				.arg(attachmentDir + "/" + fileName + "/Paper.pdf.lnk")
-				.arg(QFileInfo(pdfDir + "/" + fileName + ".pdf").absoluteFilePath()));
-			QFile::remove(attachmentDir + "/" + fileName + "/Paper.pdf");
+			QFile link(attachmentDir + "/" + fileName + "/Paper.pdf");
+			if(link.open(QFile::WriteOnly | QFile::Truncate))
+				link.write(QString(pdfDir + "/" + fileName + ".pdf").toUtf8());
 		}
 	}
 }

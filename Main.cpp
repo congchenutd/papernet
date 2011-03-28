@@ -53,8 +53,6 @@ int main(int argc, char *argv[])
 	MainWindow wnd;
 	wnd.showMaximized();
 
-//	makeFullTextFiles();
-
 	int result = app.exec();
 	saveDB();
 	return result;

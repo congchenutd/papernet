@@ -139,7 +139,7 @@ void PagePapers::onEditPaper()
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_ABSTRACT), dlg.getAbstract());
 		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_NOTE),     dlg.getNote());
 		if(!dlg.getNote().isEmpty())
-			setRead(currentPaperID);
+			setPaperRead(currentPaperID);
 		onSubmitPaper();
 	}
 }

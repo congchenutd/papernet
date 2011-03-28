@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "LinkDlg.h"
 #include "OptionDlg.h"
+#include "AttachmentIconProvider.h"
 #include <QMenu>
 #include <QAction>
 #include <QContextMenuEvent>
@@ -22,6 +23,7 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	QDir(".").mkdir(attachmentDir);
 	QDir(".").mkdir(emptyDir);
 
+	model.setIconProvider(iconProvider = new AttachmentIconProvider);
 	model.setRootPath(attachmentDir);
 	model.setResolveSymlinks(false);
 //    model.setNameFilters(QStringList() << "*.pdf" << "*.ris" << "*.enw" << "*.xml");
@@ -115,9 +117,8 @@ void AttachmentsWidget::onDel()
 
 void AttachmentsWidget::onOpen(const QModelIndex& idx)
 {
-	QString attachmentName = model.data(idx).toString();
-	openAttachment(paperID, attachmentName);
-	setRead(paperID);
+	openAttachment(paperID, model.data(idx).toString());
+	setPaperRead(paperID);
 	emit paperRead();   // let papers refresh
 }
 
@@ -152,4 +153,8 @@ QString AttachmentsWidget::guessName(const QString &fileName)
 	else if(fileName.endsWith(".enw", Qt::CaseInsensitive))
 		result = "EndNote.enw";	
 	return result;
+}
+
+AttachmentsWidget::~AttachmentsWidget() {
+	delete iconProvider;
 }

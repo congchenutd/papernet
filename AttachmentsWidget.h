@@ -5,12 +5,15 @@
 #include <QFileSystemModel>
 #include "ui_AttachmentsWidget.h"
 
+class AttachmentIconProvider;
+
 class AttachmentsWidget : public QWidget
 {
 	Q_OBJECT
 
 public:
 	AttachmentsWidget(QWidget *parent = 0);
+	~AttachmentsWidget();
 
 	void setPaper(int id);
 	void update();
@@ -37,6 +40,7 @@ private:
 	int paperID;
 	QFileSystemModel model;
 	QModelIndex currentIndex;
+	AttachmentIconProvider* iconProvider;
 };
 
 #endif // ATTACHMENTSWIDGET_H

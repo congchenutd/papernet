@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/MainWindow">
+    <file>Images/PDF.png</file>
     <file>Images/Open.png</file>
     <file>Images/FullText.png</file>
     <file>Images/Uncheck.png</file>

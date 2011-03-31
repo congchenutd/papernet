@@ -73,6 +73,7 @@ QT += sql
 QT += xml
 ICON = Images/ToiletPaper.icns
 win32 {
+    LIBPATH += zlib/lib    
     RC_FILE = PaperNet.rc
 }
 macx {

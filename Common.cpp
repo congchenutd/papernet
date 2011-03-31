@@ -81,6 +81,9 @@ void createTables()
 
 int getNextID(const QString& tableName, const QString& sectionName)
 {
+	if(tableName.isEmpty() || sectionName.isEmpty())
+		return 0;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("select max(%1) from %2").arg(sectionName).arg(tableName));
 	return query.next() ? query.value(0).toInt() + 1 : 0;
@@ -88,6 +91,9 @@ int getNextID(const QString& tableName, const QString& sectionName)
 
 void delPaper(int paperID)
 {
+	if(paperID < 0)
+		return;
+
 	// delete attached files
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
         delAttachments(paperID);
@@ -101,12 +107,18 @@ void delPaper(int paperID)
 
 void delTag(int tagID)
 {
+	if(tagID < 0)
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Tags where ID = %1").arg(tagID));
 }
 
 void addPaperTag(int paperID, int tagID)
 {
+	if(paperID < 0 || tagID < 0)
+		return;
+
 	QSqlQuery query;
 	bool result = query.exec(QObject::tr("insert into PaperTag values (%1, %2)")
 											.arg(paperID).arg(tagID));
@@ -116,6 +128,9 @@ void addPaperTag(int paperID, int tagID)
 
 void delPaperTag(int paperID, int tagID)
 {
+	if(paperID < 0 || tagID < 0)
+		return;
+
 	QSqlQuery query;
 	bool result = query.exec(QObject::tr("delete from PaperTag where Paper=%1 and Tag=%2")
 													.arg(paperID).arg(tagID));
@@ -125,6 +140,9 @@ void delPaperTag(int paperID, int tagID)
 
 bool addAttachment(int paperID, const QString& attachmentName, const QString& filePath)
 {
+	if(paperID < 0 || attachmentName.isEmpty() || filePath.isEmpty())
+		return false;
+
 	QString dir = getAttachmentDir(paperID);
 	QDir::current().mkdir(dir);  // make attachment dir for this paper
 	QString targetFilePath;
@@ -151,6 +169,9 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 
 void delAttachment(int paperID, const QString& attachmentName)
 {
+	if(paperID < 0 || attachmentName.isEmpty())
+		return;
+
 	if(MySetting<UserSetting>::getInstance()->getKeepAttachments())
 		return;
 
@@ -166,6 +187,9 @@ void delAttachment(int paperID, const QString& attachmentName)
 // delete the attachment dir and its contents
 void delAttachments(int paperID)
 {
+	if(paperID < 0)
+		return;
+
 	QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::Hidden);
 	foreach(QFileInfo info, files)
         QFile::remove(info.filePath());
@@ -175,13 +199,19 @@ void delAttachments(int paperID)
 
 QString getPaperTitle(int paperID)
 {
+	if(paperID < 0)
+		return QString("Error");
+
 	QSqlQuery query;
 	query.exec(QObject::tr("select Title from Papers where ID = %1").arg(paperID));
-	return query.next() ? query.value(0).toString() : QString("Error") ;
+	return query.next() ? query.value(0).toString() : QString("Error");
 }
 
 QString makeValidTitle(const QString& title) 
 {
+	if(title.isEmpty())
+		return title;
+
 	QString result = title;
 	result.replace(QRegExp("[:|?|*]"), "-");
 	result.remove('\"');

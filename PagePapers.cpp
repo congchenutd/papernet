@@ -322,15 +322,19 @@ void PagePapers::onCurrentRowAllTagsChanged()
 void PagePapers::onAddTag()
 {
 	bool ok;
-	QString tag = QInputDialog::getText(this, "Add Tag", "Tag Name", 
+	QString tagName = QInputDialog::getText(this, "Add Tag", "Tag Name", 
 		QLineEdit::Normal,	"New Tag", &ok);
-	if(!ok || tag.isEmpty())
+	if(!ok || tagName.isEmpty())
 		return;
 	int lastRow = modelAllTags.rowCount();
 	modelAllTags.insertRow(lastRow);
-	modelAllTags.setData(modelAllTags.index(lastRow, TAG_ID), getNextID("Tags", "ID"));
-	modelAllTags.setData(modelAllTags.index(lastRow, TAG_NAME), tag);
+	int tagID = getNextID("Tags", "ID");
+	modelAllTags.setData(modelAllTags.index(lastRow, TAG_ID),   tagID);
+	modelAllTags.setData(modelAllTags.index(lastRow, TAG_NAME), tagName);
 	modelAllTags.submitAll();
+
+	// automatically add this tag to current paper
+	addPaperTag(currentPaperID, tagID);
 }
 
 void PagePapers::onDelTag()
@@ -385,14 +389,10 @@ void PagePapers::onCurrentRowTagsChanged() {
 
 void PagePapers::onDelTagFromPaper()
 {
-	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
-		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-	{
-		QModelIndexList idxList = ui.lvTags->selectionModel()->selectedRows();
-		foreach(QModelIndex idx, idxList)
-			delPaperTag(currentPaperID, getTagID(idx.row()));
-		updateTags();
-	}
+	QModelIndexList idxList = ui.lvTags->selectionModel()->selectedRows();
+	foreach(QModelIndex idx, idxList)
+		delPaperTag(currentPaperID, getTagID(idx.row()));
+	updateTags();
 }
 
 void PagePapers::filterPapers()

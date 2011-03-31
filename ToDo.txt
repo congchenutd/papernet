@@ -6,3 +6,4 @@ import to existing unfinished papers
 auto-hidden side window
 (done) use splitter in ref edit dialog
 (done) save a textual copy of pdf to support full-text search
+Add the new added tag to corresponding paper, if there is a current paper

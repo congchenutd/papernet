@@ -13,6 +13,7 @@
 #include <QUrl>
 #include <QDebug>
 #include <QProcess>
+#include <QProcessEnvironment>
 
 #ifdef Q_WS_WIN
 #include "windows.h"

@@ -1,7 +1,7 @@
 #include "AutoSizeTableView.h"
 
 AutoSizeTableView::AutoSizeTableView(QWidget *parent)
-	: QTableView(parent), setting(0), adjustTimes(0) {}
+	: QTableView(parent), setting(0), adjustingCount(0) {}
 
 void AutoSizeTableView::init(const QString& parentObjectName)
 {
@@ -16,8 +16,8 @@ void AutoSizeTableView::init(const QString& parentObjectName)
 
 void AutoSizeTableView::resizeEvent(QResizeEvent* event)
 {
-	if(adjustTimes++ < 2)
-		resizeColumns();
+	if(adjustingCount++ < 2)
+		adjustColumns();
 	QTableView::resizeEvent(event);
 }
 
@@ -30,7 +30,7 @@ void AutoSizeTableView::saveSectionSizes()
 	setting->endGroup();
 }
 
-void AutoSizeTableView::resizeColumns()
+void AutoSizeTableView::adjustColumns()
 {
 	int i = model()->columnCount() - 1;
 	if(horizontalHeader()->stretchLastSection()) {

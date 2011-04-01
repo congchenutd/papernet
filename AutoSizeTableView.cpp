@@ -1,7 +1,7 @@
 #include "AutoSizeTableView.h"
 
 AutoSizeTableView::AutoSizeTableView(QWidget *parent)
-	: QTableView(parent), setting(0) {}
+	: QTableView(parent), setting(0), adjustTimes(0) {}
 
 void AutoSizeTableView::init(const QString& parentObjectName)
 {
@@ -16,20 +16,8 @@ void AutoSizeTableView::init(const QString& parentObjectName)
 
 void AutoSizeTableView::resizeEvent(QResizeEvent* event)
 {
-	int i = model()->columnCount() - 1;
-	if(horizontalHeader()->stretchLastSection()) {
-		while(i >= 0) {                       // find and skip last non-zero
-			if(sectionSizes.value(i) > 0) {
-				--i;
-				break; 
-			}
-			--i;
-		}
-	}
-	
-	for(; i >= 0; --i)
-		setColumnWidth(i, width() * sectionSizes.value(i));
-
+	if(adjustTimes++ < 2)
+		resizeColumns();
 	QTableView::resizeEvent(event);
 }
 
@@ -40,4 +28,21 @@ void AutoSizeTableView::saveSectionSizes()
 		setting->setValue(QString::number(i),
 			qMin(0.9, (double)(horizontalHeader()->sectionSize(i)) / width()));
 	setting->endGroup();
+}
+
+void AutoSizeTableView::resizeColumns()
+{
+	int i = model()->columnCount() - 1;
+	if(horizontalHeader()->stretchLastSection()) {
+		while(i >= 0) {                       // find and skip last non-zero
+			if(sectionSizes.value(i) > 0) {
+				--i;
+				break; 
+			}
+			--i;
+		}
+	}
+
+	for(; i >= 0; --i)
+		setColumnWidth(i, width() * sectionSizes.value(i));
 }

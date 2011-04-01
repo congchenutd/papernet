@@ -18,9 +18,13 @@ protected:
 	virtual void resizeEvent(QResizeEvent*);
 
 private:
+	void resizeColumns();
+
+private:
 	Sizes sectionSizes;
 	UserSetting* setting;
 	QString groupName;
+	int adjustTimes;
 };
 
 #endif // AUTOSIZETABLEVIEW_H

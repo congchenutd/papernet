@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+TARGET =
 DEPENDPATH += .
 INCLUDEPATH += .
 
@@ -69,11 +69,10 @@ SOURCES += AddPaperTagDlg.cpp \
            ../EnglishName/EnglishName.cpp
 RESOURCES += MainWindow.qrc
 
-QT += sql
-QT += xml
+QT += sql xml network
 ICON = Images/ToiletPaper.icns
 win32 {
-    LIBPATH += zlib/lib    
+    LIBPATH += zlib/lib
     RC_FILE = PaperNet.rc
 }
 macx {

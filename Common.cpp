@@ -31,7 +31,7 @@ bool openDB(const QString& name)
 	database.setDatabaseName(name);
 	if(!database.open())
 	{
-		QMessageBox::critical(0, "Error", "Can not open database");
+		QMessageBox::critical(0, "Error", QObject::tr("Can not open database %1").arg(name));
 		return false;
 	}
 	return true;
@@ -267,7 +267,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 	QString filePath = getAttachmentPath(paperID, attachmentName);
     QString url = filePath;
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
-        url = convertLink(getPDFPath(paperID));
+        url = convertSlashes(getPDFPath(paperID));
 
 #ifdef Q_WS_MAC
     if(attachmentName.endsWith(".url", Qt::CaseInsensitive))
@@ -287,10 +287,10 @@ void openAttachment(int paperID, const QString& attachmentName)
 }
 
 QString getAttachmentPath(int paperID, const QString& attachmentName) {
-	return convertLink(attachmentDir + getValidTitle(paperID) + "/" + attachmentName);
+	return convertSlashes(attachmentDir + getValidTitle(paperID) + "/" + attachmentName);
 }
 
-QString convertLink(const QString& link)
+QString convertSlashes(const QString& link)
 {
 	QString result = link;
 
@@ -306,9 +306,12 @@ bool renameAttachment(int paperID, const QString& oldName, const QString& newNam
 	return QFile::rename(getAttachmentPath(paperID, oldName), getAttachmentPath(paperID, newName));
 }
 
-bool renameTitle(const QString& oldName, const QString& newName) {
-    return QDir(".").rename(attachmentDir + makeValidTitle(oldName),
-                            attachmentDir + makeValidTitle(newName));
+bool renameTitle(const QString& oldName, const QString& newName)
+{
+	return QFile::rename(pdfDir + "/" + oldName + ".pdf",               // rename pdf
+						 pdfDir + "/" + newName + ".pdf") &&
+			QDir(".").rename(attachmentDir + makeValidTitle(oldName),
+                             attachmentDir + makeValidTitle(newName));  // rename attachment dir for the paper
 }
 
 int getMaxProximity()

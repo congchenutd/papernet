@@ -129,19 +129,20 @@ void PagePapers::onEditPaper()
 	dlg.setJournal (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_JOURNAL)) .toString());
 	dlg.setAbstract(modelPapers.data(modelPapers.index(currentRowPapers, PAPER_ABSTRACT)).toString());
 	dlg.setNote    (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_NOTE))    .toString());
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		renameTitle(oldTitle, dlg.getTitle());
-		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_TITLE),    dlg.getTitle());
-		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_AUTHORS),  dlg.getAuthors());
-		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_YEAR),     dlg.getYear());
-		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_JOURNAL),  dlg.getJournal());
-		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_ABSTRACT), dlg.getAbstract());
-		modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_NOTE),     dlg.getNote());
-		if(!dlg.getNote().isEmpty())
-			setPaperRead(currentPaperID);
-		onSubmitPaper();
-	}
+	if(dlg.exec() != QDialog::Accepted)
+		return;
+
+	if(!renameTitle(oldTitle, dlg.getTitle()))
+		QMessageBox::critical(this, tr("Error"), tr("Renaming tile failed!"));
+	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_TITLE),    dlg.getTitle());
+	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_AUTHORS),  dlg.getAuthors());
+	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_YEAR),     dlg.getYear());
+	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_JOURNAL),  dlg.getJournal());
+	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_ABSTRACT), dlg.getAbstract());
+	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_NOTE),     dlg.getNote());
+	if(!dlg.getNote().isEmpty())   // Cannot remember why?
+		setPaperRead(currentPaperID);
+	onSubmitPaper();
 }
 
 void PagePapers::onDelPaper()
@@ -245,7 +246,6 @@ void PagePapers::insertRecord(const ImportResult &record)
     modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     record.year);
     modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), record.abstract);
     modelPapers.submitAll();
-//	QString err = modelPapers.lastError().text();
 }
 
 void PagePapers::mergeRecord(int row, const ImportResult &record)
@@ -280,7 +280,8 @@ void PagePapers::onSubmitPaper()
 	hideRelated();
 	hideCoauthor();
 	int backup = currentPaperID;
-	modelPapers.submitAll();
+	if(!modelPapers.submitAll())
+		QMessageBox::critical(this, tr("Error"), tr("Database submission failed!"));
 	currentPaperID = backup;
 	selectID(backup);
 }

@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     loadDB();
     attachmentDir = "./Attachments/";
     emptyDir = attachmentDir + "Empty";
-    pdfDir = attachmentDir + "PDF";
+    pdfDir = "./PDF";
 
     QDir::current().mkdir(attachmentDir);
     QDir::current().mkdir(pdfDir);

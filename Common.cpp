@@ -97,9 +97,9 @@ void delPaper(int paperID)
 
 	// delete attached files
 	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
-        delAttachments(paperID);
+		delAttachments(paperID);
 
-	// delete db entries	
+	// delete db entries
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Papers where ID = %1").arg(paperID));
 	query.exec(QObject::tr("delete from PaperTag where Paper = %1").arg(paperID));
@@ -176,7 +176,7 @@ void delAttachment(int paperID, const QString& attachmentName)
 	if(MySetting<UserSetting>::getInstance()->getKeepAttachments())
 		return;
 
-    QFile::remove(getAttachmentPath(paperID, attachmentName));
+	QFile::remove(getAttachmentPath(paperID, attachmentName));
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
 	{
 		QFile::remove(getPDFPath(paperID));                               // remove pdf file
@@ -193,7 +193,7 @@ void delAttachments(int paperID)
 
 	QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::Hidden);
 	foreach(QFileInfo info, files)
-        QFile::remove(info.filePath());
+		QFile::remove(info.filePath());
 	QDir(attachmentDir).rmdir(getValidTitle(paperID));
 	QFile::remove(getPDFPath(paperID));
 }
@@ -208,7 +208,7 @@ QString getPaperTitle(int paperID)
 	return query.next() ? query.value(0).toString() : QString("Error");
 }
 
-QString makeValidTitle(const QString& title) 
+QString makeValidTitle(const QString& title)
 {
 	if(title.isEmpty())
 		return title;
@@ -231,13 +231,13 @@ QString getValidTitle(int paperID) {
 bool addLink(int paperID, const QString& link, const QString& u)
 {
 	QString linkName = link;
-    if(!linkName.endsWith(".url", Qt::CaseInsensitive))
+	if(!linkName.endsWith(".url", Qt::CaseInsensitive))
 		linkName.append(".url");
 
 	QString dir = getAttachmentDir(paperID);
 	QDir(".").mkdir(dir);
-    QFile file(dir + "/" + linkName);
-	if(file.open(QFile::WriteOnly | QFile::Truncate)) 
+	QFile file(dir + "/" + linkName);
+	if(file.open(QFile::WriteOnly | QFile::Truncate))
 	{
 		QString url(u);
 		if(!url.startsWith("http://", Qt::CaseInsensitive))
@@ -255,35 +255,35 @@ bool addLink(int paperID, const QString& link, const QString& u)
 void openUrl(const QString& url)
 {
 #ifdef Q_WS_WIN
-    QDesktopServices::openUrl(QUrl(url));
+	QDesktopServices::openUrl(QUrl(url));
 #endif
 #ifdef Q_WS_MAC
-    QDesktopServices::openUrl(QUrl::fromLocalFile(url));
+	QDesktopServices::openUrl(QUrl::fromLocalFile(url));
 #endif
 }
 
 void openAttachment(int paperID, const QString& attachmentName)
 {
 	QString filePath = getAttachmentPath(paperID, attachmentName);
-    QString url = filePath;
+	QString url = filePath;
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
-        url = convertSlashes(getPDFPath(paperID));
+		url = convertSlashes(getPDFPath(paperID));
 
 #ifdef Q_WS_MAC
-    if(attachmentName.endsWith(".url", Qt::CaseInsensitive))
-    {
-        QFile file(filePath);
-        if(file.open(QFile::ReadOnly))
-        {
-            QTextStream is(&file);
-            is.readLine();
-            url = is.readLine(); // second line is url
-            url.remove("BASEURL=");
-        }
-    }
+	if(attachmentName.endsWith(".url", Qt::CaseInsensitive))
+	{
+		QFile file(filePath);
+		if(file.open(QFile::ReadOnly))
+		{
+			QTextStream is(&file);
+			is.readLine();
+			url = is.readLine(); // second line is url
+			url.remove("BASEURL=");
+		}
+	}
 #endif
 
-    openUrl(url);
+	openUrl(url);
 }
 
 QString getAttachmentPath(int paperID, const QString& attachmentName) {
@@ -308,10 +308,12 @@ bool renameAttachment(int paperID, const QString& oldName, const QString& newNam
 
 bool renameTitle(const QString& oldName, const QString& newName)
 {
+	if(oldName == newName)
+		return true;
 	return QFile::rename(pdfDir + "/" + oldName + ".pdf",               // rename pdf
 						 pdfDir + "/" + newName + ".pdf") &&
 			QDir(".").rename(attachmentDir + makeValidTitle(oldName),
-                             attachmentDir + makeValidTitle(newName));  // rename attachment dir for the paper
+							 attachmentDir + makeValidTitle(newName));  // rename attachment dir for the paper
 }
 
 int getMaxProximity()
@@ -388,7 +390,7 @@ bool isTagged(int paperID)
 	return query.next();
 }
 
-AttachmentStatus isAttached(int paperID) 
+AttachmentStatus isAttached(int paperID)
 {
 	QFileInfoList infos = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 	if(infos.isEmpty())
@@ -480,7 +482,7 @@ QString getPDFPath(int paperID) {
 	return pdfDir + "/" + getValidTitle(paperID) + ".pdf";
 }
 
-void foo()
+void makePDFLink()
 {
 	QFileInfoList infos = QDir(attachmentDir).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 	foreach(QFileInfo info, infos)

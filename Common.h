@@ -40,7 +40,7 @@ bool fullTextSearch(int paperID, const QString& target);
 void makeFullTextFiles();
 void hideFile(const QString& filePath);
 QString getPDFPath(int paperID);
-void foo();
+void makePDFLink();
 QString convertSlashes(const QString& link);
 void openUrl(const QString& url);
 

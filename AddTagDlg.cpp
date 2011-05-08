@@ -1,20 +1,17 @@
 #include "AddTagDlg.h"
+#include <QCompleter>
 
 AddTagDlg::AddTagDlg(QAbstractItemModel* model, int column, QWidget* parent) :
 	QDialog(parent)
 {
 	ui.setupUi(this);
-//	ui.comboBox->setModel(model);
-//	ui.comboBox->setModelColumn(column);
-	ui.comboBox->loadFromTable("Tags", 1);
-	ui.comboBox->setEditable(true);
+	QCompleter* completer = new QCompleter(this);
+	completer->setCaseSensitivity(Qt::CaseInsensitive);
+	completer->setModel(model);
+	completer->setCompletionColumn(column);
+	ui.lineEdit->setCompleter(completer);
 }
 
 QString AddTagDlg::getText() const {
-	return ui.comboBox->currentText();
-}
-
-void AddTagDlg::setText(const QString &text)
-{
-//	ui.comboBox->setCu
+	return ui.lineEdit->text();
 }

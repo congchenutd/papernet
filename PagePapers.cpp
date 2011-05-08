@@ -338,30 +338,16 @@ void PagePapers::onAddTag()
 	}
 }
 
-//void PagePapers::onDelTag()
-//{
-//	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
-//		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-//	{
-//		QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
-//		QSqlDatabase::database().transaction();
-//		foreach(QModelIndex idx, idxList)
-//			delTag(getAllTagID(idx.row()));
-//		QSqlDatabase::database().commit();
-//		modelAllTags.select();
-//	}
-//}
-
 void PagePapers::onRenameTag()
 {
-	QString tag = modelAllTags.data(modelAllTags.index(currentRowTags, TAG_NAME)).toString();
-	bool ok;
-	tag = QInputDialog::getText(this, "Edit Tag", "Tag Name", QLineEdit::Normal, tag, &ok);
-	if(!ok || tag.isEmpty())
-		return;
-	modelAllTags.setData(modelAllTags.index(currentRowTags, TAG_NAME), tag);
-	modelAllTags.submitAll();
-	updateTags();
+	AddTagDlg dlg(&modelAllTags, 1, this);
+	dlg.setWindowTitle(tr("Edit Tag"));
+	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
+	{
+		modelAllTags.setData(modelAllTags.index(currentRowTags, TAG_NAME), dlg.getText());
+		modelAllTags.submitAll();
+		updateTags();
+	}
 }
 
 void PagePapers::onAddTagToPaper()

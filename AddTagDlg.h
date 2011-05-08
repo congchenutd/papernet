@@ -10,7 +10,6 @@ class AddTagDlg : public QDialog
 public:
 	AddTagDlg(QAbstractItemModel* model, int column, QWidget* parent = 0);
 	QString getText() const;
-	void    setText(const QString& text);
 
 private:
 	Ui::AddTagDlg ui;

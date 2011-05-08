@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Add Tag</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="PinYinComboBox" name="comboBox"/>
+    <widget class="QLineEdit" name="lineEdit"/>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -29,13 +29,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>PinYinComboBox</class>
-   <extends>QComboBox</extends>
-   <header>../MyComboBox/PinYinComboBox.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

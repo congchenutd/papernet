@@ -5,6 +5,7 @@
 #include "AddSnippetDlg.h"
 #include "Importer.h"
 #include "../EnglishName/EnglishName.h"
+#include "AddTagDlg.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextStream>
@@ -70,8 +71,9 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.lvAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowAllTagsChanged()));
 	connect(ui.btAddTag,  SIGNAL(clicked()), this, SLOT(onAddTag()));
-	connect(ui.lvAllTags, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditTag()));
-	connect(ui.btDelTag,  SIGNAL(clicked()), this, SLOT(onDelTag()));
+//	connect(ui.lvAllTags, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onRenameTag()));
+//	connect(ui.btDelTag,  SIGNAL(clicked()), this, SLOT(onDelTag()));
+	connect(ui.btRenameTag,       SIGNAL(clicked()), this, SLOT(onRenameTag()));
 	connect(ui.btAddTagToPaper,   SIGNAL(clicked()), this, SLOT(onAddTagToPaper()));
 	connect(ui.btDelTagFromPaper, SIGNAL(clicked()), this, SLOT(onDelTagFromPaper()));
 	connect(ui.btFilter, SIGNAL(clicked(bool)), this, SLOT(onFilter(bool)));
@@ -90,7 +92,6 @@ PagePapers::PagePapers(QWidget *parent)
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
 {
 	bool valid = idx.isValid();
-	ui.btDelTag->setEnabled(valid);
 	emit tableValid(valid);
 
 	if(valid)
@@ -147,7 +148,7 @@ void PagePapers::onEditPaper()
 
 void PagePapers::onDelPaper()
 {
-	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
+	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
@@ -207,25 +208,25 @@ void PagePapers::onImport()
 		Importer* importer = ImporterFactory::getImporter(fileName);
 		if(importer->import(fileName))
 		{
-            QList<ImportResult> results = importer->getResults();  // one file may have multiple records
-            foreach(ImportResult result, results)
-            {
-                int id = ::getPaperID(result.title);
-                if(id > -1)
-                {
-                    if(QMessageBox::warning(this, tr("Title exists"), tr("Do you want to merge into the existing record?"),
-                            QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-                        mergeRecord(idToRow(id), result);
-                    }
-                }
-                else
+			QList<ImportResult> results = importer->getResults();  // one file may have multiple records
+			foreach(ImportResult result, results)
+			{
+				int id = ::getPaperID(result.title);
+				if(id > -1)
 				{
-                    insertRecord(result);
+					if(QMessageBox::warning(this, tr("Title exists"), tr("Do you want to merge into the existing record?"),
+							QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+						mergeRecord(idToRow(id), result);
+					}
+				}
+				else
+				{
+					insertRecord(result);
 
 					// Fix it: this works only when there is one record
 					addAttachment(currentPaperID, "EndNote." + QFileInfo(fileName).suffix(), fileName);
-                }
-            }
+				}
+			}
 		}
 		delete importer;
 	}
@@ -236,46 +237,46 @@ void PagePapers::onImport()
 
 void PagePapers::insertRecord(const ImportResult &record)
 {
-    int lastRow = modelPapers.rowCount();
-    modelPapers.insertRow(lastRow);
+	int lastRow = modelPapers.rowCount();
+	modelPapers.insertRow(lastRow);
 	currentPaperID = getNextID("Papers", "ID");
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    record.title);
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  record.authors);
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  record.journal);
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     record.year);
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), record.abstract);
-    modelPapers.submitAll();
+	modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
+	modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    record.title);
+	modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  record.authors);
+	modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  record.journal);
+	modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     record.year);
+	modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), record.abstract);
+	modelPapers.submitAll();
 }
 
 void PagePapers::mergeRecord(int row, const ImportResult &record)
 {
-    QString title = modelPapers.data(modelPapers.index(row, PAPER_TITLE)).toString();
-    if(!title.isEmpty())
-        title += "; " + record.title;
-    modelPapers.setData(modelPapers.index(row, PAPER_TITLE), title);
+	QString title = modelPapers.data(modelPapers.index(row, PAPER_TITLE)).toString();
+	if(!title.isEmpty())
+		title += "; " + record.title;
+	modelPapers.setData(modelPapers.index(row, PAPER_TITLE), title);
 
-    QString authors = modelPapers.data(modelPapers.index(row, PAPER_AUTHORS)).toString();
-    if(!authors.isEmpty())
-        authors += "; " + record.authors;
-    modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS), authors);
+	QString authors = modelPapers.data(modelPapers.index(row, PAPER_AUTHORS)).toString();
+	if(!authors.isEmpty())
+		authors += "; " + record.authors;
+	modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS), authors);
 
-    QString journal = modelPapers.data(modelPapers.index(row, PAPER_JOURNAL)).toString();
-    if(!journal.isEmpty())
-        journal += "; " + record.journal;
-    modelPapers.setData(modelPapers.index(row, PAPER_JOURNAL), journal);
+	QString journal = modelPapers.data(modelPapers.index(row, PAPER_JOURNAL)).toString();
+	if(!journal.isEmpty())
+		journal += "; " + record.journal;
+	modelPapers.setData(modelPapers.index(row, PAPER_JOURNAL), journal);
 
-    modelPapers.setData(modelPapers.index(row, PAPER_YEAR), record.year);
+	modelPapers.setData(modelPapers.index(row, PAPER_YEAR), record.year);
 
-    QString abstract = modelPapers.data(modelPapers.index(row, PAPER_ABSTRACT)).toString();
-    if(!abstract.isEmpty())
-        abstract += "\r\n\r\n" + record.abstract;
-    modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT), abstract);
+	QString abstract = modelPapers.data(modelPapers.index(row, PAPER_ABSTRACT)).toString();
+	if(!abstract.isEmpty())
+		abstract += "\r\n\r\n" + record.abstract;
+	modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT), abstract);
 
-    modelPapers.submitAll();
+	modelPapers.submitAll();
 }
 
-void PagePapers::onSubmitPaper() 
+void PagePapers::onSubmitPaper()
 {
 	hideRelated();
 	hideCoauthor();
@@ -297,7 +298,7 @@ void PagePapers::onSearch(const QString& target)
 	else
 		modelPapers.setFilter(
 		tr("Title    like \"%%1%\" or \
-		    Authors  like \"%%1%\" or \
+			Authors  like \"%%1%\" or \
 			Year     like \"%%1%\" or \
 			Journal  like \"%%1%\" or \
 			Abstract like \"%%1%\" or \
@@ -308,11 +309,11 @@ void PagePapers::onCurrentRowAllTagsChanged()
 {
 	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();
-	currentRowTags = valid ? idxList.front().row() : -1;	
-	ui.btDelTag ->setEnabled(valid);
+	currentRowTags = valid ? idxList.front().row() : -1;
+	ui.btRenameTag ->setEnabled(valid);
 	ui.btAddTagToPaper->setEnabled(valid && !isFiltered());
 
-	if(isFiltered())  
+	if(isFiltered())
 	{
 		if(currentRowTags < 0)
 			return onResetPapers();   // no selected tags, show all papers
@@ -322,37 +323,36 @@ void PagePapers::onCurrentRowAllTagsChanged()
 
 void PagePapers::onAddTag()
 {
-	bool ok;
-	QString tagName = QInputDialog::getText(this, "Add Tag", "Tag Name", 
-		QLineEdit::Normal,	"New Tag", &ok);
-	if(!ok || tagName.isEmpty())
-		return;
-	int lastRow = modelAllTags.rowCount();
-	modelAllTags.insertRow(lastRow);
-	int tagID = getNextID("Tags", "ID");
-	modelAllTags.setData(modelAllTags.index(lastRow, TAG_ID),   tagID);
-	modelAllTags.setData(modelAllTags.index(lastRow, TAG_NAME), tagName);
-	modelAllTags.submitAll();
-
-	// automatically add this tag to current paper
-	addPaperTag(currentPaperID, tagID);
-}
-
-void PagePapers::onDelTag()
-{
-	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
-		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+	AddTagDlg dlg(&modelAllTags, 1, this);
+	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
 	{
-		QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
-		QSqlDatabase::database().transaction();
-		foreach(QModelIndex idx, idxList)
-			delTag(getAllTagID(idx.row()));
-		QSqlDatabase::database().commit();
-		modelAllTags.select();
+		int lastRow = modelAllTags.rowCount();
+		modelAllTags.insertRow(lastRow);
+		int tagID = getNextID("Tags", "ID");
+		modelAllTags.setData(modelAllTags.index(lastRow, TAG_ID),   tagID);
+		modelAllTags.setData(modelAllTags.index(lastRow, TAG_NAME), dlg.getText());
+		modelAllTags.submitAll();
+
+		// automatically add this tag to current paper
+		addPaperTag(currentPaperID, tagID);
 	}
 }
 
-void PagePapers::onEditTag()
+//void PagePapers::onDelTag()
+//{
+//	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
+//		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+//	{
+//		QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
+//		QSqlDatabase::database().transaction();
+//		foreach(QModelIndex idx, idxList)
+//			delTag(getAllTagID(idx.row()));
+//		QSqlDatabase::database().commit();
+//		modelAllTags.select();
+//	}
+//}
+
+void PagePapers::onRenameTag()
 {
 	QString tag = modelAllTags.data(modelAllTags.index(currentRowTags, TAG_NAME)).toString();
 	bool ok;
@@ -548,7 +548,7 @@ void PagePapers::onEditSnippet(const QModelIndex& idx)
 
 void PagePapers::onDelSnippets()
 {
-	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
+	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tvSnippets->selectionModel()->selectedRows();

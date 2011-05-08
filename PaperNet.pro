@@ -9,72 +9,83 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += AddPaperTagDlg.h \
-           AddSnippetDlg.h \
-           AttachmentIconProvider.h \
-           AttachmentsWidget.h \
-           AutoSizeTableView.h \
-           Common.h \
-           Importer.h \
-           LinkDlg.h \
-           MainWindow.h \
-           Mode.h \
-           ModelPapers.h \
-           OptionDlg.h \
-           PagePapers.h \
-           PageSnippets.h \
-           PaperDlg.h \
-           PaperList.h \
-           PaperModel.h \
-           PaperTableView.h \
-           PaperTagPage.h \
-           Pdf2Text.h \
-           SnippetsTableView.h \
-           ToolBar.h \
-           ../MySetting/MySetting.h \
-           ../EnglishName/EnglishName.h
+		   AddSnippetDlg.h \
+		   AttachmentIconProvider.h \
+		   AttachmentsWidget.h \
+		   AutoSizeTableView.h \
+		   Common.h \
+		   Importer.h \
+		   LinkDlg.h \
+		   MainWindow.h \
+		   Mode.h \
+		   ModelPapers.h \
+		   OptionDlg.h \
+		   PagePapers.h \
+		   PageSnippets.h \
+		   PaperDlg.h \
+		   PaperList.h \
+		   PaperModel.h \
+		   PaperTableView.h \
+		   PaperTagPage.h \
+		   Pdf2Text.h \
+		   SnippetsTableView.h \
+		   ToolBar.h \
+		   ../MySetting/MySetting.h \
+		   ../EnglishName/EnglishName.h \
+		   ../MyComboBox/SetTextComboBox.h \
+../MyComboBox/PinYinComboBox.h \
+../MyComboBox/GetPinYin.hd \
+	AutoHintComboBox.h \
+	AddTagDlg.h
 FORMS += AddPaperTagDlg.ui \
-         AddSnippetDlg.ui \
-         AttachmentsWidget.ui \
-         LinkDlg.ui \
-         MainWindow.ui \
-         OptionDlg.ui \
-         PagePapers.ui \
-         PageSnippets.ui \
-         PaperDlg.ui \
-         PaperList.ui \
-         PaperTagPage.ui
+		 AddSnippetDlg.ui \
+		 AttachmentsWidget.ui \
+		 LinkDlg.ui \
+		 MainWindow.ui \
+		 OptionDlg.ui \
+		 PagePapers.ui \
+		 PageSnippets.ui \
+		 PaperDlg.ui \
+		 PaperList.ui \
+		 PaperTagPage.ui \
+	AddTagDlg.ui
 SOURCES += AddPaperTagDlg.cpp \
-           AddSnippetDlg.cpp \
-           AttachmentIconProvider.cpp \
-           AttachmentsWidget.cpp \
-           AutoSizeTableView.cpp \
-           Common.cpp \
-           Importer.cpp \
-           LinkDlg.cpp \
-           Main.cpp \
-           MainWindow.cpp \
-           Mode.cpp \
-           ModelPapers.cpp \
-           OptionDlg.cpp \
-           PagePapers.cpp \
-           PageSnippets.cpp \
-           PaperDlg.cpp \
-           PaperList.cpp \
-           PaperModel.cpp \
-           PaperTableView.cpp \
-           PaperTagPage.cpp \
-           Pdf2Text.cpp \
-           SnippetsTableView.cpp \
-           ToolBar.cpp \
-           ../EnglishName/EnglishName.cpp
+		   AddSnippetDlg.cpp \
+		   AttachmentIconProvider.cpp \
+		   AttachmentsWidget.cpp \
+		   AutoSizeTableView.cpp \
+		   Common.cpp \
+		   Importer.cpp \
+		   LinkDlg.cpp \
+		   Main.cpp \
+		   MainWindow.cpp \
+		   Mode.cpp \
+		   ModelPapers.cpp \
+		   OptionDlg.cpp \
+		   PagePapers.cpp \
+		   PageSnippets.cpp \
+		   PaperDlg.cpp \
+		   PaperList.cpp \
+		   PaperModel.cpp \
+		   PaperTableView.cpp \
+		   PaperTagPage.cpp \
+		   Pdf2Text.cpp \
+		   SnippetsTableView.cpp \
+		   ToolBar.cpp \
+		   ../EnglishName/EnglishName.cpp \
+		   ../MyComboBox/SetTextComboBox.cpp \
+../MyComboBox/PinYinComboBox.cpp \
+../MyComboBox/GetPinYin.cpp \
+	AutoHintComboBox.cpp \
+	AddTagDlg.cpp
 RESOURCES += MainWindow.qrc
 
 QT += sql xml network
 ICON = Images/ToiletPaper.icns
 win32 {
-    LIBPATH += zlib/lib
-    RC_FILE = PaperNet.rc
+	LIBPATH += zlib/lib
+	RC_FILE = PaperNet.rc
 }
 macx {
-    LIBS += /usr/lib/libz.dylib
+	LIBS += /usr/lib/libz.dylib
 }

@@ -14,29 +14,31 @@ AddSnippetDlg::AddSnippetDlg(QWidget *parent)
 
 	connect(ui.listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
-	connect(ui.btAdd,    SIGNAL(clicked()), this, SLOT(onAdd()));
-	connect(ui.btDel,    SIGNAL(clicked()), this, SLOT(onDel()));
-	connect(ui.btSelect, SIGNAL(clicked()), this, SLOT(onSelect()));
+	connect(ui.btAdd,              SIGNAL(clicked()), this, SLOT(onAddRef()));
+	connect(ui.btDel,              SIGNAL(clicked()), this, SLOT(onDelRef()));
+	connect(ui.btSelect,           SIGNAL(clicked()), this, SLOT(onSelectRef()));
 	connect(ui.btSwitchToPapers,   SIGNAL(clicked()), this, SLOT(onSwitchToPapers()));
 	connect(ui.btSwitchToSnippets, SIGNAL(clicked()), this, SLOT(onSwitchToSnippets()));
 	connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onSwitchToPapers()));
 }
 
-void AddSnippetDlg::onAdd()
+void AddSnippetDlg::onAddRef()
 {
 	bool ok;
 	QString ref = QInputDialog::getText(this, tr("Add Reference"), tr("Reference"), 
 							QLineEdit::Normal, QString(""), &ok);
 	if(ok && !ref.isEmpty())
-		addPaper(ref);
+		addRef(ref);
 }
 
-void AddSnippetDlg::onDel()
+void AddSnippetDlg::onDelRef()
 {
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 			QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
+		
+		// sort reversely, s.t. removeRow doesn't damage the index
 		qSort(idxList.begin(), idxList.end(), qGreater<QModelIndex>());
 		foreach(QModelIndex idx, idxList)
 			model.removeRow(idx.row());
@@ -52,7 +54,7 @@ void AddSnippetDlg::onCurrentRowChanged()
 
 void AddSnippetDlg::accept()
 {
-	if(ui.teContent->toPlainText().isEmpty())
+	if(ui.teContent->toPlainText().isEmpty())  // force user to input content
 	{
 		ui.teContent->setFocus();
 		return;
@@ -71,7 +73,7 @@ void AddSnippetDlg::accept()
 		if(paperID == -1)  // not exist
 		{
 			paperID = getNextID("Papers", "ID");
-			::addPaper(paperID, title);
+			::addSimplePaper(paperID, title);
 		}
 		addPaperSnippet(paperID, snippetID);
 	}
@@ -82,9 +84,9 @@ void AddSnippetDlg::accept()
 	return QDialog::accept();
 }
 
-void AddSnippetDlg::addPaper(const QString& title)
+void AddSnippetDlg::addRef(const QString& title)
 {
-	if(model.stringList().indexOf(title) > -1)
+	if(model.stringList().indexOf(title) > -1)  // exists
 		return;
 	int lastRow = model.rowCount();
 	model.insertRow(lastRow);
@@ -96,6 +98,7 @@ void AddSnippetDlg::setSnippetID(int id)
 {
 	snippetID = id;
 
+	// load snippet
 	QSqlQuery query;
 	query.exec(tr("select Title, Snippet from Snippets where ID = %1").arg(id));
 	if(query.next())
@@ -104,22 +107,24 @@ void AddSnippetDlg::setSnippetID(int id)
 		ui.teContent->setPlainText(query.value(1).toString());
 	}
 
+	// load refs
 	query.exec(tr("select Paper from PaperSnippet where Snippet = %1").arg(id));
 	while(query.next())
-		addPaper(getPaperTitle(query.value(0).toInt()));
+		addRef(getPaperTitle(query.value(0).toInt()));
 }
 
-void AddSnippetDlg::onSelect()
+void AddSnippetDlg::onSelectRef()
 {
 	PaperList dlg(this);
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		QStringList papers = dlg.getSelected();
 		foreach(QString paper, papers)
-			addPaper(paper);
+			addRef(paper);
 	}
 }
 
+// keep the splitter sizes
 void AddSnippetDlg::resizeEvent(QResizeEvent*) {
 	ui.splitter->setSizes(QList<int>() << height()  * 0.6 << height()  * 0.4);
 }

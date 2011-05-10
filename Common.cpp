@@ -107,14 +107,10 @@ void delPaper(int paperID)
 	query.exec(QObject::tr("delete from PaperSnippet where Paper = %1").arg(paperID));
 }
 
-void delTag(int tagID)
-{
-	QSqlQuery query;
-	query.exec(QObject::tr("delete from Tags where ID = %1").arg(tagID));
-}
-
 int getTagID(const QString& tagName)
 {
+	if(tagName.isEmpty())
+		return -1;
 	QSqlQuery query;
 	query.exec(QObject::tr("select ID from Tags where Name = \"%1\"").arg(tagName));
 	return query.next() ? query.value(0).toInt() : -1;
@@ -123,8 +119,10 @@ int getTagID(const QString& tagName)
 void delTag(const QString& tagName)
 {
 	int tagID = getTagID(tagName);
-	delTag(tagID);
+	if(tagID < 0)
+		return;
 	QSqlQuery query;
+	query.exec(QObject::tr("delete from Tags where ID = %1").arg(tagID));
 	query.exec(QObject::tr("delete from PaperTag where Tag=%1").arg(tagID));
 }
 
@@ -134,11 +132,9 @@ void addPaperTag(int paperID, int tagID)
 		return;
 
 	QSqlQuery query;
-	bool result = query.exec(QObject::tr("insert into PaperTag values (%1, %2)")
-											.arg(paperID).arg(tagID));
+	query.exec(QObject::tr("insert into PaperTag values(%1, %2)")
+												.arg(paperID).arg(tagID));
 	updateTagSize(tagID);
-	if(!result)
-		QMessageBox::critical(0, "error", query.lastError().text());
 }
 
 void delPaperTag(int paperID, int tagID)
@@ -147,11 +143,9 @@ void delPaperTag(int paperID, int tagID)
 		return;
 
 	QSqlQuery query;
-	bool result = query.exec(QObject::tr("delete from PaperTag where Paper=%1 and Tag=%2")
-													.arg(paperID).arg(tagID));
+	query.exec(QObject::tr("delete from PaperTag where Paper=%1 and Tag=%2")
+												.arg(paperID).arg(tagID));
 	updateTagSize(tagID);
-	if(!result)
-		QMessageBox::critical(0, "error", query.lastError().text());
 }
 
 bool addAttachment(int paperID, const QString& attachmentName, const QString& filePath)
@@ -183,21 +177,19 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 	return QFile::copy(filePath, targetFilePath);
 }
 
+// del one attachment of the paper
 void delAttachment(int paperID, const QString& attachmentName)
 {
 	if(paperID < 0 || attachmentName.isEmpty())
 		return;
 
-	if(MySetting<UserSetting>::getInstance()->getKeepAttachments())
-		return;
-
-	QFile::remove(getAttachmentPath(paperID, attachmentName));
-	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
+	QFile::remove(getAttachmentPath(paperID, attachmentName));            // attachment itself
+	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)     // for pdf
 	{
-		QFile::remove(getPDFPath(paperID));                               // remove pdf file
+		QFile::remove(getPDFPath(paperID));                               // remove [title].pdf
 		QFile::remove(getAttachmentDir(paperID) + "/" + "fulltext.txt");  // remove full text file
 	}
-	QDir(attachmentDir).rmdir(getValidTitle(paperID));    // will fail if not empty
+	QDir(attachmentDir).rmdir(getValidTitle(paperID));    // del attachment dir, invalid if not empty
 }
 
 // delete the attachment dir and its contents
@@ -207,10 +199,10 @@ void delAttachments(int paperID)
 		return;
 
 	QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::Hidden);
-	foreach(QFileInfo info, files)
+	foreach(QFileInfo info, files)                       // del all files in the attachment dir
 		QFile::remove(info.filePath());
-	QDir(attachmentDir).rmdir(getValidTitle(paperID));
-	QFile::remove(getPDFPath(paperID));
+	QDir(attachmentDir).rmdir(getValidTitle(paperID));   // del attachment dir
+	QFile::remove(getPDFPath(paperID));                  // del [title].pdf
 }
 
 QString getPaperTitle(int paperID)
@@ -223,6 +215,7 @@ QString getPaperTitle(int paperID)
 	return query.next() ? query.value(0).toString() : QString("Error");
 }
 
+// remove illegal chars
 QString makeValidTitle(const QString& title)
 {
 	if(title.isEmpty())
@@ -231,7 +224,7 @@ QString makeValidTitle(const QString& title)
 	QString result = title;
 	result.replace(QRegExp("[:|?|*]"), "-");
 	result.remove('\"');
-	result.remove('\"');
+	result.remove('\'');
 	return result;
 }
 
@@ -245,6 +238,9 @@ QString getValidTitle(int paperID) {
 
 bool addLink(int paperID, const QString& link, const QString& u)
 {
+	if(paperID < 0 || link.isEmpty() || u.isEmpty())
+		return false;
+
 	QString linkName = link;
 	if(!linkName.endsWith(".url", Qt::CaseInsensitive))
 		linkName.append(".url");
@@ -269,30 +265,38 @@ bool addLink(int paperID, const QString& link, const QString& u)
 
 void openUrl(const QString& url)
 {
+	if(url.isEmpty())
+		return;
+
 #ifdef Q_WS_WIN
 	QDesktopServices::openUrl(QUrl(url));
 #endif
 #ifdef Q_WS_MAC
-	QDesktopServices::openUrl(QUrl::fromLocalFile(url));
+	QDesktopServices::openUrl(QUrl::fromLocalFile(url));  // no idea why different
 #endif
 }
 
 void openAttachment(int paperID, const QString& attachmentName)
 {
+	if(paperID < 0 || attachmentName.isEmpty())
+		return;
+
 	QString filePath = getAttachmentPath(paperID, attachmentName);
 	QString url = filePath;
+
+	// Paper.pdf is not a real file, convert it to real pdf file
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
 		url = convertSlashes(getPDFPath(paperID));
 
 #ifdef Q_WS_MAC
-	if(attachmentName.endsWith(".url", Qt::CaseInsensitive))
+	if(attachmentName.endsWith(".url", Qt::CaseInsensitive))  // mac opens url differently
 	{
 		QFile file(filePath);
 		if(file.open(QFile::ReadOnly))
 		{
 			QTextStream is(&file);
 			is.readLine();
-			url = is.readLine(); // second line is url
+			url = is.readLine();      // second line is url
 			url.remove("BASEURL=");
 		}
 	}
@@ -316,7 +320,6 @@ QString convertSlashes(const QString& link)
 	return result;
 }
 
-
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName) {
 	return QFile::rename(getAttachmentPath(paperID, oldName), getAttachmentPath(paperID, newName));
 }
@@ -325,10 +328,10 @@ bool renameTitle(const QString& oldName, const QString& newName)
 {
 	if(oldName == newName)
 		return true;
-	return QFile::rename(pdfDir + "/" + oldName + ".pdf",               // rename pdf
+	return QFile::rename(pdfDir + "/" + oldName + ".pdf",               // rename [title].pdf
 						 pdfDir + "/" + newName + ".pdf") &&
 			QDir(".").rename(attachmentDir + makeValidTitle(oldName),
-							 attachmentDir + makeValidTitle(newName));  // rename attachment dir for the paper
+							 attachmentDir + makeValidTitle(newName));  // rename attachment dir
 }
 
 int getMaxProximity()
@@ -345,12 +348,11 @@ int getMaxCoauthor()
 	return query.next() ? query.value(0).toInt() : 0;
 }
 
-bool titleExists(const QString &title) {
-	return getPaperID(title) > -1;
-}
-
 void updateSnippet(int id, const QString& title, const QString& content)
 {
+	if(id < 0 || title.isEmpty() || content.isEmpty())
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("select * from Snippets where ID = %1").arg(id));
 	if(query.next())
@@ -370,13 +372,20 @@ int getPaperID(const QString& title)
 
 void addPaperSnippet(int paperID, int snippetID)
 {
+	if(paperID < 0 || snippetID < 0)
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("insert into PaperSnippet values (%1, %2)")
 										.arg(paperID).arg(snippetID));
 }
 
-void addPaper(int id, const QString& title)
+// add a paper without detail info
+void addSimplePaper(int id, const QString& title)
 {
+	if(id < 0 || title.isEmpty())
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("insert into Papers(ID, Title) values (%1, \"%2\")")
 													.arg(id).arg(title));
@@ -384,22 +393,19 @@ void addPaper(int id, const QString& title)
 
 void delSnippet(int id)
 {
+	if(id < 0)
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Snippets where ID = %1").arg(id));
-}
-
-QStringList getPaperList(int snippetID)
-{
-	QStringList result;
-	QSqlQuery query;
-	query.exec(QObject::tr("select Paper from PaperSnippet where Snippet = %1").arg(snippetID));
-	while(query.next())
-		result << getPaperTitle(query.value(0).toInt());
-	return result;
+	query.exec(QObject::tr("delete from PaperSnippet where Snippet = %1").arg(id));
 }
 
 bool isTagged(int paperID)
 {
+	if(paperID < 0)
+		return false;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("select * from PaperTag where Paper = %1").arg(paperID));
 	return query.next();
@@ -407,6 +413,8 @@ bool isTagged(int paperID)
 
 AttachmentStatus isAttached(int paperID)
 {
+	if(paperID < 0)
+		return ATTACH_NONE;
 	QFileInfoList infos = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 	if(infos.isEmpty())
 		return ATTACH_NONE;
@@ -418,10 +426,10 @@ AttachmentStatus isAttached(int paperID)
 	QSet<QString> citations;
 	citations << "enw" << "ris";
 
-	QSet<QString> suffixes2 = suffixes;
 	if(!suffixes.intersect(citations).isEmpty())      // has endnote files
 	{
-		if(!suffixes2.subtract(citations).isEmpty())  // has more than endnote files
+		QSet<QString> suffixes2 = suffixes;
+		if(!suffixes2.subtract(citations).isEmpty())  // also has other files
 			return ATTACH_ALL;
 		return ATTACH_ENDNOTE;
 	}
@@ -430,12 +438,18 @@ AttachmentStatus isAttached(int paperID)
 
 void setPaperRead(int paperID)
 {
+	if(paperID < 0)
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("update Papers set Read = \'true\' where ID = %1").arg(paperID));
 }
 
 void updateAttached(int paperID)  // update Attached section of Papers table
 {
+	if(paperID < 0)
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("update Papers set Attached = %1 where ID = %2")
 								.arg(isAttached(paperID)).arg(paperID));
@@ -450,6 +464,9 @@ int getSnippetID(const QString& title)
 
 bool fullTextSearch(int paperID, const QString& target)
 {
+	if(paperID < 0 || target.isEmpty())
+		return false;
+
 	QString fullTextFilePath = getAttachmentDir(paperID) + "/fulltext.txt";
 	QFile file(fullTextFilePath);
 	if(file.open(QFile::ReadOnly))
@@ -482,7 +499,7 @@ void hideFile(const QString& filePath)
 	SetFileAttributesA(filePath.toAscii(), FILE_ATTRIBUTE_HIDDEN);
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_WS_MAC   // don't know how to do it in Mac
 #endif
 }
 
@@ -490,33 +507,11 @@ QString getPDFPath(int paperID) {
 	return pdfDir + "/" + getValidTitle(paperID) + ".pdf";
 }
 
-void makePDFLink()
-{
-	QFileInfoList infos = QDir(attachmentDir).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-	foreach(QFileInfo info, infos)
-	{
-		QString fileName = info.fileName();  // also dir name
-		if(QFile::exists(pdfDir + "/" + fileName + ".pdf"))
-		{
-			QFile link(attachmentDir + "/" + fileName + "/Paper.pdf");
-			link.open(QFile::WriteOnly | QFile::Truncate);
-		}
-	}
-}
-
-void temp()
-{
-	QSqlQuery query1;
-	query1.exec("select tag, count(*) from paperTag group by tag");
-	while(query1.next())
-	{
-		QSqlQuery query2;
-		query2.exec(QObject::tr("update Tags set Size = %1 where id = %2").arg(query1.value(1).toInt()).arg(query1.value(0).toInt()));
-	}
-}
-
 void updateTagSize(int tagID)
 {
+	if(tagID < 0)
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("select count(*) from PaperTag group by Tag having Tag = %1").arg(tagID));
 	int size = query.next() ? query.value(0).toInt() : 0;
@@ -534,8 +529,11 @@ QStringList getTags(int paperID)
 	return tags;
 }
 
-void renameTag(const QString &oldName, const QString &newName)
+void renameTag(const QString& oldName, const QString& newName)
 {
+	if(oldName.isEmpty() || newName.isEmpty())
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("update Tags set Name = \"%1\" where Name = \"%2\"")
 			   .arg(newName).arg(oldName));
@@ -543,6 +541,9 @@ void renameTag(const QString &oldName, const QString &newName)
 
 void addTag(int id, const QString& name)
 {
+	if(id < 0 || name.isEmpty())
+		return;
+
 	QSqlQuery query;
 	query.exec(QObject::tr("insert into Tags values(%1, \"%2\", 0)")
 			   .arg(id).arg(name));

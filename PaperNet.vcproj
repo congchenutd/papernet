@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="PaperNet"
-	ProjectGUID="{092A4135-A6C1-3A25-83D1-3CEEB30EFFB0}"
+	ProjectGUID="{E20C082D-7F12-3F65-B4FE-3D1FD8A01F41}"
 	Keyword="Qt4VSv1.0"
 	TargetFrameworkVersion="0"
 	>
@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="4"
-				AdditionalIncludeDirectories="F:\Program\PaperNet\zlib\include;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtXml&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include&quot;;.;&quot;$(QTDIR)\include\ActiveQt&quot;;debug;&quot;d:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;"
+				AdditionalIncludeDirectories="&quot;$(QTDIR)\include\QtCore&quot;,&quot;$(QTDIR)\include\QtNetwork&quot;,&quot;$(QTDIR)\include\QtGui&quot;,&quot;$(QTDIR)\include\QtXml&quot;,&quot;$(QTDIR)\include\QtSql&quot;,&quot;$(QTDIR)\include&quot;,&quot;.&quot;,&quot;zlib\include&quot;,&quot;$(QTDIR)\include\ActiveQt&quot;,&quot;debug&quot;,&quot;.&quot;,..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_DLL,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -135,7 +135,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;$(QTDIR)\include\QtCore&quot;,&quot;$(QTDIR)\include\QtNetwork&quot;,&quot;$(QTDIR)\include\QtGui&quot;,&quot;$(QTDIR)\include\QtXml&quot;,&quot;$(QTDIR)\include\QtSql&quot;,&quot;$(QTDIR)\include&quot;,&quot;.&quot;,&quot;$(QTDIR)\include\ActiveQt&quot;,&quot;release&quot;,&quot;.&quot;,d:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008"
+				AdditionalIncludeDirectories="&quot;$(QTDIR)\include\QtCore&quot;,&quot;$(QTDIR)\include\QtNetwork&quot;,&quot;$(QTDIR)\include\QtGui&quot;,&quot;$(QTDIR)\include\QtXml&quot;,&quot;$(QTDIR)\include\QtSql&quot;,&quot;$(QTDIR)\include&quot;,&quot;.&quot;,&quot;zlib\include&quot;,&quot;$(QTDIR)\include\ActiveQt&quot;,&quot;release&quot;,&quot;.&quot;,..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008"
 				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_DLL,QT_NO_DEBUG,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT,NDEBUG"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -206,19 +206,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="AddPaperTagDlg.cpp"
-				>
-			</File>
-			<File
 				RelativePath="AddSnippetDlg.cpp"
 				>
 			</File>
 			<File
 				RelativePath="AddTagDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath="AttachmentIconProvider.cpp"
 				>
 			</File>
 			<File
@@ -238,7 +230,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\WordCloud\flowlayout.cpp"
+				RelativePath="..\WordCloud\FlowLayout.cpp"
 				>
 			</File>
 			<File
@@ -255,14 +247,6 @@
 			</File>
 			<File
 				RelativePath="MainWindow.cpp"
-				>
-			</File>
-			<File
-				RelativePath="Mode.cpp"
-				>
-			</File>
-			<File
-				RelativePath="ModelPapers.cpp"
 				>
 			</File>
 			<File
@@ -294,19 +278,15 @@
 				>
 			</File>
 			<File
-				RelativePath="PaperTagPage.cpp"
-				>
-			</File>
-			<File
 				RelativePath="Pdf2Text.cpp"
 				>
 			</File>
 			<File
-				RelativePath="SnippetsTableView.cpp"
+				RelativePath=".\SnippetsTableView.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\TagsWidget.cpp"
+				RelativePath="TagsWidget.cpp"
 				>
 			</File>
 			<File
@@ -324,32 +304,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="AddPaperTagDlg.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;AddPaperTagDlg.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="AddSnippetDlg.h"
 				>
 				<FileConfiguration
@@ -358,7 +312,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;AddSnippetDlg.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -369,7 +323,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -384,7 +338,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;AddTagDlg.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -395,35 +349,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="AttachmentIconProvider.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -436,7 +364,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;AttachmentsWidget.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -447,7 +375,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -462,7 +390,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;AutoSizeTableView.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -473,7 +401,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -532,8 +460,30 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\WordCloud\flowlayout.h"
+				RelativePath="..\WordCloud\FlowLayout.h"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Importer.h"
@@ -570,7 +520,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;LinkDlg.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -581,7 +531,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -596,7 +546,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;MainWindow.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -607,59 +557,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="Mode.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;Mode.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="ModelPapers.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;ModelPapers.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -700,7 +598,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;OptionDlg.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -711,7 +609,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -726,7 +624,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;PagePapers.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -737,7 +635,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -752,7 +650,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;PageSnippets.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -763,7 +661,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -778,7 +676,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;PaperDlg.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -789,7 +687,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -804,7 +702,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;PaperList.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -815,7 +713,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -830,7 +728,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;PaperModel.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -841,7 +739,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -856,7 +754,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;PaperTableView.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -867,33 +765,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="PaperTagPage.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;PaperTagPage.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -926,7 +798,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SnippetsTableView.h"
+				RelativePath=".\SnippetsTableView.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -934,7 +806,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;SnippetsTableView.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -945,14 +817,14 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\TagsWidget.h"
+				RelativePath="TagsWidget.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -960,7 +832,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I.&quot; &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -971,7 +843,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -986,7 +858,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot; &quot;ToolBar.h&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -997,7 +869,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1012,7 +884,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I.&quot; &quot;-IF:\Program\PaperNet\zlib\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\debug&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1023,9 +895,61 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-Id:\Program\Develop\Qt4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DQT_NO_DEBUG -DNDEBUG -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.&quot; &quot;-I.\zlib\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\release&quot; &quot;-I.&quot; &quot;-I.\..\..\..\..\Qt\4.7.3\mkspecs\win32-msvc2008&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="zlib\include\zconf.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="zlib\include\zlib.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Performing Custom Build Step"
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -1052,32 +976,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="ui_AddPaperTagDlg.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -1341,49 +1239,11 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="ui_PaperTagPage.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-			</File>
 			<Filter
 				Name="Debug"
 				Filter="cpp;moc"
 				SourceControlFiles="false"
 				>
-				<File
-					RelativePath=".\Debug\moc_AddPaperTagDlg.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
 				<File
 					RelativePath=".\Debug\moc_AddSnippetDlg.cpp"
 					>
@@ -1446,30 +1306,6 @@
 				</File>
 				<File
 					RelativePath=".\Debug\moc_MainWindow.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Debug\moc_Mode.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Debug\moc_ModelPapers.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -1565,18 +1401,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\Debug\moc_PaperTagPage.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath=".\Debug\moc_SnippetsTableView.cpp"
 					>
 					<FileConfiguration
@@ -1630,18 +1454,6 @@
 				Filter="cpp;moc"
 				SourceControlFiles="false"
 				>
-				<File
-					RelativePath=".\Release\moc_AddPaperTagDlg.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
 				<File
 					RelativePath=".\Release\moc_AddSnippetDlg.cpp"
 					>
@@ -1704,30 +1516,6 @@
 				</File>
 				<File
 					RelativePath=".\Release\moc_MainWindow.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Release\moc_Mode.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Release\moc_ModelPapers.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1823,18 +1611,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\Release\moc_PaperTagPage.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath=".\Release\moc_SnippetsTableView.cpp"
 					>
 					<FileConfiguration
@@ -1890,32 +1666,6 @@
 			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
 			ParseFiles="false"
 			>
-			<File
-				RelativePath="AddPaperTagDlg.ui"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="UIC AddPaperTagDlg.ui"
-						CommandLine="$(QTDIR)\bin\uic.exe AddPaperTagDlg.ui -o ui_AddPaperTagDlg.h&#x0D;&#x0A;"
-						AdditionalDependencies="AddPaperTagDlg.ui;$(QTDIR)\bin\uic.exe"
-						Outputs="ui_AddPaperTagDlg.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="UIC AddPaperTagDlg.ui"
-						CommandLine="$(QTDIR)\bin\uic.exe AddPaperTagDlg.ui -o ui_AddPaperTagDlg.h&#x0D;&#x0A;"
-						AdditionalDependencies="AddPaperTagDlg.ui;$(QTDIR)\bin\uic.exe"
-						Outputs="ui_AddPaperTagDlg.h"
-					/>
-				</FileConfiguration>
-			</File>
 			<File
 				RelativePath="AddSnippetDlg.ui"
 				>
@@ -2176,32 +1926,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="PaperTagPage.ui"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="UIC PaperTagPage.ui"
-						CommandLine="$(QTDIR)\bin\uic.exe PaperTagPage.ui -o ui_PaperTagPage.h&#x0D;&#x0A;"
-						AdditionalDependencies="PaperTagPage.ui;$(QTDIR)\bin\uic.exe"
-						Outputs="ui_PaperTagPage.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="UIC PaperTagPage.ui"
-						CommandLine="$(QTDIR)\bin\uic.exe PaperTagPage.ui -o ui_PaperTagPage.h&#x0D;&#x0A;"
-						AdditionalDependencies="PaperTagPage.ui;$(QTDIR)\bin\uic.exe"
-						Outputs="ui_PaperTagPage.h"
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -2370,47 +2094,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Images\Down.png"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\Images\Exit.png"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\Images\Filter.png"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -2479,7 +2163,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\GeneratedFiles\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\Images\PDF.png;.\Images\Open.png;.\Images\FullText.png;.\Images\Uncheck.png;.\Images\Snippet.png;.\Images\AttachAll.png;.\Images\AttachEndNote.png;.\Images\AttachPaper.png;.\Images\Coauthor.png;.\Images\Related.png;.\Images\Rename.png;.\Images\Down.png;.\Images\Filter.png;.\Images\Up.png;.\Images\Cancel.png;.\Images\Options.png;.\Images\AddLink.png;.\Images\AddFile.png;.\Images\Import.png;.\Images\Add.png;.\Images\Minus.png;.\Images\Exit.png;.\Images\ToiletPaper.png;.\Images\TagEdit.png;.\Images\TagAdd.png"
+						AdditionalDependencies="$(InputPath);.\Images\PDF.png;.\Images\Open.png;.\Images\FullText.png;.\Images\Snippet.png;.\Images\AttachAll.png;.\Images\AttachEndNote.png;.\Images\AttachPaper.png;.\Images\Coauthor.png;.\Images\Related.png;.\Images\Cancel.png;.\Images\Options.png;.\Images\AddLink.png;.\Images\AddFile.png;.\Images\Import.png;.\Images\Add.png;.\Images\Minus.png;.\Images\Exit.png;.\Images\ToiletPaper.png;.\Images\Tag.png"
 						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -2490,7 +2174,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\GeneratedFiles\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\Images\PDF.png;.\Images\Open.png;.\Images\FullText.png;.\Images\Uncheck.png;.\Images\Snippet.png;.\Images\AttachAll.png;.\Images\AttachEndNote.png;.\Images\AttachPaper.png;.\Images\Coauthor.png;.\Images\Related.png;.\Images\Rename.png;.\Images\Down.png;.\Images\Filter.png;.\Images\Up.png;.\Images\Cancel.png;.\Images\Options.png;.\Images\AddLink.png;.\Images\AddFile.png;.\Images\Import.png;.\Images\Add.png;.\Images\Minus.png;.\Images\Exit.png;.\Images\ToiletPaper.png;.\Images\TagEdit.png;.\Images\TagAdd.png"
+						AdditionalDependencies="$(InputPath);.\Images\PDF.png;.\Images\Open.png;.\Images\FullText.png;.\Images\Snippet.png;.\Images\AttachAll.png;.\Images\AttachEndNote.png;.\Images\AttachPaper.png;.\Images\Coauthor.png;.\Images\Related.png;.\Images\Cancel.png;.\Images\Options.png;.\Images\AddLink.png;.\Images\AddFile.png;.\Images\Import.png;.\Images\Add.png;.\Images\Minus.png;.\Images\Exit.png;.\Images\ToiletPaper.png;.\Images\Tag.png"
 						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -2596,26 +2280,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Images\Rename.png"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\Images\Snippet.png"
 				>
 				<FileConfiguration
@@ -2636,27 +2300,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Images\TagAdd.png"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\Images\TagEdit.png"
+				RelativePath=".\Images\Tag.png"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -2677,46 +2321,6 @@
 			</File>
 			<File
 				RelativePath=".\Images\ToiletPaper.png"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\Images\Uncheck.png"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\Images\Up.png"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

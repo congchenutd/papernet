@@ -42,6 +42,7 @@ private slots:
 	void onAddSnippet();
 	void onEditSnippet(const QModelIndex& idx);
 	void onDelSnippets();
+	void onFilterPapers();
 
 signals:
 	void tableValid(bool);

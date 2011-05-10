@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QFileSystemModel>
+#include <QFileIconProvider>
 #include "ui_AttachmentsWidget.h"
 
 class AttachmentIconProvider;
@@ -41,6 +42,13 @@ private:
 	QFileSystemModel model;
 	QModelIndex currentIndex;
 	AttachmentIconProvider* iconProvider;
+};
+
+class AttachmentIconProvider : public QFileIconProvider
+{
+public:
+	AttachmentIconProvider();
+	virtual QIcon icon(const QFileInfo& info) const;
 };
 
 #endif // ATTACHMENTSWIDGET_H

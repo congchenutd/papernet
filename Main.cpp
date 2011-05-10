@@ -56,8 +56,6 @@ int main(int argc, char *argv[])
 	MainWindow wnd;
 	wnd.showMaximized();
 
-	temp();
-
 	int result = app.exec();
 	saveDB();
 	return result;

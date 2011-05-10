@@ -68,6 +68,7 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvSnippets, SIGNAL(delSnippets()),    this, SLOT(onDelSnippets()));
 	connect(ui.tvSnippets, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditSnippet(QModelIndex)));
 
+	connect(ui.widgetWordCloud, SIGNAL(filter()),    this, SLOT(onFilterPapers()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPaper()));
@@ -345,6 +346,18 @@ void PagePapers::onClicked(const QModelIndex& idx)
 	updateSnippets();
 }
 
+void PagePapers::onFilterPapers()
+{
+	hideRelated();
+	hideCoauthor();
+	QStringList tagClauses;
+	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+	foreach(WordLabel* tag, tags)
+		tagClauses << tr("Tag = %1").arg(getTagID(tag->text()));
+	modelPapers.setFilter(tr("ID in (select Paper from PaperTag where %1)")
+								.arg(tagClauses.join(" OR ")));
+}
+
 void PagePapers::onShowRelated()
 {
 	hideCoauthor();
@@ -416,7 +429,7 @@ void PagePapers::onAddSnippet()
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
 	dlg->setWindowTitle(tr("Add Snippet"));
 	dlg->setSnippetID(getNextID("Snippets", "ID"));
-	dlg->addPaper(getPaperTitle(currentPaperID));
+	dlg->addRef(getPaperTitle(currentPaperID));
 	dlg->show();
 }
 

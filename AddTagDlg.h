@@ -4,6 +4,7 @@
 #include "ui_AddTagDlg.h"
 #include <QSqlTableModel>
 
+// add/edit a tag
 class AddTagDlg : public QDialog
 {
 	Q_OBJECT

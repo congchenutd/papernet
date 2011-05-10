@@ -2,7 +2,6 @@
 #include "Common.h"
 #include "LinkDlg.h"
 #include "OptionDlg.h"
-#include "AttachmentIconProvider.h"
 #include <QMenu>
 #include <QAction>
 #include <QContextMenuEvent>
@@ -157,4 +156,17 @@ QString AttachmentsWidget::guessName(const QString &fileName)
 
 AttachmentsWidget::~AttachmentsWidget() {
 	delete iconProvider;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+AttachmentIconProvider::AttachmentIconProvider()
+: QFileIconProvider() {}
+
+QIcon AttachmentIconProvider::icon(const QFileInfo& info) const
+{
+	// special icon for pdf, looks better than the system's
+	if(info.fileName().compare("Paper.pdf", Qt::CaseInsensitive) == 0)
+		return QIcon(":/MainWindow/Images/PDF.png");
+	return QFileIconProvider::icon(info);
 }

@@ -64,7 +64,6 @@ private:
 
 	PaperModel modelPapers;
 	int currentRowPapers;
-	int currentRowTags;
 	int currentPaperID;
 	QDataWidgetMapper mapper;
 	QSqlQueryModel modelSnippets;

@@ -44,42 +44,47 @@ void ToolBar::onShowText(bool show)
 
 void ToolBar::initSearchBar()
 {
-    addSeparator();
-    addWidget(new QLabel(tr(" Search ")));
-    addWidget(leSearch = new QLineEdit(this));
+	addSeparator();
+	addWidget(new QLabel(tr(" Search ")));
+	addWidget(leSearch = new QLineEdit(this));
 	addWidget(new QLabel(" "));
-	btFullText = new QPushButton(QIcon(":/MainWindow/Images/FullText.png"), QString());
-	addWidget(btFullText);
-	QPushButton* btClear = new QPushButton(QIcon(":/MainWindow/Images/Cancel.png"), QString(), this);
-    btClear->setShortcut(QKeySequence(Qt::Key_Escape));
-    addWidget(btClear);
-    QPushButton* btFocus = new QPushButton("Focus", this);
-    btFocus->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
-    btFocus->setMaximumWidth(0);    // "hide" it
-    addWidget(btFocus);
 
-    connect(leSearch,   SIGNAL(textEdited(QString)), this, SIGNAL(search(QString)));
+	btFullText = new QPushButton(QIcon(":/MainWindow/Images/FullText.png"), QString());
+	btFullText->setToolTip(tr("Full text search"));
+	addWidget(btFullText);
+
+	QPushButton* btClear = new QPushButton(QIcon(":/MainWindow/Images/Cancel.png"), QString(), this);
+	btClear->setShortcut(QKeySequence(Qt::Key_Escape));
+	btClear->setToolTip(tr("Clear search result"));
+	addWidget(btClear);
+
+	QPushButton* btFocus = new QPushButton("Focus", this);
+	btFocus->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
+	btFocus->setMaximumWidth(0);    // "hide" it
+	addWidget(btFocus);
+
+	connect(leSearch,   SIGNAL(textEdited(QString)), this, SIGNAL(search(QString)));
 	connect(btFullText, SIGNAL(clicked()),           this, SLOT(onFullTextSearch()));
-    connect(btClear,  SIGNAL(clicked()), this, SLOT(onClear()));
-    connect(btFocus,  SIGNAL(clicked()), this, SLOT(onFocus()));
+	connect(btClear,  SIGNAL(clicked()), this, SLOT(onClear()));
+	connect(btFocus,  SIGNAL(clicked()), this, SLOT(onFocus()));
 }
 
 void ToolBar::onClear()
 {
-    leSearch->clearFocus();
-    leSearch->clear();
-    emit search(QString());
+	leSearch->clearFocus();
+	leSearch->clear();
+	emit search(QString());
 }
 
 void ToolBar::onFocus()
 {
-    if(leSearch->hasFocus())
-    {
-        onClear();
-        leSearch->clearFocus();
-    }
-    else
-        leSearch->setFocus();
+	if(leSearch->hasFocus())
+	{
+		onClear();
+		leSearch->clearFocus();
+	}
+	else
+		leSearch->setFocus();
 }
 
 void ToolBar::onFullTextSearch() {

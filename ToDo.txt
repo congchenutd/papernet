@@ -1,10 +1,1 @@
-(done) fuzzy matching of names
-weights of tags
-import to existing unfinished papers
-(done) open ref
-(done) show snippets of a paper
-auto-hidden side window
-(done) use splitter in ref edit dialog
-(done) save a textual copy of pdf to support full-text search
-Add the new added tag to corresponding paper, if there is a current paper
-debug: load and save when initializing removes db
+(done) fuzzy matching of namesweights of tags(done) import to existing unfinished papers(done) open ref(done) show snippets of a paperauto-hidden side window(done) use splitter in ref edit dialog(done) save a textual copy of pdf to support full-text search(done) Add the new added tag to corresponding paper, if there is a current paperdebug: load and save when initializing removes db

@@ -22,7 +22,6 @@ PagePapers::PagePapers(QWidget *parent)
 	: QWidget(parent)
 {
 	currentRowPapers = -1;
-	currentRowTags   = -1;
 	setting = MySetting<UserSetting>::getInstance();
 
 	ui.setupUi(this);
@@ -56,6 +55,8 @@ PagePapers::PagePapers(QWidget *parent)
 
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
 			&mapper, SLOT(setCurrentModelIndex(QModelIndex)));
+	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+			this, SLOT(onCurrentRowPapersChanged(QModelIndex)));
 	connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
 			this, SLOT(onSubmitPaper()));
 	connect(ui.tvPapers,   SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));

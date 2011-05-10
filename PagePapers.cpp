@@ -70,14 +70,6 @@ PagePapers::PagePapers(QWidget *parent)
 
 	connect(ui.lvAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowAllTagsChanged()));
-	connect(ui.btAddTag,  SIGNAL(clicked()), this, SLOT(onAddTag()));
-//	connect(ui.lvAllTags, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onRenameTag()));
-//	connect(ui.btDelTag,  SIGNAL(clicked()), this, SLOT(onDelTag()));
-	connect(ui.btRenameTag,       SIGNAL(clicked()), this, SLOT(onRenameTag()));
-	connect(ui.btAddTagToPaper,   SIGNAL(clicked()), this, SLOT(onAddTagToPaper()));
-	connect(ui.btDelTagFromPaper, SIGNAL(clicked()), this, SLOT(onDelTagFromPaper()));
-	connect(ui.btFilter, SIGNAL(clicked(bool)), this, SLOT(onFilter(bool)));
-
 	connect(ui.lvTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowTagsChanged()));
 
@@ -87,6 +79,10 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvSnippets, SIGNAL(addSnippet()),   this, SLOT(onAddSnippet()));
 	connect(ui.tvSnippets, SIGNAL(delSnippets()),  this, SLOT(onDelSnippets()));
 	connect(ui.tvSnippets, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditSnippet(QModelIndex)));
+
+	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
+	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPaper()));
+	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPaper()));
 }
 
 void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
@@ -310,20 +306,20 @@ void PagePapers::onCurrentRowAllTagsChanged()
 	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();
 	currentRowTags = valid ? idxList.front().row() : -1;
-	ui.btRenameTag ->setEnabled(valid);
-	ui.btAddTagToPaper->setEnabled(valid && !isFiltered());
+//	ui.btRenameTag ->setEnabled(valid);
+//	ui.btAddTagToPaper->setEnabled(valid && !isFiltered());
 
-	if(isFiltered())
-	{
-		if(currentRowTags < 0)
-			return onResetPapers();   // no selected tags, show all papers
-		filterPapers();
-	}
+//	if(isFiltered())
+//	{
+//		if(currentRowTags < 0)
+//			return onResetPapers();   // no selected tags, show all papers
+//		filterPapers();
+//	}
 }
 
 void PagePapers::onAddTag()
 {
-	AddTagDlg dlg(&modelAllTags, 1, this);
+	AddTagDlg dlg(this);
 	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
 	{
 		int lastRow = modelAllTags.rowCount();
@@ -341,48 +337,37 @@ void PagePapers::onAddTag()
 	}
 }
 
-void PagePapers::onRenameTag()
-{
-	AddTagDlg dlg(&modelAllTags, 1, this);
-	dlg.setWindowTitle(tr("Edit Tag"));
-	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
-	{
-		modelAllTags.setData(modelAllTags.index(currentRowTags, TAG_NAME), dlg.getText());
-		modelAllTags.submitAll();
-		updateTags();
-	}
-}
-
 void PagePapers::onAddTagToPaper()
 {
-	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
-	foreach(QModelIndex idx, idxList)
-		addPaperTag(currentPaperID, getAllTagID(idx.row()));
+	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+	foreach(WordLabel* tag, tags)
+		addPaperTag(currentPaperID, ::getTagID(tag->text()));
 	ui.widgetWordCloud->updateSizes();
 	updateTags();
 }
 
 void PagePapers::updateTags()
 {
-	QString thisPapersTags(tr("(select Tag from PaperTag where Paper = %1)")
-																.arg(currentPaperID));
-	modelTags.setQuery(tr("select ID, Name from Tags where ID in %1 order by Name")
-																.arg(thisPapersTags));
-	ui.lvTags->setModelColumn(TAG_NAME);
+//	QString thisPapersTags(tr("(select Tag from PaperTag where Paper = %1)")
+//																.arg(currentPaperID));
+//	modelTags.setQuery(tr("select ID, Name from Tags where ID in %1 order by Name")
+//																.arg(thisPapersTags));
+//	ui.lvTags->setModelColumn(TAG_NAME);
+//	if(!isFiltered())
+//		modelAllTags.setFilter(tr("ID not in %1 order by Name").arg(thisPapersTags));
 
-	if(!isFiltered())
-		modelAllTags.setFilter(tr("ID not in %1 order by Name").arg(thisPapersTags));
+	ui.widgetWordCloud->highLight(getTags(currentPaperID));
 }
 
 void PagePapers::onCurrentRowTagsChanged() {
-	ui.btDelTagFromPaper->setEnabled(!ui.lvTags->selectionModel()->selectedRows().isEmpty());
+//	ui.btDelTagFromPaper->setEnabled(!ui.lvTags->selectionModel()->selectedRows().isEmpty());
 }
 
 void PagePapers::onDelTagFromPaper()
 {
-	QModelIndexList idxList = ui.lvTags->selectionModel()->selectedRows();
-	foreach(QModelIndex idx, idxList)
-		delPaperTag(currentPaperID, getTagID(idx.row()));
+	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+	foreach(WordLabel* tag, tags)
+		delPaperTag(currentPaperID, ::getTagID(tag->text()));
 	ui.widgetWordCloud->updateSizes();
 	updateTags();
 }
@@ -430,10 +415,6 @@ void PagePapers::resetAllTags()
 	modelAllTags.setTable("Tags");
 	modelAllTags.setFilter("Name != \"\" order by Name");
 	modelAllTags.select();
-}
-
-bool PagePapers::isFiltered() const {
-	return ui.btFilter->isChecked();
 }
 
 void PagePapers::onClicked(const QModelIndex& idx)

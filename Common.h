@@ -47,12 +47,14 @@ QString convertSlashes(const QString& link);
 void openUrl(const QString& url);
 void temp();
 void updateTagSize(int tagID);
+QStringList getTags(int paperID);
+void renameTag(const QString& oldName, const QString& newName);
 
 typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 AttachmentStatus isAttached(int paperID);
 
-enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE, 
-	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE, 
+enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE,
+	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE,
 	  PAPER_PROXIMITY, PAPER_COAUTHOR, PAPER_ADDEDTIME};
 enum {TAG_ID, TAG_NAME, TAG_SIZE};
 enum {SNIPPET_ID, SNIPPET_TITLE, SNIPPET_SNIPPET};

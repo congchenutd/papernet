@@ -38,7 +38,6 @@ private slots:
 	void onCurrentRowAllTagsChanged();
 	void onAddTag();
 //	void onDelTag();
-	void onRenameTag();
 	void onAddTagToPaper();
 	void onDelTagFromPaper();
 
@@ -61,7 +60,6 @@ private:
 	void updateTags();
 	void filterPapers();
 	void resetAllTags();
-	bool isFiltered() const;
 	void hideRelated();
 	void hideCoauthor();
 	void mergeRecord(int row, const ImportResult& record);

@@ -529,3 +529,21 @@ void updateTagSize(int tagID)
 	int size = query.next() ? query.value(0).toInt() : 0;
 	query.exec(QObject::tr("update Tags set Size = %1 where ID = %2").arg(size).arg(tagID));
 }
+
+QStringList getTags(int paperID)
+{
+	QStringList tags;
+	QSqlQuery query;
+	query.exec(QObject::tr("select Name from Tags, PaperTag where Paper = %1 and Tag = ID")
+			   .arg(paperID));
+	while(query.next())
+		tags << query.value(0).toString();
+	return tags;
+}
+
+void renameTag(const QString &oldName, const QString &newName)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("update Tags set Name = \"%1\" where Name = \"%2\"")
+			   .arg(newName).arg(oldName));
+}

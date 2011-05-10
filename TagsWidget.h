@@ -18,7 +18,13 @@ protected:
 
 private slots:
 	void onDel();
-	void onAdd();
+	void onRename();
+
+signals:
+	void removeTag();
+	void addTag();
+	void newTag();
+
 private:
 	QSqlTableModel* model;
 };

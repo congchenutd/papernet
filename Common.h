@@ -8,6 +8,8 @@ void createTables();
 int getNextID(const QString& tableName, const QString& sectionName);
 void delPaper(int paperID);
 void delTag  (int tagID);
+void delTag  (const QString& tagName);
+int getTagID(const QString& tagName);
 void addPaperTag(int paperID, int tagID);
 void delPaperTag(int paperID, int tagID);
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName);
@@ -43,6 +45,8 @@ QString getPDFPath(int paperID);
 void makePDFLink();
 QString convertSlashes(const QString& link);
 void openUrl(const QString& url);
+void temp();
+void updateTagSize(int tagID);
 
 typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 AttachmentStatus isAttached(int paperID);
@@ -50,7 +54,7 @@ AttachmentStatus isAttached(int paperID);
 enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE, 
 	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE, 
 	  PAPER_PROXIMITY, PAPER_COAUTHOR, PAPER_ADDEDTIME};
-enum {TAG_ID, TAG_NAME};
+enum {TAG_ID, TAG_NAME, TAG_SIZE};
 enum {SNIPPET_ID, SNIPPET_TITLE, SNIPPET_SNIPPET};
 
 #endif // Common_h__

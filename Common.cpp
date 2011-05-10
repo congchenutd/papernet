@@ -58,7 +58,8 @@ void createTables()
 
 	query.exec("create table Tags( \
 					ID int primary key, \
-					Name varchar unique \
+					Name varchar unique, \
+					Size int \
 				)");
 
 	query.exec("create table PaperTag( \
@@ -108,11 +109,23 @@ void delPaper(int paperID)
 
 void delTag(int tagID)
 {
-	if(tagID < 0)
-		return;
-
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Tags where ID = %1").arg(tagID));
+}
+
+int getTagID(const QString& tagName)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("select ID from Tags where Name = \"%1\"").arg(tagName));
+	return query.next() ? query.value(0).toInt() : -1;
+}
+
+void delTag(const QString& tagName)
+{
+	int tagID = getTagID(tagName);
+	delTag(tagID);
+	QSqlQuery query;
+	query.exec(QObject::tr("delete from PaperTag where Tag=%1").arg(tagID));
 }
 
 void addPaperTag(int paperID, int tagID)
@@ -123,6 +136,7 @@ void addPaperTag(int paperID, int tagID)
 	QSqlQuery query;
 	bool result = query.exec(QObject::tr("insert into PaperTag values (%1, %2)")
 											.arg(paperID).arg(tagID));
+	updateTagSize(tagID);
 	if(!result)
 		QMessageBox::critical(0, "error", query.lastError().text());
 }
@@ -135,6 +149,7 @@ void delPaperTag(int paperID, int tagID)
 	QSqlQuery query;
 	bool result = query.exec(QObject::tr("delete from PaperTag where Paper=%1 and Tag=%2")
 													.arg(paperID).arg(tagID));
+	updateTagSize(tagID);
 	if(!result)
 		QMessageBox::critical(0, "error", query.lastError().text());
 }
@@ -494,4 +509,23 @@ void makePDFLink()
 			link.open(QFile::WriteOnly | QFile::Truncate);
 		}
 	}
+}
+
+void temp()
+{
+	QSqlQuery query1;
+	query1.exec("select tag, count(*) from paperTag group by tag");
+	while(query1.next())
+	{
+		QSqlQuery query2;
+		query2.exec(QObject::tr("update Tags set Size = %1 where id = %2").arg(query1.value(1).toInt()).arg(query1.value(0).toInt()));
+	}
+}
+
+void updateTagSize(int tagID)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("select count(*) from PaperTag group by Tag having Tag = %1").arg(tagID));
+	int size = query.next() ? query.value(0).toInt() : 0;
+	query.exec(QObject::tr("update Tags set Size = %1 where ID = %2").arg(size).arg(tagID));
 }

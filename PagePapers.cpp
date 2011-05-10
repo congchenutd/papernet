@@ -53,8 +53,8 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.lvAllTags->setModel(&modelAllTags);
 	ui.lvAllTags->setModelColumn(TAG_NAME);
+	ui.widgetWordCloud->updateSizes();
 	ui.lvTags->setModel(&modelTags);
-
 	ui.tvSnippets->setModel(&modelSnippets);
 
 	loadSplitterSizes();
@@ -335,6 +335,9 @@ void PagePapers::onAddTag()
 
 		// automatically add this tag to current paper
 		addPaperTag(currentPaperID, tagID);
+
+		ui.widgetWordCloud->addWord(dlg.getText(), 20);
+		ui.widgetWordCloud->updateSizes();
 	}
 }
 
@@ -355,6 +358,7 @@ void PagePapers::onAddTagToPaper()
 	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
 		addPaperTag(currentPaperID, getAllTagID(idx.row()));
+	ui.widgetWordCloud->updateSizes();
 	updateTags();
 }
 
@@ -379,6 +383,7 @@ void PagePapers::onDelTagFromPaper()
 	QModelIndexList idxList = ui.lvTags->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
 		delPaperTag(currentPaperID, getTagID(idx.row()));
+	ui.widgetWordCloud->updateSizes();
 	updateTags();
 }
 

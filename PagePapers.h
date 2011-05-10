@@ -35,14 +35,9 @@ private slots:
 	void onShowCoauthored();
 	void onResetPapers();
 
-	void onCurrentRowAllTagsChanged();
 	void onAddTag();
-//	void onDelTag();
 	void onAddTagToPaper();
 	void onDelTagFromPaper();
-
-	void onCurrentRowTagsChanged();
-	void onFilter(bool enabled);
 
 	void onAddSnippet();
 	void onEditSnippet(const QModelIndex& idx);
@@ -53,13 +48,9 @@ signals:
 
 private:
 	int getPaperID (int row) const;
-	int getTagID   (int row) const;
-	int getAllTagID(int row) const;
 	void selectID(int id);
 	int idToRow(int id) const;
 	void updateTags();
-	void filterPapers();
-	void resetAllTags();
 	void hideRelated();
 	void hideCoauthor();
 	void mergeRecord(int row, const ImportResult& record);
@@ -72,8 +63,6 @@ private:
 	Ui::PagePapersClass ui;
 
 	PaperModel modelPapers;
-	QSqlTableModel modelAllTags;
-	QSqlQueryModel modelTags;
 	int currentRowPapers;
 	int currentRowTags;
 	int currentPaperID;

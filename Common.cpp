@@ -547,3 +547,10 @@ void renameTag(const QString &oldName, const QString &newName)
 	query.exec(QObject::tr("update Tags set Name = \"%1\" where Name = \"%2\"")
 			   .arg(newName).arg(oldName));
 }
+
+void addTag(int id, const QString& name)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("insert into Tags values(%1, \"%2\", 0)")
+			   .arg(id).arg(name));
+}

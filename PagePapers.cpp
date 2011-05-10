@@ -30,8 +30,6 @@ PagePapers::PagePapers(QWidget *parent)
 
 	onResetPapers();
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
-	resetAllTags();
-	modelAllTags.setEditStrategy(QSqlTableModel::OnManualSubmit);
 
 	mapper.setModel(&modelPapers);
 	mapper.addMapping(ui.teAbstract, PAPER_ABSTRACT);
@@ -51,33 +49,22 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
-	ui.lvAllTags->setModel(&modelAllTags);
-	ui.lvAllTags->setModelColumn(TAG_NAME);
 	ui.widgetWordCloud->updateSizes();
-	ui.lvTags->setModel(&modelTags);
 	ui.tvSnippets->setModel(&modelSnippets);
 
 	loadSplitterSizes();
 
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
 			&mapper, SLOT(setCurrentModelIndex(QModelIndex)));
-	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-			this, SLOT(onCurrentRowPapersChanged(QModelIndex)));
 	connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
 			this, SLOT(onSubmitPaper()));
-	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
-	connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
-
-	connect(ui.lvAllTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-			this, SLOT(onCurrentRowAllTagsChanged()));
-	connect(ui.lvTags->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-			this, SLOT(onCurrentRowTagsChanged()));
-
-	connect(ui.tvPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
-	connect(ui.tvPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
-	connect(ui.tvPapers,   SIGNAL(addSnippet()),   this, SLOT(onAddSnippet()));
-	connect(ui.tvSnippets, SIGNAL(addSnippet()),   this, SLOT(onAddSnippet()));
-	connect(ui.tvSnippets, SIGNAL(delSnippets()),  this, SLOT(onDelSnippets()));
+	connect(ui.tvPapers,   SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
+	connect(ui.tvPapers,   SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
+	connect(ui.tvPapers,   SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
+	connect(ui.tvPapers,   SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
+	connect(ui.tvPapers,   SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
+	connect(ui.tvSnippets, SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
+	connect(ui.tvSnippets, SIGNAL(delSnippets()),    this, SLOT(onDelSnippets()));
 	connect(ui.tvSnippets, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditSnippet(QModelIndex)));
 
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
@@ -158,12 +145,6 @@ void PagePapers::onDelPaper()
 
 int PagePapers::getPaperID(int row) const {
 	return row > -1 ? modelPapers.data(modelPapers.index(row, PAPER_ID)).toInt() : -1;
-}
-int PagePapers::getTagID(int row) const {
-	return row > -1 ? modelTags.data(modelTags.index(row, TAG_ID)).toInt() : -1;
-}
-int PagePapers::getAllTagID(int row) const {
-	return row > -1 ? modelAllTags.data(modelAllTags.index(row, TAG_ID)).toInt() : -1;
 }
 
 void PagePapers::selectID(int id)
@@ -301,37 +282,14 @@ void PagePapers::onSearch(const QString& target)
 			Note     like \"%%1%\" ").arg(target));
 }
 
-void PagePapers::onCurrentRowAllTagsChanged()
-{
-	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
-	bool valid = !idxList.isEmpty();
-	currentRowTags = valid ? idxList.front().row() : -1;
-//	ui.btRenameTag ->setEnabled(valid);
-//	ui.btAddTagToPaper->setEnabled(valid && !isFiltered());
-
-//	if(isFiltered())
-//	{
-//		if(currentRowTags < 0)
-//			return onResetPapers();   // no selected tags, show all papers
-//		filterPapers();
-//	}
-}
-
 void PagePapers::onAddTag()
 {
 	AddTagDlg dlg(this);
 	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
 	{
-		int lastRow = modelAllTags.rowCount();
-		modelAllTags.insertRow(lastRow);
 		int tagID = getNextID("Tags", "ID");
-		modelAllTags.setData(modelAllTags.index(lastRow, TAG_ID),   tagID);
-		modelAllTags.setData(modelAllTags.index(lastRow, TAG_NAME), dlg.getText());
-		modelAllTags.submitAll();
-
-		// automatically add this tag to current paper
-		addPaperTag(currentPaperID, tagID);
-
+		addTag(tagID, dlg.getText());
+		addPaperTag(currentPaperID, tagID);  // auto add this tag to current paper
 		ui.widgetWordCloud->addWord(dlg.getText(), 20);
 		ui.widgetWordCloud->updateSizes();
 	}
@@ -348,19 +306,8 @@ void PagePapers::onAddTagToPaper()
 
 void PagePapers::updateTags()
 {
-//	QString thisPapersTags(tr("(select Tag from PaperTag where Paper = %1)")
-//																.arg(currentPaperID));
-//	modelTags.setQuery(tr("select ID, Name from Tags where ID in %1 order by Name")
-//																.arg(thisPapersTags));
-//	ui.lvTags->setModelColumn(TAG_NAME);
-//	if(!isFiltered())
-//		modelAllTags.setFilter(tr("ID not in %1 order by Name").arg(thisPapersTags));
-
+	ui.widgetWordCloud->unselectAll();
 	ui.widgetWordCloud->highLight(getTags(currentPaperID));
-}
-
-void PagePapers::onCurrentRowTagsChanged() {
-//	ui.btDelTagFromPaper->setEnabled(!ui.lvTags->selectionModel()->selectedRows().isEmpty());
 }
 
 void PagePapers::onDelTagFromPaper()
@@ -370,28 +317,6 @@ void PagePapers::onDelTagFromPaper()
 		delPaperTag(currentPaperID, ::getTagID(tag->text()));
 	ui.widgetWordCloud->updateSizes();
 	updateTags();
-}
-
-void PagePapers::filterPapers()
-{
-	hideRelated();
-	hideCoauthor();
-	QStringList tagClauses;
-	QModelIndexList idxList = ui.lvAllTags->selectionModel()->selectedRows();
-	foreach(QModelIndex idx, idxList)
-		tagClauses << tr("Tag = %1").arg(getAllTagID(idx.row()));
-	if(tagClauses.isEmpty())
-		tagClauses << tr("Tag = %1").arg(getAllTagID(currentRowTags));
-	modelPapers.setFilter(tr("ID in (select Paper from PaperTag where %1)")
-										.arg(tagClauses.join(" OR ")));
-}
-
-void PagePapers::onFilter(bool enabled)
-{
-	if(enabled)
-		resetAllTags();   // show all tags
-	else
-		onResetPapers();    // show all papers
 }
 
 void PagePapers::onResetPapers()
@@ -408,13 +333,6 @@ void PagePapers::onResetPapers()
 	hideRelated();
 	hideCoauthor();
 	selectID(currentPaperID);
-}
-
-void PagePapers::resetAllTags()
-{
-	modelAllTags.setTable("Tags");
-	modelAllTags.setFilter("Name != \"\" order by Name");
-	modelAllTags.select();
 }
 
 void PagePapers::onClicked(const QModelIndex& idx)
@@ -573,7 +491,6 @@ void PagePapers::loadSplitterSizes()
 	ui.splitterHorizontal->restoreState(setting->value("SplitterHorizontal").toByteArray());
 	ui.splitterPapers    ->restoreState(setting->value("SplitterPapers")    .toByteArray());
 	ui.splitterDetails   ->restoreState(setting->value("SplitterDetails")   .toByteArray());
-	ui.splitterTags      ->restoreState(setting->value("SplitterTags")      .toByteArray());
 }
 
 void PagePapers::saveSplitterSizes()
@@ -581,5 +498,4 @@ void PagePapers::saveSplitterSizes()
 	setting->setValue("SplitterHorizontal", ui.splitterHorizontal->saveState());
 	setting->setValue("SplitterPapers",     ui.splitterPapers->saveState());
 	setting->setValue("SplitterDetails",    ui.splitterDetails->saveState());
-	setting->setValue("SplitterTags",       ui.splitterTags->saveState());
 }

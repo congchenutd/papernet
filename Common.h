@@ -49,6 +49,7 @@ void temp();
 void updateTagSize(int tagID);
 QStringList getTags(int paperID);
 void renameTag(const QString& oldName, const QString& newName);
+void addTag(int id, const QString& name);
 
 typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 AttachmentStatus isAttached(int paperID);

@@ -21,6 +21,7 @@ private slots:
 	void onRename();
 
 signals:
+	void filter();
 	void removeTag();
 	void addTag();
 	void newTag();

@@ -23,15 +23,18 @@ void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 	}
 	else
 	{
+		QAction actionFilter(tr("Show Tagged Papers"), this);
 		QAction actionAdd   (tr("Add to Paper"), this);
 		QAction actionRemove(tr("Remove from Paper"), this);
 		QAction actionRename(tr("Rename Tag"), this);
 		QAction actionDel   (tr("Delete Tag"), this);
+		connect(&actionFilter, SIGNAL(triggered()), this, SIGNAL(filter()));
 		connect(&actionAdd,    SIGNAL(triggered()), this, SIGNAL(addTag()));
 		connect(&actionRemove, SIGNAL(triggered()), this, SIGNAL(removeTag()));
 		connect(&actionRename, SIGNAL(triggered()), this, SLOT(onRename()));
 		connect(&actionDel,    SIGNAL(triggered()), this, SLOT(onDel()));
 		QMenu menu(this);
+		menu.addAction(&actionFilter);
 		menu.addAction(&actionAdd);
 		menu.addAction(&actionRemove);
 		menu.addAction(&actionRename);

@@ -434,13 +434,6 @@ void setPaperRead(int paperID)
 	query.exec(QObject::tr("update Papers set Read = \'true\' where ID = %1").arg(paperID));
 }
 
-void updateTagged(int paperID)  // update Tagged section of Papers table
-{
-	QSqlQuery query;
-	query.exec(QObject::tr("update Papers set Tagged = %1 where ID = %2")
-								.arg(isTagged(paperID)).arg(paperID));
-}
-
 void updateAttached(int paperID)  // update Attached section of Papers table
 {
 	QSqlQuery query;

@@ -31,18 +31,18 @@ class UserSetting : public MySetting<UserSetting>
 public:
 	UserSetting(const QString& fileName);
 
-	QFont getFont() const;
-	int   getBackupDays() const;
-	bool  getKeepAttachments() const;
-	QString getLastImportPath() const;
+	QFont   getFont()               const;
+	int     getBackupDays()         const;
+	bool    getKeepAttachments()    const;
+	QString getLastImportPath()     const;
 	QString getLastAttachmentPath() const;
-	QString getTempLocation() const;
-	void setFont(const QFont& font);
-	void setBackupDays(int days);
-	void setKeepAttachments(bool keep);
-	void setLastImportPath(const QString& path);
+	QString getTempLocation()       const;
+	void setFont              (const QFont& font);
+	void setBackupDays        (int days);
+	void setKeepAttachments   (bool keep);
+	void setLastImportPath    (const QString& path);
 	void setLastAttachmentPath(const QString& path);
-	void setTempLocation(const QString& temp);
+	void setTempLocation      (const QString& temp);
 
 private:
 	void loadDefaults();

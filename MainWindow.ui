@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>525</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -53,6 +53,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAboutQt"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -87,6 +88,17 @@
    <addaction name="actionDelPaper"/>
    <addaction name="actionAddSnippet"/>
    <addaction name="actionDelSnippet"/>
+  </widget>
+  <widget class="SearchBar" name="toolBarSearch">
+   <property name="windowTitle">
+    <string>Search bar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
   <action name="actionExit">
    <property name="icon">
@@ -204,6 +216,11 @@
     <string>Import paper</string>
    </property>
   </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -221,6 +238,11 @@
   </customwidget>
   <customwidget>
    <class>ToolBar</class>
+   <extends>QToolBar</extends>
+   <header>ToolBar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SearchBar</class>
    <extends>QToolBar</extends>
    <header>ToolBar.h</header>
   </customwidget>

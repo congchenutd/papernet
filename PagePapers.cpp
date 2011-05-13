@@ -21,11 +21,11 @@
 PagePapers::PagePapers(QWidget *parent)
 	: QWidget(parent)
 {
-	currentRowPapers = -1;
+	currentRow = -1;
 	setting = MySetting<UserSetting>::getInstance();
 
 	ui.setupUi(this);
-	ui.tvPapers->init("PagePapers");
+	ui.tvPapers->init("PagePapers");   // set the table name for the view
 
 	onResetPapers();
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -48,7 +48,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
-	ui.widgetWordCloud->updateSizes();
+	ui.widgetWordCloud->updateSizes();   // init the size of the labels
 	ui.tvSnippets->setModel(&modelSnippets);
 
 	loadSplitterSizes();
@@ -56,7 +56,7 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
 			&mapper, SLOT(setCurrentModelIndex(QModelIndex)));
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-			this, SLOT(onCurrentRowPapersChanged(QModelIndex)));
+			this, SLOT(onCurrentRowChanged(QModelIndex)));
 	connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
 			this, SLOT(onSubmitPaper()));
 	connect(ui.tvPapers,   SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
@@ -74,12 +74,10 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPaper()));
 }
 
-void PagePapers::onCurrentRowPapersChanged(const QModelIndex& idx)
+void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 {
-	bool valid = idx.isValid();
-	emit tableValid(valid);
-
-	if(valid)
+	emit tableValid(idx.isValid());
+	if(idx.isValid())
 		onClicked(idx);
 }
 
@@ -108,25 +106,25 @@ void PagePapers::onEditPaper()
 {
 	PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Edit Paper"));
-	QString oldTitle = modelPapers.data(modelPapers.index(currentRowPapers, PAPER_TITLE)).toString();
+	QString oldTitle = modelPapers.data(modelPapers.index(currentRow, PAPER_TITLE)).toString();
 	dlg.setTitle(oldTitle);
-	dlg.setAuthors (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_AUTHORS)) .toString());
-	dlg.setYear    (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_YEAR))    .toInt());
-	dlg.setJournal (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_JOURNAL)) .toString());
-	dlg.setAbstract(modelPapers.data(modelPapers.index(currentRowPapers, PAPER_ABSTRACT)).toString());
-	dlg.setNote    (modelPapers.data(modelPapers.index(currentRowPapers, PAPER_NOTE))    .toString());
+	dlg.setAuthors (modelPapers.data(modelPapers.index(currentRow, PAPER_AUTHORS)) .toString());
+	dlg.setYear    (modelPapers.data(modelPapers.index(currentRow, PAPER_YEAR))    .toInt());
+	dlg.setJournal (modelPapers.data(modelPapers.index(currentRow, PAPER_JOURNAL)) .toString());
+	dlg.setAbstract(modelPapers.data(modelPapers.index(currentRow, PAPER_ABSTRACT)).toString());
+	dlg.setNote    (modelPapers.data(modelPapers.index(currentRow, PAPER_NOTE))    .toString());
 	if(dlg.exec() != QDialog::Accepted)
 		return;
 
 	if(!renameTitle(oldTitle, dlg.getTitle()))
 		QMessageBox::critical(this, tr("Error"), tr("Renaming tile failed!"));
-	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_TITLE),    dlg.getTitle());
-	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_AUTHORS),  dlg.getAuthors());
-	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_YEAR),     dlg.getYear());
-	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_JOURNAL),  dlg.getJournal());
-	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_ABSTRACT), dlg.getAbstract());
-	modelPapers.setData(modelPapers.index(currentRowPapers, PAPER_NOTE),     dlg.getNote());
-	if(!dlg.getNote().isEmpty())   // Cannot remember why?
+	modelPapers.setData(modelPapers.index(currentRow, PAPER_TITLE),    dlg.getTitle());
+	modelPapers.setData(modelPapers.index(currentRow, PAPER_AUTHORS),  dlg.getAuthors());
+	modelPapers.setData(modelPapers.index(currentRow, PAPER_YEAR),     dlg.getYear());
+	modelPapers.setData(modelPapers.index(currentRow, PAPER_JOURNAL),  dlg.getJournal());
+	modelPapers.setData(modelPapers.index(currentRow, PAPER_ABSTRACT), dlg.getAbstract());
+	modelPapers.setData(modelPapers.index(currentRow, PAPER_NOTE),     dlg.getNote());
+	if(!dlg.getNote().isEmpty())   // paper with notes indicates being read
 		setPaperRead(currentPaperID);
 	onSubmitPaper();
 }
@@ -137,10 +135,8 @@ void PagePapers::onDelPaper()
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
-		QSqlDatabase::database().transaction();
 		foreach(QModelIndex idx, idxList)
 			delPaper(getPaperID(idx.row()));
-		QSqlDatabase::database().commit();
 		modelPapers.select();
 	}
 }
@@ -154,8 +150,8 @@ void PagePapers::selectID(int id)
 	int row = idToRow(id);
 	if(row > -1)
 	{
-		currentRowPapers = row;
-		ui.tvPapers->selectRow(currentRowPapers);
+		currentRow = row;
+		ui.tvPapers->selectRow(currentRow);
 		ui.tvPapers->setFocus();
 	}
 }
@@ -176,8 +172,8 @@ void PagePapers::onImport()
 	if(files.isEmpty())
 		return;
 
-	onSubmitPaper();
-	ui.tvPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
+	//onSubmitPaper();
+	//ui.tvPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
 
 	QString file = files.front();
 	setting->setLastImportPath(QFileInfo(file).absolutePath());
@@ -185,33 +181,36 @@ void PagePapers::onImport()
 	foreach(QString fileName, files)
 	{
 		Importer* importer = ImporterFactory::getImporter(fileName);
-		if(importer->import(fileName))
+		if(!importer->import(fileName))
 		{
-			QList<ImportResult> results = importer->getResults();  // one file may have multiple records
-			foreach(ImportResult result, results)
+			delete importer;
+			continue;
+		}
+			
+		QList<ImportResult> results = importer->getResults();
+		foreach(ImportResult result, results)    // one file may have multiple records
+		{
+			int id = ::getPaperID(result.title);
+			if(id > -1)   // merge to existing record
 			{
-				int id = ::getPaperID(result.title);
-				if(id > -1)
-				{
-					if(QMessageBox::warning(this, tr("Title exists"), tr("Do you want to merge into the existing record?"),
-							QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-						mergeRecord(idToRow(id), result);
-					}
-				}
-				else
-				{
-					insertRecord(result);
-
-					// Fix it: this works only when there is one record
-					addAttachment(currentPaperID, "EndNote." + QFileInfo(fileName).suffix(), fileName);
+				if(QMessageBox::warning(this, tr("Title exists"), tr("Do you want to merge into the existing record?"),
+						QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+					mergeRecord(idToRow(id), result);
 				}
 			}
+			else
+			{
+				insertRecord(result);
+
+				// FIXME: this works only when there is one record
+				// change it to EndNote(i)
+				addAttachment(currentPaperID, "EndNote." + QFileInfo(fileName).suffix(), fileName);
+			}
 		}
-		delete importer;
 	}
 
 	onSubmitPaper();
-	onResetPapers();
+//	onResetPapers();
 }
 
 void PagePapers::insertRecord(const ImportResult &record)
@@ -339,8 +338,8 @@ void PagePapers::onResetPapers()
 
 void PagePapers::onClicked(const QModelIndex& idx)
 {
-	currentRowPapers = idx.row();
-	currentPaperID = getPaperID(currentRowPapers);
+	currentRow = idx.row();
+	currentPaperID = getPaperID(currentRow);
 	updateTags();
 	ui.widgetAttachments->setPaper(currentPaperID);
 	updateSnippets();
@@ -397,7 +396,7 @@ void PagePapers::onShowCoauthored()
 	hideCoauthor();
 
 	QStringList authors = modelPapers.data(
-		modelPapers.index(currentRowPapers, PAPER_AUTHORS)).toString().split(";");
+		modelPapers.index(currentRow, PAPER_AUTHORS)).toString().split(";");
 	foreach(QString author, authors)
 		for(int row=0; row<modelPapers.rowCount(); ++row)
 		{
@@ -446,7 +445,7 @@ void PagePapers::onEditSnippet(const QModelIndex& idx)
 	AddSnippetDlg* dlg = new AddSnippetDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
 	dlg->setWindowTitle(tr("Edit Snippet"));
-	dlg->setSnippetID(getSnippetID(idx));
+	dlg->setSnippetID(getSnippetID(idx.row()));
 	dlg->show();
 }
 
@@ -457,13 +456,13 @@ void PagePapers::onDelSnippets()
 	{
 		QModelIndexList idxList = ui.tvSnippets->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delSnippet(getSnippetID(idx));
+			delSnippet(getSnippetID(idx.row()));
 		onResetPapers();
 	}
 }
 
-int PagePapers::getSnippetID(const QModelIndex& idx) const {
-	return ::getSnippetID(modelSnippets.data(modelSnippets.index(idx.row(), 0)).toString());
+int PagePapers::getSnippetID(int row) const {
+	return ::getSnippetID(modelSnippets.data(modelSnippets.index(row, 0)).toString());
 }
 
 void PagePapers::jumpToPaper(const QString& title) {

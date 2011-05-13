@@ -8,11 +8,10 @@ OptionDlg::OptionDlg(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+	setting = MySetting<UserSetting>::getInstance();
 
 	connect(ui.btFont, SIGNAL(clicked()), this, SLOT(onFont()));
 	connect(ui.btTemp, SIGNAL(clicked()), this, SLOT(onTempLocation()));
-
-	setting = MySetting<UserSetting>::getInstance();
 
 	// load settings
 	qApp->setFont(setting->getFont());
@@ -56,7 +55,8 @@ void OptionDlg::onTempLocation()
 
 //////////////////////////////////////////////////////////////////////////
 // Setting
-UserSetting::UserSetting(const QString& fileName) : MySetting<UserSetting>(fileName)
+UserSetting::UserSetting(const QString& fileName) 
+: MySetting<UserSetting>(fileName)
 {
 	if(QFile(this->fileName).size() == 0)   // no setting
 		loadDefaults();

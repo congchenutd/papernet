@@ -11,9 +11,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	instance = this;
 
 	ui.setupUi(this);
-    ui.toolBarMain->initSearchBar();
-	ui.actionPapers->setChecked(true);
-	onPapers();
+	onPapers();     // paper page by default
 
 	pagePapers   = static_cast<PagePapers*>  (ui.stackedWidget->widget(0));
 	pageSnippets = static_cast<PageSnippets*>(ui.stackedWidget->widget(1));
@@ -22,18 +20,21 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	actionGroup->addAction(ui.actionPapers);
 	actionGroup->addAction(ui.actionSnippets);
 
-	connect(ui.actionOptions,     SIGNAL(triggered()), this, SLOT(onOptions()));
-	connect(ui.actionAbout,       SIGNAL(triggered()), this, SLOT(onAbout()));
-	connect(ui.actionPapers,      SIGNAL(triggered()), this, SLOT(onPapers()));
-	connect(ui.actionSnippets,    SIGNAL(triggered()), this, SLOT(onSnippets()));
-    connect(ui.toolBarMain, SIGNAL(search(QString)), pagePapers,   SLOT(onSearch(QString)));
-    connect(ui.toolBarMain, SIGNAL(search(QString)), pageSnippets, SLOT(onSearch(QString)));
-	connect(ui.toolBarMain, SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
+	connect(ui.actionOptions,  SIGNAL(triggered()), this, SLOT(onOptions()));
+	connect(ui.actionAbout,    SIGNAL(triggered()), this, SLOT(onAbout()));
+	connect(ui.actionPapers,   SIGNAL(triggered()), this, SLOT(onPapers()));
+	connect(ui.actionSnippets, SIGNAL(triggered()), this, SLOT(onSnippets()));
+	connect(ui.actionAboutQt,  SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionImportPaper, SIGNAL(triggered()), pagePapers,   SLOT(onImport()));
 	connect(ui.actionAddPaper,    SIGNAL(triggered()), pagePapers,   SLOT(onAddPaper()));
 	connect(ui.actionDelPaper,    SIGNAL(triggered()), pagePapers,   SLOT(onDelPaper()));
 	connect(ui.actionAddSnippet,  SIGNAL(triggered()), pageSnippets, SLOT(onAdd()));
 	connect(ui.actionDelSnippet,  SIGNAL(triggered()), pageSnippets, SLOT(onDel()));
+
+	connect(ui.toolBarSearch, SIGNAL(search(QString)),         pagePapers,   SLOT(onSearch(QString)));
+    connect(ui.toolBarSearch, SIGNAL(search(QString)),         pageSnippets, SLOT(onSearch(QString)));
+	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers,   SLOT(onFullTextSearch(QString)));
+	
 	connect(pagePapers,   SIGNAL(tableValid(bool)), ui.actionDelPaper,   SLOT(setEnabled(bool)));
 	connect(pageSnippets, SIGNAL(tableValid(bool)), ui.actionDelSnippet, SLOT(setEnabled(bool)));
 
@@ -44,14 +45,14 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 void MainWindow::onOptions()
 {
 	OptionDlg dlg(this);
-	dlg.exec();
+	dlg.exec();           // dlg will save the settings by itself
 }
 
 void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About", 
-		tr("<h3><b>PaperNet: a better paper manager</b></h3>"
-		"<p>Build 2011.3.27</p>"
+		tr("<h3><b>PaperNet: A Better Paper Manager</b></h3>"
+		"<p>Build 2011.5.13</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
 }
 
@@ -63,7 +64,7 @@ void MainWindow::closeEvent(QCloseEvent*)
 		delOldBackup();
 		backup();
 	}
-	pagePapers->saveSectionSizes();
+	pagePapers->saveSectionSizes();   // save the settings before the dtr
 	pagePapers->saveSplitterSizes();
 	pageSnippets->saveSectionSizes();
 	setting->destroySettingManager();
@@ -98,8 +99,9 @@ void MainWindow::backup(const QString& name)
 
 void MainWindow::onPapers() 
 {
+	ui.actionPapers->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(0);
-    ui.toolBarMain->onClear();
+    ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(true);
 	ui.actionAddPaper->setVisible(true);
 	ui.actionDelPaper->setVisible(true);
@@ -109,8 +111,9 @@ void MainWindow::onPapers()
 
 void MainWindow::onSnippets() 
 {
+	ui.actionSnippets->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(1);
-    ui.toolBarMain->onClear();
+    ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(false);
 	ui.actionAddPaper->setVisible(false);
 	ui.actionDelPaper->setVisible(false);
@@ -120,14 +123,12 @@ void MainWindow::onSnippets()
 
 void MainWindow::jumpToPaper(const QString& title)
 {
-	ui.actionPapers->setChecked(true);
 	onPapers();
 	pagePapers->jumpToPaper(title);
 }
 
 void MainWindow::jumpToSnippet(int snippetID)
 {
-	ui.actionSnippets->setChecked(true);
 	onSnippets();
 	pageSnippets->jumpToSnippet(snippetID);
 }

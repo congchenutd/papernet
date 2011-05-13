@@ -10,14 +10,16 @@
 ToolBar::ToolBar(QWidget *parent)
 	: QToolBar(parent)
 {
+	// actions for the context menu
 	actionSmallIcon = new QAction(tr("Use small icons"), this);
 	actionShowText  = new QAction(tr("Show text"), this);
 	actionSmallIcon->setCheckable(true);
 	actionShowText ->setCheckable(true);
+	connect(actionSmallIcon, SIGNAL(triggered(bool)), this, SLOT(onSmallIcon(bool)));
+	connect(actionShowText,  SIGNAL(triggered(bool)), this, SLOT(onShowText (bool)));
+
 	onSmallIcon(MySetting<UserSetting>::getInstance()->value("SmallIcon").toBool());
 	onShowText (MySetting<UserSetting>::getInstance()->value("ShowText").toBool());
-	connect(actionSmallIcon, SIGNAL(triggered(bool)), this, SLOT(onSmallIcon(bool)));
-	connect(actionShowText,  SIGNAL(triggered(bool)), this, SLOT(onShowText(bool)));
 }
 
 void ToolBar::contextMenuEvent(QContextMenuEvent* event)
@@ -42,10 +44,10 @@ void ToolBar::onShowText(bool show)
 	MySetting<UserSetting>::getInstance()->setValue("ShowText", show);
 }
 
-void ToolBar::initSearchBar()
+//////////////////////////////////////////////////////////////////////////
+SearchBar::SearchBar(QWidget* parent) : QToolBar(parent)
 {
-	addSeparator();
-	addWidget(new QLabel(tr(" Search ")));
+	addWidget(new QLabel(tr("Search ")));
 	addWidget(leSearch = new QLineEdit(this));
 	addWidget(new QLabel(" "));
 
@@ -58,6 +60,7 @@ void ToolBar::initSearchBar()
 	btClear->setToolTip(tr("Clear search result"));
 	addWidget(btClear);
 
+	// use an invisible button to capture shortcut for the lineedit
 	QPushButton* btFocus = new QPushButton("Focus", this);
 	btFocus->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
 	btFocus->setMaximumWidth(0);    // "hide" it
@@ -65,28 +68,25 @@ void ToolBar::initSearchBar()
 
 	connect(leSearch,   SIGNAL(textEdited(QString)), this, SIGNAL(search(QString)));
 	connect(btFullText, SIGNAL(clicked()),           this, SLOT(onFullTextSearch()));
-	connect(btClear,  SIGNAL(clicked()), this, SLOT(onClear()));
-	connect(btFocus,  SIGNAL(clicked()), this, SLOT(onFocus()));
+	connect(btClear,    SIGNAL(clicked()),           this, SLOT(onClear()));
+	connect(btFocus,    SIGNAL(clicked()),           this, SLOT(onFocus()));
 }
 
-void ToolBar::onClear()
+void SearchBar::onClear()
 {
 	leSearch->clearFocus();
 	leSearch->clear();
 	emit search(QString());
 }
 
-void ToolBar::onFocus()
+void SearchBar::onFocus()
 {
 	if(leSearch->hasFocus())
-	{
 		onClear();
-		leSearch->clearFocus();
-	}
 	else
 		leSearch->setFocus();
 }
 
-void ToolBar::onFullTextSearch() {
+void SearchBar::onFullTextSearch() {
 	emit fullTextSearch(leSearch->text());
 }

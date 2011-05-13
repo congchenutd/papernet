@@ -14,28 +14,39 @@ class ToolBar : public QToolBar
 
 public:
 	ToolBar(QWidget* parent = 0);
-    void initSearchBar();
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event);
 
-signals:
-    void search(const QString& target);
-	void fullTextSearch(const QString& target);
-
-public slots:
-    void onClear();
-	void onFullTextSearch();
-
 private slots:
 	void onSmallIcon(bool small);
-	void onShowText(bool show);
-    void onFocus();
+	void onShowText (bool show);
 
 private:
-    QAction*   actionSmallIcon;
-    QAction*   actionShowText;
-    QLineEdit* leSearch;
+    QAction* actionSmallIcon;
+    QAction* actionShowText;
+};
+
+class SearchBar : public QToolBar
+{
+	Q_OBJECT
+
+public:
+	SearchBar(QWidget* parent = 0);
+
+public slots:
+	void onClear();
+
+private slots:
+	void onFullTextSearch();
+	void onFocus();
+
+signals:
+	void search(const QString& target);
+	void fullTextSearch(const QString& target);
+
+private:
+	QLineEdit*   leSearch;
 	QPushButton* btFullText;
 };
 

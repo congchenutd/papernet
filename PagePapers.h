@@ -25,7 +25,7 @@ private slots:
 	void onAddPaper();
 	void onDelPaper();
 	void onImport();
-	void onCurrentRowPapersChanged(const QModelIndex& idx);
+	void onCurrentRowChanged(const QModelIndex& idx);
 	void onEditPaper();
 	void onSearch(const QString& target);
 	void onFullTextSearch(const QString& target);
@@ -38,37 +38,37 @@ private slots:
 	void onAddTag();
 	void onAddTagToPaper();
 	void onDelTagFromPaper();
+	void onFilterPapers();
 
 	void onAddSnippet();
 	void onEditSnippet(const QModelIndex& idx);
 	void onDelSnippets();
-	void onFilterPapers();
 
 signals:
 	void tableValid(bool);
 
 private:
-	int getPaperID (int row) const;
+	int  getPaperID(int row) const;
+	int  idToRow   (int id)  const;
 	void selectID(int id);
-	int idToRow(int id) const;
 	void updateTags();
 	void hideRelated();
 	void hideCoauthor();
 	void mergeRecord(int row, const ImportResult& record);
 	void insertRecord(const ImportResult& record);
 	void updateSnippets();
-	int  getSnippetID(const QModelIndex& idx) const;
+	int  getSnippetID(int row) const;
 	void loadSplitterSizes();
 
 private:
 	Ui::PagePapersClass ui;
 
-	PaperModel modelPapers;
-	int currentRowPapers;
-	int currentPaperID;
+	PaperModel        modelPapers;
+	QSqlQueryModel    modelSnippets;
 	QDataWidgetMapper mapper;
-	QSqlQueryModel modelSnippets;
-	UserSetting* setting;
+	int               currentRow;
+	int               currentPaperID;
+	UserSetting*      setting;
 };
 
 #endif // PAGEPAPERS_H

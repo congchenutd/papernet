@@ -25,8 +25,6 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	model.setIconProvider(iconProvider = new AttachmentIconProvider);
 	model.setRootPath(attachmentDir);
 	model.setResolveSymlinks(false);
-//    model.setNameFilters(QStringList() << "*.pdf" << "*.ris" << "*.enw" << "*.xml");
-//    model.setNameFilterDisables(false);
 	ui.listView->setModel(&model);
 	ui.listView->setRootIndex(model.index(emptyDir));
 
@@ -40,11 +38,10 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 void AttachmentsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
 	currentIndex = ui.listView->indexAt(event->pos());
-	bool valid = currentIndex.isValid();
 	ui.actionAddFile->setEnabled(paperID > -1);
 	ui.actionAddLink->setEnabled(paperID > -1);
-	ui.actionRename->setEnabled(valid);
-	ui.actionDel->setEnabled(valid);
+	ui.actionRename ->setEnabled(currentIndex.isValid());
+	ui.actionDel    ->setEnabled(currentIndex.isValid());
 
 	QMenu contextMenu(this);
 	contextMenu.addAction(ui.actionAddFile);
@@ -54,7 +51,7 @@ void AttachmentsWidget::contextMenuEvent(QContextMenuEvent* event)
 	contextMenu.exec(event->globalPos());
 }
 
-void AttachmentsWidget::setPaper(int id) 
+void AttachmentsWidget::setPaper(int id)
 {
 	paperID = id;
 	update();
@@ -62,55 +59,54 @@ void AttachmentsWidget::setPaper(int id)
 
 void AttachmentsWidget::onAddFile()
 {
+	// file name
 	UserSetting* setting = MySetting<UserSetting>::getInstance();
-	QString lastPath = setting->getLastAttachmentPath();
+	const QString lastPath = setting->getLastAttachmentPath();
 	QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"),
 													lastPath, tr("All files (*.*)"));
 	if(filePath.isEmpty())
 		return;
-	
 	setting->setLastAttachmentPath(QFileInfo(filePath).absolutePath());
-	
+
+	// attachment name
 	bool ok;
-	QString attachmentName = QInputDialog::getText(this, tr("Attachment name"), 
-		tr("Attachment name"), QLineEdit::Normal, guessName(filePath), &ok);
+	QString attachmentName = QInputDialog::getText(this, tr("Attachment name"),
+		tr("Attachment name"), QLineEdit::Normal, suggestName(filePath), &ok);
 	if(!ok || attachmentName.isEmpty())
 		return;
 
+	// add
 	if(!addAttachment(paperID, attachmentName, filePath))
 	{
-		QMessageBox::critical(this, tr("Error"), tr("The name already exists!"));
+		QMessageBox::critical(this, tr("Error"), tr("Add attachment error!"));
 		return;
 	}
 
-	update();
-	updateAttached(paperID);
+	update();       // update the view
 }
 
 void AttachmentsWidget::onAddLink()
 {
 	LinkDlg dlg(this);
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		if(!addLink(paperID, dlg.getName(), dlg.getUrl()))
-		{
-			QMessageBox::critical(this, tr("Error"), tr("The name already exists!"));
-			return;
-		}
+	if(dlg.exec() != QDialog::Accepted)
+		return;
 
-		update();
-		updateAttached(paperID);
+	if(!addLink(paperID, dlg.getName(), dlg.getUrl()))
+	{
+		QMessageBox::critical(this, tr("Error"), tr("Add link error!"));
+		return;
 	}
+
+	update();
 }
 
 void AttachmentsWidget::onDel()
 {
-	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
+	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-        delAttachment(paperID, model.fileName(currentIndex));
+		delAttachment(paperID, model.fileName(currentIndex));
 		update();
-		updateAttached(paperID);
 	}
 }
 
@@ -118,7 +114,7 @@ void AttachmentsWidget::onOpen(const QModelIndex& idx)
 {
 	openAttachment(paperID, model.data(idx).toString());
 	setPaperRead(paperID);
-	emit paperRead();   // let papers refresh
+	emit paperRead();   // let paper page refresh
 }
 
 void AttachmentsWidget::update()   // refresh
@@ -127,22 +123,23 @@ void AttachmentsWidget::update()   // refresh
 	if(QDir(dir).entryList().isEmpty())
 		dir = emptyDir;
 	ui.listView->setRootIndex(model.index(dir));
+	updateAttached(paperID);	   // update the model's attached status
 }
 
 void AttachmentsWidget::onRename()
 {
 	QString oldName = model.data(currentIndex).toString();
 	bool ok;
-	QString newName = QInputDialog::getText(this, tr("Attachment name"), 
+	QString newName = QInputDialog::getText(this, tr("Attachment name"),
 		tr("Attachment name"), QLineEdit::Normal, oldName, &ok);
 	if(!ok || newName.isEmpty())
 		return;
 
 	if(!renameAttachment(paperID, oldName, newName))
-		QMessageBox::critical(this, tr("Error"), tr("The name already exists!"));
+		QMessageBox::critical(this, tr("Error"), tr("Rename failed!"));
 }
 
-QString AttachmentsWidget::guessName(const QString &fileName)
+QString AttachmentsWidget::suggestName(const QString &fileName)
 {
 	QString result = QFileInfo(fileName).fileName();
 	if(fileName.endsWith(".pdf", Qt::CaseInsensitive))
@@ -150,7 +147,7 @@ QString AttachmentsWidget::guessName(const QString &fileName)
 	else if(fileName.endsWith(".ris", Qt::CaseInsensitive))
 		result = "EndNote.ris";
 	else if(fileName.endsWith(".enw", Qt::CaseInsensitive))
-		result = "EndNote.enw";	
+		result = "EndNote.enw";
 	return result;
 }
 

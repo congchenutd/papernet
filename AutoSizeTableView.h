@@ -11,8 +11,8 @@ class AutoSizeTableView : public QTableView
 
 public:
 	AutoSizeTableView(QWidget *parent);
-	void saveSectionSizes();
-	void init(const QString& parentObjectName);
+	void saveSectionSizes();                     // must be called before the dtr
+	void init(const QString& parentObjectName);  // FIXME: how to call after the ctr?
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);

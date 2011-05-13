@@ -5,8 +5,8 @@ AutoSizeTableView::AutoSizeTableView(QWidget *parent)
 
 void AutoSizeTableView::init(const QString& parentObjectName)
 {
-	this->groupName = parentObjectName + " Section Sizes";
-	setting = MySetting<UserSetting>::getInstance();
+	groupName = parentObjectName + " Section Sizes";
+	setting = UserSetting::getInstance();
 	setting->beginGroup(groupName);
 	QStringList keys = setting->allKeys();
 	foreach(QString key, keys)
@@ -16,7 +16,7 @@ void AutoSizeTableView::init(const QString& parentObjectName)
 
 void AutoSizeTableView::resizeEvent(QResizeEvent* event)
 {
-	if(adjustingCount++ < 2)
+	if(adjustingCount++ < 2)   // skip the first 2 events during initialization
 		adjustColumns();
 	QTableView::resizeEvent(event);
 }
@@ -37,7 +37,7 @@ void AutoSizeTableView::adjustColumns()
 		while(i >= 0) {                       // find and skip last non-zero
 			if(sectionSizes.value(i) > 0) {
 				--i;
-				break; 
+				break;
 			}
 			--i;
 		}

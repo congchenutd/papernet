@@ -30,7 +30,7 @@ private slots:
 	void onOpen(const QModelIndex& idx);
 
 private:
-	QString guessName(const QString &fileName);
+	QString suggestName(const QString &fileName);
 
 signals:
 	void paperRead();

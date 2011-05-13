@@ -28,8 +28,8 @@ bool NonXmlImporter::import(const QString& fileName)
 		QString line = is.readLine();
 		if(line.startsWith(getFirstHead()))
 		{
-			results << ImportResult();
-			currentResult = results.end() - 1;   // the last
+			results << ImportResult();           // insert a new record
+			currentResult = results.end() - 1;   // point to the new one
 			continue;
 		}
 
@@ -62,17 +62,11 @@ bool NonXmlImporter::import(const QString& fileName)
 	return true;
 }
 
+// trim the head of line, and return the rest
 QString NonXmlImporter::trimHead(const QString& line, const QString head) const {
 	return line.mid(line.indexOf(head) + head.length()).trimmed();
 }
 
-//bool NonXmlImporter::recordCount() const
-//{
-//	QFile file(fileName);
-//	if(!file.open(QFile::ReadOnly))
-//		return -1;
-
-//}
 
 //////////////////////////////////////////////////////////////////////////
 QString EnwImporter::getFirstHead() const {

@@ -172,6 +172,7 @@ void PagePapers::onImport()
 	if(files.isEmpty())
 		return;
 
+	// Can't remember why these two lines are here
 	//onSubmitPaper();
 	//ui.tvPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
 
@@ -186,7 +187,7 @@ void PagePapers::onImport()
 			delete importer;
 			continue;
 		}
-			
+
 		QList<ImportResult> results = importer->getResults();
 		foreach(ImportResult result, results)    // one file may have multiple records
 		{
@@ -210,7 +211,7 @@ void PagePapers::onImport()
 	}
 
 	onSubmitPaper();
-//	onResetPapers();
+//	onResetPapers();   // can't remember why
 }
 
 void PagePapers::insertRecord(const ImportResult &record)

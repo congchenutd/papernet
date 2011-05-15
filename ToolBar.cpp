@@ -47,7 +47,7 @@ void ToolBar::onShowText(bool show)
 //////////////////////////////////////////////////////////////////////////
 SearchBar::SearchBar(QWidget* parent) : QToolBar(parent)
 {
-	addWidget(new QLabel(tr("Search ")));
+	addWidget(new QLabel(tr(" Search ")));
 	addWidget(leSearch = new QLineEdit(this));
 	addWidget(new QLabel(" "));
 

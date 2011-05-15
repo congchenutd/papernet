@@ -37,6 +37,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->setModel(&modelPapers);
 	ui.tvPapers->hideColumn(PAPER_ID);
 	ui.tvPapers->hideColumn(PAPER_READ);
+	ui.tvPapers->hideColumn(PAPER_TAGGED);
 	ui.tvPapers->hideColumn(PAPER_JOURNAL);
 	ui.tvPapers->hideColumn(PAPER_ABSTRACT);
 	ui.tvPapers->hideColumn(PAPER_NOTE);

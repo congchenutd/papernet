@@ -5,12 +5,12 @@
 #include <QSqlTableModel>
 #include "ui_PageSnippets.h"
 
-class PageSnippets : public QWidget
+class PageQuotes : public QWidget
 {
 	Q_OBJECT
 
 public:
-	PageSnippets(QWidget *parent = 0);
+	PageQuotes(QWidget *parent = 0);
 	void jumpToSnippet(int snippetID);
 	void saveSectionSizes();
 

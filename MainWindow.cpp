@@ -13,30 +13,33 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	ui.setupUi(this);
 	onPapers();     // paper page by default
 
-	pagePapers   = static_cast<PagePapers*>  (ui.stackedWidget->widget(0));
-	pageSnippets = static_cast<PageSnippets*>(ui.stackedWidget->widget(1));
+	pagePapers     = static_cast<PagePapers*>    (ui.stackedWidget->widget(0));
+	pageQuotes     = static_cast<PageQuotes*>    (ui.stackedWidget->widget(1));
+	pageDictionary = static_cast<PageDictionary*>(ui.stackedWidget->widget(2));
 
 	QActionGroup* actionGroup = new QActionGroup(this);
 	actionGroup->addAction(ui.actionPapers);
-	actionGroup->addAction(ui.actionSnippets);
+	actionGroup->addAction(ui.actionQuotes);
+	actionGroup->addAction(ui.actionDictionary);
 
-	connect(ui.actionOptions,  SIGNAL(triggered()), this, SLOT(onOptions()));
-	connect(ui.actionAbout,    SIGNAL(triggered()), this, SLOT(onAbout()));
-	connect(ui.actionPapers,   SIGNAL(triggered()), this, SLOT(onPapers()));
-	connect(ui.actionSnippets, SIGNAL(triggered()), this, SLOT(onSnippets()));
-	connect(ui.actionAboutQt,  SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-	connect(ui.actionImportPaper, SIGNAL(triggered()), pagePapers,   SLOT(onImport()));
-	connect(ui.actionAddPaper,    SIGNAL(triggered()), pagePapers,   SLOT(onAddPaper()));
-	connect(ui.actionDelPaper,    SIGNAL(triggered()), pagePapers,   SLOT(onDelPaper()));
-	connect(ui.actionAddSnippet,  SIGNAL(triggered()), pageSnippets, SLOT(onAdd()));
-	connect(ui.actionDelSnippet,  SIGNAL(triggered()), pageSnippets, SLOT(onDel()));
+	connect(ui.actionOptions,    SIGNAL(triggered()), this, SLOT(onOptions()));
+	connect(ui.actionAbout,      SIGNAL(triggered()), this, SLOT(onAbout()));
+	connect(ui.actionPapers,     SIGNAL(triggered()), this, SLOT(onPapers()));
+	connect(ui.actionQuotes,     SIGNAL(triggered()), this, SLOT(onQuotes()));
+	connect(ui.actionDictionary, SIGNAL(triggered()), this, SLOT(onDictionary()));
+	connect(ui.actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+	connect(ui.actionImportPaper, SIGNAL(triggered()), pagePapers, SLOT(onImport()));
+	connect(ui.actionAddPaper,    SIGNAL(triggered()), pagePapers, SLOT(onAddPaper()));
+	connect(ui.actionDelPaper,    SIGNAL(triggered()), pagePapers, SLOT(onDelPaper()));
+	connect(ui.actionAddSnippet,  SIGNAL(triggered()), pageQuotes, SLOT(onAdd()));
+	connect(ui.actionDelSnippet,  SIGNAL(triggered()), pageQuotes, SLOT(onDel()));
 
 	connect(ui.toolBarSearch, SIGNAL(search(QString)),         pagePapers,   SLOT(onSearch(QString)));
-    connect(ui.toolBarSearch, SIGNAL(search(QString)),         pageSnippets, SLOT(onSearch(QString)));
+    connect(ui.toolBarSearch, SIGNAL(search(QString)),         pageQuotes, SLOT(onSearch(QString)));
 	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers,   SLOT(onFullTextSearch(QString)));
 	
 	connect(pagePapers,   SIGNAL(tableValid(bool)), ui.actionDelPaper,   SLOT(setEnabled(bool)));
-	connect(pageSnippets, SIGNAL(tableValid(bool)), ui.actionDelSnippet, SLOT(setEnabled(bool)));
+	connect(pageQuotes, SIGNAL(tableValid(bool)), ui.actionDelSnippet, SLOT(setEnabled(bool)));
 
 	// load settings
 	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());
@@ -66,7 +69,7 @@ void MainWindow::closeEvent(QCloseEvent*)
 	}
 	pagePapers->saveSectionSizes();   // save the settings before the dtr
 	pagePapers->saveSplitterSizes();
-	pageSnippets->saveSectionSizes();
+	pageQuotes->saveSectionSizes();
 	setting->destroySettingManager();
 }
 
@@ -109,9 +112,9 @@ void MainWindow::onPapers()
 	ui.actionDelSnippet->setVisible(false);
 }
 
-void MainWindow::onSnippets() 
+void MainWindow::onQuotes() 
 {
-	ui.actionSnippets->setChecked(true);
+	ui.actionQuotes->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(1);
     ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(false);
@@ -119,6 +122,18 @@ void MainWindow::onSnippets()
 	ui.actionDelPaper->setVisible(false);
 	ui.actionAddSnippet->setVisible(true);
 	ui.actionDelSnippet->setVisible(true);
+}
+
+void MainWindow::onDictionary()
+{
+	ui.actionDictionary->setChecked(true);
+	ui.stackedWidget->setCurrentIndex(2);
+	ui.toolBarSearch->onClear();
+	ui.actionImportPaper->setVisible(false);
+	ui.actionAddPaper->setVisible(false);
+	ui.actionDelPaper->setVisible(false);
+	ui.actionAddSnippet->setVisible(false);
+	ui.actionDelSnippet->setVisible(false);
 }
 
 void MainWindow::jumpToPaper(const QString& title)
@@ -129,8 +144,8 @@ void MainWindow::jumpToPaper(const QString& title)
 
 void MainWindow::jumpToSnippet(int snippetID)
 {
-	onSnippets();
-	pageSnippets->jumpToSnippet(snippetID);
+	onQuotes();
+	pageQuotes->jumpToSnippet(snippetID);
 }
 
 MainWindow* MainWindow::getInstance() {

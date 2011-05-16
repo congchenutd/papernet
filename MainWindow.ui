@@ -28,7 +28,8 @@
        <number>0</number>
       </property>
       <widget class="PagePapers" name="pagePapers"/>
-      <widget class="PageSnippets" name="pageSnippets"/>
+      <widget class="PageQuotes" name="pageQuotes"/>
+      <widget class="PageDictionary" name="pageDictionary"/>
      </widget>
     </item>
    </layout>
@@ -39,7 +40,7 @@
      <x>0</x>
      <y>0</y>
      <width>525</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -61,7 +62,7 @@
      <string>View</string>
     </property>
     <addaction name="actionPapers"/>
-    <addaction name="actionSnippets"/>
+    <addaction name="actionQuotes"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -81,7 +82,8 @@
    <addaction name="actionOptions"/>
    <addaction name="separator"/>
    <addaction name="actionPapers"/>
-   <addaction name="actionSnippets"/>
+   <addaction name="actionQuotes"/>
+   <addaction name="actionDictionary"/>
    <addaction name="separator"/>
    <addaction name="actionImportPaper"/>
    <addaction name="actionAddPaper"/>
@@ -135,19 +137,19 @@
     <string>Papers</string>
    </property>
   </action>
-  <action name="actionSnippets">
+  <action name="actionQuotes">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Snippet.png</normaloff>:/MainWindow/Images/Snippet.png</iconset>
+     <normaloff>:/MainWindow/Images/Quote.png</normaloff>:/MainWindow/Images/Quote.png</iconset>
    </property>
    <property name="text">
-    <string>Snippets</string>
+    <string>Quotes</string>
    </property>
    <property name="toolTip">
-    <string>Snippets</string>
+    <string>Quotes</string>
    </property>
   </action>
   <action name="actionAddPaper">
@@ -221,6 +223,18 @@
     <string>About Qt</string>
    </property>
   </action>
+  <action name="actionDictionary">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/MainWindow/Images/Dictionary.png</normaloff>:/MainWindow/Images/Dictionary.png</iconset>
+   </property>
+   <property name="text">
+    <string>Dictionary</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -231,9 +245,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>PageSnippets</class>
+   <class>PageQuotes</class>
    <extends>QWidget</extends>
-   <header>PageSnippets.h</header>
+   <header>PageQuotes.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -245,6 +259,12 @@
    <class>SearchBar</class>
    <extends>QToolBar</extends>
    <header>ToolBar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PageDictionary</class>
+   <extends>QWidget</extends>
+   <header>PageDictionary.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

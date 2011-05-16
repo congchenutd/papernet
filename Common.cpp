@@ -55,29 +55,40 @@ void createTables()
 					Proximity int, \
 					Coauthor  int  \
 				)");
-
 	query.exec("create table Tags( \
 					ID int primary key, \
 					Name varchar unique, \
 					Size int \
 				)");
-
 	query.exec("create table PaperTag( \
 					Paper int references Papers(ID) on delete cascade on update cascade, \
 					Tag   int references Tags  (ID) on delete cascade on update cascade, \
 					primary key (Paper, Tag) \
 				)");
-
 	query.exec("create table Snippets( \
 					ID int primary key, \
 					Title   varchar, \
 					Snippet varchar  \
 				)");
-
 	query.exec("create table PaperSnippet( \
 					Paper   int references Papers  (ID) on delete cascade on update cascade, \
 					Snippet int references Snippets(ID) on delete cascade on update cascade, \
 					primary key (Paper, Snippet) \
+			   )");
+	query.exec("create table Dictionary( \
+					ID int primary key, \
+					Phrase  varchar, \
+					Explain varchar \
+			   )");
+	query.exec("create table DictionaryTags( \
+					ID int primary key, \
+					Name varchar unique, \
+					Size int \
+			  )");
+	query.exec("create table PhraseTag( \
+					Phrase int references Papers(ID) on delete cascade on update cascade, \
+					Tag    int references Tags  (ID) on delete cascade on update cascade, \
+					primary key (Paper, Tag) \
 			   )");
 }
 

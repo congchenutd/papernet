@@ -1,9 +1,9 @@
-#include "PageSnippets.h"
+#include "PageQuotes.h"
 #include "AddSnippetDlg.h"
 #include "Common.h"
 #include <QMessageBox>
 
-PageSnippets::PageSnippets(QWidget *parent)
+PageQuotes::PageQuotes(QWidget *parent)
 	: QWidget(parent), currentRow(-1)
 {
 	ui.setupUi(this);
@@ -19,7 +19,7 @@ PageSnippets::PageSnippets(QWidget *parent)
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 }
 
-void PageSnippets::onSearch(const QString& target)
+void PageQuotes::onSearch(const QString& target)
 {
 	if(target.isEmpty())
 		resetSnippets();
@@ -28,7 +28,7 @@ void PageSnippets::onSearch(const QString& target)
 						    Snippet like \"%%1%\" ").arg(target));
 }
 
-void PageSnippets::onCurrentRowChanged()
+void PageQuotes::onCurrentRowChanged()
 {
 	QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();
@@ -36,7 +36,7 @@ void PageSnippets::onCurrentRowChanged()
 	emit tableValid(valid);
 }
 
-void PageSnippets::onAdd()
+void PageQuotes::onAdd()
 {
 	AddSnippetDlg* dlg = new AddSnippetDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
@@ -45,7 +45,7 @@ void PageSnippets::onAdd()
 	dlg->show();
 }
 
-void PageSnippets::onEdit()
+void PageQuotes::onEdit()
 {
 	AddSnippetDlg* dlg = new AddSnippetDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
@@ -54,7 +54,7 @@ void PageSnippets::onEdit()
 	dlg->show();
 }
 
-void PageSnippets::onDel()
+void PageQuotes::onDel()
 {
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
@@ -66,7 +66,7 @@ void PageSnippets::onDel()
 	}
 }
 
-void PageSnippets::resetSnippets()
+void PageQuotes::resetSnippets()
 {
 	model.setTable("Snippets");
 	model.select();
@@ -75,15 +75,15 @@ void PageSnippets::resetSnippets()
 	ui.tableView->sortByColumn(SNIPPET_TITLE, Qt::AscendingOrder);
 }
 
-int PageSnippets::getID(int row) const {
+int PageQuotes::getID(int row) const {
 	return model.data(model.index(row, SNIPPET_ID)).toInt();
 }
 
-void PageSnippets::onAccepted() {
+void PageQuotes::onAccepted() {
 	model.select();
 }
 
-void PageSnippets::jumpToSnippet(int snippetID)
+void PageQuotes::jumpToSnippet(int snippetID)
 {
 	QModelIndexList indexes = model.match(
 		model.index(0, SNIPPET_ID), Qt::DisplayRole, snippetID, 1, Qt::MatchExactly | Qt::MatchWrap);
@@ -94,6 +94,6 @@ void PageSnippets::jumpToSnippet(int snippetID)
 	}
 }
 
-void PageSnippets::saveSectionSizes() {
+void PageQuotes::saveSectionSizes() {
 	ui.tableView->saveSectionSizes();
 }

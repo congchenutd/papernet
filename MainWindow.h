@@ -5,7 +5,8 @@
 #include "ui_MainWindow.h"
 
 class PagePapers;
-class PageSnippets;
+class PageQuotes;
+class PageDictionary;
 
 class MainWindow : public QMainWindow
 {
@@ -26,14 +27,16 @@ private slots:
 	void delOldBackup();
 	void backup(const QString& name = QString());
 	void onPapers();
-	void onSnippets();
+	void onQuotes();
+	void onDictionary();
 
 private:
 	Ui::MainWindowClass ui;
 	
 	static MainWindow* instance;
-	PagePapers*   pagePapers;
-	PageSnippets* pageSnippets;
+	PagePapers*     pagePapers;
+	PageQuotes*     pageQuotes;
+	PageDictionary* pageDictionary;
 };
 
 #endif // MAINWINDOW_H

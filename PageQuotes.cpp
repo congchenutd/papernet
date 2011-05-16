@@ -1,11 +1,12 @@
 #include "PageQuotes.h"
-#include "AddSnippetDlg.h"
+#include "AddQuoteDlg.h"
 #include "Common.h"
 #include <QMessageBox>
 
 PageQuotes::PageQuotes(QWidget *parent)
-	: QWidget(parent), currentRow(-1)
+	: QWidget(parent) 
 {
+	currentRow = -1;
 	ui.setupUi(this);
 	ui.tableView->init("PageSnippets");
 
@@ -38,18 +39,18 @@ void PageQuotes::onCurrentRowChanged()
 
 void PageQuotes::onAdd()
 {
-	AddSnippetDlg* dlg = new AddSnippetDlg(this);
+	AddQuoteDlg* dlg = new AddQuoteDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
-	dlg->setWindowTitle(tr("Add Snippet"));
+	dlg->setWindowTitle(tr("Add Quote"));
 	dlg->setSnippetID(getNextID("Snippets", "ID"));
 	dlg->show();
 }
 
 void PageQuotes::onEdit()
 {
-	AddSnippetDlg* dlg = new AddSnippetDlg(this);
+	AddQuoteDlg* dlg = new AddQuoteDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
-	dlg->setWindowTitle(tr("Edit Snippet"));
+	dlg->setWindowTitle(tr("Edit Quote"));
 	dlg->setSnippetID(getID(currentRow));
 	dlg->show();
 }
@@ -61,7 +62,7 @@ void PageQuotes::onDel()
 	{
 		QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delSnippet(getID(idx.row()));
+			delQuote(getID(idx.row()));
 		model.select();
 	}
 }
@@ -92,8 +93,4 @@ void PageQuotes::jumpToSnippet(int snippetID)
 		ui.tableView->selectRow(indexes.at(0).row());
 		ui.tableView->setFocus();
 	}
-}
-
-void PageQuotes::saveSectionSizes() {
-	ui.tableView->saveSectionSizes();
 }

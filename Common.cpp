@@ -359,7 +359,7 @@ int getMaxCoauthor()
 	return query.next() ? query.value(0).toInt() : 0;
 }
 
-void updateSnippet(int id, const QString& title, const QString& content)
+void updateQuote(int id, const QString& title, const QString& content)
 {
 	if(id < 0 || title.isEmpty() || content.isEmpty())
 		return;
@@ -381,7 +381,7 @@ int getPaperID(const QString& title)
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
-void addPaperSnippet(int paperID, int snippetID)
+void addPaperQuote(int paperID, int snippetID)
 {
 	if(paperID < 0 || snippetID < 0)
 		return;
@@ -402,7 +402,7 @@ void addSimplePaper(int id, const QString& title)
 													.arg(id).arg(title));
 }
 
-void delSnippet(int id)
+void delQuote(int id)
 {
 	if(id < 0)
 		return;
@@ -466,7 +466,7 @@ void updateAttached(int paperID)  // update Attached section of Papers table
 								.arg(isAttached(paperID)).arg(paperID));
 }
 
-int getSnippetID(const QString& title)
+int getQuoteID(const QString& title)
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("select ID from Snippets where Title = \"%1\"").arg(title));

@@ -17,7 +17,7 @@ protected:
 signals:
 	void showRelated();
 	void showCoauthored();
-	void addSnippet();
+	void addQuote();
 };
 
 #endif // PAPERTABLEVIEW_H

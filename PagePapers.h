@@ -40,9 +40,9 @@ private slots:
 	void onDelTagFromPaper();
 	void onFilterPapers();
 
-	void onAddSnippet();
-	void onEditSnippet(const QModelIndex& idx);
-	void onDelSnippets();
+	void onAddQuote();
+	void onEditQuote(const QModelIndex& idx);
+	void onDelQuotes();
 
 signals:
 	void tableValid(bool);

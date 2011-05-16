@@ -22,24 +22,27 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	actionGroup->addAction(ui.actionQuotes);
 	actionGroup->addAction(ui.actionDictionary);
 
-	connect(ui.actionOptions,    SIGNAL(triggered()), this, SLOT(onOptions()));
-	connect(ui.actionAbout,      SIGNAL(triggered()), this, SLOT(onAbout()));
-	connect(ui.actionPapers,     SIGNAL(triggered()), this, SLOT(onPapers()));
-	connect(ui.actionQuotes,     SIGNAL(triggered()), this, SLOT(onQuotes()));
-	connect(ui.actionDictionary, SIGNAL(triggered()), this, SLOT(onDictionary()));
-	connect(ui.actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+	connect(ui.actionOptions,     SIGNAL(triggered()), this, SLOT(onOptions()));
+	connect(ui.actionAbout,       SIGNAL(triggered()), this, SLOT(onAbout()));
+	connect(ui.actionPapers,      SIGNAL(triggered()), this, SLOT(onPapers()));
+	connect(ui.actionQuotes,      SIGNAL(triggered()), this, SLOT(onQuotes()));
+	connect(ui.actionDictionary,  SIGNAL(triggered()), this, SLOT(onDictionary()));
+	connect(ui.actionAboutQt,     SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionImportPaper, SIGNAL(triggered()), pagePapers, SLOT(onImport()));
 	connect(ui.actionAddPaper,    SIGNAL(triggered()), pagePapers, SLOT(onAddPaper()));
 	connect(ui.actionDelPaper,    SIGNAL(triggered()), pagePapers, SLOT(onDelPaper()));
-	connect(ui.actionAddSnippet,  SIGNAL(triggered()), pageQuotes, SLOT(onAdd()));
-	connect(ui.actionDelSnippet,  SIGNAL(triggered()), pageQuotes, SLOT(onDel()));
+	connect(ui.actionAddQuote,    SIGNAL(triggered()), pageQuotes, SLOT(onAdd()));
+	connect(ui.actionDelQuote,    SIGNAL(triggered()), pageQuotes, SLOT(onDel()));
+	connect(ui.actionAddPhrase,   SIGNAL(triggered()), pageDictionary, SLOT(onAdd()));
+	connect(ui.actionDelPhrase,   SIGNAL(triggered()), pageDictionary, SLOT(onDel()));
 
-	connect(ui.toolBarSearch, SIGNAL(search(QString)),         pagePapers,   SLOT(onSearch(QString)));
+	connect(ui.toolBarSearch, SIGNAL(search(QString)),         pagePapers, SLOT(onSearch(QString)));
     connect(ui.toolBarSearch, SIGNAL(search(QString)),         pageQuotes, SLOT(onSearch(QString)));
-	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers,   SLOT(onFullTextSearch(QString)));
+	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
 	
-	connect(pagePapers,   SIGNAL(tableValid(bool)), ui.actionDelPaper,   SLOT(setEnabled(bool)));
-	connect(pageQuotes, SIGNAL(tableValid(bool)), ui.actionDelSnippet, SLOT(setEnabled(bool)));
+	connect(pagePapers,     SIGNAL(tableValid(bool)), ui.actionDelPaper,  SLOT(setEnabled(bool)));
+	connect(pageQuotes,     SIGNAL(tableValid(bool)), ui.actionDelQuote,  SLOT(setEnabled(bool)));
+	connect(pageDictionary, SIGNAL(tableValid(bool)), ui.actionDelPhrase, SLOT(setEnabled(bool)));
 
 	// load settings
 	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());
@@ -69,7 +72,6 @@ void MainWindow::closeEvent(QCloseEvent*)
 	}
 	pagePapers->saveSectionSizes();   // save the settings before the dtr
 	pagePapers->saveSplitterSizes();
-	pageQuotes->saveSectionSizes();
 	setting->destroySettingManager();
 }
 
@@ -108,8 +110,10 @@ void MainWindow::onPapers()
 	ui.actionImportPaper->setVisible(true);
 	ui.actionAddPaper->setVisible(true);
 	ui.actionDelPaper->setVisible(true);
-	ui.actionAddSnippet->setVisible(false);
-	ui.actionDelSnippet->setVisible(false);
+	ui.actionAddQuote->setVisible(false);
+	ui.actionDelQuote->setVisible(false);
+	ui.actionAddPhrase->setVisible(false);
+	ui.actionDelPhrase->setVisible(false);
 }
 
 void MainWindow::onQuotes() 
@@ -120,8 +124,10 @@ void MainWindow::onQuotes()
 	ui.actionImportPaper->setVisible(false);
 	ui.actionAddPaper->setVisible(false);
 	ui.actionDelPaper->setVisible(false);
-	ui.actionAddSnippet->setVisible(true);
-	ui.actionDelSnippet->setVisible(true);
+	ui.actionAddQuote->setVisible(true);
+	ui.actionDelQuote->setVisible(true);
+	ui.actionAddPhrase->setVisible(false);
+	ui.actionDelPhrase->setVisible(false);
 }
 
 void MainWindow::onDictionary()
@@ -132,8 +138,10 @@ void MainWindow::onDictionary()
 	ui.actionImportPaper->setVisible(false);
 	ui.actionAddPaper->setVisible(false);
 	ui.actionDelPaper->setVisible(false);
-	ui.actionAddSnippet->setVisible(false);
-	ui.actionDelSnippet->setVisible(false);
+	ui.actionAddQuote->setVisible(false);
+	ui.actionDelQuote->setVisible(false);
+	ui.actionAddPhrase->setVisible(true);
+	ui.actionDelPhrase->setVisible(true);
 }
 
 void MainWindow::jumpToPaper(const QString& title)

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QSqlTableModel>
-#include "ui_PageSnippets.h"
+#include "ui_PageQuotes.h"
 
 class PageQuotes : public QWidget
 {
@@ -12,13 +12,10 @@ class PageQuotes : public QWidget
 public:
 	PageQuotes(QWidget *parent = 0);
 	void jumpToSnippet(int snippetID);
-	void saveSectionSizes();
-
-public slots:
-	void onAdd();
-	void onDel();	
 
 private slots:
+	void onAdd();
+	void onDel();	
 	void onCurrentRowChanged();
 	void onSearch(const QString& target);
 	void onEdit();
@@ -32,7 +29,7 @@ private:
 	int getID(int row) const;
 
 private:
-	Ui::PageSnippetsClass ui;
+	Ui::PageQuotesClass ui;
 
 	QSqlTableModel model;
 	int currentRow;

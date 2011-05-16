@@ -12,9 +12,19 @@ class PageDictionary : public QWidget
 public:
 	PageDictionary(QWidget *parent = 0);
 
+public slots:
+	void onAdd();
+	void onDel();
+	void onEdit();
+	void onCurrentRowChanged();
+
+signals:
+	void tableValid(bool);
+
 private:
 	Ui::PageDictionary ui;
 	QSqlTableModel model;
+	int currentRow;
 };
 
 #endif // PAGEDICTIONARY_H

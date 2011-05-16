@@ -2,7 +2,7 @@
 #include "Common.h"
 #include "OptionDlg.h"
 #include "PaperDlg.h"
-#include "AddSnippetDlg.h"
+#include "AddQuoteDlg.h"
 #include "Importer.h"
 #include "../EnglishName/EnglishName.h"
 #include "AddTagDlg.h"
@@ -50,7 +50,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
 	ui.widgetWordCloud->updateSizes();   // init the size of the labels
-	ui.tvSnippets->setModel(&modelSnippets);
+	ui.tvQuotes->setModel(&modelSnippets);
 
 	loadSplitterSizes();
 
@@ -60,14 +60,14 @@ PagePapers::PagePapers(QWidget *parent)
 			this, SLOT(onCurrentRowChanged(QModelIndex)));
 	connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
 			this, SLOT(onSubmitPaper()));
-	connect(ui.tvPapers,   SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
-	connect(ui.tvPapers,   SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
-	connect(ui.tvPapers,   SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
-	connect(ui.tvPapers,   SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
-	connect(ui.tvPapers,   SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
-	connect(ui.tvSnippets, SIGNAL(addSnippet()),     this, SLOT(onAddSnippet()));
-	connect(ui.tvSnippets, SIGNAL(delSnippets()),    this, SLOT(onDelSnippets()));
-	connect(ui.tvSnippets, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditSnippet(QModelIndex)));
+	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
+	connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
+	connect(ui.tvPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
+	connect(ui.tvPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
+	connect(ui.tvPapers, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
+	connect(ui.tvQuotes, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
+	connect(ui.tvQuotes, SIGNAL(delQuotes()),      this, SLOT(onDelQuotes()));
+	connect(ui.tvQuotes, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditQuote(QModelIndex)));
 
 	connect(ui.widgetWordCloud, SIGNAL(filter()),    this, SLOT(onFilterPapers()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
@@ -424,11 +424,11 @@ void PagePapers::hideCoauthor()
 	QSqlDatabase::database().commit();
 }
 
-void PagePapers::onAddSnippet()
+void PagePapers::onAddQuote()
 {
-	AddSnippetDlg* dlg = new AddSnippetDlg(this);
+	AddQuoteDlg* dlg = new AddQuoteDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
-	dlg->setWindowTitle(tr("Add Snippet"));
+	dlg->setWindowTitle(tr("Add Quote"));
 	dlg->setSnippetID(getNextID("Snippets", "ID"));
 	dlg->addRef(getPaperTitle(currentPaperID));
 	dlg->show();
@@ -439,32 +439,32 @@ void PagePapers::updateSnippets()
 	modelSnippets.setQuery(tr("select Title, Snippet from Snippets where id in \
 							  (select Snippet from PaperSnippet where Paper = %1) order by Title")
 							  .arg(currentPaperID));
-	ui.tvSnippets->resizeColumnToContents(0);
+	ui.tvQuotes->resizeColumnToContents(0);
 }
 
-void PagePapers::onEditSnippet(const QModelIndex& idx)
+void PagePapers::onEditQuote(const QModelIndex& idx)
 {
-	AddSnippetDlg* dlg = new AddSnippetDlg(this);
+	AddQuoteDlg* dlg = new AddQuoteDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
-	dlg->setWindowTitle(tr("Edit Snippet"));
+	dlg->setWindowTitle(tr("Edit Quote"));
 	dlg->setSnippetID(getSnippetID(idx.row()));
 	dlg->show();
 }
 
-void PagePapers::onDelSnippets()
+void PagePapers::onDelQuotes()
 {
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		QModelIndexList idxList = ui.tvSnippets->selectionModel()->selectedRows();
+		QModelIndexList idxList = ui.tvQuotes->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delSnippet(getSnippetID(idx.row()));
+			delQuote(getSnippetID(idx.row()));
 		onResetPapers();
 	}
 }
 
 int PagePapers::getSnippetID(int row) const {
-	return ::getSnippetID(modelSnippets.data(modelSnippets.index(row, 0)).toString());
+	return ::getQuoteID(modelSnippets.data(modelSnippets.index(row, 0)).toString());
 }
 
 void PagePapers::jumpToPaper(const QString& title) {

@@ -133,16 +133,16 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tabSnippets">
+       <widget class="QWidget" name="tabQuotes">
         <attribute name="title">
-         <string>Snippets</string>
+         <string>Quotes</string>
         </attribute>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="margin">
           <number>5</number>
          </property>
          <item>
-          <widget class="SnippetsTableView" name="tvSnippets">
+          <widget class="QuotesTableView" name="tvQuotes">
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
@@ -231,7 +231,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>76</width>
+         <width>85</width>
          <height>413</height>
         </rect>
        </property>
@@ -270,9 +270,9 @@
    <header>PaperTableView.h</header>
   </customwidget>
   <customwidget>
-   <class>SnippetsTableView</class>
+   <class>QuotesTableView</class>
    <extends>QTableView</extends>
-   <header>SnippetsTableView.h</header>
+   <header>QuotesTableView.h</header>
   </customwidget>
   <customwidget>
    <class>TagsWidget</class>

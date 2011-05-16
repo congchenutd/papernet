@@ -23,6 +23,12 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QTableView" name="tableView">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
       <property name="sortingEnabled">
        <bool>true</bool>
       </property>
@@ -103,7 +109,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>76</width>
+         <width>85</width>
          <height>263</height>
         </rect>
        </property>

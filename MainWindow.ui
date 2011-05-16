@@ -88,8 +88,10 @@
    <addaction name="actionImportPaper"/>
    <addaction name="actionAddPaper"/>
    <addaction name="actionDelPaper"/>
-   <addaction name="actionAddSnippet"/>
-   <addaction name="actionDelSnippet"/>
+   <addaction name="actionAddQuote"/>
+   <addaction name="actionDelQuote"/>
+   <addaction name="actionAddPhrase"/>
+   <addaction name="actionDelPhrase"/>
   </widget>
   <widget class="SearchBar" name="toolBarSearch">
    <property name="windowTitle">
@@ -164,16 +166,16 @@
     <string>Add paper</string>
    </property>
   </action>
-  <action name="actionAddSnippet">
+  <action name="actionAddQuote">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
    </property>
    <property name="text">
-    <string>Add snippet</string>
+    <string>Add Quote</string>
    </property>
    <property name="toolTip">
-    <string>Add snippet</string>
+    <string>Add Quote</string>
    </property>
   </action>
   <action name="actionDelPaper">
@@ -191,7 +193,7 @@
     <string>Delete paper</string>
    </property>
   </action>
-  <action name="actionDelSnippet">
+  <action name="actionDelQuote">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -200,10 +202,10 @@
      <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
    </property>
    <property name="text">
-    <string>Delete snippet</string>
+    <string>Delete Quote</string>
    </property>
    <property name="toolTip">
-    <string>Delete snippet</string>
+    <string>Delete Quote</string>
    </property>
   </action>
   <action name="actionImportPaper">
@@ -233,6 +235,27 @@
    </property>
    <property name="text">
     <string>Dictionary</string>
+   </property>
+  </action>
+  <action name="actionAddPhrase">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Phrase</string>
+   </property>
+  </action>
+  <action name="actionDelPhrase">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Phrase</string>
    </property>
   </action>
  </widget>

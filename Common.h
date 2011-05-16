@@ -15,6 +15,7 @@ void updateAttached(int paperID);
 int getMaxProximity();
 int getMaxCoauthor();
 AttachmentStatus isAttached(int paperID);
+int getPaperID(const QString& title);
 
 void delTag  (const QString& tagName);
 int getTagID(const QString& tagName);
@@ -46,12 +47,11 @@ QString getPDFPath(int paperID);
 QString convertSlashes(const QString& link);
 void openUrl(const QString& url);
 
-void updateSnippet(int id, const QString& title, const QString& content);
-int getPaperID(const QString& title);
-void addPaperSnippet(int paperID, int snippetID);
+void updateQuote(int id, const QString& title, const QString& content);
+void addPaperQuote(int paperID, int snippetID);
 void addSimplePaper(int id, const QString& title);
-void delSnippet(int id);
-int getSnippetID(const QString& title);
+void delQuote(int id);
+int getQuoteID(const QString& title);
 
 enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE,
 	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE,

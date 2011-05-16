@@ -77,8 +77,8 @@ void createTables()
 			   )");
 	query.exec("create table Dictionary( \
 					ID int primary key, \
-					Phrase  varchar, \
-					Explain varchar \
+					Phrase      varchar, \
+					Explanation varchar \
 			   )");
 	query.exec("create table DictionaryTags( \
 					ID int primary key, \

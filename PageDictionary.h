@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "ui_PageDictionary.h"
+#include <QSqlTableModel>
 
 class PageDictionary : public QWidget
 {
@@ -10,10 +11,10 @@ class PageDictionary : public QWidget
 
 public:
 	PageDictionary(QWidget *parent = 0);
-	~PageDictionary();
 
 private:
 	Ui::PageDictionary ui;
+	QSqlTableModel model;
 };
 
 #endif // PAGEDICTIONARY_H

@@ -14,6 +14,9 @@
    <string>PagePapers</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <property name="margin">
+    <number>5</number>
+   </property>
    <item>
     <widget class="QSplitter" name="splitterHorizontal">
      <property name="orientation">
@@ -229,7 +232,7 @@
          <x>0</x>
          <y>0</y>
          <width>76</width>
-         <height>399</height>
+         <height>413</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_4">

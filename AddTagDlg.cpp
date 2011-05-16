@@ -2,13 +2,12 @@
 #include "Common.h"
 #include <QCompleter>
 
-AddTagDlg::AddTagDlg(QWidget* parent) :
-	QDialog(parent)
+AddTagDlg::AddTagDlg(const QString& tableName, QWidget* parent) : QDialog(parent)
 {
 	ui.setupUi(this);
 
 	// a compeleter gives a hint of the input
-	model.setTable("Tags");
+	model.setTable(tableName);
 	model.select();
 	model.sort(TAG_NAME, Qt::AscendingOrder);
 	QCompleter* completer = new QCompleter(this);

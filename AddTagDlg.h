@@ -10,7 +10,7 @@ class AddTagDlg : public QDialog
 	Q_OBJECT
 
 public:
-	AddTagDlg(QWidget* parent = 0);
+	AddTagDlg(const QString& tableName, QWidget* parent = 0);
 	QString getText() const;
 	void    setText(const QString& text);
 

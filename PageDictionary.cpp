@@ -1,6 +1,7 @@
 #include "PageDictionary.h"
 #include "Common.h"
 #include "AddPhraseDlg.h"
+#include "AddTagDlg.h"
 #include <QMessageBox>
 
 PageDictionary::PageDictionary(QWidget *parent)
@@ -20,6 +21,10 @@ PageDictionary::PageDictionary(QWidget *parent)
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
+	connect(ui.widgetWordCloud, SIGNAL(filter()),    this, SLOT(onFilterPhrases()));
+	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
+	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPhrase()));
+	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPhrase()));
 }
 
 void PageDictionary::onAdd()
@@ -43,8 +48,8 @@ void PageDictionary::onDel()
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
-		//foreach(QModelIndex idx, idxList)
-		//	delSnippet(getID(idx.row()));
+		foreach(QModelIndex idx, idxList)
+			delPhrase(model.data(model.index(idx.row(), DICTIONARY_ID)).toInt());
 		model.select();
 	}
 }
@@ -69,4 +74,33 @@ void PageDictionary::onCurrentRowChanged()
 	bool valid = !idxList.isEmpty();
 	currentRow = valid ? idxList.front().row() : -1;	
 	emit tableValid(valid);
+}
+
+void PageDictionary::onAddTag()
+{
+	AddTagDlg dlg("DictionaryTags", this);
+	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
+	{
+		int tagID = getNextID("DictionaryTags", "ID");
+		addTag("DictionaryTags", tagID, dlg.getText());
+//		addPaperTag(currentPaperID, tagID);  // auto add this tag to current paper
+//		addPhraseTag(cu)
+		ui.widgetWordCloud->addWord(dlg.getText(), 20);
+		ui.widgetWordCloud->updateSizes();
+	}
+}
+
+void PageDictionary::onAddTagToPhrase()
+{
+
+}
+
+void PageDictionary::onDelTagFromPhrase()
+{
+
+}
+
+void PageDictionary::onFilterPhrases()
+{
+
 }

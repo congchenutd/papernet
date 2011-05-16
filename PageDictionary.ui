@@ -109,7 +109,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>85</width>
+         <width>77</width>
          <height>263</height>
         </rect>
        </property>
@@ -118,7 +118,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="WordCloudWidget" name="widgetWordCloud" native="true"/>
+         <widget class="PhraseTagsWidget" name="widgetWordCloud" native="true"/>
         </item>
        </layout>
       </widget>
@@ -130,9 +130,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>WordCloudWidget</class>
+   <class>PhraseTagsWidget</class>
    <extends>QWidget</extends>
-   <header>../WordCloud/WordCloudWidget.h</header>
+   <header>PhraseTagsWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

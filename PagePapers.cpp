@@ -287,11 +287,11 @@ void PagePapers::onSearch(const QString& target)
 
 void PagePapers::onAddTag()
 {
-	AddTagDlg dlg(this);
+	AddTagDlg dlg("Tags", this);
 	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
 	{
 		int tagID = getNextID("Tags", "ID");
-		addTag(tagID, dlg.getText());
+		addTag("Tags", tagID, dlg.getText());
 		addPaperTag(currentPaperID, tagID);  // auto add this tag to current paper
 		ui.widgetWordCloud->addWord(dlg.getText(), 20);
 		ui.widgetWordCloud->updateSizes();
@@ -302,7 +302,7 @@ void PagePapers::onAddTagToPaper()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		addPaperTag(currentPaperID, ::getTagID(tag->text()));
+		addPaperTag(currentPaperID, ::getTagID("Tags", tag->text()));
 	ui.widgetWordCloud->updateSizes();
 	updateTags();
 }
@@ -310,14 +310,14 @@ void PagePapers::onAddTagToPaper()
 void PagePapers::updateTags()
 {
 	ui.widgetWordCloud->unselectAll();
-	ui.widgetWordCloud->highLight(getTags(currentPaperID));
+	ui.widgetWordCloud->highLight(getTags("Tags", currentPaperID));
 }
 
 void PagePapers::onDelTagFromPaper()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		delPaperTag(currentPaperID, ::getTagID(tag->text()));
+		delPaperTag(currentPaperID, ::getTagID("Tags", tag->text()));
 	ui.widgetWordCloud->updateSizes();
 	updateTags();
 }
@@ -354,7 +354,7 @@ void PagePapers::onFilterPapers()
 	QStringList tagClauses;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		tagClauses << tr("Tag = %1").arg(getTagID(tag->text()));
+		tagClauses << tr("Tag = %1").arg(getTagID("Tags", tag->text()));
 	modelPapers.setFilter(tr("ID in (select Paper from PaperTag where %1)")
 								.arg(tagClauses.join(" OR ")));
 }

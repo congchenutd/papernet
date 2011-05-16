@@ -49,7 +49,7 @@ void TagsWidget::onDel()
 	foreach(WordLabel* word, selected)   // del selected
 	{
 		removeWord(word);
-		delTag(word->text());
+		delTag("Tags", word->text());
 	}
 }
 
@@ -73,7 +73,7 @@ void TagsWidget::onRename()
 	QList<WordLabel*> selected = getSelected();
 	if(selected.size() > 1)
 		return;
-	AddTagDlg dlg(this);
+	AddTagDlg dlg("Tags", this);
 	dlg.setWindowTitle(tr("Edit Tag"));
 	WordLabel* word = selected.front();
 	QString oldName = word->text();
@@ -81,6 +81,6 @@ void TagsWidget::onRename()
 	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
 	{
 		word->setText(dlg.getText());
-		renameTag(oldName, dlg.getText());
+		renameTag("Tags", oldName, dlg.getText());
 	}
 }

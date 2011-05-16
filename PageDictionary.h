@@ -12,11 +12,16 @@ class PageDictionary : public QWidget
 public:
 	PageDictionary(QWidget *parent = 0);
 
-public slots:
+private slots:
 	void onAdd();
 	void onDel();
 	void onEdit();
 	void onCurrentRowChanged();
+
+	void onAddTag();
+	void onAddTagToPhrase();
+	void onDelTagFromPhrase();
+	void onFilterPhrases();
 
 signals:
 	void tableValid(bool);

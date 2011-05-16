@@ -17,12 +17,12 @@ int getMaxCoauthor();
 AttachmentStatus isAttached(int paperID);
 int getPaperID(const QString& title);
 
-void delTag  (const QString& tagName);
-int getTagID(const QString& tagName);
-void updateTagSize(int tagID);
-QStringList getTags(int paperID);
-void renameTag(const QString& oldName, const QString& newName);
-void addTag(int id, const QString& name);
+void addTag(const QString& tableName, int id, const QString& name);
+void delTag (const QString& tableName, const QString& tagName);
+int getTagID(const QString& tableName, const QString& tagName);
+void updateTagSize(const QString& tableName, int tagID);
+QStringList getTags(const QString& tableName, int paperID);
+void renameTag(const QString& tableName, const QString& oldName, const QString& newName);
 
 void addPaperTag(int paperID, int tagID);
 void delPaperTag(int paperID, int tagID);
@@ -52,6 +52,8 @@ void addPaperQuote(int paperID, int snippetID);
 void addSimplePaper(int id, const QString& title);
 void delQuote(int id);
 int getQuoteID(const QString& title);
+
+void delPhrase(int id);
 
 enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE,
 	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE,

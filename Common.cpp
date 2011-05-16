@@ -127,17 +127,17 @@ int getTagID(const QString& tagName)
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
-void delTag(const QString& tagName)
+void delTag(const QString& tableName, const QString& tagName)
 {
 	int tagID = getTagID(tagName);
 	if(tagID < 0)
 		return;
 	QSqlQuery query;
-	query.exec(QObject::tr("delete from Tags where ID = %1").arg(tagID));
+	query.exec(QObject::tr("delete from %1 where ID = %2").arg(tableName).arg(tagID));
 	query.exec(QObject::tr("delete from PaperTag where Tag=%1").arg(tagID));
 }
 
-void addPaperTag(int paperID, int tagID)
+void addPaperTag(const QString& tableName, int paperID, int tagID)
 {
 	if(paperID < 0 || tagID < 0)
 		return;
@@ -145,10 +145,10 @@ void addPaperTag(int paperID, int tagID)
 	QSqlQuery query;
 	query.exec(QObject::tr("insert into PaperTag values(%1, %2)")
 												.arg(paperID).arg(tagID));
-	updateTagSize(tagID);
+	updateTagSize(tableName, tagID);
 }
 
-void delPaperTag(int paperID, int tagID)
+void delPaperTag(const QString& tableName, int paperID, int tagID)
 {
 	if(paperID < 0 || tagID < 0)
 		return;
@@ -156,7 +156,7 @@ void delPaperTag(int paperID, int tagID)
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from PaperTag where Paper=%1 and Tag=%2")
 												.arg(paperID).arg(tagID));
-	updateTagSize(tagID);
+	updateTagSize(tableName, tagID);
 }
 
 bool addAttachment(int paperID, const QString& attachmentName, const QString& filePath)
@@ -518,7 +518,7 @@ QString getPDFPath(int paperID) {
 	return pdfDir + "/" + getValidTitle(paperID) + ".pdf";
 }
 
-void updateTagSize(int tagID)
+void updateTagSize(const QString& tableName, int tagID)
 {
 	if(tagID < 0)
 		return;
@@ -550,12 +550,19 @@ void renameTag(const QString& oldName, const QString& newName)
 			   .arg(newName).arg(oldName));
 }
 
-void addTag(int id, const QString& name)
+void addTag(const QString& tableName, int id, const QString& name)
 {
 	if(id < 0 || name.isEmpty())
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("insert into Tags values(%1, \"%2\", 0)")
-			   .arg(id).arg(name));
+	query.exec(QObject::tr("insert into %1 values(%2, \"%3\", 0)")
+								.arg(tableName).arg(id).arg(name));
+}
+
+void delPhrase(int id)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("delete from Dictionary where ID = %1")    .arg(id));
+	query.exec(QObject::tr("delete from PhraseTag  where Phrase = %1").arg(id));
 }

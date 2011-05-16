@@ -118,7 +118,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="PhraseTagsWidget" name="widgetWordCloud" native="true"/>
+         <widget class="TagsWidget" name="widgetWordCloud" native="true"/>
         </item>
        </layout>
       </widget>
@@ -130,9 +130,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>PhraseTagsWidget</class>
+   <class>TagsWidget</class>
    <extends>QWidget</extends>
-   <header>PhraseTagsWidget.h</header>
+   <header>TagsWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

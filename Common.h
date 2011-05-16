@@ -17,15 +17,13 @@ int getMaxCoauthor();
 AttachmentStatus isAttached(int paperID);
 int getPaperID(const QString& title);
 
-void addTag(const QString& tableName, int id, const QString& name);
-void delTag (const QString& tableName, const QString& tagName);
-int getTagID(const QString& tableName, const QString& tagName);
-void updateTagSize(const QString& tableName, int tagID);
-QStringList getTags(const QString& tableName, int paperID);
+int  getTagID (const QString& tableName, const QString& tagName);
+void delTag   (const QString& tableName, const QString& tagName);
 void renameTag(const QString& tableName, const QString& oldName, const QString& newName);
+QStringList getTagsOfPaper(int paperID);
 
-void addPaperTag(int paperID, int tagID);
-void delPaperTag(int paperID, int tagID);
+void updatePaperTagSize(int tagID);
+void updatePhraseTagSize(int tagID);
 
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName);
 void delAttachment(int paperID, const QString& attachmentName);

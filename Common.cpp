@@ -118,45 +118,23 @@ void delPaper(int paperID)
 	query.exec(QObject::tr("delete from PaperSnippet where Paper = %1").arg(paperID));
 }
 
-int getTagID(const QString& tagName)
+int getTagID(const QString& tableName, const QString& tagName)
 {
 	if(tagName.isEmpty())
 		return -1;
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from Tags where Name = \"%1\"").arg(tagName));
+	query.exec(QObject::tr("select ID from %1 where Name = \"%2\"").arg(tableName).arg(tagName));
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
 void delTag(const QString& tableName, const QString& tagName)
 {
-	int tagID = getTagID(tagName);
+	int tagID = getTagID(tableName, tagName);
 	if(tagID < 0)
 		return;
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from %1 where ID = %2").arg(tableName).arg(tagID));
 	query.exec(QObject::tr("delete from PaperTag where Tag=%1").arg(tagID));
-}
-
-void addPaperTag(const QString& tableName, int paperID, int tagID)
-{
-	if(paperID < 0 || tagID < 0)
-		return;
-
-	QSqlQuery query;
-	query.exec(QObject::tr("insert into PaperTag values(%1, %2)")
-												.arg(paperID).arg(tagID));
-	updateTagSize(tableName, tagID);
-}
-
-void delPaperTag(const QString& tableName, int paperID, int tagID)
-{
-	if(paperID < 0 || tagID < 0)
-		return;
-
-	QSqlQuery query;
-	query.exec(QObject::tr("delete from PaperTag where Paper=%1 and Tag=%2")
-												.arg(paperID).arg(tagID));
-	updateTagSize(tableName, tagID);
 }
 
 bool addAttachment(int paperID, const QString& attachmentName, const QString& filePath)
@@ -518,7 +496,7 @@ QString getPDFPath(int paperID) {
 	return pdfDir + "/" + getValidTitle(paperID) + ".pdf";
 }
 
-void updateTagSize(const QString& tableName, int tagID)
+void updatePaperTagSize(int tagID)
 {
 	if(tagID < 0)
 		return;
@@ -529,7 +507,7 @@ void updateTagSize(const QString& tableName, int tagID)
 	query.exec(QObject::tr("update Tags set Size = %1 where ID = %2").arg(size).arg(tagID));
 }
 
-QStringList getTags(int paperID)
+QStringList getTagsOfPaper(int paperID)
 {
 	QStringList tags;
 	QSqlQuery query;
@@ -540,24 +518,14 @@ QStringList getTags(int paperID)
 	return tags;
 }
 
-void renameTag(const QString& oldName, const QString& newName)
+void renameTag(const QString& tableName, const QString& oldName, const QString& newName)
 {
 	if(oldName.isEmpty() || newName.isEmpty())
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("update Tags set Name = \"%1\" where Name = \"%2\"")
-			   .arg(newName).arg(oldName));
-}
-
-void addTag(const QString& tableName, int id, const QString& name)
-{
-	if(id < 0 || name.isEmpty())
-		return;
-
-	QSqlQuery query;
-	query.exec(QObject::tr("insert into %1 values(%2, \"%3\", 0)")
-								.arg(tableName).arg(id).arg(name));
+	query.exec(QObject::tr("update %1 set Name = \"%2\" where Name = \"%3\"")
+			   .arg(tableName).arg(newName).arg(oldName));
 }
 
 void delPhrase(int id)
@@ -565,4 +533,15 @@ void delPhrase(int id)
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Dictionary where ID = %1")    .arg(id));
 	query.exec(QObject::tr("delete from PhraseTag  where Phrase = %1").arg(id));
+}
+
+void updatePhraseTagSize(int tagID)
+{
+	if(tagID < 0)
+		return;
+
+	QSqlQuery query;
+	query.exec(QObject::tr("select count(*) from PhraseTag group by Tag having Tag = %1").arg(tagID));
+	int size = query.next() ? query.value(0).toInt() : 0;
+	query.exec(QObject::tr("update DictionaryTags set Size = %1 where ID = %2").arg(size).arg(tagID));
 }

@@ -30,6 +30,7 @@ private:
 	Ui::PageDictionary ui;
 	QSqlTableModel model;
 	int currentRow;
+	int currentPhraseID;
 };
 
 #endif // PAGEDICTIONARY_H

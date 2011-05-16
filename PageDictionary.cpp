@@ -3,6 +3,7 @@
 #include "AddPhraseDlg.h"
 #include "AddTagDlg.h"
 #include <QMessageBox>
+#include <QSqlQuery>
 
 PageDictionary::PageDictionary(QWidget *parent)
 	: QWidget(parent)
@@ -17,6 +18,9 @@ PageDictionary::PageDictionary(QWidget *parent)
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
 	ui.tableView->resizeColumnToContents(DICTIONARY_PHRASE);
+
+	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag");
+	ui.widgetWordCloud->updateSizes();   // init the size of the labels
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
@@ -72,7 +76,8 @@ void PageDictionary::onCurrentRowChanged()
 {
 	QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();
-	currentRow = valid ? idxList.front().row() : -1;	
+	currentRow = valid ? idxList.front().row() : -1;
+	currentPhraseID = model.data(model.index(currentRow, TAG_ID)).toInt();
 	emit tableValid(valid);
 }
 
@@ -82,17 +87,18 @@ void PageDictionary::onAddTag()
 	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
 	{
 		int tagID = getNextID("DictionaryTags", "ID");
-		addTag("DictionaryTags", tagID, dlg.getText());
-//		addPaperTag(currentPaperID, tagID);  // auto add this tag to current paper
-//		addPhraseTag(cu)
-		ui.widgetWordCloud->addWord(dlg.getText(), 20);
-		ui.widgetWordCloud->updateSizes();
+		ui.widgetWordCloud->addTag(tagID, dlg.getText());
+		ui.widgetWordCloud->addTagToPaper(tagID, currentPhraseID);
 	}
 }
 
 void PageDictionary::onAddTagToPhrase()
 {
-
+	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+	foreach(WordLabel* tag, tags)
+		ui.widgetWordCloud->addTagToPaper(getTagID("DictionaryTags", tag->text()),
+										  currentPhraseID);
+	highLightTags();
 }
 
 void PageDictionary::onDelTagFromPhrase()

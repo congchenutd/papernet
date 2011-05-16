@@ -51,7 +51,7 @@ private:
 	int  getPaperID(int row) const;
 	int  idToRow   (int id)  const;
 	void selectID(int id);
-	void updateTags();
+	void highLightTags();
 	void hideRelated();
 	void hideCoauthor();
 	void mergeRecord(int row, const ImportResult& record);

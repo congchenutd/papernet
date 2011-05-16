@@ -49,6 +49,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
+	ui.widgetWordCloud->setTableNames("Tags", "PaperTag");
 	ui.widgetWordCloud->updateSizes();   // init the size of the labels
 	ui.tvQuotes->setModel(&modelSnippets);
 
@@ -291,10 +292,8 @@ void PagePapers::onAddTag()
 	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
 	{
 		int tagID = getNextID("Tags", "ID");
-		addTag("Tags", tagID, dlg.getText());
-		addPaperTag(currentPaperID, tagID);  // auto add this tag to current paper
-		ui.widgetWordCloud->addWord(dlg.getText(), 20);
-		ui.widgetWordCloud->updateSizes();
+		ui.widgetWordCloud->addTag(tagID, dlg.getText());
+		ui.widgetWordCloud->addTagToPaper(tagID, currentPaperID);
 	}
 }
 
@@ -302,24 +301,24 @@ void PagePapers::onAddTagToPaper()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		addPaperTag(currentPaperID, ::getTagID("Tags", tag->text()));
-	ui.widgetWordCloud->updateSizes();
-	updateTags();
+		ui.widgetWordCloud->addTagToPaper(getTagID("Tags", tag->text()),
+										  currentPaperID);
+	highLightTags();
 }
 
-void PagePapers::updateTags()
+void PagePapers::highLightTags()
 {
 	ui.widgetWordCloud->unselectAll();
-	ui.widgetWordCloud->highLight(getTags("Tags", currentPaperID));
+	ui.widgetWordCloud->highLight(getTagsOfPaper(currentPaperID));
 }
 
 void PagePapers::onDelTagFromPaper()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		delPaperTag(currentPaperID, ::getTagID("Tags", tag->text()));
-	ui.widgetWordCloud->updateSizes();
-	updateTags();
+		ui.widgetWordCloud->removeTagFromPaper(getTagID("Tags", tag->text()), 
+											   currentPaperID);
+	highLightTags();
 }
 
 void PagePapers::onResetPapers()
@@ -342,7 +341,7 @@ void PagePapers::onClicked(const QModelIndex& idx)
 {
 	currentRow = idx.row();
 	currentPaperID = getPaperID(currentRow);
-	updateTags();
+	highLightTags();
 	ui.widgetAttachments->setPaper(currentPaperID);
 	updateSnippets();
 }

@@ -3,15 +3,17 @@
 
 #include "../WordCloud/WordCloudWidget.h"
 
-class QSqlTableModel;
-
 class TagsWidget : public WordCloudWidget
 {
 	Q_OBJECT
 
 public:
 	TagsWidget(QWidget* parent = 0);
+	void setTableNames(const QString& tagName, const QString& relationName);
 	void updateSizes();
+	void addTag(int id, const QString& text);
+	void addTagToPaper(int tagID, int paperID);
+	void removeTagFromPaper(int tagID, int paperID);
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event);
@@ -27,7 +29,8 @@ signals:
 	void newTag();
 
 private:
-	QSqlTableModel* model;
+	QString tagTableName;
+	QString relationTableName;
 };
 
 #endif // TAGSWIDGET_H

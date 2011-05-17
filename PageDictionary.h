@@ -26,6 +26,7 @@ private slots:
 	void onAddTagToPhrase();
 	void onDelTagFromPhrase();
 	void onFilterPhrases();
+	void onResetPhrases();
 
 signals:
 	void tableValid(bool);

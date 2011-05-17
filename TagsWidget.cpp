@@ -13,17 +13,20 @@ void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 	QMenu menu(this);
 	QAction actionNewTag(tr("New Tag"), this);
 	QAction actionFilter(tr("Show Tagged Items"), this);
+	QAction actionUnFilter(tr("Show All Items"), this);
 	QAction actionAdd   (tr("Add"), this);
 	QAction actionRemove(tr("Remove"), this);
 	QAction actionRename(tr("Rename"), this);
 	QAction actionDel   (tr("Delete"), this);
-	connect(&actionNewTag, SIGNAL(triggered()), this, SIGNAL(newTag()));
-	connect(&actionFilter, SIGNAL(triggered()), this, SIGNAL(filter()));
-	connect(&actionAdd,    SIGNAL(triggered()), this, SIGNAL(addTag()));
-	connect(&actionRemove, SIGNAL(triggered()), this, SIGNAL(removeTag()));
-	connect(&actionRename, SIGNAL(triggered()), this, SLOT(onRename()));
-	connect(&actionDel,    SIGNAL(triggered()), this, SLOT(onDel()));
+	connect(&actionNewTag,   SIGNAL(triggered()), this, SIGNAL(newTag()));
+	connect(&actionFilter,   SIGNAL(triggered()), this, SIGNAL(filter()));
+	connect(&actionUnFilter, SIGNAL(triggered()), this, SIGNAL(unfilter()));
+	connect(&actionAdd,      SIGNAL(triggered()), this, SIGNAL(addTag()));
+	connect(&actionRemove,   SIGNAL(triggered()), this, SIGNAL(removeTag()));
+	connect(&actionRename,   SIGNAL(triggered()), this, SLOT(onRename()));
+	connect(&actionDel,      SIGNAL(triggered()), this, SLOT(onDel()));
 	menu.addAction(&actionNewTag);
+	menu.addAction(&actionUnFilter);
 	if(childAt(event->pos()) != 0)
 	{
 		menu.addAction(&actionFilter);

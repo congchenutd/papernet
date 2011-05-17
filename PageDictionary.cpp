@@ -12,11 +12,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 	ui.setupUi(this);
 	currentRow = -1;
 
-	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
-	model.setTable("Dictionary");
-	model.select();
-	while(model.canFetchMore())
-		model.fetchMore();
+	onResetPhrases();
 
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
@@ -32,6 +28,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.widgetWordCloud, SIGNAL(filter()),    this, SLOT(onFilterPhrases()));
+	connect(ui.widgetWordCloud, SIGNAL(unfilter()),  this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPhrase()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPhrase()));
@@ -123,7 +120,7 @@ void PageDictionary::onFilterPhrases()
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
 		tagClauses << tr("Tag = %1").arg(getTagID("DictionaryTags", tag->text()));
-	model.setFilter(tr("ID in (select Paper from PhraseTag where %1)")
+	model.setFilter(tr("ID in (select Phrase from PhraseTag where %1)")
 									.arg(tagClauses.join(" OR ")));
 }
 
@@ -137,4 +134,13 @@ void PageDictionary::saveGeometry()
 {
 	UserSetting* setting = UserSetting::getInstance();
 	setting->setValue("SplitterDictionary", ui.splitter->saveState());
+}
+
+void PageDictionary::onResetPhrases()
+{
+	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
+	model.setTable("Dictionary");
+	model.select();
+	while(model.canFetchMore())
+		model.fetchMore();
 }

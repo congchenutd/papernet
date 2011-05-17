@@ -27,6 +27,7 @@ private slots:
 
 signals:
 	void filter();
+	void unfilter();
 	void removeTag();
 	void addTag();
 	void newTag();

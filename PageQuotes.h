@@ -1,5 +1,5 @@
-#ifndef PAGESNIPPETS_H
-#define PAGESNIPPETS_H
+#ifndef PAGEQUOTES_H
+#define PAGEQUOTES_H
 
 #include <QWidget>
 #include <QSqlTableModel>
@@ -11,11 +11,11 @@ class PageQuotes : public QWidget
 
 public:
 	PageQuotes(QWidget *parent = 0);
-	void jumpToSnippet(int snippetID);
+	void jumpToQuote(int quoteID);
 
 private slots:
 	void onAdd();
-	void onDel();	
+	void onDel();
 	void onCurrentRowChanged();
 	void onSearch(const QString& target);
 	void onEdit();
@@ -25,7 +25,7 @@ signals:
 	void tableValid(bool);
 
 private:
-	void resetSnippets();
+	void resetQuotes();
 	int getID(int row) const;
 
 private:
@@ -35,4 +35,4 @@ private:
 	int currentRow;
 };
 
-#endif // PAGESNIPPETS_H
+#endif // PAGEQUOTES_H

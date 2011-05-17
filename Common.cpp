@@ -65,15 +65,15 @@ void createTables()
 					Tag   int references Tags  (ID) on delete cascade on update cascade, \
 					primary key (Paper, Tag) \
 				)");
-	query.exec("create table Snippets( \
+	query.exec("create table Quotes( \
 					ID int primary key, \
-					Title   varchar, \
-					Snippet varchar  \
+					Title varchar, \
+					Quote varchar  \
 				)");
-	query.exec("create table PaperSnippet( \
-					Paper   int references Papers  (ID) on delete cascade on update cascade, \
-					Snippet int references Snippets(ID) on delete cascade on update cascade, \
-					primary key (Paper, Snippet) \
+	query.exec("create table PaperQuote( \
+					Paper int references Papers(ID) on delete cascade on update cascade, \
+					Quote int references Quotes(ID) on delete cascade on update cascade, \
+					primary key (Paper, Quote) \
 			   )");
 	query.exec("create table Dictionary( \
 					ID int primary key, \
@@ -86,9 +86,9 @@ void createTables()
 					Size int \
 			  )");
 	query.exec("create table PhraseTag( \
-					Phrase int references Papers(ID) on delete cascade on update cascade, \
-					Tag    int references Tags  (ID) on delete cascade on update cascade, \
-					primary key (Paper, Tag) \
+					Phrase int references Dictionary    (ID) on delete cascade on update cascade, \
+					Tag    int references DictionaryTags(ID) on delete cascade on update cascade, \
+					primary key (Phrase, Tag) \
 			   )");
 }
 
@@ -115,7 +115,7 @@ void delPaper(int paperID)
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Papers where ID = %1").arg(paperID));
 	query.exec(QObject::tr("delete from PaperTag where Paper = %1").arg(paperID));
-	query.exec(QObject::tr("delete from PaperSnippet where Paper = %1").arg(paperID));
+	query.exec(QObject::tr("delete from PaperQuote where Paper = %1").arg(paperID));
 }
 
 int getTagID(const QString& tableName, const QString& tagName)
@@ -343,12 +343,12 @@ void updateQuote(int id, const QString& title, const QString& content)
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("select * from Snippets where ID = %1").arg(id));
+	query.exec(QObject::tr("select * from Quotes where ID = %1").arg(id));
 	if(query.next())
-		query.exec(QObject::tr("update Snippets set Title = \"%1\", Snippet =\"%2\" \
+		query.exec(QObject::tr("update Quotes set Title = \"%1\", Quote =\"%2\" \
 							   where ID = %3").arg(title).arg(content).arg(id));
 	else
-		query.exec(QObject::tr("insert into Snippets values (%1, \"%2\", \"%3\")")
+		query.exec(QObject::tr("insert into Quotes values (%1, \"%2\", \"%3\")")
 										.arg(id).arg(title).arg(content));
 }
 
@@ -359,14 +359,14 @@ int getPaperID(const QString& title)
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
-void addPaperQuote(int paperID, int snippetID)
+void addPaperQuote(int paperID, int quoteID)
 {
-	if(paperID < 0 || snippetID < 0)
+	if(paperID < 0 || quoteID < 0)
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("insert into PaperSnippet values (%1, %2)")
-										.arg(paperID).arg(snippetID));
+	query.exec(QObject::tr("insert into PaperQuote values (%1, %2)")
+										.arg(paperID).arg(quoteID));
 }
 
 // add a paper without detail info
@@ -386,8 +386,8 @@ void delQuote(int id)
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("delete from Snippets where ID = %1").arg(id));
-	query.exec(QObject::tr("delete from PaperSnippet where Snippet = %1").arg(id));
+	query.exec(QObject::tr("delete from Quotes where ID = %1").arg(id));
+	query.exec(QObject::tr("delete from PaperQuote where Quote = %1").arg(id));
 }
 
 bool isTagged(int paperID)
@@ -447,7 +447,7 @@ void updateAttached(int paperID)  // update Attached section of Papers table
 int getQuoteID(const QString& title)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from Snippets where Title = \"%1\"").arg(title));
+	query.exec(QObject::tr("select ID from Quotes where Title = \"%1\"").arg(title));
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
@@ -496,17 +496,6 @@ QString getPDFPath(int paperID) {
 	return pdfDir + "/" + getValidTitle(paperID) + ".pdf";
 }
 
-void updatePaperTagSize(int tagID)
-{
-	if(tagID < 0)
-		return;
-
-	QSqlQuery query;
-	query.exec(QObject::tr("select count(*) from PaperTag group by Tag having Tag = %1").arg(tagID));
-	int size = query.next() ? query.value(0).toInt() : 0;
-	query.exec(QObject::tr("update Tags set Size = %1 where ID = %2").arg(size).arg(tagID));
-}
-
 QStringList getTagsOfPaper(int paperID)
 {
 	QStringList tags;
@@ -533,17 +522,6 @@ void delPhrase(int id)
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from Dictionary where ID = %1")    .arg(id));
 	query.exec(QObject::tr("delete from PhraseTag  where Phrase = %1").arg(id));
-}
-
-void updatePhraseTagSize(int tagID)
-{
-	if(tagID < 0)
-		return;
-
-	QSqlQuery query;
-	query.exec(QObject::tr("select count(*) from PhraseTag group by Tag having Tag = %1").arg(tagID));
-	int size = query.next() ? query.value(0).toInt() : 0;
-	query.exec(QObject::tr("update DictionaryTags set Size = %1 where ID = %2").arg(size).arg(tagID));
 }
 
 QStringList getTagsOfPhrase(int phraseID)

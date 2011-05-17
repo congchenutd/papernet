@@ -51,7 +51,7 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.widgetWordCloud->setTableNames("Tags", "PaperTag");
 	ui.widgetWordCloud->updateSizes();   // init the size of the labels
-	ui.tvQuotes->setModel(&modelSnippets);
+	ui.tvQuotes->setModel(&modelQuotes);
 
 	loadSplitterSizes();
 
@@ -293,7 +293,7 @@ void PagePapers::onAddTag()
 	{
 		int tagID = getNextID("Tags", "ID");
 		ui.widgetWordCloud->addTag(tagID, dlg.getText());
-		ui.widgetWordCloud->addTagToPaper(tagID, currentPaperID);
+		ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
 	}
 }
 
@@ -301,7 +301,7 @@ void PagePapers::onAddTagToPaper()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->addTagToPaper(getTagID("Tags", tag->text()),
+		ui.widgetWordCloud->addTagToItem(getTagID("Tags", tag->text()),
 										  currentPaperID);
 	highLightTags();
 }
@@ -316,7 +316,7 @@ void PagePapers::onDelTagFromPaper()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->removeTagFromPaper(getTagID("Tags", tag->text()), 
+		ui.widgetWordCloud->removeTagFromPaper(getTagID("Tags", tag->text()),
 											   currentPaperID);
 	highLightTags();
 }
@@ -343,7 +343,7 @@ void PagePapers::onClicked(const QModelIndex& idx)
 	currentPaperID = getPaperID(currentRow);
 	highLightTags();
 	ui.widgetAttachments->setPaper(currentPaperID);
-	updateSnippets();
+	updateQuotes();
 }
 
 void PagePapers::onFilterPapers()
@@ -428,15 +428,15 @@ void PagePapers::onAddQuote()
 	AddQuoteDlg* dlg = new AddQuoteDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
 	dlg->setWindowTitle(tr("Add Quote"));
-	dlg->setSnippetID(getNextID("Snippets", "ID"));
+	dlg->setQuoteID(getNextID("Quotes", "ID"));
 	dlg->addRef(getPaperTitle(currentPaperID));
 	dlg->show();
 }
 
-void PagePapers::updateSnippets()
+void PagePapers::updateQuotes()
 {
-	modelSnippets.setQuery(tr("select Title, Snippet from Snippets where id in \
-							  (select Snippet from PaperSnippet where Paper = %1) order by Title")
+	modelQuotes.setQuery(tr("select Title, Quote from Quotes where id in \
+							  (select Quote from PaperQuote where Paper = %1) order by Title")
 							  .arg(currentPaperID));
 	ui.tvQuotes->resizeColumnToContents(0);
 }
@@ -446,7 +446,7 @@ void PagePapers::onEditQuote(const QModelIndex& idx)
 	AddQuoteDlg* dlg = new AddQuoteDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
 	dlg->setWindowTitle(tr("Edit Quote"));
-	dlg->setSnippetID(getSnippetID(idx.row()));
+	dlg->setQuoteID(getQuoteID(idx.row()));
 	dlg->show();
 }
 
@@ -457,13 +457,13 @@ void PagePapers::onDelQuotes()
 	{
 		QModelIndexList idxList = ui.tvQuotes->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delQuote(getSnippetID(idx.row()));
+			delQuote(getQuoteID(idx.row()));
 		onResetPapers();
 	}
 }
 
-int PagePapers::getSnippetID(int row) const {
-	return ::getQuoteID(modelSnippets.data(modelSnippets.index(row, 0)).toString());
+int PagePapers::getQuoteID(int row) const {
+	return ::getQuoteID(modelQuotes.data(modelQuotes.index(row, 0)).toString());
 }
 
 void PagePapers::jumpToPaper(const QString& title) {

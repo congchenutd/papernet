@@ -7,25 +7,25 @@
 #include <QSqlQuery>
 
 AddQuoteDlg::AddQuoteDlg(QWidget *parent)
-	: QDialog(parent), snippetID(-1)
+	: QDialog(parent), quoteID(-1)
 {
 	ui.setupUi(this);
 	ui.listView->setModel(&model);
 
 	connect(ui.listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
-	connect(ui.btAdd,              SIGNAL(clicked()), this, SLOT(onAddRef()));
-	connect(ui.btDel,              SIGNAL(clicked()), this, SLOT(onDelRef()));
-	connect(ui.btSelect,           SIGNAL(clicked()), this, SLOT(onSelectRef()));
-	connect(ui.btSwitchToPapers,   SIGNAL(clicked()), this, SLOT(onSwitchToPapers()));
-	connect(ui.btSwitchToSnippets, SIGNAL(clicked()), this, SLOT(onSwitchToSnippets()));
+	connect(ui.btAdd,            SIGNAL(clicked()), this, SLOT(onAddRef()));
+	connect(ui.btDel,            SIGNAL(clicked()), this, SLOT(onDelRef()));
+	connect(ui.btSelect,         SIGNAL(clicked()), this, SLOT(onSelectRef()));
+	connect(ui.btSwitchToPapers, SIGNAL(clicked()), this, SLOT(onSwitchToPapers()));
+	connect(ui.btSwitchToQuotes, SIGNAL(clicked()), this, SLOT(onSwitchToQuotes()));
 	connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onSwitchToPapers()));
 }
 
 void AddQuoteDlg::onAddRef()
 {
 	bool ok;
-	QString ref = QInputDialog::getText(this, tr("Add Reference"), tr("Reference"), 
+	QString ref = QInputDialog::getText(this, tr("Add Reference"), tr("Reference"),
 							QLineEdit::Normal, QString(""), &ok);
 	if(ok && !ref.isEmpty())
 		addRef(ref);
@@ -33,11 +33,11 @@ void AddQuoteDlg::onAddRef()
 
 void AddQuoteDlg::onDelRef()
 {
-	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
+	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 			QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
-		
+
 		// sort reversely, s.t. removeRow doesn't damage the index
 		qSort(idxList.begin(), idxList.end(), qGreater<QModelIndex>());
 		foreach(QModelIndex idx, idxList)
@@ -61,10 +61,10 @@ void AddQuoteDlg::accept()
 	}
 
 	QSqlDatabase::database().transaction();
-	updateQuote(snippetID, ui.leTitle->text(), ui.teContent->toPlainText());
+	updateQuote(quoteID, ui.leTitle->text(), ui.teContent->toPlainText());
 
 	QSqlQuery query;
-	query.exec(QObject::tr("delete from PaperSnippet where Snippet = %1").arg(snippetID));
+	query.exec(QObject::tr("delete from PaperQuote where Quote = %1").arg(quoteID));
 
 	QStringList list = model.stringList();
 	foreach(QString title, list)
@@ -75,11 +75,11 @@ void AddQuoteDlg::accept()
 			paperID = getNextID("Papers", "ID");
 			::addSimplePaper(paperID, title);
 		}
-		addPaperQuote(paperID, snippetID);
+		addPaperQuote(paperID, quoteID);
 	}
 
 	QSqlDatabase::database().commit();
-	
+
 	deleteLater();
 	return QDialog::accept();
 }
@@ -94,13 +94,13 @@ void AddQuoteDlg::addRef(const QString& title)
 	model.sort(0);
 }
 
-void AddQuoteDlg::setSnippetID(int id)
+void AddQuoteDlg::setQuoteID(int id)
 {
-	snippetID = id;
+	quoteID = id;
 
-	// load snippet
+	// load quote
 	QSqlQuery query;
-	query.exec(tr("select Title, Snippet from Snippets where ID = %1").arg(id));
+	query.exec(tr("select Title, Quote from Quotes where ID = %1").arg(id));
 	if(query.next())
 	{
 		ui.leTitle  ->setText     (query.value(0).toString());
@@ -108,7 +108,7 @@ void AddQuoteDlg::setSnippetID(int id)
 	}
 
 	// load refs
-	query.exec(tr("select Paper from PaperSnippet where Snippet = %1").arg(id));
+	query.exec(tr("select Paper from PaperQuote where Quote = %1").arg(id));
 	while(query.next())
 		addRef(getPaperTitle(query.value(0).toInt()));
 }
@@ -132,12 +132,12 @@ void AddQuoteDlg::resizeEvent(QResizeEvent*) {
 void AddQuoteDlg::onSwitchToPapers()
 {
 	QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
-	QString paper = idxList.isEmpty() 
+	QString paper = idxList.isEmpty()
 				  ? QString() : model.data(idxList.front(), Qt::DisplayRole).toString();
 	MainWindow::getInstance()->jumpToPaper(paper);
 }
 
-void AddQuoteDlg::onSwitchToSnippets() {
-	MainWindow::getInstance()->jumpToSnippet(snippetID);
+void AddQuoteDlg::onSwitchToQuotes() {
+	MainWindow::getInstance()->jumpToQuote(quoteID);
 }
 

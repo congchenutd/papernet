@@ -10,9 +10,9 @@ void QuotesTableView::contextMenuEvent(QContextMenuEvent* event)
 	if(!indexAt(event->pos()).isValid())
 		return;
 
-	QAction actionAddQuote(QIcon(":/MainWindow/Images/Snippet.png"), tr("Add Quote"),    this);
+	QAction actionAddQuote(QIcon(":/MainWindow/Images/Quote.png"), tr("Add Quote"),    this);
 	QAction actionDelQuote(QIcon(":/MainWindow/Images/Uncheck.png"), tr("Delete Quote"), this);
-	
+
 	connect(&actionAddQuote, SIGNAL(triggered()), this, SIGNAL(addQuote()));
 	connect(&actionDelQuote, SIGNAL(triggered()), this, SIGNAL(delQuotes()));
 

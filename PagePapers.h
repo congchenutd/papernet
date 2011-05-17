@@ -56,15 +56,15 @@ private:
 	void hideCoauthor();
 	void mergeRecord(int row, const ImportResult& record);
 	void insertRecord(const ImportResult& record);
-	void updateSnippets();
-	int  getSnippetID(int row) const;
+	void updateQuotes();
+	int  getQuoteID(int row) const;
 	void loadSplitterSizes();
 
 private:
 	Ui::PagePapersClass ui;
 
 	PaperModel        modelPapers;
-	QSqlQueryModel    modelSnippets;
+	QSqlQueryModel    modelQuotes;
 	QDataWidgetMapper mapper;
 	int               currentRow;
 	int               currentPaperID;

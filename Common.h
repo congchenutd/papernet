@@ -23,9 +23,6 @@ void renameTag(const QString& tableName, const QString& oldName, const QString& 
 QStringList getTagsOfPaper (int paperID);
 QStringList getTagsOfPhrase(int phraseID);
 
-void updatePaperTagSize(int tagID);
-void updatePhraseTagSize(int tagID);
-
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName);
 void delAttachment(int paperID, const QString& attachmentName);
 void delAttachments(int paperID);
@@ -47,7 +44,7 @@ QString convertSlashes(const QString& link);
 void openUrl(const QString& url);
 
 void updateQuote(int id, const QString& title, const QString& content);
-void addPaperQuote(int paperID, int snippetID);
+void addPaperQuote(int paperID, int quoteID);
 void addSimplePaper(int id, const QString& title);
 void delQuote(int id);
 int getQuoteID(const QString& title);
@@ -58,7 +55,7 @@ enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE,
 	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE,
 	  PAPER_PROXIMITY, PAPER_COAUTHOR, PAPER_ADDEDTIME};
 enum {TAG_ID, TAG_NAME, TAG_SIZE};
-enum {SNIPPET_ID, SNIPPET_TITLE, SNIPPET_SNIPPET};
+enum {QUOTE_ID, QUOTE_TITLE, QUOTE_QUOTE};
 enum {DICTIONARY_ID, DICTIONARY_PHRASE, DICTIONARY_EXPLANATION};
 
 #endif // Common_h__

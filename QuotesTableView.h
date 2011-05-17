@@ -1,5 +1,5 @@
-#ifndef SNIPPETSTABLEVIEW_H
-#define SNIPPETSTABLEVIEW_H
+#ifndef QUOTESTABLEVIEW_H
+#define QUOTESTABLEVIEW_H
 
 #include <QTableView>
 
@@ -18,4 +18,4 @@ signals:
 	void delQuotes();
 };
 
-#endif // SNIPPETSTABLEVIEW_H
+#endif // QUOTESTABLEVIEW_H

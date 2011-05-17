@@ -105,13 +105,13 @@
         </widget>
        </item>
        <item row="0" column="5">
-        <widget class="QPushButton" name="btSwitchToSnippets">
+        <widget class="QPushButton" name="btSwitchToQuotes">
          <property name="toolTip">
-          <string>Switch to snippets</string>
+          <string>Switch to Quotes Page</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/MainWindow/Images/Snippet.png</normaloff>:/MainWindow/Images/Snippet.png</iconset>
+          <iconset resource="MainWindow.qrc">
+           <normaloff>:/MainWindow/Images/Quote.png</normaloff>:/MainWindow/Images/Quote.png</iconset>
          </property>
         </widget>
        </item>

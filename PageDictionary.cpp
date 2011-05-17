@@ -48,7 +48,7 @@ void PageDictionary::onAdd()
 
 void PageDictionary::onDel()
 {
-	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?", 
+	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
@@ -78,6 +78,7 @@ void PageDictionary::onCurrentRowChanged()
 	bool valid = !idxList.isEmpty();
 	currentRow = valid ? idxList.front().row() : -1;
 	currentPhraseID = valid ? model.data(model.index(currentRow, TAG_ID)).toInt() : -1;
+	highLightTags();
 	emit tableValid(valid);
 }
 
@@ -88,7 +89,7 @@ void PageDictionary::onAddTag()
 	{
 		int tagID = getNextID("DictionaryTags", "ID");
 		ui.widgetWordCloud->addTag(tagID, dlg.getText());
-		ui.widgetWordCloud->addTagToPaper(tagID, currentPhraseID);
+		ui.widgetWordCloud->addTagToItem(tagID, currentPhraseID);
 	}
 }
 
@@ -96,7 +97,7 @@ void PageDictionary::onAddTagToPhrase()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->addTagToPaper(getTagID("DictionaryTags", tag->text()),
+		ui.widgetWordCloud->addTagToItem(getTagID("DictionaryTags", tag->text()),
 										  currentPhraseID);
 	highLightTags();
 }
@@ -105,7 +106,7 @@ void PageDictionary::onDelTagFromPhrase()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->removeTagFromPaper(getTagID("DictionaryTags", tag->text()), 
+		ui.widgetWordCloud->removeTagFromPaper(getTagID("DictionaryTags", tag->text()),
 												currentPhraseID);
 	highLightTags();
 }

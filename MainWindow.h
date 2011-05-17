@@ -15,8 +15,8 @@ class MainWindow : public QMainWindow
 public:
 	MainWindow(QWidget *parent = 0, Qt::WFlags flags = 0);
 	static MainWindow* getInstance();
-	void jumpToPaper  (const QString& title);
-	void jumpToSnippet(int snippetID);
+	void jumpToPaper(const QString& title);
+	void jumpToQuote(int quoteID);
 
 protected:
 	virtual void closeEvent(QCloseEvent*);
@@ -32,7 +32,7 @@ private slots:
 
 private:
 	Ui::MainWindowClass ui;
-	
+
 	static MainWindow* instance;
 	PagePapers*     pagePapers;
 	PageQuotes*     pageQuotes;

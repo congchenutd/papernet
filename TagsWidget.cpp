@@ -84,17 +84,17 @@ void TagsWidget::addTag(int id, const QString& text)
 	QSqlQuery query;
 	query.exec(tr("insert into %1 values(%2, \"%3\", 0)")
 					.arg(tagTableName).arg(id).arg(text));
-	
+
 	addWord(text, 20);
 	normalizeSizes();
 }
 
-void TagsWidget::addTagToPaper(int tagID, int paperID)
+void TagsWidget::addTagToItem(int tagID, int itemID)
 {
 	QSqlQuery query;
 	query.exec(QObject::tr("insert into %1 values(%2, %3)")
-					.arg(relationTableName).arg(paperID).arg(tagID));
-	updatePaperTagSize(tagID);   // recalculate tag size
+					.arg(relationTableName).arg(itemID).arg(tagID));
+	updateTagSize(tagID);   // recalculate tag size
 	updateSizes();
 }
 
@@ -103,7 +103,7 @@ void TagsWidget::removeTagFromPaper(int tagID, int paperID)
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from %1 where Paper=%2 and Tag=%3")
 					.arg(relationTableName).arg(paperID).arg(tagID));
-	updatePaperTagSize(tagID);   // recalculate tag size
+	updateTagSize(tagID);   // recalculate tag size
 	updateSizes();
 }
 
@@ -111,4 +111,17 @@ void TagsWidget::setTableNames(const QString& tagName, const QString& relationNa
 {
 	tagTableName      = tagName;
 	relationTableName = relationName;
+}
+
+void TagsWidget::updateTagSize(int tagID)
+{
+	if(tagID < 0)
+		return;
+
+	QSqlQuery query;
+	query.exec(tr("select count(*) from %1 group by Tag having Tag = %2")
+			   .arg(relationTableName).arg(tagID));
+	int size = query.next() ? query.value(0).toInt() : 0;
+	query.exec(tr("update %1 set Size=%2 where ID=%3")
+			   .arg(tagTableName).arg(size).arg(tagID));
 }

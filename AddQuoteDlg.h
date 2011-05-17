@@ -1,11 +1,11 @@
-#ifndef ADDSNIPPETDLG_H
-#define ADDSNIPPETDLG_H
+#ifndef ADDQUOTEDLG_H
+#define ADDQUOTEDLG_H
 
 #include <QDialog>
 #include <QStringListModel>
 #include "ui_AddQuoteDlg.h"
 
-// add/edit snippet, invoked from snippet page and paper page
+// add/edit quote, invoked from quote page and paper page
 class AddQuoteDlg : public QDialog
 {
 	Q_OBJECT
@@ -13,7 +13,7 @@ class AddQuoteDlg : public QDialog
 public:
 	AddQuoteDlg(QWidget *parent = 0);
 
-	void setSnippetID(int id);
+	void setQuoteID(int id);
 	void addRef(const QString& title);
 
 protected:
@@ -26,12 +26,12 @@ private slots:
 	void onSelectRef();            // select existing ref
 	virtual void accept();
 	void onSwitchToPapers();
-	void onSwitchToSnippets();
+	void onSwitchToQuotes();
 
 private:
 	Ui::AddQuoteDlgClass ui;
 	QStringListModel model;
-	int snippetID;
+	int quoteID;
 };
 
-#endif // ADDSNIPPETDLG_H
+#endif // ADDQUOTEDLG_H

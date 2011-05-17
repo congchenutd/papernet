@@ -37,9 +37,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(ui.actionDelPhrase,   SIGNAL(triggered()), pageDictionary, SLOT(onDel()));
 
 	connect(ui.toolBarSearch, SIGNAL(search(QString)),         pagePapers, SLOT(onSearch(QString)));
-    connect(ui.toolBarSearch, SIGNAL(search(QString)),         pageQuotes, SLOT(onSearch(QString)));
+	connect(ui.toolBarSearch, SIGNAL(search(QString)),         pageQuotes, SLOT(onSearch(QString)));
 	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
-	
+
 	connect(pagePapers,     SIGNAL(tableValid(bool)), ui.actionDelPaper,  SLOT(setEnabled(bool)));
 	connect(pageQuotes,     SIGNAL(tableValid(bool)), ui.actionDelQuote,  SLOT(setEnabled(bool)));
 	connect(pageDictionary, SIGNAL(tableValid(bool)), ui.actionDelPhrase, SLOT(setEnabled(bool)));
@@ -56,7 +56,7 @@ void MainWindow::onOptions()
 
 void MainWindow::onAbout()
 {
-	QMessageBox::about(this, "About", 
+	QMessageBox::about(this, "About",
 		tr("<h3><b>PaperNet: A Better Paper Manager</b></h3>"
 		"<p>Build 2011.5.13</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
@@ -79,7 +79,7 @@ void MainWindow::delOldBackup()
 {
 	const QDate today = QDate::currentDate();
 	const int   days  = MySetting<UserSetting>::getInstance()->getBackupDays();
-	const QFileInfoList fileInfos = 
+	const QFileInfoList fileInfos =
 		QDir("Backup").entryInfoList(QStringList() << "*.db", QDir::Files);
 	foreach(QFileInfo fileInfo, fileInfos)
 		if(QDate::fromString(fileInfo.baseName(), Qt::ISODate).daysTo(today) > days)
@@ -89,8 +89,8 @@ void MainWindow::delOldBackup()
 void MainWindow::backup(const QString& name)
 {
 	QDir::current().mkdir("Backup");
-	QString backupFileName = name.isEmpty() 
-		? "./Backup/" + QDate::currentDate().toString(Qt::ISODate) + ".db" 
+	QString backupFileName = name.isEmpty()
+		? "./Backup/" + QDate::currentDate().toString(Qt::ISODate) + ".db"
 		: name;
 
 	if(QFile::exists(backupFileName))
@@ -102,11 +102,11 @@ void MainWindow::backup(const QString& name)
 	file.close();
 }
 
-void MainWindow::onPapers() 
+void MainWindow::onPapers()
 {
 	ui.actionPapers->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(0);
-    ui.toolBarSearch->onClear();
+	ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(true);
 	ui.actionAddPaper->setVisible(true);
 	ui.actionDelPaper->setVisible(true);
@@ -116,11 +116,11 @@ void MainWindow::onPapers()
 	ui.actionDelPhrase->setVisible(false);
 }
 
-void MainWindow::onQuotes() 
+void MainWindow::onQuotes()
 {
 	ui.actionQuotes->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(1);
-    ui.toolBarSearch->onClear();
+	ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(false);
 	ui.actionAddPaper->setVisible(false);
 	ui.actionDelPaper->setVisible(false);
@@ -150,10 +150,10 @@ void MainWindow::jumpToPaper(const QString& title)
 	pagePapers->jumpToPaper(title);
 }
 
-void MainWindow::jumpToSnippet(int snippetID)
+void MainWindow::jumpToQuote(int quoteID)
 {
 	onQuotes();
-	pageQuotes->jumpToSnippet(snippetID);
+	pageQuotes->jumpToQuote(quoteID);
 }
 
 MainWindow* MainWindow::getInstance() {

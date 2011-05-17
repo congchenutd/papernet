@@ -496,10 +496,6 @@ void PagePapers::onFullTextSearch(const QString& target)
 		modelPapers.setFilter(filter.join(" OR "));
 }
 
-void PagePapers::saveSectionSizes() {
-	ui.tvPapers->saveSectionSizes();
-}
-
 void PagePapers::loadSplitterSizes()
 {
 	ui.splitterHorizontal->restoreState(setting->value("SplitterHorizontal").toByteArray());
@@ -507,8 +503,11 @@ void PagePapers::loadSplitterSizes()
 	ui.splitterDetails   ->restoreState(setting->value("SplitterDetails")   .toByteArray());
 }
 
-void PagePapers::saveSplitterSizes()
+void PagePapers::saveGeometry()
 {
+	ui.tvPapers->saveSectionSizes();  // sections
+
+	// splitters
 	setting->setValue("SplitterHorizontal", ui.splitterHorizontal->saveState());
 	setting->setValue("SplitterPapers",     ui.splitterPapers->saveState());
 	setting->setValue("SplitterDetails",    ui.splitterDetails->saveState());

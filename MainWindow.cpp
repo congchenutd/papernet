@@ -58,20 +58,20 @@ void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About",
 		tr("<h3><b>PaperNet: A Better Paper Manager</b></h3>"
-		"<p>Build 2011.5.13</p>"
+		"<p>Build 2011.5.17</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
 }
 
 void MainWindow::closeEvent(QCloseEvent*)
 {
-	UserSetting* setting = MySetting<UserSetting>::getInstance();
+	UserSetting* setting = UserSetting::getInstance();
 	if(setting->getBackupDays() > 0)
 	{
 		delOldBackup();
 		backup();
 	}
-	pagePapers->saveSectionSizes();   // save the settings before the dtr
-	pagePapers->saveSplitterSizes();
+	pagePapers->saveGeometry();   // save the settings before the dtr
+	pageDictionary->saveGeometry();
 	setting->destroySettingManager();
 }
 

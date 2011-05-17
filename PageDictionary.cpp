@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "AddPhraseDlg.h"
 #include "AddTagDlg.h"
+#include "OptionDlg.h"
 #include <QMessageBox>
 #include <QSqlQuery>
 
@@ -14,13 +15,18 @@ PageDictionary::PageDictionary(QWidget *parent)
 	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
 	model.setTable("Dictionary");
 	model.select();
+	while(model.canFetchMore())
+		model.fetchMore();
 
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
 	ui.tableView->resizeColumnToContents(DICTIONARY_PHRASE);
+	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
 
 	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag");
 	ui.widgetWordCloud->updateSizes();   // init the size of the labels
+
+	ui.splitter->restoreState(UserSetting::getInstance()->value("SplitterDictionary").toByteArray());
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
@@ -125,4 +131,10 @@ void PageDictionary::highLightTags()
 {
 	ui.widgetWordCloud->unselectAll();
 	ui.widgetWordCloud->highLight(getTagsOfPhrase(currentPhraseID));
+}
+
+void PageDictionary::saveGeometry()
+{
+	UserSetting* setting = UserSetting::getInstance();
+	setting->setValue("SplitterDictionary", ui.splitter->saveState());
 }

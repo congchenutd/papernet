@@ -15,11 +15,10 @@ class PagePapers : public QWidget
 	Q_OBJECT
 
 public:
-	PagePapers(QWidget *parent = 0);
+	PagePapers(QWidget* parent = 0);
 	~PagePapers();
 	void jumpToPaper(const QString& title);
-	void saveSectionSizes();
-	void saveSplitterSizes();
+	void saveGeometry();
 
 private slots:
 	void onAddPaper();

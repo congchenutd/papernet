@@ -11,6 +11,7 @@ class PageDictionary : public QWidget
 
 public:
 	PageDictionary(QWidget *parent = 0);
+	void saveGeometry();
 
 private:
 	void highLightTags();

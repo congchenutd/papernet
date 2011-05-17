@@ -545,3 +545,14 @@ void updatePhraseTagSize(int tagID)
 	int size = query.next() ? query.value(0).toInt() : 0;
 	query.exec(QObject::tr("update DictionaryTags set Size = %1 where ID = %2").arg(size).arg(tagID));
 }
+
+QStringList getTagsOfPhrase(int phraseID)
+{
+	QStringList tags;
+	QSqlQuery query;
+	query.exec(QObject::tr("select Name from DictionaryTags, PhraseTag where Phrase=%1 and Tag=ID")
+															.arg(phraseID));
+	while(query.next())
+		tags << query.value(0).toString();
+	return tags;
+}

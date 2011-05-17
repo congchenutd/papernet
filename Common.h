@@ -20,7 +20,8 @@ int getPaperID(const QString& title);
 int  getTagID (const QString& tableName, const QString& tagName);
 void delTag   (const QString& tableName, const QString& tagName);
 void renameTag(const QString& tableName, const QString& oldName, const QString& newName);
-QStringList getTagsOfPaper(int paperID);
+QStringList getTagsOfPaper (int paperID);
+QStringList getTagsOfPhrase(int phraseID);
 
 void updatePaperTagSize(int tagID);
 void updatePhraseTagSize(int tagID);

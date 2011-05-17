@@ -12,6 +12,9 @@ class PageDictionary : public QWidget
 public:
 	PageDictionary(QWidget *parent = 0);
 
+private:
+	void highLightTags();
+
 private slots:
 	void onAdd();
 	void onDel();

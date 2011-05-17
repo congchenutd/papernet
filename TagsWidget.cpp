@@ -52,7 +52,7 @@ void TagsWidget::updateSizes()
 	while(query.next())
 	{
 		QString word = query.value(0).toString();
-		int     size = query.value(0).toInt();
+		int     size = query.value(1).toInt();
 		if(WordLabel* label = findWord(word))
 			label->setSize(size);
 		else

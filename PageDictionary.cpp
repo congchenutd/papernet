@@ -77,7 +77,7 @@ void PageDictionary::onCurrentRowChanged()
 	QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();
 	currentRow = valid ? idxList.front().row() : -1;
-	currentPhraseID = model.data(model.index(currentRow, TAG_ID)).toInt();
+	currentPhraseID = valid ? model.data(model.index(currentRow, TAG_ID)).toInt() : -1;
 	emit tableValid(valid);
 }
 
@@ -103,10 +103,25 @@ void PageDictionary::onAddTagToPhrase()
 
 void PageDictionary::onDelTagFromPhrase()
 {
-
+	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+	foreach(WordLabel* tag, tags)
+		ui.widgetWordCloud->removeTagFromPaper(getTagID("DictionaryTags", tag->text()), 
+												currentPhraseID);
+	highLightTags();
 }
 
 void PageDictionary::onFilterPhrases()
 {
+	QStringList tagClauses;
+	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+	foreach(WordLabel* tag, tags)
+		tagClauses << tr("Tag = %1").arg(getTagID("DictionaryTags", tag->text()));
+	model.setFilter(tr("ID in (select Paper from PhraseTag where %1)")
+									.arg(tagClauses.join(" OR ")));
+}
 
+void PageDictionary::highLightTags()
+{
+	ui.widgetWordCloud->unselectAll();
+	ui.widgetWordCloud->highLight(getTagsOfPhrase(currentPhraseID));
 }

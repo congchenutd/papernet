@@ -49,8 +49,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
-	ui.widgetWordCloud->setTableNames("Tags", "PaperTag");
-	ui.widgetWordCloud->updateSizes();   // init the size of the labels
+	ui.widgetWordCloud->setTableNames("Tags", "PaperTag", "Paper");
 	ui.tvQuotes->setModel(&modelQuotes);
 
 	loadSplitterSizes();
@@ -317,7 +316,7 @@ void PagePapers::onDelTagFromPaper()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->removeTagFromPaper(getTagID("Tags", tag->text()),
+		ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()),
 											   currentPaperID);
 	highLightTags();
 }

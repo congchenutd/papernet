@@ -534,3 +534,10 @@ QStringList getTagsOfPhrase(int phraseID)
 		tags << query.value(0).toString();
 	return tags;
 }
+
+int idToRow(QAbstractItemModel *model, int section, int id)
+{
+	QModelIndexList indexes = model->match(
+		model->index(0, section), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
+	return !indexes.isEmpty() ? indexes.at(0).row() : -1;
+}

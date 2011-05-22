@@ -3,6 +3,8 @@
 
 #include <QString>
 
+class QAbstractItemModel;
+
 typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 
 bool openDB(const QString& name);
@@ -50,6 +52,8 @@ void delQuote(int id);
 int getQuoteID(const QString& title);
 
 void delPhrase(int id);
+
+int idToRow(QAbstractItemModel* model, int section, int id);
 
 enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE,
 	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE,

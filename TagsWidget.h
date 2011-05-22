@@ -9,11 +9,11 @@ class TagsWidget : public WordCloudWidget
 
 public:
 	TagsWidget(QWidget* parent = 0);
-	void setTableNames(const QString& tagName, const QString& relationName);
+	void setTableNames(const QString& tagName, const QString& relationName, const QString& relationSection);
 	void updateSizes();
 	void addTag(int id, const QString& text);
 	void addTagToItem(int tagID, int paperID);
-	void removeTagFromPaper(int tagID, int paperID);
+	void removeTagFromItem(int tagID, int paperID);
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event);
@@ -35,6 +35,7 @@ signals:
 private:
 	QString tagTableName;
 	QString relationTableName;
+	QString relationSectionName;
 };
 
 #endif // TAGSWIDGET_H

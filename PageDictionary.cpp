@@ -19,8 +19,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 	ui.tableView->resizeColumnToContents(DICTIONARY_PHRASE);
 	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
 
-	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag");
-	ui.widgetWordCloud->updateSizes();   // init the size of the labels
+	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag", "Phrase");
 
 	ui.splitter->restoreState(UserSetting::getInstance()->value("SplitterDictionary").toByteArray());
 
@@ -41,11 +40,12 @@ void PageDictionary::onAdd()
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		int lastRow = model.rowCount();
+		currentPhraseID = getNextID("Dictionary", "ID");
 		model.insertRow(lastRow);
-		model.setData(model.index(lastRow, DICTIONARY_ID),          getNextID("Dictionary", "ID"));
+		model.setData(model.index(lastRow, DICTIONARY_ID),          currentPhraseID);
 		model.setData(model.index(lastRow, DICTIONARY_PHRASE),      dlg.getPhrase());
 		model.setData(model.index(lastRow, DICTIONARY_EXPLANATION), dlg.getExplanation());
-		model.submitAll();
+		submit();
 	}
 }
 
@@ -71,7 +71,7 @@ void PageDictionary::onEdit()
 	{
 		model.setData(model.index(currentRow, DICTIONARY_PHRASE),      dlg.getPhrase());
 		model.setData(model.index(currentRow, DICTIONARY_EXPLANATION), dlg.getExplanation());
-		model.submitAll();
+		submit();
 	}
 }
 
@@ -109,7 +109,7 @@ void PageDictionary::onDelTagFromPhrase()
 {
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->removeTagFromPaper(getTagID("DictionaryTags", tag->text()),
+		ui.widgetWordCloud->removeTagFromItem(getTagID("DictionaryTags", tag->text()),
 												currentPhraseID);
 	highLightTags();
 }
@@ -143,4 +143,22 @@ void PageDictionary::onResetPhrases()
 	model.select();
 	while(model.canFetchMore())
 		model.fetchMore();
+}
+
+void PageDictionary::submit()
+{
+	int backupID = currentPhraseID;
+	model.submitAll();
+	selectID(backupID);
+}
+
+void PageDictionary::selectID(int id)
+{
+	int row = idToRow(&model, DICTIONARY_ID, id);
+	if(row > -1)
+	{
+		currentRow = row;
+		ui.tableView->selectRow(currentRow);
+		ui.tableView->setFocus();
+	}
 }

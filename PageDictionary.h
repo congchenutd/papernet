@@ -32,6 +32,10 @@ signals:
 	void tableValid(bool);
 
 private:
+	void selectID(int id);
+	void submit();
+
+private:
 	Ui::PageDictionary ui;
 	QSqlTableModel model;
 	int currentRow;

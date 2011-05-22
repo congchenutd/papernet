@@ -86,7 +86,7 @@ void TagsWidget::addTag(int id, const QString& text)
 	// add to db
 	QSqlQuery query;
 	query.exec(tr("insert into %1 values(%2, \"%3\", 0)")
-					.arg(tagTableName).arg(id).arg(text));
+			   .arg(tagTableName).arg(id).arg(text));
 
 	addWord(text, 20);
 	normalizeSizes();
@@ -95,25 +95,30 @@ void TagsWidget::addTag(int id, const QString& text)
 void TagsWidget::addTagToItem(int tagID, int itemID)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("insert into %1 values(%2, %3)")
-					.arg(relationTableName).arg(itemID).arg(tagID));
+	query.exec(tr("insert into %1 values(%2, %3)")
+			   .arg(relationTableName).arg(itemID).arg(tagID));
 	updateTagSize(tagID);   // recalculate tag size
 	updateSizes();
 }
 
-void TagsWidget::removeTagFromPaper(int tagID, int paperID)
+void TagsWidget::removeTagFromItem(int tagID, int itemID)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("delete from %1 where Paper=%2 and Tag=%3")
-					.arg(relationTableName).arg(paperID).arg(tagID));
+	query.exec(tr("delete from %1 where %2=%3 and Tag=%4")
+			   .arg(relationTableName)
+			   .arg(relationSectionName)
+			   .arg(itemID)
+			   .arg(tagID));
 	updateTagSize(tagID);   // recalculate tag size
 	updateSizes();
 }
 
-void TagsWidget::setTableNames(const QString& tagName, const QString& relationName)
+void TagsWidget::setTableNames(const QString& tagName, const QString& relationName, const QString& relationSection)
 {
-	tagTableName      = tagName;
-	relationTableName = relationName;
+	tagTableName        = tagName;
+	relationTableName   = relationName;
+	relationSectionName = relationSection;
+	updateSizes();
 }
 
 void TagsWidget::updateTagSize(int tagID)

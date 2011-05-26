@@ -5,6 +5,7 @@ PaperDlg::PaperDlg(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+	resize(800, 600);
 	ui.sbYear->setValue(QDate::currentDate().year());
 }
 
@@ -32,6 +33,10 @@ QString PaperDlg::getNote() const {
 	return ui.teNote->toPlainText();
 }
 
+QStringList PaperDlg::getTags() const {
+	return ui.leTags->text().split(";");
+}
+
 void PaperDlg::setTitle(const QString& title) {
 	ui.leTitle->setText(title);
 }
@@ -54,4 +59,8 @@ void PaperDlg::setNote(const QString& note) {
 
 void PaperDlg::setYear(int year){
 	ui.sbYear->setValue(year);
+}
+
+void PaperDlg::setTags(const QStringList& tags) {
+	ui.leTags->setText(tags.join(";"));
 }

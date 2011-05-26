@@ -315,7 +315,7 @@ bool renameAttachment(int paperID, const QString& oldName, const QString& newNam
 
 bool renameTitle(const QString& oldName, const QString& newName)
 {
-	if(oldName == newName)
+	if(oldName == newName || oldName.isEmpty() || newName.isEmpty())
 		return true;
 	return QFile::rename(pdfDir + "/" + oldName + ".pdf",               // rename [title].pdf
 						 pdfDir + "/" + newName + ".pdf") &&

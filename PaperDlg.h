@@ -17,12 +17,14 @@ public:
 	QString getJournal () const;
 	QString getAbstract() const;
 	QString getNote    () const;
+	QStringList getTags() const;
 	void setTitle   (const QString& title);
 	void setAuthors (const QString& authors);
 	void setYear    (int year);
 	void setJournal (const QString& journal);
 	void setAbstract(const QString& ab);
 	void setNote    (const QString& note);
+	void setTags    (const QStringList& tags);
 
 private:
 	Ui::PaperDlgClass ui;

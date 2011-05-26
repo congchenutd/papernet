@@ -94,13 +94,9 @@ void PagePapers::onAddPaper()
 		modelPapers.insertRow(lastRow);
 		currentPaperID = getNextID("Papers", "ID");
 		modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
-		modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    dlg.getTitle());
-		modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  dlg.getAuthors());
-		modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     dlg.getYear());
-		modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  dlg.getJournal());
-		modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), dlg.getAbstract());
-		modelPapers.setData(modelPapers.index(lastRow, PAPER_NOTE),     dlg.getNote());
+		updateRecord(lastRow, dlg);
 		onSubmitPaper();
+		updateTags(dlg.getTags());
 	}
 }
 
@@ -115,20 +111,39 @@ void PagePapers::onEditPaper()
 	dlg.setJournal (modelPapers.data(modelPapers.index(currentRow, PAPER_JOURNAL)) .toString());
 	dlg.setAbstract(modelPapers.data(modelPapers.index(currentRow, PAPER_ABSTRACT)).toString());
 	dlg.setNote    (modelPapers.data(modelPapers.index(currentRow, PAPER_NOTE))    .toString());
+	dlg.setTags    (getTagsOfPaper(currentPaperID));
 	if(dlg.exec() != QDialog::Accepted)
 		return;
 
+	updateRecord(currentRow, dlg);
+	onSubmitPaper();
 	if(!renameTitle(oldTitle, dlg.getTitle()))
 		QMessageBox::critical(this, tr("Error"), tr("Renaming tile failed!"));
-	modelPapers.setData(modelPapers.index(currentRow, PAPER_TITLE),    dlg.getTitle());
-	modelPapers.setData(modelPapers.index(currentRow, PAPER_AUTHORS),  dlg.getAuthors());
-	modelPapers.setData(modelPapers.index(currentRow, PAPER_YEAR),     dlg.getYear());
-	modelPapers.setData(modelPapers.index(currentRow, PAPER_JOURNAL),  dlg.getJournal());
-	modelPapers.setData(modelPapers.index(currentRow, PAPER_ABSTRACT), dlg.getAbstract());
-	modelPapers.setData(modelPapers.index(currentRow, PAPER_NOTE),     dlg.getNote());
 	if(!dlg.getNote().isEmpty())   // paper with notes indicates being read
 		setPaperRead(currentPaperID);
-	onSubmitPaper();
+	updateTags(dlg.getTags());
+}
+
+void PagePapers::updateRecord(int row, const PaperDlg& dlg)
+{
+	modelPapers.setData(modelPapers.index(row, PAPER_TITLE),    dlg.getTitle());
+	modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS),  dlg.getAuthors());
+	modelPapers.setData(modelPapers.index(row, PAPER_YEAR),     dlg.getYear());
+	modelPapers.setData(modelPapers.index(row, PAPER_JOURNAL),  dlg.getJournal());
+	modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT), dlg.getAbstract());
+	modelPapers.setData(modelPapers.index(row, PAPER_NOTE),     dlg.getNote());
+}
+
+void PagePapers::updateTags(const QStringList& tags)
+{
+	QSqlQuery query;
+	query.exec(tr("delete from PaperTag where paper = %1").arg(currentPaperID));
+	foreach(QString tag, tags)
+	{
+		int tagID = getNextID("Tags", "ID");
+		ui.widgetWordCloud->addTag(tagID, tag);
+		ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
+	}
 }
 
 void PagePapers::onDelPaper()

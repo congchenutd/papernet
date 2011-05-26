@@ -9,6 +9,7 @@
 #include "PaperModel.h"
 
 struct ImportResult;
+class PaperDlg;
 
 class PagePapers : public QWidget
 {
@@ -58,6 +59,8 @@ private:
 	void updateQuotes();
 	int  getQuoteID(int row) const;
 	void loadSplitterSizes();
+	void updateRecord(int row, const PaperDlg& dlg);
+	void updateTags(const QStringList& tags);
 
 private:
 	Ui::PagePapersClass ui;

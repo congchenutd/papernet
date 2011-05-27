@@ -21,3 +21,11 @@ void AddPhraseDlg::setPhrase(const QString& phrase) {
 void AddPhraseDlg::setExplanation(const QString& explanation) {
 	ui.teExplanation->setPlainText(explanation);
 }
+
+QStringList AddPhraseDlg::getTags() const {
+	return ui.leTags->text().split(";");
+}
+
+void AddPhraseDlg::setTags(const QStringList &tags) {
+	ui.leTags->setText(tags.join(";"));
+}

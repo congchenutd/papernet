@@ -12,8 +12,10 @@ public:
 	AddPhraseDlg(QWidget *parent = 0);
 	QString getPhrase()      const;
 	QString getExplanation() const;
+	QStringList getTags()    const;
 	void setPhrase     (const QString& phrase);
 	void setExplanation(const QString& explanation);
+	void setTags       (const QStringList& tags);
 
 private:
 	Ui::AddPhraseDlg ui;

@@ -34,6 +34,7 @@ signals:
 private:
 	void selectID(int id);
 	void submit();
+	void updateTags(const QStringList& tags);
 
 private:
 	Ui::PageDictionary ui;

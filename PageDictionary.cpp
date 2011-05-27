@@ -46,6 +46,7 @@ void PageDictionary::onAdd()
 		model.setData(model.index(lastRow, DICTIONARY_PHRASE),      dlg.getPhrase());
 		model.setData(model.index(lastRow, DICTIONARY_EXPLANATION), dlg.getExplanation());
 		submit();
+		updateTags(dlg.getTags());
 	}
 }
 
@@ -67,11 +68,29 @@ void PageDictionary::onEdit()
 	dlg.setWindowTitle(tr("Edit Phrase"));
 	dlg.setPhrase     (model.data(model.index(currentRow, DICTIONARY_PHRASE))     .toString());
 	dlg.setExplanation(model.data(model.index(currentRow, DICTIONARY_EXPLANATION)).toString());
+	dlg.setTags(getTagsOfPhrase(currentPhraseID));
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		model.setData(model.index(currentRow, DICTIONARY_PHRASE),      dlg.getPhrase());
 		model.setData(model.index(currentRow, DICTIONARY_EXPLANATION), dlg.getExplanation());
 		submit();
+		updateTags(dlg.getTags());
+	}
+}
+
+void PageDictionary::updateTags(const QStringList& tags)
+{
+	QSqlQuery query;
+	query.exec(tr("delete from PhraseTag where Phrase = %1").arg(currentPhraseID));
+	foreach(QString tag, tags)
+	{
+		int tagID = getTagID("DictionaryTags", tag);
+		if(tagID < 0)
+		{
+			tagID = getNextID("DictionaryTags", "ID");
+			ui.widgetWordCloud->addTag(tagID, tag);
+		}
+		ui.widgetWordCloud->addTagToItem(tagID, currentPhraseID);
 	}
 }
 

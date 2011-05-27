@@ -137,11 +137,15 @@ void PagePapers::updateRecord(int row, const PaperDlg& dlg)
 void PagePapers::updateTags(const QStringList& tags)
 {
 	QSqlQuery query;
-	query.exec(tr("delete from PaperTag where paper = %1").arg(currentPaperID));
+	query.exec(tr("delete from PaperTag where Paper = %1").arg(currentPaperID));
 	foreach(QString tag, tags)
 	{
-		int tagID = getNextID("Tags", "ID");
-		ui.widgetWordCloud->addTag(tagID, tag);
+		int tagID = getTagID("Tags", tag);
+		if(tagID < 0)
+		{
+			tagID = getNextID("Tags", "ID");
+			ui.widgetWordCloud->addTag(tagID, tag);
+		}
 		ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
 	}
 }

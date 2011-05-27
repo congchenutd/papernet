@@ -84,6 +84,8 @@ void PageDictionary::updateTags(const QStringList& tags)
 	query.exec(tr("delete from PhraseTag where Phrase = %1").arg(currentPhraseID));
 	foreach(QString tag, tags)
 	{
+		if(tag.isEmpty())
+			continue;
 		int tagID = getTagID("DictionaryTags", tag);
 		if(tagID < 0)
 		{

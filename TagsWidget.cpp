@@ -11,13 +11,13 @@ TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
 void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
 	QMenu menu(this);
-	QAction actionNewTag(tr("New Tag"), this);
-	QAction actionFilter(tr("Show Tagged Items"), this);
-	QAction actionUnFilter(tr("Show All Items"), this);
-	QAction actionAdd   (tr("Add"), this);
-	QAction actionRemove(tr("Remove"), this);
-	QAction actionRename(tr("Rename"), this);
-	QAction actionDel   (tr("Delete"), this);
+	QAction actionNewTag  (tr("New Tag"),     this);
+	QAction actionFilter  (tr("Show Tagged"), this);
+	QAction actionUnFilter(tr("Show All"),    this);
+	QAction actionAdd     (tr("Add"),         this);
+	QAction actionRemove  (tr("Remove"),      this);
+	QAction actionRename  (tr("Rename"),      this);
+	QAction actionDel     (tr("Delete"),      this);
 	connect(&actionNewTag,   SIGNAL(triggered()), this, SIGNAL(newTag()));
 	connect(&actionFilter,   SIGNAL(triggered()), this, SIGNAL(filter()));
 	connect(&actionUnFilter, SIGNAL(triggered()), this, SIGNAL(unfilter()));
@@ -48,7 +48,9 @@ void TagsWidget::onDel()
 	}
 }
 
-void TagsWidget::updateSizes()
+
+// rebuild the cloud
+void TagsWidget::rebuild()
 {
 	QSqlQuery query;
 	query.exec(tr("select Name, Size from %1").arg(tagTableName));
@@ -98,7 +100,6 @@ void TagsWidget::addTagToItem(int tagID, int itemID)
 	query.exec(tr("insert into %1 values(%2, %3)")
 			   .arg(relationTableName).arg(itemID).arg(tagID));
 	updateTagSize(tagID);   // recalculate tag size
-	updateSizes();
 }
 
 void TagsWidget::removeTagFromItem(int tagID, int itemID)
@@ -110,7 +111,6 @@ void TagsWidget::removeTagFromItem(int tagID, int itemID)
 			   .arg(itemID)
 			   .arg(tagID));
 	updateTagSize(tagID);   // recalculate tag size
-	updateSizes();
 }
 
 void TagsWidget::setTableNames(const QString& tagName, const QString& relationName, const QString& relationSection)
@@ -118,7 +118,7 @@ void TagsWidget::setTableNames(const QString& tagName, const QString& relationNa
 	tagTableName        = tagName;
 	relationTableName   = relationName;
 	relationSectionName = relationSection;
-	updateSizes();
+	rebuild();
 }
 
 void TagsWidget::updateTagSize(int tagID)
@@ -132,4 +132,5 @@ void TagsWidget::updateTagSize(int tagID)
 	int size = query.next() ? query.value(0).toInt() : 0;
 	query.exec(tr("update %1 set Size=%2 where ID=%3")
 			   .arg(tagTableName).arg(size).arg(tagID));
+	rebuild();
 }

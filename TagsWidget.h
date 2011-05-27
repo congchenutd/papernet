@@ -10,7 +10,7 @@ class TagsWidget : public WordCloudWidget
 public:
 	TagsWidget(QWidget* parent = 0);
 	void setTableNames(const QString& tagName, const QString& relationName, const QString& relationSection);
-	void updateSizes();
+	void rebuild();
 	void addTag(int id, const QString& text);
 	void addTagToItem     (int tagID, int itemID);
 	void removeTagFromItem(int tagID, int itemID);

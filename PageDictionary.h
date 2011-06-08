@@ -27,6 +27,7 @@ private slots:
 	void onDelTagFromPhrase();
 	void onFilterPhrases();
 	void onResetPhrases();
+	void onDoubleClick(const QString& label);
 
 signals:
 	void tableValid(bool);

@@ -74,6 +74,7 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPaper()));
+	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onDoubleClick(QString)));
 }
 
 void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
@@ -530,4 +531,12 @@ void PagePapers::saveGeometry()
 	setting->setValue("SplitterHorizontal", ui.splitterHorizontal->saveState());
 	setting->setValue("SplitterPapers",     ui.splitterPapers->saveState());
 	setting->setValue("SplitterDetails",    ui.splitterDetails->saveState());
+}
+
+void PagePapers::onDoubleClick(const QString& label)
+{
+	if(label.isEmpty())
+		onResetPapers();
+	else
+		onFilterPapers();
 }

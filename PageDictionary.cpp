@@ -31,6 +31,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPhrase()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPhrase()));
+	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onDoubleClick(QString)));
 }
 
 void PageDictionary::onAdd()
@@ -182,4 +183,12 @@ void PageDictionary::selectID(int id)
 		ui.tableView->selectRow(currentRow);
 		ui.tableView->setFocus();
 	}
+}
+
+void PageDictionary::onDoubleClick(const QString& label)
+{
+	if(label.isEmpty())
+		onResetPhrases();
+	else
+		onFilterPhrases();
 }

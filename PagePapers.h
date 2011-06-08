@@ -39,6 +39,7 @@ private slots:
 	void onAddTagToPaper();
 	void onDelTagFromPaper();
 	void onFilterPapers();
+	void onDoubleClick(const QString& label);
 
 	void onAddQuote();
 	void onEditQuote(const QModelIndex& idx);

@@ -53,7 +53,7 @@ void TagsWidget::onDel()
 void TagsWidget::rebuild()
 {
 	QSqlQuery query;
-	query.exec(tr("select Name, Size from %1").arg(tagTableName));
+	query.exec(tr("select Name, Size from %1 order by Name").arg(tagTableName));
 	while(query.next())
 	{
 		QString word = query.value(0).toString();

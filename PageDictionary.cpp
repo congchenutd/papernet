@@ -120,19 +120,29 @@ void PageDictionary::onAddTag()
 
 void PageDictionary::onAddTagToPhrase()
 {
-	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
-	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->addTagToItem(getTagID("DictionaryTags", tag->text()),
-										  currentPhraseID);
+	QModelIndexList rows = ui.tableView->selectionModel()->selectedRows(PAPER_ID);
+	foreach(QModelIndex idx, rows)
+	{
+		int phraseID = model.data(idx).toInt();
+		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+		foreach(WordLabel* tag, tags)
+			ui.widgetWordCloud->addTagToItem(getTagID("DictionaryTags", tag->text()),
+											 phraseID);
+	}
 	highLightTags();
 }
 
 void PageDictionary::onDelTagFromPhrase()
 {
-	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
-	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->removeTagFromItem(getTagID("DictionaryTags", tag->text()),
-												currentPhraseID);
+	QModelIndexList rows = ui.tableView->selectionModel()->selectedRows(PAPER_ID);
+	foreach(QModelIndex idx, rows)
+	{
+		int phraseID = model.data(idx).toInt();
+		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+		foreach(WordLabel* tag, tags)
+			ui.widgetWordCloud->removeTagFromItem(getTagID("DictionaryTags", tag->text()),
+												  phraseID);
+	}
 	highLightTags();
 }
 

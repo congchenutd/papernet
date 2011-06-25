@@ -134,7 +134,8 @@ void delTag(const QString& tableName, const QString& tagName)
 		return;
 	QSqlQuery query;
 	query.exec(QObject::tr("delete from %1 where ID = %2").arg(tableName).arg(tagID));
-	query.exec(QObject::tr("delete from PaperTag where Tag=%1").arg(tagID));
+	query.exec(QObject::tr("delete from PaperTag  where Tag=%1").arg(tagID));
+	query.exec(QObject::tr("delete from PhraseTag where Tag=%1").arg(tagID));
 }
 
 bool addAttachment(int paperID, const QString& attachmentName, const QString& filePath)

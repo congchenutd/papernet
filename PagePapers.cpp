@@ -319,10 +319,15 @@ void PagePapers::onAddTag()
 
 void PagePapers::onAddTagToPaper()
 {
-	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
-	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->addTagToItem(getTagID("Tags", tag->text()),
-										  currentPaperID);
+	QModelIndexList rows = ui.tvPapers->selectionModel()->selectedRows(PAPER_ID);
+	foreach(QModelIndex idx, rows)
+	{
+		int paperID = modelPapers.data(idx).toInt();
+		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+		foreach(WordLabel* tag, tags)
+			ui.widgetWordCloud->addTagToItem(getTagID("Tags", tag->text()),
+											 paperID);
+	}
 	highLightTags();
 }
 
@@ -334,10 +339,15 @@ void PagePapers::highLightTags()
 
 void PagePapers::onDelTagFromPaper()
 {
-	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
-	foreach(WordLabel* tag, tags)
-		ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()),
-											   currentPaperID);
+	QModelIndexList rows = ui.tvPapers->selectionModel()->selectedRows(PAPER_ID);
+	foreach(QModelIndex idx, rows)
+	{
+		int paperID = modelPapers.data(idx).toInt();
+		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+		foreach(WordLabel* tag, tags)
+			ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()),
+												  paperID);
+	}
 	highLightTags();
 }
 

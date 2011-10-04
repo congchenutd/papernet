@@ -11,13 +11,13 @@ TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
 void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
 	QMenu menu(this);
-	QAction actionNewTag  (tr("New Tag"),     this);
-	QAction actionFilter  (tr("Show Tagged"), this);
-	QAction actionUnFilter(tr("Show All"),    this);
-	QAction actionAdd     (tr("Add"),         this);
-	QAction actionRemove  (tr("Remove"),      this);
-	QAction actionRename  (tr("Rename"),      this);
-	QAction actionDel     (tr("Delete"),      this);
+	QAction actionNewTag  (tr("New Tag"),           this);
+	QAction actionFilter  (tr("Show Tagged"),       this);
+	QAction actionUnFilter(tr("Show All"),          this);
+	QAction actionAdd     (tr("Add to Paper"),      this);
+	QAction actionRemove  (tr("Remove from Paper"), this);
+	QAction actionRename  (tr("Rename"),            this);
+	QAction actionDel     (tr("Delete Tag"),        this);
 	connect(&actionNewTag,   SIGNAL(triggered()), this, SIGNAL(newTag()));
 	connect(&actionFilter,   SIGNAL(triggered()), this, SIGNAL(filter()));
 	connect(&actionUnFilter, SIGNAL(triggered()), this, SIGNAL(unfilter()));

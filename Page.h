@@ -13,6 +13,6 @@ public:
 	virtual void add() = 0;
 	virtual void del() = 0;
 	virtual void search(const QString&) {}
-	virtual void jumpToID(int id) {}
+	virtual void jumpToID(int id) {}   // "click" an ID
 };
 #endif // Page_h__

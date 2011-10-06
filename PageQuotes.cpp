@@ -9,9 +9,9 @@ PageQuotes::PageQuotes(QWidget *parent)
 {
 	currentRow = -1;
 	ui.setupUi(this);
-	ui.tableView->init("PageQuotes");
+	ui.tableView->init("PageQuotes");   // set the table name for the view
 
-	resetQuotes();
+	resetQuotes();   // init model
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(QUOTE_ID);
 	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
@@ -40,7 +40,7 @@ void PageQuotes::onCurrentRowChanged()
 }
 
 void PageQuotes::onClicked(const QModelIndex& idx) {
-	Navigator::getInstance()->addFootStep(this, getID(idx.row()));
+	Navigator::getInstance()->addFootStep(this, getID(idx.row()));  // track navigation
 }
 
 void PageQuotes::add()

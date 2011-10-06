@@ -12,10 +12,11 @@ class PageDictionary : public Page
 public:
 	PageDictionary(QWidget *parent = 0);
 	void saveGeometry();
-	void add();
-	void del();
-	void search(const QString& target);
-	void jumpToID(int id);
+
+	virtual void add();
+	virtual void del();
+	virtual void search(const QString& target);
+	virtual void jumpToID(int id);
 
 private slots:
 	void onEdit();

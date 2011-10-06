@@ -20,10 +20,11 @@ public:
 	~PagePapers();
 	void jumpToPaper(const QString& title);
 	void saveGeometry();
-	void add();
-	void del();
-	void search(const QString& target);
-	void jumpToID(int id);
+
+	virtual void add();
+	virtual void del();
+	virtual void search(const QString& target);
+	virtual void jumpToID(int id);
 
 private slots:
 	void onImport();
@@ -61,7 +62,7 @@ private:
 	void loadSplitterSizes();
 	void updateRecord(int row, const PaperDlg& dlg);
 	void updateTags(const QStringList& tags);
-	void selectRow(int row);
+	void setCurrentRow(int row);
 
 private:
 	Ui::PagePapersClass ui;

@@ -28,7 +28,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.setupUi(this);
 	ui.tvPapers->init("PagePapers");   // set the table name for the view
 
-	onResetPapers();
+	onResetPapers();   // init model, table ...
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
 
 	mapper.setModel(&modelPapers);
@@ -46,7 +46,6 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->hideColumn(PAPER_COAUTHOR);
 	ui.tvPapers->hideColumn(PAPER_ADDEDTIME);
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
-	ui.tvPapers->setColumnWidth(PAPER_TAGGED,   32);
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
@@ -82,17 +81,17 @@ void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 {
 	emit tableValid(idx.isValid());
 	if(idx.isValid())
-		selectRow(idx.row());
+		setCurrentRow(idx.row());
 }
 
 // only triggered by mouse click, not programmatically
 void PagePapers::onClicked(const QModelIndex& idx)
 {
-	selectRow(idx.row());
+	setCurrentRow(idx.row());
 	Navigator::getInstance()->addFootStep(this, currentPaperID);
 }
 
-void PagePapers::selectRow(int row)
+void PagePapers::setCurrentRow(int row)
 {
 	currentRow = row;
 	currentPaperID = getPaperID(row);
@@ -114,7 +113,7 @@ void PagePapers::jumpToID(int id)
 
 void PagePapers::add()
 {
-	onSubmitPaper();
+//	onSubmitPaper();
 	PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Add Paper"));
 	if(dlg.exec() == QDialog::Accepted)
@@ -147,7 +146,7 @@ void PagePapers::onEditPaper()
 	updateRecord(currentRow, dlg);
 	onSubmitPaper();
 	renameTitle(oldTitle, dlg.getTitle());
-	if(!dlg.getNote().isEmpty())   // paper with notes indicates being read
+	if(!dlg.getNote().isEmpty())   // paper with notes indicates its been read
 		setPaperRead(currentPaperID);
 	updateTags(dlg.getTags());
 }
@@ -164,12 +163,15 @@ void PagePapers::updateRecord(int row, const PaperDlg& dlg)
 
 void PagePapers::updateTags(const QStringList& tags)
 {
+	// remove all connections to tags
 	QSqlQuery query;
 	query.exec(tr("delete from PaperTag where Paper = %1").arg(currentPaperID));
+
+	// add connections back
 	foreach(QString tag, tags)
 	{
 		int tagID = getTagID("Tags", tag);
-		if(tagID < 0)
+		if(tagID < 0)   // new tag
 		{
 			tagID = getNextID("Tags", "ID");
 			ui.widgetWordCloud->addTag(tagID, tag);
@@ -185,9 +187,9 @@ void PagePapers::del()
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
-		foreach(QModelIndex idx, idxList)
-			delPaper(getPaperID(idx.row()));
-		modelPapers.select();
+		foreach(QModelIndex idx, idxList)     // find all selected indexes
+			delPaper(getPaperID(idx.row()));  // delete in the db
+		modelPapers.select();                 // reload db
 	}
 }
 
@@ -287,6 +289,8 @@ void PagePapers::mergeRecord(int row, const ImportResult &record)
 	modelPapers.submitAll();
 }
 
+// submit the model
+// keep selecting current paper
 void PagePapers::onSubmitPaper()
 {
 	hideRelated();
@@ -319,11 +323,11 @@ void PagePapers::search(const QString& target)
 void PagePapers::onAddTag()
 {
 	AddTagDlg dlg("Tags", this);
-	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
+	if(dlg.exec() == QDialog::Accepted)
 	{
 		int tagID = getNextID("Tags", "ID");
-		ui.widgetWordCloud->addTag(tagID, dlg.getText());
-		ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
+		ui.widgetWordCloud->addTag(tagID, dlg.getText());         // create tag
+		ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);  // add to paper
 		highLightTags();
 	}
 }
@@ -331,23 +335,24 @@ void PagePapers::onAddTag()
 void PagePapers::onAddTagToPaper()
 {
 	QModelIndexList rows = ui.tvPapers->selectionModel()->selectedRows(PAPER_ID);
-	foreach(QModelIndex idx, rows)
+	foreach(QModelIndex idx, rows)  // for all selected papers
 	{
 		int paperID = modelPapers.data(idx).toInt();
 		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
-		foreach(WordLabel* tag, tags)
-			ui.widgetWordCloud->addTagToItem(getTagID("Tags", tag->text()),
-											 paperID);
+		foreach(WordLabel* tag, tags)   // add all selected tags to selected papers
+			ui.widgetWordCloud->addTagToItem(getTagID("Tags", tag->text()), paperID);
 	}
 	highLightTags();
 }
 
+// highlight the tags of current paper
 void PagePapers::highLightTags()
 {
 	ui.widgetWordCloud->unselectAll();
 	ui.widgetWordCloud->highLight(getTagsOfPaper(currentPaperID));
 }
 
+// same structure as onAddTagToPaper()
 void PagePapers::onDelTagFromPaper()
 {
 	QModelIndexList rows = ui.tvPapers->selectionModel()->selectedRows(PAPER_ID);
@@ -356,8 +361,7 @@ void PagePapers::onDelTagFromPaper()
 		int paperID = modelPapers.data(idx).toInt();
 		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 		foreach(WordLabel* tag, tags)
-			ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()),
-												  paperID);
+			ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()), paperID);
 	}
 	highLightTags();
 }
@@ -378,6 +382,7 @@ void PagePapers::onResetPapers()
 	jumpToID(currentPaperID);
 }
 
+// filter papers with tags
 void PagePapers::onFilterPapers()
 {
 	hideRelated();
@@ -395,24 +400,28 @@ void PagePapers::onShowRelated()
 	hideCoauthor();
 	QSqlDatabase::database().transaction();
 	QSqlQuery query, subQuery;
-	query.exec(tr("update Papers set Proximity = 0"));
+	query.exec(tr("update Papers set Proximity = 0"));   // reset proximity
+
+	// calculate proximity
 	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
 				  where Tag in (select Tag from PaperTag where Paper = %1) \
 				  and Paper != %1 and ID = Paper \
 				  group by Paper").arg(currentPaperID));
 
+	// save proximity
 	while(query.next()) {
 		subQuery.exec(tr("update Papers set Proximity = %1 where ID = %2")
 			.arg(query.value(1).toInt())
 			.arg(query.value(0).toInt()));
 	}
 
+	// set itself the max proximity
 	query.exec(tr("update Papers set Proximity = (select max(Proximity)+1 from Papers) \
 				  where ID = %1").arg(currentPaperID));
 	QSqlDatabase::database().commit();
 
-	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
-	jumpToID(currentPaperID);
+	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);  // sort
+	jumpToID(currentPaperID);                                         // keep highlighting
 }
 
 void PagePapers::hideRelated()
@@ -460,9 +469,9 @@ void PagePapers::onAddQuote()
 	AddQuoteDlg* dlg = new AddQuoteDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
 	dlg->setWindowTitle(tr("Add Quote"));
-	dlg->setQuoteID(getNextID("Quotes", "ID"));
-	dlg->addRef(getPaperTitle(currentPaperID));
-	dlg->show();
+	dlg->setQuoteID(getNextID("Quotes", "ID"));    // create new quote id
+	dlg->addRef(getPaperTitle(currentPaperID));    // add itself
+	dlg->show();    // not modal, s.t. can switch between paper and quote pages
 }
 
 void PagePapers::updateQuotes()
@@ -479,7 +488,7 @@ void PagePapers::onEditQuote(const QModelIndex& idx)
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
 	dlg->setWindowTitle(tr("Edit Quote"));
 	dlg->setQuoteID(getQuoteID(idx.row()));
-	dlg->show();
+	dlg->show();    // not modal, s.t. can switch between paper and quote pages
 }
 
 void PagePapers::onDelQuotes()
@@ -516,16 +525,16 @@ void PagePapers::onFullTextSearch(const QString& target)
 	for(int row = 0; row < rowCount; ++row)
 	{
 		progress.setValue(row);
-		if(fullTextSearch(getPaperID(row), target))
-			filter << tr("ID = %1").arg(getPaperID(row));
-		if (progress.wasCanceled())
+		if(fullTextSearch(getPaperID(row), target))        // if found in this paper
+			filter << tr("ID = %1").arg(getPaperID(row));  // add the paper to filter
+		if(progress.wasCanceled())
 			break;
 	}
 
 	if(filter.isEmpty())
 		QMessageBox::information(this, tr("Full text search"), tr("No such paper!"));
 	else
-		modelPapers.setFilter(filter.join(" OR "));
+		modelPapers.setFilter(filter.join(" OR "));        // filter out papers
 }
 
 void PagePapers::loadSplitterSizes()

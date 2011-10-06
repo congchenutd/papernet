@@ -11,10 +11,11 @@ class PageQuotes : public Page
 
 public:
 	PageQuotes(QWidget *parent = 0);
-	void add();
-	void del();
-	void search(const QString& target);
-	void jumpToID(int id);
+	
+	virtual void add();
+	virtual void del();
+	virtual void search(const QString& target);
+	virtual void jumpToID(int id);
 
 private slots:
 	void onCurrentRowChanged();

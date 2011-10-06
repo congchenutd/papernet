@@ -13,7 +13,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 	ui.setupUi(this);
 	currentRow = -1;
 
-	onResetPhrases();
+	onResetPhrases();   // init model
 
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
@@ -215,7 +215,7 @@ void PageDictionary::search(const QString& target)
 }
 
 void PageDictionary::onClicked(const QModelIndex& idx) {
-	Navigator::getInstance()->addFootStep(this, getID(idx.row()));
+	Navigator::getInstance()->addFootStep(this, getID(idx.row()));   // navigation
 }
 
 int PageDictionary::getID(int row) const {

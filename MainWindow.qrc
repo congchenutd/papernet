@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/MainWindow">
+    <file>Images/Backward.png</file>
+    <file>Images/Forward.png</file>
     <file>Images/Dictionary.png</file>
     <file>Images/Quote.png</file>
     <file>Images/Rename.png</file>

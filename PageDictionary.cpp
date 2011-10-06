@@ -3,11 +3,12 @@
 #include "AddPhraseDlg.h"
 #include "AddTagDlg.h"
 #include "OptionDlg.h"
+#include "Navigator.h"
 #include <QMessageBox>
 #include <QSqlQuery>
 
 PageDictionary::PageDictionary(QWidget *parent)
-	: QWidget(parent)
+	: Page(parent)
 {
 	ui.setupUi(this);
 	currentRow = -1;
@@ -26,15 +27,16 @@ PageDictionary::PageDictionary(QWidget *parent)
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
+	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
 	connect(ui.widgetWordCloud, SIGNAL(filter()),    this, SLOT(onFilterPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),  this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPhrase()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPhrase()));
-	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onDoubleClick(QString)));
+	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
 }
 
-void PageDictionary::onAdd()
+void PageDictionary::add()
 {
 	AddPhraseDlg dlg(this);
 	dlg.setWindowTitle(tr("Add Phrase"));
@@ -51,14 +53,14 @@ void PageDictionary::onAdd()
 	}
 }
 
-void PageDictionary::onDel()
+void PageDictionary::del()
 {
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delPhrase(model.data(model.index(idx.row(), DICTIONARY_ID)).toInt());
+			delPhrase(getID(idx.row()));
 		model.select();
 	}
 }
@@ -181,10 +183,10 @@ void PageDictionary::submit()
 {
 	int backupID = currentPhraseID;
 	model.submitAll();
-	selectID(backupID);
+	jumpToID(backupID);
 }
 
-void PageDictionary::selectID(int id)
+void PageDictionary::jumpToID(int id)
 {
 	int row = idToRow(&model, DICTIONARY_ID, id);
 	if(row > -1)
@@ -195,10 +197,27 @@ void PageDictionary::selectID(int id)
 	}
 }
 
-void PageDictionary::onDoubleClick(const QString& label)
+void PageDictionary::onTagDoubleClicked(const QString& label)
 {
 	if(label.isEmpty())
 		onResetPhrases();
 	else
 		onFilterPhrases();
+}
+
+void PageDictionary::search(const QString& target)
+{
+	if(target.isEmpty())
+		onResetPhrases();
+	else
+		model.setFilter(tr("Phrase like \"%%1%\" or \
+						    Explanation like \"%%1%\" ").arg(target));
+}
+
+void PageDictionary::onClicked(const QModelIndex& idx) {
+	Navigator::getInstance()->addFootStep(this, getID(idx.row()));
+}
+
+int PageDictionary::getID(int row) const {
+	return model.data(model.index(row, DICTIONARY_ID)).toInt();
 }

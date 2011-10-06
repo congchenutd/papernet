@@ -1,17 +1,17 @@
 #ifndef PAGEPAPERS_H
 #define PAGEPAPERS_H
 
-#include <QWidget>
 #include <QSqlTableModel>
 #include <QSqlQueryModel>
 #include <QDataWidgetMapper>
 #include "ui_PagePapers.h"
 #include "PaperModel.h"
+#include "Page.h"
 
 struct ImportResult;
 class PaperDlg;
 
-class PagePapers : public QWidget
+class PagePapers : public Page
 {
 	Q_OBJECT
 
@@ -20,14 +20,15 @@ public:
 	~PagePapers();
 	void jumpToPaper(const QString& title);
 	void saveGeometry();
+	void add();
+	void del();
+	void search(const QString& target);
+	void jumpToID(int id);
 
 private slots:
-	void onAddPaper();
-	void onDelPaper();
 	void onImport();
 	void onCurrentRowChanged(const QModelIndex& idx);
 	void onEditPaper();
-	void onSearch(const QString& target);
 	void onFullTextSearch(const QString& target);
 	void onSubmitPaper();
 	void onClicked(const QModelIndex& idx);
@@ -39,7 +40,7 @@ private slots:
 	void onAddTagToPaper();
 	void onDelTagFromPaper();
 	void onFilterPapers();
-	void onDoubleClick(const QString& label);
+	void onTagDoubleClicked(const QString& label);
 
 	void onAddQuote();
 	void onEditQuote(const QModelIndex& idx);
@@ -50,8 +51,6 @@ signals:
 
 private:
 	int  getPaperID(int row) const;
-	int  idToRow   (int id)  const;
-	void selectID(int id);
 	void highLightTags();
 	void hideRelated();
 	void hideCoauthor();
@@ -62,6 +61,7 @@ private:
 	void loadSplitterSizes();
 	void updateRecord(int row, const PaperDlg& dlg);
 	void updateTags(const QStringList& tags);
+	void selectRow(int row);
 
 private:
 	Ui::PagePapersClass ui;

@@ -4,6 +4,8 @@
 #include <QDialog>
 #include "ui_PaperDlg.h"
 
+class QCompleter;
+
 class PaperDlg : public QDialog
 {
 	Q_OBJECT
@@ -28,6 +30,7 @@ public:
 
 private:
 	Ui::PaperDlgClass ui;
+	QCompleter* completer;
 };
 
 #endif // PAPERDLG_H

@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QApplication>
 
 ToolBar::ToolBar(QWidget *parent)
 	: QToolBar(parent)
@@ -48,7 +49,7 @@ void ToolBar::onShowText(bool show)
 SearchBar::SearchBar(QWidget* parent) : QToolBar(parent)
 {
 	addWidget(new QLabel(tr("  Search ")));
-	addWidget(leSearch = new QLineEdit(this));
+	addWidget(leSearch = new SearchLineEdit(this));
 	addWidget(new QLabel(" "));
 
 	btFullText = new QPushButton(QIcon(":/MainWindow/Images/FullText.png"), QString());
@@ -89,4 +90,33 @@ void SearchBar::onFocus()
 
 void SearchBar::onFullTextSearch() {
 	emit fullTextSearch(leSearch->text());
+}
+
+//////////////////////////////////////////////////////////////////////////
+SearchLineEdit::SearchLineEdit(QWidget* parent) 
+	: QLineEdit(parent) {}
+
+void SearchLineEdit::clear()
+{
+	QPalette p = palette();
+	p.setColor(QPalette::Text, Qt::gray);
+	setPalette(p);
+	setText(tr(" type to search ..."));
+}
+
+void SearchLineEdit::focusInEvent(QFocusEvent* event)
+{
+	if(text() == tr(" type to search ..."))
+	{
+		setPalette(qApp->palette());  // reset palette
+		QLineEdit::clear();
+	}
+	QLineEdit::focusInEvent(event);
+}
+
+void SearchLineEdit::focusOutEvent(QFocusEvent* event)
+{
+	if(text().isEmpty())
+		clear();
+	QLineEdit::focusOutEvent(event);
 }

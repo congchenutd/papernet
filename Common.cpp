@@ -314,14 +314,14 @@ bool renameAttachment(int paperID, const QString& oldName, const QString& newNam
 	return QFile::rename(getAttachmentPath(paperID, oldName), getAttachmentPath(paperID, newName));
 }
 
-bool renameTitle(const QString& oldName, const QString& newName)
+void renameTitle(const QString& oldName, const QString& newName)
 {
 	if(oldName == newName || oldName.isEmpty() || newName.isEmpty())
-		return true;
-	return QFile::rename(pdfDir + "/" + oldName + ".pdf",               // rename [title].pdf
-						 pdfDir + "/" + newName + ".pdf") &&
-			QDir(".").rename(attachmentDir + makeValidTitle(oldName),
-							 attachmentDir + makeValidTitle(newName));  // rename attachment dir
+		return;
+	QFile::rename(pdfDir + "/" + oldName + ".pdf",              // rename [title].pdf
+				  pdfDir + "/" + newName + ".pdf");
+	QDir(".").rename(attachmentDir + makeValidTitle(oldName),
+					 attachmentDir + makeValidTitle(newName));  // rename attachment dir
 }
 
 int getMaxProximity()
@@ -536,9 +536,9 @@ QStringList getTagsOfPhrase(int phraseID)
 	return tags;
 }
 
-int idToRow(QAbstractItemModel *model, int section, int id)
+int idToRow(QAbstractItemModel* model, int idSection, int id)
 {
 	QModelIndexList indexes = model->match(
-		model->index(0, section), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
+		model->index(0, idSection), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
 	return !indexes.isEmpty() ? indexes.at(0).row() : -1;
 }

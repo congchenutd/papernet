@@ -5,6 +5,7 @@
 #include "AddQuoteDlg.h"
 #include "Importer.h"
 #include "../EnglishName/EnglishName.h"
+#include "Navigator.h"
 #include "AddTagDlg.h"
 #include <QMessageBox>
 #include <QFileDialog>
@@ -19,7 +20,7 @@
 #include <QProgressDialog>
 
 PagePapers::PagePapers(QWidget *parent)
-	: QWidget(parent)
+	: Page(parent)
 {
 	currentRow = -1;
 	setting = MySetting<UserSetting>::getInstance();
@@ -74,17 +75,44 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPaper()));
-	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onDoubleClick(QString)));
+	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
 }
 
 void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 {
 	emit tableValid(idx.isValid());
 	if(idx.isValid())
-		onClicked(idx);
+		selectRow(idx.row());
 }
 
-void PagePapers::onAddPaper()
+// only triggered by mouse click, not programmatically
+void PagePapers::onClicked(const QModelIndex& idx)
+{
+	selectRow(idx.row());
+	Navigator::getInstance()->addFootStep(this, currentPaperID);
+}
+
+void PagePapers::selectRow(int row)
+{
+	currentRow = row;
+	currentPaperID = getPaperID(row);
+	highLightTags();
+	updateQuotes();
+	ui.widgetAttachments->setPaper(currentPaperID);
+}
+
+void PagePapers::jumpToID(int id)
+{
+	int row = idToRow(&modelPapers, PAPER_ID, id);
+	if(row > -1)
+	{
+		currentRow = row;
+		ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
+		ui.tvPapers->setFocus();
+	}
+}
+
+void PagePapers::add()
 {
 	onSubmitPaper();
 	PaperDlg dlg(this);
@@ -118,8 +146,7 @@ void PagePapers::onEditPaper()
 
 	updateRecord(currentRow, dlg);
 	onSubmitPaper();
-	if(!renameTitle(oldTitle, dlg.getTitle()))
-		QMessageBox::critical(this, tr("Error"), tr("Renaming tile failed!"));
+	renameTitle(oldTitle, dlg.getTitle());
 	if(!dlg.getNote().isEmpty())   // paper with notes indicates being read
 		setPaperRead(currentPaperID);
 	updateTags(dlg.getTags());
@@ -149,9 +176,10 @@ void PagePapers::updateTags(const QStringList& tags)
 		}
 		ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
 	}
+	highLightTags();
 }
 
-void PagePapers::onDelPaper()
+void PagePapers::del()
 {
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
@@ -165,24 +193,6 @@ void PagePapers::onDelPaper()
 
 int PagePapers::getPaperID(int row) const {
 	return row > -1 ? modelPapers.data(modelPapers.index(row, PAPER_ID)).toInt() : -1;
-}
-
-void PagePapers::selectID(int id)
-{
-	int row = idToRow(id);
-	if(row > -1)
-	{
-		currentRow = row;
-		ui.tvPapers->selectRow(currentRow);
-		ui.tvPapers->setFocus();
-	}
-}
-
-int PagePapers::idToRow(int id) const
-{
-	QModelIndexList indexes = modelPapers.match(
-		modelPapers.index(0, PAPER_ID), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
-	return !indexes.isEmpty() ? indexes.at(0).row() : -1;
 }
 
 void PagePapers::onImport()
@@ -218,7 +228,7 @@ void PagePapers::onImport()
 			{
 				if(QMessageBox::warning(this, tr("Title exists"), tr("Do you want to merge into the existing record?"),
 						QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-					mergeRecord(idToRow(id), result);
+					mergeRecord(idToRow(&modelPapers, PAPER_ID, id), result);
 				}
 			}
 			else
@@ -285,14 +295,14 @@ void PagePapers::onSubmitPaper()
 	if(!modelPapers.submitAll())
 		QMessageBox::critical(this, tr("Error"), tr("Database submission failed!"));
 	currentPaperID = backup;
-	selectID(backup);
+	jumpToID(backup);
 }
 
 PagePapers::~PagePapers() {
-	onSubmitPaper();
+	//onSubmitPaper();   // everything should have been manually submitted
 }
 
-void PagePapers::onSearch(const QString& target)
+void PagePapers::search(const QString& target)
 {
 	if(target.isEmpty())
 		onResetPapers();
@@ -314,6 +324,7 @@ void PagePapers::onAddTag()
 		int tagID = getNextID("Tags", "ID");
 		ui.widgetWordCloud->addTag(tagID, dlg.getText());
 		ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
+		highLightTags();
 	}
 }
 
@@ -364,16 +375,7 @@ void PagePapers::onResetPapers()
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	hideRelated();
 	hideCoauthor();
-	selectID(currentPaperID);
-}
-
-void PagePapers::onClicked(const QModelIndex& idx)
-{
-	currentRow = idx.row();
-	currentPaperID = getPaperID(currentRow);
-	highLightTags();
-	ui.widgetAttachments->setPaper(currentPaperID);
-	updateQuotes();
+	jumpToID(currentPaperID);
 }
 
 void PagePapers::onFilterPapers()
@@ -410,7 +412,7 @@ void PagePapers::onShowRelated()
 	QSqlDatabase::database().commit();
 
 	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
-	selectID(currentPaperID);
+	jumpToID(currentPaperID);
 }
 
 void PagePapers::hideRelated()
@@ -442,7 +444,7 @@ void PagePapers::onShowCoauthored()
 	modelPapers.submitAll();
 
 	ui.tvPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);
-	selectID(currentPaperID);
+	jumpToID(currentPaperID);
 }
 
 void PagePapers::hideCoauthor()
@@ -497,7 +499,7 @@ int PagePapers::getQuoteID(int row) const {
 }
 
 void PagePapers::jumpToPaper(const QString& title) {
-	selectID(::getPaperID(title));
+	jumpToID(::getPaperID(title));
 }
 
 void PagePapers::onFullTextSearch(const QString& target)
@@ -543,7 +545,7 @@ void PagePapers::saveGeometry()
 	setting->setValue("SplitterDetails",    ui.splitterDetails->saveState());
 }
 
-void PagePapers::onDoubleClick(const QString& label)
+void PagePapers::onTagDoubleClicked(const QString& label)
 {
 	if(label.isEmpty())
 		onResetPapers();

@@ -27,7 +27,7 @@ void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 	connect(&actionDel,      SIGNAL(triggered()), this, SLOT(onDel()));
 	menu.addAction(&actionNewTag);
 	menu.addAction(&actionUnFilter);
-	if(childAt(event->pos()) != 0)
+	if(childAt(event->pos()) != 0)     // click on a tag
 	{
 		menu.addAction(&actionFilter);
 		menu.addAction(&actionAdd);
@@ -48,7 +48,6 @@ void TagsWidget::onDel()
 	}
 }
 
-
 // rebuild the cloud
 void TagsWidget::rebuild()
 {
@@ -63,7 +62,7 @@ void TagsWidget::rebuild()
 		else
 			addWord(word, size);
 	}
-	normalizeSizes();
+	normalizeSizes();  // calculate the display sizes
 }
 
 void TagsWidget::onRename()
@@ -71,26 +70,30 @@ void TagsWidget::onRename()
 	QList<WordLabel*> selected = getSelected();
 	if(selected.size() > 1)
 		return;
-	AddTagDlg dlg(tagTableName, this);
-	dlg.setWindowTitle(tr("Edit Tag"));
+
 	WordLabel* word = selected.front();
 	QString oldName = word->text();
+	AddTagDlg dlg(tagTableName, this);
+	dlg.setWindowTitle(tr("Edit Tag"));
 	dlg.setText(oldName);
-	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
+	if(dlg.exec() == QDialog::Accepted)
 	{
-		word->setText(dlg.getText());
+		renameWord(word, dlg.getText());
 		renameTag(tagTableName, oldName, dlg.getText());   // db
 	}
 }
 
 void TagsWidget::addTag(int id, const QString& text)
 {
+	if(text.isEmpty())
+		return;
+
 	// add to db
 	QSqlQuery query;
 	query.exec(tr("insert into %1 values(%2, \"%3\", 0)")
 			   .arg(tagTableName).arg(id).arg(text));
 
-	addWord(text, 20);
+	addWord(text);
 	normalizeSizes();
 }
 
@@ -126,6 +129,7 @@ void TagsWidget::updateTagSize(int tagID)
 	if(tagID < 0)
 		return;
 
+	// calculate the raw size of a tag
 	QSqlQuery query;
 	query.exec(tr("select count(*) from %1 group by Tag having Tag = %2")
 			   .arg(relationTableName).arg(tagID));

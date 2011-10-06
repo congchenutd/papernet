@@ -3,6 +3,7 @@
 #include "OptionDlg.h"
 #include <QDesktopServices>
 #include <QUrl>
+#include "ToolBar.h"
 
 extern QString userName;
 extern QString dbName;

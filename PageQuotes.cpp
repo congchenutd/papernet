@@ -1,10 +1,11 @@
 #include "PageQuotes.h"
 #include "AddQuoteDlg.h"
 #include "Common.h"
+#include "Navigator.h"
 #include <QMessageBox>
 
 PageQuotes::PageQuotes(QWidget *parent)
-	: QWidget(parent)
+	: Page(parent)
 {
 	currentRow = -1;
 	ui.setupUi(this);
@@ -18,9 +19,10 @@ PageQuotes::PageQuotes(QWidget *parent)
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
+	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
 }
 
-void PageQuotes::onSearch(const QString& target)
+void PageQuotes::search(const QString& target)
 {
 	if(target.isEmpty())
 		resetQuotes();
@@ -37,7 +39,11 @@ void PageQuotes::onCurrentRowChanged()
 	emit tableValid(valid);
 }
 
-void PageQuotes::onAdd()
+void PageQuotes::onClicked(const QModelIndex& idx) {
+	Navigator::getInstance()->addFootStep(this, getID(idx.row()));
+}
+
+void PageQuotes::add()
 {
 	AddQuoteDlg* dlg = new AddQuoteDlg(this);
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
@@ -55,7 +61,7 @@ void PageQuotes::onEdit()
 	dlg->show();
 }
 
-void PageQuotes::onDel()
+void PageQuotes::del()
 {
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
@@ -84,13 +90,13 @@ void PageQuotes::onAccepted() {
 	model.select();
 }
 
-void PageQuotes::jumpToQuote(int quoteID)
+void PageQuotes::jumpToID(int id)
 {
-	QModelIndexList indexes = model.match(
-		model.index(0, QUOTE_ID), Qt::DisplayRole, quoteID, 1, Qt::MatchExactly | Qt::MatchWrap);
-	if(!indexes.isEmpty())
+	int row = idToRow(&model, QUOTE_ID, id);
+	if(row > -1)
 	{
-		ui.tableView->selectRow(indexes.at(0).row());
+		currentRow = row;
+		ui.tableView->selectRow(currentRow);  // will trigger onCurrentRowChanged()
 		ui.tableView->setFocus();
 	}
 }

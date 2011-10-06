@@ -7,6 +7,8 @@
 class PagePapers;
 class PageQuotes;
 class PageDictionary;
+class Navigator;
+struct FootStep;
 
 class MainWindow : public QMainWindow
 {
@@ -29,6 +31,15 @@ private slots:
 	void onPapers();
 	void onQuotes();
 	void onDictionary();
+	void onAdd();
+	void onDel();
+	void onSearch(const QString& target);
+	void onForward();
+	void onBackward();
+	void onTableInvalid(bool valid);
+
+private:
+	void navigateTo(const FootStep& footStep);
 
 private:
 	Ui::MainWindowClass ui;
@@ -37,6 +48,8 @@ private:
 	PagePapers*     pagePapers;
 	PageQuotes*     pageQuotes;
 	PageDictionary* pageDictionary;
+	Page* currentPage;
+	Navigator* navigator;
 };
 
 #endif // MAINWINDOW_H

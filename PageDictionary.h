@@ -1,41 +1,42 @@
 #ifndef PAGEDICTIONARY_H
 #define PAGEDICTIONARY_H
 
-#include <QWidget>
-#include "ui_PageDictionary.h"
 #include <QSqlTableModel>
+#include "ui_PageDictionary.h"
+#include "Page.h"
 
-class PageDictionary : public QWidget
+class PageDictionary : public Page
 {
 	Q_OBJECT
 
 public:
 	PageDictionary(QWidget *parent = 0);
 	void saveGeometry();
-
-private:
-	void highLightTags();
+	void add();
+	void del();
+	void search(const QString& target);
+	void jumpToID(int id);
 
 private slots:
-	void onAdd();
-	void onDel();
 	void onEdit();
 	void onCurrentRowChanged();
+	void onClicked(const QModelIndex& idx);
 
 	void onAddTag();
 	void onAddTagToPhrase();
 	void onDelTagFromPhrase();
 	void onFilterPhrases();
 	void onResetPhrases();
-	void onDoubleClick(const QString& label);
+	void onTagDoubleClicked(const QString& label);
 
 signals:
 	void tableValid(bool);
 
 private:
-	void selectID(int id);
+	int getID(int row) const;
 	void submit();
 	void updateTags(const QStringList& tags);
+	void highLightTags();
 
 private:
 	Ui::PageDictionary ui;

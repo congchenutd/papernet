@@ -2,12 +2,14 @@
 #define TOOLBAR_H
 
 #include <QToolBar>
+#include <QLineEdit>
 
 class QAction;
 class QLineEdit;
 class QPushButton;
 class QCheckBox;
 
+// A tool bar with a context menu (show small icon, show text)
 class ToolBar : public QToolBar
 {
 	Q_OBJECT
@@ -27,6 +29,19 @@ private:
     QAction* actionShowText;
 };
 
+// A line edit that shows "type to search" when it loses focus
+class SearchLineEdit : public QLineEdit
+{
+public:
+	SearchLineEdit(QWidget* parent = 0);
+	void clear();
+
+protected:
+	virtual void focusInEvent (QFocusEvent*);
+	virtual void focusOutEvent(QFocusEvent*);
+};
+
+// A search tool bar
 class SearchBar : public QToolBar
 {
 	Q_OBJECT
@@ -46,8 +61,8 @@ signals:
 	void fullTextSearch(const QString& target);
 
 private:
-	QLineEdit*   leSearch;
-	QPushButton* btFullText;
+	SearchLineEdit* leSearch;
+	QPushButton*    btFullText;
 };
 
 #endif // TOOLBAR_H

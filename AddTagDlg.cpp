@@ -9,7 +9,7 @@ AddTagDlg::AddTagDlg(const QString& tableName, QWidget* parent) : QDialog(parent
 	// a compeleter gives a hint of the input
 	model.setTable(tableName);
 	model.select();
-	model.sort(TAG_NAME, Qt::AscendingOrder);
+
 	QCompleter* completer = new QCompleter(this);
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 	completer->setModel(&model);
@@ -19,11 +19,16 @@ AddTagDlg::AddTagDlg(const QString& tableName, QWidget* parent) : QDialog(parent
 }
 
 QString AddTagDlg::getText() const {
-	return ui.lineEdit->text();
+	return ui.lineEdit->text().toLower();
 }
 
 void AddTagDlg::setText(const QString& text)
 {
 	ui.lineEdit->setText(text);
 	ui.lineEdit->selectAll();
+}
+
+void AddTagDlg::accept() {
+	if(!getText().isEmpty())
+		QDialog::accept();
 }

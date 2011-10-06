@@ -13,6 +13,7 @@ public:
 	AddTagDlg(const QString& tableName, QWidget* parent = 0);
 	QString getText() const;
 	void    setText(const QString& text);
+	void    accept();
 
 private:
 	Ui::AddTagDlg ui;

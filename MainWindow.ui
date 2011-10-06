@@ -40,7 +40,7 @@
      <x>0</x>
      <y>0</y>
      <width>525</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -63,6 +63,7 @@
     </property>
     <addaction name="actionPapers"/>
     <addaction name="actionQuotes"/>
+    <addaction name="actionDictionary"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -85,13 +86,12 @@
    <addaction name="actionQuotes"/>
    <addaction name="actionDictionary"/>
    <addaction name="separator"/>
+   <addaction name="actionBackward"/>
+   <addaction name="actionForward"/>
+   <addaction name="separator"/>
    <addaction name="actionImportPaper"/>
-   <addaction name="actionAddPaper"/>
-   <addaction name="actionDelPaper"/>
-   <addaction name="actionAddQuote"/>
-   <addaction name="actionDelQuote"/>
-   <addaction name="actionAddPhrase"/>
-   <addaction name="actionDelPhrase"/>
+   <addaction name="actionAdd"/>
+   <addaction name="actionDel"/>
   </widget>
   <widget class="SearchBar" name="toolBarSearch">
    <property name="windowTitle">
@@ -154,58 +154,28 @@
     <string>Quotes</string>
    </property>
   </action>
-  <action name="actionAddPaper">
+  <action name="actionAdd">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
    </property>
    <property name="text">
-    <string>Add paper</string>
+    <string>Add</string>
    </property>
    <property name="toolTip">
-    <string>Add paper</string>
+    <string>Add</string>
    </property>
   </action>
-  <action name="actionAddQuote">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
-   </property>
-   <property name="text">
-    <string>Add Quote</string>
-   </property>
-   <property name="toolTip">
-    <string>Add Quote</string>
-   </property>
-  </action>
-  <action name="actionDelPaper">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
+  <action name="actionDel">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
    </property>
    <property name="text">
-    <string>Delete paper</string>
+    <string>Delete</string>
    </property>
    <property name="toolTip">
-    <string>Delete paper</string>
-   </property>
-  </action>
-  <action name="actionDelQuote">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
-   </property>
-   <property name="text">
-    <string>Delete Quote</string>
-   </property>
-   <property name="toolTip">
-    <string>Delete Quote</string>
+    <string>Delete</string>
    </property>
   </action>
   <action name="actionImportPaper">
@@ -237,25 +207,34 @@
     <string>Dictionary</string>
    </property>
   </action>
-  <action name="actionAddPhrase">
-   <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
-   </property>
-   <property name="text">
-    <string>Add Phrase</string>
-   </property>
-  </action>
-  <action name="actionDelPhrase">
+  <action name="actionBackward">
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
+     <normaloff>:/MainWindow/Images/Backward.png</normaloff>:/MainWindow/Images/Backward.png</iconset>
    </property>
    <property name="text">
-    <string>Delete Phrase</string>
+    <string>Go backward</string>
+   </property>
+   <property name="toolTip">
+    <string>Go backward</string>
+   </property>
+  </action>
+  <action name="actionForward">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/MainWindow/Images/Forward.png</normaloff>:/MainWindow/Images/Forward.png</iconset>
+   </property>
+   <property name="text">
+    <string>Go forward</string>
+   </property>
+   <property name="toolTip">
+    <string>Go forward</string>
    </property>
   </action>
  </widget>

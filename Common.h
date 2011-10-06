@@ -37,7 +37,7 @@ QString getAttachmentDir(int paperID);
 void openAttachment(int paperID, const QString& attachmentName);
 QString getAttachmentPath(int paperID, const QString& attachmentName);
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName);
-bool renameTitle(const QString& oldName, const QString& newName);
+void renameTitle(const QString& oldName, const QString& newName);
 bool fullTextSearch(int paperID, const QString& target);
 void makeFullTextFiles();
 void hideFile(const QString& filePath);
@@ -53,7 +53,7 @@ int getQuoteID(const QString& title);
 
 void delPhrase(int id);
 
-int idToRow(QAbstractItemModel* model, int section, int id);
+int idToRow(QAbstractItemModel* model, int idSection, int id);
 
 enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE,
 	  PAPER_AUTHORS, PAPER_YEAR, PAPER_JOURNAL, PAPER_ABSTRACT, PAPER_NOTE,

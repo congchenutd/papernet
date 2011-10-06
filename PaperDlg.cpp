@@ -1,5 +1,8 @@
 #include "PaperDlg.h"
+#include "Common.h"
 #include <QDate>
+#include <QSqlTableModel>
+#include <QCompleter>
 
 PaperDlg::PaperDlg(QWidget *parent)
 	: QDialog(parent)
@@ -7,6 +10,18 @@ PaperDlg::PaperDlg(QWidget *parent)
 	ui.setupUi(this);
 	resize(800, 600);
 	ui.sbYear->setValue(QDate::currentDate().year());
+
+	QSqlTableModel* tagModel = new QSqlTableModel(this);
+	tagModel->setTable("Tags");
+	tagModel->select();
+
+	completer = new QCompleter(this);
+	completer->setCaseSensitivity(Qt::CaseInsensitive);
+	completer->setModel(tagModel);
+	completer->setCompletionColumn(TAG_NAME);
+	completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
+
+	ui.leTags->setCompleter(completer);
 }
 
 QString PaperDlg::getTitle() const {
@@ -34,7 +49,8 @@ QString PaperDlg::getNote() const {
 }
 
 QStringList PaperDlg::getTags() const {
-	return ui.leTags->text().split(";");
+	return ui.leTags->text().isEmpty() ? QStringList()
+									   : ui.leTags->text().split(";");
 }
 
 void PaperDlg::setTitle(const QString& title) {

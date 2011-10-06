@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "OptionDlg.h"
 #include "Common.h"
+#include "Navigator.h"
 #include <QMessageBox>
 #include <QDate>
 #include <QActionGroup>
@@ -9,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
 {
 	instance = this;
+	currentPage = 0;
+	navigator = Navigator::getInstance();
 
 	ui.setupUi(this);
 	onPapers();     // paper page by default
@@ -29,20 +32,19 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(ui.actionDictionary,  SIGNAL(triggered()), this, SLOT(onDictionary()));
 	connect(ui.actionAboutQt,     SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionImportPaper, SIGNAL(triggered()), pagePapers, SLOT(onImport()));
-	connect(ui.actionAddPaper,    SIGNAL(triggered()), pagePapers, SLOT(onAddPaper()));
-	connect(ui.actionDelPaper,    SIGNAL(triggered()), pagePapers, SLOT(onDelPaper()));
-	connect(ui.actionAddQuote,    SIGNAL(triggered()), pageQuotes, SLOT(onAdd()));
-	connect(ui.actionDelQuote,    SIGNAL(triggered()), pageQuotes, SLOT(onDel()));
-	connect(ui.actionAddPhrase,   SIGNAL(triggered()), pageDictionary, SLOT(onAdd()));
-	connect(ui.actionDelPhrase,   SIGNAL(triggered()), pageDictionary, SLOT(onDel()));
-
-	connect(ui.toolBarSearch, SIGNAL(search(QString)),         pagePapers, SLOT(onSearch(QString)));
-	connect(ui.toolBarSearch, SIGNAL(search(QString)),         pageQuotes, SLOT(onSearch(QString)));
+	connect(ui.actionAdd, SIGNAL(triggered()), this, SLOT(onAdd()));
+	connect(ui.actionDel, SIGNAL(triggered()), this, SLOT(onDel()));
+	connect(ui.actionBackward, SIGNAL(triggered()), this, SLOT(onBackward()));
+	connect(ui.actionForward,  SIGNAL(triggered()), this, SLOT(onForward()));
+	connect(ui.toolBarSearch, SIGNAL(search(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
 
-	connect(pagePapers,     SIGNAL(tableValid(bool)), ui.actionDelPaper,  SLOT(setEnabled(bool)));
-	connect(pageQuotes,     SIGNAL(tableValid(bool)), ui.actionDelQuote,  SLOT(setEnabled(bool)));
-	connect(pageDictionary, SIGNAL(tableValid(bool)), ui.actionDelPhrase, SLOT(setEnabled(bool)));
+	connect(pagePapers,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
+	connect(pageQuotes,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
+	connect(pageDictionary, SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
+
+	connect(navigator, SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
+	connect(navigator, SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
 
 	// load settings
 	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());
@@ -104,44 +106,29 @@ void MainWindow::backup(const QString& name)
 
 void MainWindow::onPapers()
 {
+	currentPage = ui.pagePapers;
 	ui.actionPapers->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(0);
 	ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(true);
-	ui.actionAddPaper->setVisible(true);
-	ui.actionDelPaper->setVisible(true);
-	ui.actionAddQuote->setVisible(false);
-	ui.actionDelQuote->setVisible(false);
-	ui.actionAddPhrase->setVisible(false);
-	ui.actionDelPhrase->setVisible(false);
 }
 
 void MainWindow::onQuotes()
 {
+	currentPage = ui.pageQuotes;
 	ui.actionQuotes->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(1);
 	ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(false);
-	ui.actionAddPaper->setVisible(false);
-	ui.actionDelPaper->setVisible(false);
-	ui.actionAddQuote->setVisible(true);
-	ui.actionDelQuote->setVisible(true);
-	ui.actionAddPhrase->setVisible(false);
-	ui.actionDelPhrase->setVisible(false);
 }
 
 void MainWindow::onDictionary()
 {
+	currentPage = ui.pageDictionary;
 	ui.actionDictionary->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(2);
 	ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(false);
-	ui.actionAddPaper->setVisible(false);
-	ui.actionDelPaper->setVisible(false);
-	ui.actionAddQuote->setVisible(false);
-	ui.actionDelQuote->setVisible(false);
-	ui.actionAddPhrase->setVisible(true);
-	ui.actionDelPhrase->setVisible(true);
 }
 
 void MainWindow::jumpToPaper(const QString& title)
@@ -153,11 +140,53 @@ void MainWindow::jumpToPaper(const QString& title)
 void MainWindow::jumpToQuote(int quoteID)
 {
 	onQuotes();
-	pageQuotes->jumpToQuote(quoteID);
+	pageQuotes->jumpToID(quoteID);
 }
 
 MainWindow* MainWindow::getInstance() {
 	return instance;
+}
+
+void MainWindow::onAdd() {
+	currentPage->add();
+}
+
+void MainWindow::onDel() {
+	currentPage->del();
+}
+
+void MainWindow::onSearch(const QString& target) {
+	currentPage->search(target);
+}
+
+void MainWindow::onForward() {
+	navigateTo(navigator->forward());
+}
+
+void MainWindow::onBackward() {
+	navigateTo(navigator->backward());
+}
+
+void MainWindow::onTableInvalid(bool valid) {
+	//if(Page* page = dynamic_cast<Page*>(sender()))
+	//	if(currentPage == page)
+	//		ui.actionDel->setEnabled(valid);
+}
+
+void MainWindow::navigateTo(const FootStep& footStep)
+{
+	if(footStep.page == 0)
+		return;
+
+	currentPage = footStep.page;
+	if(currentPage == ui.pagePapers)
+		onPapers();
+	else if(currentPage == ui.pageQuotes)
+		onQuotes();
+	else
+		onDictionary();
+
+	currentPage->jumpToID(footStep.id);
 }
 
 MainWindow* MainWindow::instance = 0;

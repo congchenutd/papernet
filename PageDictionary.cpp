@@ -12,6 +12,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 {
 	ui.setupUi(this);
 	currentRow = -1;
+	currentPhraseID = -1;
 
 	onResetPhrases();   // init model
 
@@ -107,9 +108,16 @@ void PageDictionary::onCurrentRowChanged()
 	QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();
 	currentRow = valid ? idxList.front().row() : -1;
-	currentPhraseID = valid ? model.data(model.index(currentRow, TAG_ID)).toInt() : -1;
-	highLightTags();
+	if(valid)
+	{
+		currentPhraseID = model.data(model.index(currentRow, TAG_ID)).toInt();
+		highLightTags();
+	}
 	emit tableValid(valid);
+}
+
+void PageDictionary::onClicked(const QModelIndex& idx) {
+	Navigator::getInstance()->addFootStep(this, getID(idx.row()));   // navigation
 }
 
 // new tag
@@ -185,6 +193,7 @@ void PageDictionary::onResetPhrases()
 	model.select();
 	while(model.canFetchMore())
 		model.fetchMore();
+	jumpToID(currentPhraseID);
 }
 
 // submit, while keep selecting current phrase
@@ -222,10 +231,6 @@ void PageDictionary::search(const QString& target)
 	else
 		model.setFilter(tr("Phrase like \"%%1%\" or \
 						    Explanation like \"%%1%\" ").arg(target));
-}
-
-void PageDictionary::onClicked(const QModelIndex& idx) {
-	Navigator::getInstance()->addFootStep(this, getID(idx.row()));   // navigation
 }
 
 int PageDictionary::getID(int row) const {

@@ -61,7 +61,6 @@ private:
 	void highLightTags();
 	int  getQuoteID(int row) const;
 	void loadSplitterSizes();
-	void setCurrentRow(int row);
 
 private:
 	Ui::PagePapersClass ui;

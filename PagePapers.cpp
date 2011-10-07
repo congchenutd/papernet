@@ -23,6 +23,7 @@ PagePapers::PagePapers(QWidget *parent)
 	: Page(parent)
 {
 	currentRow = -1;
+	currentPaperID = -1;
 	setting = MySetting<UserSetting>::getInstance();
 
 	ui.setupUi(this);
@@ -81,23 +82,18 @@ void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 {
 	emit tableValid(idx.isValid());
 	if(idx.isValid())
-		setCurrentRow(idx.row());
+	{
+		currentRow = idx.row();
+		currentPaperID = getPaperID(idx.row());
+		highLightTags();
+		updateQuotes();
+		ui.widgetAttachments->setPaper(currentPaperID);
+	}
 }
 
 // only triggered by mouse click, not programmatically
-void PagePapers::onClicked(const QModelIndex& idx)
-{
-	setCurrentRow(idx.row());
-	Navigator::getInstance()->addFootStep(this, currentPaperID);
-}
-
-void PagePapers::setCurrentRow(int row)
-{
-	currentRow = row;
-	currentPaperID = getPaperID(row);
-	highLightTags();
-	updateQuotes();
-	ui.widgetAttachments->setPaper(currentPaperID);
+void PagePapers::onClicked(const QModelIndex& idx) {
+	Navigator::getInstance()->addFootStep(this, getPaperID(idx.row()));
 }
 
 void PagePapers::jumpToID(int id)

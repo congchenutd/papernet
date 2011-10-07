@@ -40,6 +40,7 @@ private:
 	void submit();
 	void updateTags(const QStringList& tags);
 	void highLightTags();
+	void hideRelated();
 
 private:
 	Ui::PageDictionary ui;

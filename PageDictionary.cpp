@@ -156,6 +156,7 @@ void PageDictionary::onDelTagFromPhrase()
 
 void PageDictionary::onFilterPhrases()
 {
+	hideRelated();
 	QStringList tagClauses;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)   // create filter from selected tags
@@ -178,6 +179,7 @@ void PageDictionary::saveGeometry()
 
 void PageDictionary::onResetPhrases()
 {
+	hideRelated();   // reset coloring
 	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
 	model.setTable("Dictionary");
 	model.select();
@@ -188,6 +190,7 @@ void PageDictionary::onResetPhrases()
 // submit, while keep selecting current phrase
 void PageDictionary::submit()
 {
+	hideRelated();
 	int backupID = currentPhraseID;
 	model.submitAll();
 	jumpToID(backupID);
@@ -231,15 +234,16 @@ int PageDictionary::getID(int row) const {
 
 void PageDictionary::onShowRelated()
 {
+	hideRelated();    // reset coloring
+
 	QSqlDatabase::database().transaction();
 	QSqlQuery query, subQuery;
-	query.exec(tr("update Dictionary set Proximity = 0"));   // reset proximity
 
 	// calculate proximity
-	query.exec(tr("select Dictionary.ID, count(Phrase) Proximity from Dictionary, PhraseTag \
+	query.exec(tr("select Dictionary.ID, count(PhraseTag.Phrase) Proximity from Dictionary, PhraseTag \
 				  where Tag in (select Tag from PhraseTag where Phrase = %1) \
-				  and Phrase != %1 and ID = Phrase \
-				  group by Phrase").arg(currentPhraseID));
+				  and ID != %1 and ID = PhraseTag.Phrase \
+				  group by PhraseTag.Phrase").arg(currentPhraseID));
 
 	// save proximity
 	while(query.next()) {
@@ -255,4 +259,10 @@ void PageDictionary::onShowRelated()
 
 	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
 	jumpToID(currentPhraseID);                                              // keep highlighting
+}
+
+void PageDictionary::hideRelated()
+{
+	QSqlQuery query;
+	query.exec(tr("update Dictionary set Proximity = 0"));   // reset proximity
 }

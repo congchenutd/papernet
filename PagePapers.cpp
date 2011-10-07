@@ -397,10 +397,11 @@ void PagePapers::onFilterPapers()
 
 void PagePapers::onShowRelated()
 {
-	hideCoauthor();
+	hideCoauthor();   // reset coloring
+	hideRelated();
+
 	QSqlDatabase::database().transaction();
 	QSqlQuery query, subQuery;
-	query.exec(tr("update Papers set Proximity = 0"));   // reset proximity
 
 	// calculate proximity
 	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
@@ -434,7 +435,7 @@ void PagePapers::hideRelated()
 
 void PagePapers::onShowCoauthored()
 {
-	hideRelated();
+	hideRelated();    // reset coloring
 	hideCoauthor();
 
 	QStringList authors = modelPapers.data(

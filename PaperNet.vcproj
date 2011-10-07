@@ -25,7 +25,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="CompileDate.bat"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -47,7 +46,7 @@
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="4"
 				AdditionalIncludeDirectories="&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot;,&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot;,&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot;,&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot;,&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot;,&quot;..\..\..\..\Qt\4.7.4\include&quot;,&quot;.&quot;,&quot;zlib\include&quot;,&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot;,&quot;debug&quot;,&quot;.&quot;,..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008"
-				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,COMPILE_DATE_CPP,COMPILE_DATE,QT_DLL,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
+				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_DLL,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="3"
@@ -66,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,COMPILE_DATE_CPP,COMPILE_DATE,QT_DLL,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT,_DEBUG"
+				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_DLL,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT,_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -138,7 +137,7 @@
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="2"
 				AdditionalIncludeDirectories="&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot;,&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot;,&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot;,&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot;,&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot;,&quot;..\..\..\..\Qt\4.7.4\include&quot;,&quot;.&quot;,&quot;zlib\include&quot;,&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot;,&quot;release&quot;,&quot;.&quot;,..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008"
-				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,COMPILE_DATE_CPP,COMPILE_DATE,QT_DLL,QT_NO_DEBUG,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT,NDEBUG"
+				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_DLL,QT_NO_DEBUG,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT,NDEBUG"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -157,7 +156,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,COMPILE_DATE_CPP,COMPILE_DATE,QT_DLL,QT_NO_DEBUG,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
+				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,QT_DLL,QT_NO_DEBUG,QT_SQL_LIB,QT_XML_LIB,QT_GUI_LIB,QT_NETWORK_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -175,6 +174,7 @@
 				ProgramDatabaseFile=""
 				SubSystem="2"
 				LinkTimeCodeGeneration="0"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -334,7 +334,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AddPhraseDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddPhraseDlg.h -o debug\moc_AddPhraseDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddPhraseDlg.h -o debug\moc_AddPhraseDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AddPhraseDlg.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="debug\moc_AddPhraseDlg.cpp"
 					/>
@@ -345,7 +345,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AddPhraseDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddPhraseDlg.h -o release\moc_AddPhraseDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddPhraseDlg.h -o release\moc_AddPhraseDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AddPhraseDlg.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="release\moc_AddPhraseDlg.cpp"
 					/>
@@ -360,7 +360,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AddQuoteDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddQuoteDlg.h -o debug\moc_AddQuoteDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddQuoteDlg.h -o debug\moc_AddQuoteDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AddQuoteDlg.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="debug\moc_AddQuoteDlg.cpp"
 					/>
@@ -371,7 +371,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AddQuoteDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddQuoteDlg.h -o release\moc_AddQuoteDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddQuoteDlg.h -o release\moc_AddQuoteDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AddQuoteDlg.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="release\moc_AddQuoteDlg.cpp"
 					/>
@@ -386,7 +386,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AddTagDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddTagDlg.h -o debug\moc_AddTagDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddTagDlg.h -o debug\moc_AddTagDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AddTagDlg.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="debug\moc_AddTagDlg.cpp"
 					/>
@@ -397,7 +397,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AddTagDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddTagDlg.h -o release\moc_AddTagDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AddTagDlg.h -o release\moc_AddTagDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AddTagDlg.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="release\moc_AddTagDlg.cpp"
 					/>
@@ -412,7 +412,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AttachmentsWidget.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AttachmentsWidget.h -o debug\moc_AttachmentsWidget.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AttachmentsWidget.h -o debug\moc_AttachmentsWidget.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AttachmentsWidget.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="debug\moc_AttachmentsWidget.cpp"
 					/>
@@ -423,7 +423,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AttachmentsWidget.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AttachmentsWidget.h -o release\moc_AttachmentsWidget.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AttachmentsWidget.h -o release\moc_AttachmentsWidget.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AttachmentsWidget.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="release\moc_AttachmentsWidget.cpp"
 					/>
@@ -438,7 +438,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AutoSizeTableView.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AutoSizeTableView.h -o debug\moc_AutoSizeTableView.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AutoSizeTableView.h -o debug\moc_AutoSizeTableView.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AutoSizeTableView.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="debug\moc_AutoSizeTableView.cpp"
 					/>
@@ -449,7 +449,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC AutoSizeTableView.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AutoSizeTableView.h -o release\moc_AutoSizeTableView.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 AutoSizeTableView.h -o release\moc_AutoSizeTableView.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="AutoSizeTableView.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="release\moc_AutoSizeTableView.cpp"
 					/>
@@ -468,7 +468,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC DictionaryModel.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 DictionaryModel.h -o debug\moc_DictionaryModel.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 DictionaryModel.h -o debug\moc_DictionaryModel.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;DictionaryModel.h"
 						Outputs="debug\moc_DictionaryModel.cpp"
 					/>
@@ -479,7 +479,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC DictionaryModel.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 DictionaryModel.h -o release\moc_DictionaryModel.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 DictionaryModel.h -o release\moc_DictionaryModel.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;DictionaryModel.h"
 						Outputs="release\moc_DictionaryModel.cpp"
 					/>
@@ -494,7 +494,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC DictionaryTableView.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 DictionaryTableView.h -o debug\moc_DictionaryTableView.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 DictionaryTableView.h -o debug\moc_DictionaryTableView.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;DictionaryTableView.h"
 						Outputs="debug\moc_DictionaryTableView.cpp"
 					/>
@@ -505,7 +505,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC DictionaryTableView.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 DictionaryTableView.h -o release\moc_DictionaryTableView.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 DictionaryTableView.h -o release\moc_DictionaryTableView.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;DictionaryTableView.h"
 						Outputs="release\moc_DictionaryTableView.cpp"
 					/>
@@ -532,7 +532,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC LinkDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 LinkDlg.h -o debug\moc_LinkDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 LinkDlg.h -o debug\moc_LinkDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;LinkDlg.h"
 						Outputs="debug\moc_LinkDlg.cpp"
 					/>
@@ -543,7 +543,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC LinkDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 LinkDlg.h -o release\moc_LinkDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 LinkDlg.h -o release\moc_LinkDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;LinkDlg.h"
 						Outputs="release\moc_LinkDlg.cpp"
 					/>
@@ -558,7 +558,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC MainWindow.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 MainWindow.h -o debug\moc_MainWindow.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 MainWindow.h -o debug\moc_MainWindow.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;MainWindow.h"
 						Outputs="debug\moc_MainWindow.cpp"
 					/>
@@ -569,7 +569,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC MainWindow.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 MainWindow.h -o release\moc_MainWindow.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 MainWindow.h -o release\moc_MainWindow.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;MainWindow.h"
 						Outputs="release\moc_MainWindow.cpp"
 					/>
@@ -588,7 +588,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC Navigator.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Navigator.h -o debug\moc_Navigator.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Navigator.h -o debug\moc_Navigator.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;Navigator.h"
 						Outputs="debug\moc_Navigator.cpp"
 					/>
@@ -599,7 +599,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC Navigator.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Navigator.h -o release\moc_Navigator.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 Navigator.h -o release\moc_Navigator.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;Navigator.h"
 						Outputs="release\moc_Navigator.cpp"
 					/>
@@ -614,7 +614,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC OptionDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 OptionDlg.h -o debug\moc_OptionDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 OptionDlg.h -o debug\moc_OptionDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;OptionDlg.h"
 						Outputs="debug\moc_OptionDlg.cpp"
 					/>
@@ -625,7 +625,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC OptionDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 OptionDlg.h -o release\moc_OptionDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 OptionDlg.h -o release\moc_OptionDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;OptionDlg.h"
 						Outputs="release\moc_OptionDlg.cpp"
 					/>
@@ -644,7 +644,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PageDictionary.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PageDictionary.h -o debug\moc_PageDictionary.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PageDictionary.h -o debug\moc_PageDictionary.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PageDictionary.h"
 						Outputs="debug\moc_PageDictionary.cpp"
 					/>
@@ -655,7 +655,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PageDictionary.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PageDictionary.h -o release\moc_PageDictionary.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PageDictionary.h -o release\moc_PageDictionary.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PageDictionary.h"
 						Outputs="release\moc_PageDictionary.cpp"
 					/>
@@ -670,7 +670,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PagePapers.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PagePapers.h -o debug\moc_PagePapers.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PagePapers.h -o debug\moc_PagePapers.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PagePapers.h"
 						Outputs="debug\moc_PagePapers.cpp"
 					/>
@@ -681,7 +681,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PagePapers.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PagePapers.h -o release\moc_PagePapers.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PagePapers.h -o release\moc_PagePapers.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PagePapers.h"
 						Outputs="release\moc_PagePapers.cpp"
 					/>
@@ -696,7 +696,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PageQuotes.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PageQuotes.h -o debug\moc_PageQuotes.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PageQuotes.h -o debug\moc_PageQuotes.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PageQuotes.h"
 						Outputs="debug\moc_PageQuotes.cpp"
 					/>
@@ -707,7 +707,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PageQuotes.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PageQuotes.h -o release\moc_PageQuotes.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PageQuotes.h -o release\moc_PageQuotes.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PageQuotes.h"
 						Outputs="release\moc_PageQuotes.cpp"
 					/>
@@ -722,7 +722,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PaperDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperDlg.h -o debug\moc_PaperDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperDlg.h -o debug\moc_PaperDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PaperDlg.h"
 						Outputs="debug\moc_PaperDlg.cpp"
 					/>
@@ -733,7 +733,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PaperDlg.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperDlg.h -o release\moc_PaperDlg.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperDlg.h -o release\moc_PaperDlg.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PaperDlg.h"
 						Outputs="release\moc_PaperDlg.cpp"
 					/>
@@ -748,7 +748,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PaperList.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperList.h -o debug\moc_PaperList.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperList.h -o debug\moc_PaperList.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PaperList.h"
 						Outputs="debug\moc_PaperList.cpp"
 					/>
@@ -759,7 +759,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PaperList.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperList.h -o release\moc_PaperList.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperList.h -o release\moc_PaperList.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PaperList.h"
 						Outputs="release\moc_PaperList.cpp"
 					/>
@@ -774,7 +774,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PaperModel.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperModel.h -o debug\moc_PaperModel.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperModel.h -o debug\moc_PaperModel.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PaperModel.h"
 						Outputs="debug\moc_PaperModel.cpp"
 					/>
@@ -785,7 +785,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PaperModel.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperModel.h -o release\moc_PaperModel.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperModel.h -o release\moc_PaperModel.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PaperModel.h"
 						Outputs="release\moc_PaperModel.cpp"
 					/>
@@ -800,7 +800,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PaperTableView.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperTableView.h -o debug\moc_PaperTableView.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperTableView.h -o debug\moc_PaperTableView.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PaperTableView.h"
 						Outputs="debug\moc_PaperTableView.cpp"
 					/>
@@ -811,7 +811,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC PaperTableView.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperTableView.h -o release\moc_PaperTableView.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 PaperTableView.h -o release\moc_PaperTableView.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;PaperTableView.h"
 						Outputs="release\moc_PaperTableView.cpp"
 					/>
@@ -830,7 +830,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC QuotesTableView.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 QuotesTableView.h -o debug\moc_QuotesTableView.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 QuotesTableView.h -o debug\moc_QuotesTableView.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;QuotesTableView.h"
 						Outputs="debug\moc_QuotesTableView.cpp"
 					/>
@@ -841,7 +841,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC QuotesTableView.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 QuotesTableView.h -o release\moc_QuotesTableView.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 QuotesTableView.h -o release\moc_QuotesTableView.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;QuotesTableView.h"
 						Outputs="release\moc_QuotesTableView.cpp"
 					/>
@@ -856,7 +856,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC TagsWidget.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 TagsWidget.h -o debug\moc_TagsWidget.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 TagsWidget.h -o debug\moc_TagsWidget.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;TagsWidget.h"
 						Outputs="debug\moc_TagsWidget.cpp"
 					/>
@@ -867,7 +867,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC TagsWidget.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 TagsWidget.h -o release\moc_TagsWidget.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 TagsWidget.h -o release\moc_TagsWidget.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;TagsWidget.h"
 						Outputs="release\moc_TagsWidget.cpp"
 					/>
@@ -882,7 +882,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC ToolBar.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ToolBar.h -o debug\moc_ToolBar.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ToolBar.h -o debug\moc_ToolBar.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;ToolBar.h"
 						Outputs="debug\moc_ToolBar.cpp"
 					/>
@@ -893,7 +893,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC ToolBar.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ToolBar.h -o release\moc_ToolBar.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ToolBar.h -o release\moc_ToolBar.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="C:\Qt\4.7.4\bin\moc.exe;ToolBar.h"
 						Outputs="release\moc_ToolBar.cpp"
 					/>
@@ -908,7 +908,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC ..\WordCloud\WordCloudWidget.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ..\WordCloud\WordCloudWidget.h -o debug\moc_WordCloudWidget.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;debug&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ..\WordCloud\WordCloudWidget.h -o debug\moc_WordCloudWidget.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="..\WordCloud\WordCloudWidget.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="debug\moc_WordCloudWidget.cpp"
 					/>
@@ -919,7 +919,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="MOC ..\WordCloud\WordCloudWidget.h"
-						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DCOMPILE_DATE_CPP -DCOMPILE_DATE -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ..\WordCloud\WordCloudWidget.h -o release\moc_WordCloudWidget.cpp&#x0D;&#x0A;"
+						CommandLine="C:\Qt\4.7.4\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I&quot;..\..\..\..\Qt\4.7.4\include\QtCore&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtNetwork&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtGui&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtXml&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\QtSql&quot; -I&quot;..\..\..\..\Qt\4.7.4\include&quot; -I&quot;.&quot; -I&quot;zlib\include&quot; -I&quot;..\..\..\..\Qt\4.7.4\include\ActiveQt&quot; -I&quot;release&quot; -I&quot;.&quot; -I..\..\..\..\Qt\4.7.4\mkspecs\win32-msvc2008 -D_MSC_VER=1500 -DWIN32 ..\WordCloud\WordCloudWidget.h -o release\moc_WordCloudWidget.cpp&#x0D;&#x0A;"
 						AdditionalDependencies="..\WordCloud\WordCloudWidget.h;C:\Qt\4.7.4\bin\moc.exe"
 						Outputs="release\moc_WordCloudWidget.cpp"
 					/>
@@ -1892,302 +1892,62 @@
 			<File
 				RelativePath="Images\Add.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\AddFile.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\AddLink.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\AttachAll.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\AttachEndNote.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\AttachPaper.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Backward.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Cancel.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Coauthor.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\CompileDate.txt"
+				RelativePath="CompileDate.txt"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Dictionary.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Exit.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Forward.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\FullText.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Import.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="MainWindow.qrc"
@@ -2197,10 +1957,10 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Rcc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\debug\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\Images\Backward.png;.\Images\Forward.png;.\Images\Dictionary.png;.\Images\Quote.png;.\Images\Rename.png;.\Images\PDF.png;.\Images\Open.png;.\Images\FullText.png;.\Images\AttachAll.png;.\Images\AttachEndNote.png;.\Images\AttachPaper.png;.\Images\Coauthor.png;.\Images\Related.png;.\Images\Cancel.png;.\Images\Options.png;.\Images\AddLink.png;.\Images\AddFile.png;.\Images\Add.png;.\Images\Minus.png;.\Images\Import.png;.\Images\Exit.png;.\Images\ToiletPaper.png;.\Images\Tag.png;.\CompileDate.txt"
-						Outputs=".\debug\qrc_$(InputName).cpp"
+						Description="RCC MainWindow.qrc"
+						CommandLine="C:\Qt\4.7.4\bin\rcc.exe -name MainWindow MainWindow.qrc -o debug\qrc_MainWindow.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.4\bin\rcc.exe;CompileDate.txt;Images\Add.png;Images\AddFile.png;Images\AddLink.png;Images\AttachAll.png;Images\AttachEndNote.png;Images\AttachPaper.png;Images\Backward.png;Images\Cancel.png;Images\Coauthor.png;Images\Dictionary.png;Images\Exit.png;Images\Forward.png;Images\FullText.png;Images\Import.png;Images\Minus.png;Images\Open.png;Images\Options.png;Images\PDF.png;Images\Quote.png;Images\Related.png;Images\Rename.png;Images\Tag.png;Images\ToiletPaper.png;MainWindow.qrc"
+						Outputs="debug\qrc_MainWindow.cpp"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -2208,192 +1968,48 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Rcc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\debug\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\Images\Backward.png;.\Images\Forward.png;.\Images\Dictionary.png;.\Images\Quote.png;.\Images\Rename.png;.\Images\PDF.png;.\Images\Open.png;.\Images\FullText.png;.\Images\AttachAll.png;.\Images\AttachEndNote.png;.\Images\AttachPaper.png;.\Images\Coauthor.png;.\Images\Related.png;.\Images\Cancel.png;.\Images\Options.png;.\Images\AddLink.png;.\Images\AddFile.png;.\Images\Add.png;.\Images\Minus.png;.\Images\Import.png;.\Images\Exit.png;.\Images\ToiletPaper.png;.\Images\Tag.png;.\CompileDate.txt"
-						Outputs=".\debug\qrc_$(InputName).cpp"
+						Description="RCC MainWindow.qrc"
+						CommandLine="C:\Qt\4.7.4\bin\rcc.exe -name MainWindow MainWindow.qrc -o release\qrc_MainWindow.cpp&#x0D;&#x0A;"
+						AdditionalDependencies="C:\Qt\4.7.4\bin\rcc.exe;CompileDate.txt;Images\Add.png;Images\AddFile.png;Images\AddLink.png;Images\AttachAll.png;Images\AttachEndNote.png;Images\AttachPaper.png;Images\Backward.png;Images\Cancel.png;Images\Coauthor.png;Images\Dictionary.png;Images\Exit.png;Images\Forward.png;Images\FullText.png;Images\Import.png;Images\Minus.png;Images\Open.png;Images\Options.png;Images\PDF.png;Images\Quote.png;Images\Related.png;Images\Rename.png;Images\Tag.png;Images\ToiletPaper.png;MainWindow.qrc"
+						Outputs="release\qrc_MainWindow.cpp"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Minus.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Open.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Options.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\PDF.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Quote.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Related.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Rename.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\Tag.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Images\ToiletPaper.png"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<File

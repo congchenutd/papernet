@@ -18,7 +18,7 @@ void overwritingCopy(const QString& src, const QString& dest)
 void loadDB()
 {
 	QString temp = MySetting<UserSetting>::getInstance()->getTempLocation();
-	if(temp == ".")
+	if(temp == "." || temp.isEmpty())
 	{
 		dbName = "PaperNet.db";
 		return;
@@ -38,9 +38,11 @@ void saveDB()
 
 void loadCompileDate()
 {
-	// this resource file will be generated before build in VC
+	// this resource file will be generated after running CompileDate.bat
 	QResource resource(":/MainWindow/CompileDate.txt");
 	compileDate = (char*)resource.data();
+	if(compileDate.isEmpty())
+		compileDate = "Unknown";
 }
 
 int main(int argc, char *argv[])

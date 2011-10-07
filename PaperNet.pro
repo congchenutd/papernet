@@ -17,11 +17,6 @@ macx {
 	LIBS += /usr/lib/libz.dylib
 }
 
-COMPILE_DATE = $$system(date /T)
-message (The application was compiled at $$COMPILE_DATE)
-
-DEFINES += COMPILE_DATE_CPP COMPILE_DATE
-
 # Input
 HEADERS += AddPhraseDlg.h \
            AddQuoteDlg.h \

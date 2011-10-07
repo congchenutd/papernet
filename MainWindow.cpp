@@ -58,10 +58,12 @@ void MainWindow::onOptions()
 
 void MainWindow::onAbout()
 {
+	extern QString compileDate;
 	QMessageBox::about(this, "About",
 		tr("<h3><b>PaperNet: A Better Paper Manager</b></h3>"
-		"<p>Build 2011.10.6</p>"
-		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
+		"<p>Compiled at %1</p>"
+		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>")
+		.arg(compileDate));
 }
 
 void MainWindow::closeEvent(QCloseEvent*)

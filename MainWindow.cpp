@@ -60,7 +60,7 @@ void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About",
 		tr("<h3><b>PaperNet: A Better Paper Manager</b></h3>"
-		"<p>Build 2011.6.25</p>"
+		"<p>Build 2011.10.6</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>"));
 }
 
@@ -134,7 +134,7 @@ void MainWindow::onDictionary()
 void MainWindow::jumpToPaper(const QString& title)
 {
 	onPapers();
-	pagePapers->jumpToPaper(title);
+	pagePapers->jumpToID(::getPaperID(title));
 }
 
 void MainWindow::jumpToQuote(int quoteID)
@@ -150,19 +150,15 @@ MainWindow* MainWindow::getInstance() {
 void MainWindow::onAdd() {
 	currentPage->add();
 }
-
 void MainWindow::onDel() {
 	currentPage->del();
 }
-
 void MainWindow::onSearch(const QString& target) {
 	currentPage->search(target);
 }
-
 void MainWindow::onForward() {
 	navigateTo(navigator->forward());
 }
-
 void MainWindow::onBackward() {
 	navigateTo(navigator->backward());
 }
@@ -178,6 +174,7 @@ void MainWindow::navigateTo(const FootStep& footStep)
 	if(footStep.page == 0)
 		return;
 
+	// switch to corresponding page
 	currentPage = footStep.page;
 	if(currentPage == ui.pagePapers)
 		onPapers();
@@ -186,7 +183,7 @@ void MainWindow::navigateTo(const FootStep& footStep)
 	else
 		onDictionary();
 
-	currentPage->jumpToID(footStep.id);
+	currentPage->jumpToID(footStep.id);   // jump to row
 }
 
 MainWindow* MainWindow::instance = 0;

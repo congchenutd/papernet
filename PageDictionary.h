@@ -4,6 +4,7 @@
 #include <QSqlTableModel>
 #include "ui_PageDictionary.h"
 #include "Page.h"
+#include "DictionaryModel.h"
 
 class PageDictionary : public Page
 {
@@ -22,11 +23,12 @@ private slots:
 	void onEdit();
 	void onCurrentRowChanged();
 	void onClicked(const QModelIndex& idx);
+	void onShowRelated();
 
 	void onAddTag();
 	void onAddTagToPhrase();
 	void onDelTagFromPhrase();
-	void onFilterPhrases();
+	void onFilterPhrases();   // by tags
 	void onResetPhrases();
 	void onTagDoubleClicked(const QString& label);
 
@@ -41,7 +43,7 @@ private:
 
 private:
 	Ui::PageDictionary ui;
-	QSqlTableModel model;
+	DictionaryModel model;
 	int currentRow;
 	int currentPhraseID;
 };

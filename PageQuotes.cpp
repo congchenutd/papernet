@@ -45,7 +45,7 @@ void PageQuotes::onClicked(const QModelIndex& idx) {
 
 void PageQuotes::add()
 {
-	AddQuoteDlg* dlg = new AddQuoteDlg(this);
+	AddQuoteDlg* dlg = new AddQuoteDlg(this);    // non-modal
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
 	dlg->setWindowTitle(tr("Add Quote"));
 	dlg->setQuoteID(getNextID("Quotes", "ID"));
@@ -54,7 +54,7 @@ void PageQuotes::add()
 
 void PageQuotes::onEdit()
 {
-	AddQuoteDlg* dlg = new AddQuoteDlg(this);
+	AddQuoteDlg* dlg = new AddQuoteDlg(this);    // non-modal
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
 	dlg->setWindowTitle(tr("Edit Quote"));
 	dlg->setQuoteID(getID(currentRow));

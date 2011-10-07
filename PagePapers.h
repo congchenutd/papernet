@@ -18,7 +18,6 @@ class PagePapers : public Page
 public:
 	PagePapers(QWidget* parent = 0);
 	~PagePapers();
-	void jumpToPaper(const QString& title);
 	void saveGeometry();
 
 	virtual void add();
@@ -52,16 +51,16 @@ signals:
 
 private:
 	int  getPaperID(int row) const;
-	void highLightTags();
 	void hideRelated();
 	void hideCoauthor();
 	void mergeRecord(int row, const ImportResult& record);
 	void insertRecord(const ImportResult& record);
+	void updateRecord(int row, const PaperDlg& dlg);
 	void updateQuotes();
+	void updateTags(const QStringList& tags);
+	void highLightTags();
 	int  getQuoteID(int row) const;
 	void loadSplitterSizes();
-	void updateRecord(int row, const PaperDlg& dlg);
-	void updateTags(const QStringList& tags);
 	void setCurrentRow(int row);
 
 private:

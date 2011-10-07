@@ -507,10 +507,6 @@ int PagePapers::getQuoteID(int row) const {
 	return ::getQuoteID(modelQuotes.data(modelQuotes.index(row, 0)).toString());
 }
 
-void PagePapers::jumpToPaper(const QString& title) {
-	jumpToID(::getPaperID(title));
-}
-
 void PagePapers::onFullTextSearch(const QString& target)
 {
 	onResetPapers();

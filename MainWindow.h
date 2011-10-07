@@ -26,8 +26,6 @@ protected:
 private slots:
 	void onOptions();
 	void onAbout();
-	void delOldBackup();
-	void backup(const QString& name = QString());
 	void onPapers();
 	void onQuotes();
 	void onDictionary();
@@ -39,6 +37,8 @@ private slots:
 	void onTableInvalid(bool valid);
 
 private:
+	void delOldBackup();
+	void backup(const QString& name = QString());
 	void navigateTo(const FootStep& footStep);
 
 private:

@@ -20,7 +20,7 @@ public:
 private slots:
 	void onCurrentRowChanged();
 	void onEdit();
-	void onAccepted();
+	void onAccepted();   // for the dlg to submit
 	void onClicked(const QModelIndex& idx);
 
 signals:

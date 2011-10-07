@@ -1,7 +1,6 @@
 #ifndef PAPERTABLEVIEW_H
 #define PAPERTABLEVIEW_H
 
-#include <QTableView>
 #include "AutoSizeTableView.h"
 
 class PaperTableView : public AutoSizeTableView

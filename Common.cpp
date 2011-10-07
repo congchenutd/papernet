@@ -24,6 +24,7 @@ QString dbName;
 QString attachmentDir;
 QString emptyDir;
 QString pdfDir;
+QString compileDate;
 
 bool openDB(const QString& name)
 {
@@ -76,9 +77,10 @@ void createTables()
 					primary key (Paper, Quote) \
 			   )");
 	query.exec("create table Dictionary( \
-					ID int primary key, \
+					ID int primary key,  \
 					Phrase      varchar, \
-					Explanation varchar \
+					Explanation varchar, \
+					Proximity   int      \
 			   )");
 	query.exec("create table DictionaryTags( \
 					ID int primary key, \
@@ -324,10 +326,10 @@ void renameTitle(const QString& oldName, const QString& newName)
 					 attachmentDir + makeValidTitle(newName));  // rename attachment dir
 }
 
-int getMaxProximity()
+int getMaxProximity(const QString& tableName)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select max(Proximity) from Papers"));
+	query.exec(QObject::tr("select max(Proximity) from %1").arg(tableName));
 	return query.next() ? query.value(0).toInt() : 0;
 }
 

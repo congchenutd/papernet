@@ -17,6 +17,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
+	ui.tableView->hideColumn(DICTIONARY_PROXIMITY);
 	ui.tableView->resizeColumnToContents(DICTIONARY_PHRASE);
 	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
 
@@ -28,6 +29,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
+	connect(ui.tableView, SIGNAL(showRelated()),              this, SLOT(onShowRelated()));
 	connect(ui.widgetWordCloud, SIGNAL(filter()),    this, SLOT(onFilterPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),  this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
@@ -81,6 +83,7 @@ void PageDictionary::onEdit()
 	}
 }
 
+// recreate the associations to tags
 void PageDictionary::updateTags(const QStringList& tags)
 {
 	QSqlQuery query;
@@ -109,6 +112,7 @@ void PageDictionary::onCurrentRowChanged()
 	emit tableValid(valid);
 }
 
+// new tag
 void PageDictionary::onAddTag()
 {
 	AddTagDlg dlg("DictionaryTags", this);
@@ -120,6 +124,7 @@ void PageDictionary::onAddTag()
 	}
 }
 
+// add selected tags to selected phrases
 void PageDictionary::onAddTagToPhrase()
 {
 	QModelIndexList rows = ui.tableView->selectionModel()->selectedRows(PAPER_ID);
@@ -134,6 +139,7 @@ void PageDictionary::onAddTagToPhrase()
 	highLightTags();
 }
 
+// del selected tags from selected phrases
 void PageDictionary::onDelTagFromPhrase()
 {
 	QModelIndexList rows = ui.tableView->selectionModel()->selectedRows(PAPER_ID);
@@ -152,7 +158,7 @@ void PageDictionary::onFilterPhrases()
 {
 	QStringList tagClauses;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
-	foreach(WordLabel* tag, tags)
+	foreach(WordLabel* tag, tags)   // create filter from selected tags
 		tagClauses << tr("Tag = %1").arg(getTagID("DictionaryTags", tag->text()));
 	model.setFilter(tr("ID in (select Phrase from PhraseTag where %1)")
 									.arg(tagClauses.join(" OR ")));
@@ -179,6 +185,7 @@ void PageDictionary::onResetPhrases()
 		model.fetchMore();
 }
 
+// submit, while keep selecting current phrase
 void PageDictionary::submit()
 {
 	int backupID = currentPhraseID;
@@ -192,7 +199,7 @@ void PageDictionary::jumpToID(int id)
 	if(row > -1)
 	{
 		currentRow = row;
-		ui.tableView->selectRow(currentRow);
+		ui.tableView->selectRow(currentRow);  // will trigger onCurrentRowChanged()
 		ui.tableView->setFocus();
 	}
 }
@@ -220,4 +227,32 @@ void PageDictionary::onClicked(const QModelIndex& idx) {
 
 int PageDictionary::getID(int row) const {
 	return model.data(model.index(row, DICTIONARY_ID)).toInt();
+}
+
+void PageDictionary::onShowRelated()
+{
+	QSqlDatabase::database().transaction();
+	QSqlQuery query, subQuery;
+	query.exec(tr("update Dictionary set Proximity = 0"));   // reset proximity
+
+	// calculate proximity
+	query.exec(tr("select Dictionary.ID, count(Phrase) Proximity from Dictionary, PhraseTag \
+				  where Tag in (select Tag from PhraseTag where Phrase = %1) \
+				  and Phrase != %1 and ID = Phrase \
+				  group by Phrase").arg(currentPhraseID));
+
+	// save proximity
+	while(query.next()) {
+		subQuery.exec(tr("update Dictionary set Proximity = %1 where ID = %2")
+			.arg(query.value(1).toInt())
+			.arg(query.value(0).toInt()));
+	}
+
+	// set itself the max proximity
+	query.exec(tr("update Dictionary set Proximity = (select max(Proximity)+1 from Dictionary) \
+				  where ID = %1").arg(currentPhraseID));
+	QSqlDatabase::database().commit();
+
+	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
+	jumpToID(currentPhraseID);                                              // keep highlighting
 }

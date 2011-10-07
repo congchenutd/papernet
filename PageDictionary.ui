@@ -22,7 +22,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTableView" name="tableView">
+     <widget class="DictionaryTableView" name="tableView">
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
@@ -134,6 +134,11 @@
    <extends>QWidget</extends>
    <header>TagsWidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DictionaryTableView</class>
+   <extends>QTableView</extends>
+   <header>DictionaryTableView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

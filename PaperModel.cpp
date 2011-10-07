@@ -12,11 +12,11 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 	// for related and coauthor
 	if(role == Qt::BackgroundRole)
 	{
-		float maxProximity = getMaxProximity();
+		float maxProximity = getMaxProximity("Papers");
 		if(maxProximity > 0)
 		{
 			float proximity = data(index(idx.row(), PAPER_PROXIMITY)).toInt();
-			float red = (maxProximity - proximity)/maxProximity*55 + 200;
+			float red = (maxProximity - proximity) / maxProximity * 55 + 200;
 			return QBrush(QColor(red, red, 255));
 		}
 
@@ -24,7 +24,7 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 		if(maxCoauthor > 0)
 		{
 			float coauthor = data(index(idx.row(), PAPER_COAUTHOR)).toInt();
-			float green = (maxCoauthor - coauthor)/maxCoauthor*55 + 200;
+			float green = (maxCoauthor - coauthor) / maxCoauthor * 55 + 200;
 			return QBrush(QColor(255, green, green));
 		}
 	}

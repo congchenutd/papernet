@@ -14,7 +14,7 @@ void delPaper(int paperID);
 bool isTagged(int paperID);
 void setPaperRead(int paperID);
 void updateAttached(int paperID);
-int getMaxProximity();
+int getMaxProximity(const QString& tableName);
 int getMaxCoauthor();
 AttachmentStatus isAttached(int paperID);
 int getPaperID(const QString& title);
@@ -60,6 +60,6 @@ enum {PAPER_ID, PAPER_READ, PAPER_TAGGED, PAPER_ATTACHED, PAPER_TITLE,
 	  PAPER_PROXIMITY, PAPER_COAUTHOR, PAPER_ADDEDTIME};
 enum {TAG_ID, TAG_NAME, TAG_SIZE};
 enum {QUOTE_ID, QUOTE_TITLE, QUOTE_QUOTE};
-enum {DICTIONARY_ID, DICTIONARY_PHRASE, DICTIONARY_EXPLANATION};
+enum {DICTIONARY_ID, DICTIONARY_PHRASE, DICTIONARY_EXPLANATION, DICTIONARY_PROXIMITY};
 
 #endif // Common_h__

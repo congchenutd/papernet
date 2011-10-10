@@ -6,6 +6,8 @@
 #include "Page.h"
 #include "DictionaryModel.h"
 
+class Thesaurus;
+
 class PageDictionary : public Page
 {
 	Q_OBJECT
@@ -24,6 +26,7 @@ private slots:
 	void onCurrentRowChanged();
 	void onClicked(const QModelIndex& idx);
 	void onShowRelated();
+	void onThesaurus(const QStringList& relatedWords);
 
 	void onAddTag();
 	void onAddTagToPhrase();
@@ -47,6 +50,7 @@ private:
 	DictionaryModel model;
 	int currentRow;
 	int currentPhraseID;
+	Thesaurus* thesaurus;
 };
 
 #endif // PAGEDICTIONARY_H

@@ -4,6 +4,7 @@
 #include "AddTagDlg.h"
 #include "OptionDlg.h"
 #include "Navigator.h"
+#include "Thesaurus.h"
 #include <QMessageBox>
 #include <QSqlQuery>
 
@@ -15,6 +16,8 @@ PageDictionary::PageDictionary(QWidget *parent)
 	currentPhraseID = -1;
 
 	onResetPhrases();   // init model
+	thesaurus = new BigHugeThesaurus(this);
+	connect(thesaurus, SIGNAL(response(QStringList)), this, SLOT(onThesaurus(QStringList)));
 
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
@@ -23,7 +26,6 @@ PageDictionary::PageDictionary(QWidget *parent)
 	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
 
 	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag", "Phrase");
-
 	ui.splitter->restoreState(UserSetting::getInstance()->value("SplitterDictionary").toByteArray());
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
@@ -241,6 +243,7 @@ void PageDictionary::onShowRelated()
 {
 	hideRelated();    // reset coloring
 
+	// ------------ calculate proximity by tags -------------
 	QSqlDatabase::database().transaction();
 	QSqlQuery query, subQuery;
 
@@ -261,6 +264,27 @@ void PageDictionary::onShowRelated()
 	query.exec(tr("update Dictionary set Proximity = (select max(Proximity)+1 from Dictionary) \
 				  where ID = %1").arg(currentPhraseID));
 	QSqlDatabase::database().commit();
+
+	// -------------- calculate proximity by thesaurus ---------------
+	thesaurus->request(model.data(model.index(currentRow, DICTIONARY_PHRASE)).toString());
+
+	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
+	jumpToID(currentPhraseID);                                              // keep highlighting
+}
+
+void PageDictionary::onThesaurus(const QStringList& relatedWords)
+{
+	//update Dictionary set Proximity = (select Proximity from Dictionary where ID = 1)+5 where ID = 1
+	QSqlQuery query;
+	foreach(QString related, relatedWords) {
+		query.exec(tr("update Dictionary set Proximity = \
+					  (select Proximity from Dictionary where Phrase = \"%1\")+1 \
+					  where Phrase = \"%1\"").arg(related));
+	}
+
+	// set itself the max proximity
+	query.exec(tr("update Dictionary set Proximity = (select max(Proximity)+1 from Dictionary) \
+				  where ID = %1").arg(currentPhraseID));
 
 	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
 	jumpToID(currentPhraseID);                                              // keep highlighting

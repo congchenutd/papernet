@@ -345,6 +345,7 @@ void PagePapers::onAddTagToPaper()
 void PagePapers::highLightTags()
 {
 	ui.widgetWordCloud->unselectAll();
+	ui.widgetWordCloud->unrelateAll();
 	ui.widgetWordCloud->highLight(getTagsOfPaper(currentPaperID));
 }
 

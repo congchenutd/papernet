@@ -126,11 +126,12 @@ void PageDictionary::onClicked(const QModelIndex& idx) {
 void PageDictionary::onAddTag()
 {
 	AddTagDlg dlg("DictionaryTags", this);
-	if(dlg.exec() == QDialog::Accepted && !dlg.getText().isEmpty())
+	if(dlg.exec() == QDialog::Accepted)
 	{
 		int tagID = getNextID("DictionaryTags", "ID");
 		ui.widgetWordCloud->addTag(tagID, dlg.getText());
 		ui.widgetWordCloud->addTagToItem(tagID, currentPhraseID);
+		highLightTags();
 	}
 }
 
@@ -178,6 +179,7 @@ void PageDictionary::onFilterPhrases()
 void PageDictionary::highLightTags()
 {
 	ui.widgetWordCloud->unselectAll();
+	ui.widgetWordCloud->unrelateAll();
 	ui.widgetWordCloud->highLight(getTagsOfPhrase(currentPhraseID));
 }
 
@@ -195,6 +197,7 @@ void PageDictionary::onResetPhrases()
 	model.select();
 	while(model.canFetchMore())
 		model.fetchMore();
+	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
 	jumpToID(currentPhraseID);
 }
 

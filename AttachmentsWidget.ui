@@ -43,7 +43,7 @@
   <action name="actionAddFile">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/AddFile.png</normaloff>:/MainWindow/Images/AddFile.png</iconset>
+     <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
    </property>
    <property name="text">
     <string>Add file</string>

@@ -11,13 +11,13 @@ TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
 void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
 	QMenu menu(this);
-	QAction actionNewTag  (tr("New Tag"),           this);
-	QAction actionFilter  (tr("Show Tagged"),       this);
-	QAction actionUnFilter(tr("Show All"),          this);
-	QAction actionAdd     (tr("Add to Paper"),      this);
-	QAction actionRemove  (tr("Remove from Paper"), this);
-	QAction actionRename  (tr("Rename"),            this);
-	QAction actionDel     (tr("Delete Tag"),        this);
+	QAction actionNewTag  (QIcon(":/MainWindow/Images/AddTag.png"),     tr("New Tag"), this);
+	QAction actionFilter  (QIcon(":/MainWindow/Images/ShowTagged.png"), tr("Show Tagged"), this);
+	QAction actionUnFilter(QIcon(":/MainWindow/Images/Cancel.png"),     tr("Show All"), this);
+	QAction actionAdd     (QIcon(":/MainWindow/Images/Backward.png"),   tr("Add to Paper"),      this);
+	QAction actionRemove  (QIcon(":/MainWindow/Images/Forward.png"),    tr("Remove from Paper"), this);
+	QAction actionRename  (QIcon(":/MainWindow/Images/EditTag.png"),    tr("Rename"), this);
+	QAction actionDel     (QIcon(":/MainWindow/Images/DelTag.png"),     tr("Delete Tag"), this);
 	connect(&actionNewTag,   SIGNAL(triggered()), this, SIGNAL(newTag()));
 	connect(&actionFilter,   SIGNAL(triggered()), this, SIGNAL(filter()));
 	connect(&actionUnFilter, SIGNAL(triggered()), this, SIGNAL(unfilter()));

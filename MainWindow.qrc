@@ -6,23 +6,25 @@
         <file>Images/Quote.png</file>
         <file>Images/Rename.png</file>
         <file>Images/PDF.png</file>
-        <file>Images/Open.png</file>
         <file>Images/FullText.png</file>
         <file>Images/AttachAll.png</file>
         <file>Images/AttachEndNote.png</file>
         <file>Images/AttachPaper.png</file>
         <file>Images/Coauthor.png</file>
         <file>Images/Related.png</file>
-        <file>Images/Cancel.png</file>
         <file>Images/Options.png</file>
         <file>Images/AddLink.png</file>
-        <file>Images/AddFile.png</file>
         <file>Images/Add.png</file>
         <file>Images/Minus.png</file>
         <file>Images/Import.png</file>
         <file>Images/Exit.png</file>
         <file>Images/ToiletPaper.png</file>
-        <file>Images/Tag.png</file>
         <file>CompileDate.txt</file>
+        <file>Images/AddAttachment.png</file>
+        <file>Images/AddTag.png</file>
+        <file>Images/DelTag.png</file>
+        <file>Images/Cancel.png</file>
+        <file>Images/EditTag.png</file>
+        <file>Images/ShowTagged.png</file>
     </qresource>
 </RCC>

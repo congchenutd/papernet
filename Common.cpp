@@ -418,10 +418,11 @@ AttachmentStatus isAttached(int paperID)
 	QSet<QString> citations;
 	citations << "enw" << "ris";
 
-	if(!suffixes.intersect(citations).isEmpty())      // has endnote files
+	QSet<QString> suffixesEndnote = suffixes;
+	if(!suffixesEndnote.intersect(citations).isEmpty()) // has endnote files
 	{
-		QSet<QString> suffixes2 = suffixes;
-		if(!suffixes2.subtract(citations).isEmpty())  // also has other files
+		QSet<QString> suffixesPdf = suffixes;
+		if(!suffixesPdf.subtract(citations).isEmpty())  // also has other files
 			return ATTACH_ALL;
 		return ATTACH_ENDNOTE;
 	}

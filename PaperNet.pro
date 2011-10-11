@@ -48,7 +48,8 @@ HEADERS += AddPhraseDlg.h \
            ../WordCloud/WordCloudWidget.h \
 		   ../WordCloud/FlowLayout.h \
 		   ../EnglishName/EnglishName.h \
-			DictionaryModel.h
+			DictionaryModel.h \
+    Thesaurus.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -88,7 +89,10 @@ SOURCES += AddPhraseDlg.cpp \
            ../WordCloud/WordCloudWidget.cpp \
 		   ../WordCloud/FlowLayout.cpp      \
            ../EnglishName/EnglishName.cpp \
-		   DictionaryModel.cpp
+		   DictionaryModel.cpp \
+    Thesaurus.cpp
 RESOURCES += MainWindow.qrc
+
+
 
 

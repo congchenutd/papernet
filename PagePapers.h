@@ -10,6 +10,7 @@
 
 struct ImportResult;
 class PaperDlg;
+class Thesaurus;
 
 class PagePapers : public Page
 {
@@ -46,6 +47,8 @@ private slots:
 	void onEditQuote(const QModelIndex& idx);
 	void onDelQuotes();
 
+	void onThesaurus(const QStringList& relatedTags);
+
 signals:
 	void tableValid(bool);
 
@@ -71,6 +74,7 @@ private:
 	int               currentRow;
 	int               currentPaperID;
 	UserSetting*      setting;
+	Thesaurus*        thesaurus;
 };
 
 #endif // PAGEPAPERS_H

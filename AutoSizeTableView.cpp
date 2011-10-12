@@ -25,8 +25,10 @@ void AutoSizeTableView::saveSectionSizes()
 {
 	setting->beginGroup(groupName);
 	for(int i = 0; i < model()->columnCount(); ++i)
-		setting->setValue(QString::number(i),
-			qMin(0.9, (double)(horizontalHeader()->sectionSize(i)) / width()));
+	{
+		double ratio = (double)(horizontalHeader()->sectionSize(i)) / width();
+		setting->setValue(QString::number(i), qMax(0.01, qMin(0.9, ratio)));
+	}
 	setting->endGroup();
 }
 

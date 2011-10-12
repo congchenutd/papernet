@@ -26,7 +26,8 @@ private slots:
 	void onCurrentRowChanged();
 	void onClicked(const QModelIndex& idx);
 	void onShowRelated();
-	void onThesaurus(const QStringList& relatedWords);
+	void onPhraseThesaurus(const QStringList& relatedWords);
+	void onTagThesaurus   (const QStringList& relatedTags);
 
 	void onAddTag();
 	void onAddTagToPhrase();
@@ -50,7 +51,8 @@ private:
 	DictionaryModel model;
 	int currentRow;
 	int currentPhraseID;
-	Thesaurus* thesaurus;
+	Thesaurus* phraseThesaurus;
+	Thesaurus* tagThesaurus;
 };
 
 #endif // PAGEDICTIONARY_H

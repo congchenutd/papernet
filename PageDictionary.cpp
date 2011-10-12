@@ -16,8 +16,10 @@ PageDictionary::PageDictionary(QWidget *parent)
 	currentPhraseID = -1;
 
 	onResetPhrases();   // init model
-	thesaurus = new BigHugeThesaurus(this);
-	connect(thesaurus, SIGNAL(response(QStringList)), this, SLOT(onThesaurus(QStringList)));
+	phraseThesaurus = new BigHugeThesaurus(this);
+	tagThesaurus    = new BigHugeThesaurus(this);
+	connect(phraseThesaurus, SIGNAL(response(QStringList)), this, SLOT(onPhraseThesaurus(QStringList)));
+	connect(tagThesaurus,    SIGNAL(response(QStringList)), this, SLOT(onTagThesaurus   (QStringList)));
 
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
@@ -265,46 +267,110 @@ void PageDictionary::onShowRelated()
 
 	// ------------ calculate proximity by tags -------------
 	QSqlDatabase::database().transaction();
-	QSqlQuery query, subQuery;
 
-	// calculate proximity
-	query.exec(tr("select Dictionary.ID, count(PhraseTag.Phrase) Proximity from Dictionary, PhraseTag \
+	// gather related tags: tags this phrase has (direct), and their proximate tags (from tagThesaurus)
+	QSqlQuery query;    // query direct tags' names
+	query.exec(tr("select Name from DictionaryTags, PhraseTag \
+				   where Phrase = %1 and ID = Tag").arg(currentPhraseID));
+	while(query.next())
+		tagThesaurus->request(query.value(0).toString());   // query proximate tags with this direct tag
+
+	// calculate proximity by direct tags:
+	// 1. find in PhraseTag all direct tags
+	// 2. count the # of all other phrases that have these tags
+	// 3. associate the # with the phrases
+	query.exec(tr("select Dictionary.ID, count(PhraseTag.Phrase) Proximity \
+				  from Dictionary, PhraseTag \
 				  where Tag in (select Tag from PhraseTag where Phrase = %1) \
-				  and ID != %1 and ID = PhraseTag.Phrase \
+						and ID != %1 and ID = PhraseTag.Phrase \
 				  group by PhraseTag.Phrase").arg(currentPhraseID));
 
 	// save proximity
+	QSqlQuery subQuery;
 	while(query.next()) {
 		subQuery.exec(tr("update Dictionary set Proximity = %1 where ID = %2")
 			.arg(query.value(1).toInt())
 			.arg(query.value(0).toInt()));
 	}
 
-	// set itself the max proximity
-	query.exec(tr("update Dictionary set Proximity = (select max(Proximity)+1 from Dictionary) \
+	// give itself the max proximity
+	query.exec(tr("update Dictionary set Proximity = \
+					  (select max(Proximity)+1 from Dictionary where ID <> %1) \
 				  where ID = %1").arg(currentPhraseID));
 	QSqlDatabase::database().commit();
 
-	// -------------- calculate proximity by thesaurus ---------------
-	thesaurus->request(model.data(model.index(currentRow, DICTIONARY_PHRASE)).toString());
+	// -------------- update proximity by proximate phrases ---------------
+	phraseThesaurus->request(model.data(model.index(currentRow, DICTIONARY_PHRASE)).toString());
 
 	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
 	jumpToID(currentPhraseID);                                              // keep highlighting
 }
 
-// thesaurus returns the result of related words
-void PageDictionary::onThesaurus(const QStringList& relatedWords)
+// thesaurus returns related phrases
+void PageDictionary::onPhraseThesaurus(const QStringList& relatedPhrases)
 {
+	if(relatedPhrases.isEmpty())
+		return;
+
+	QSqlDatabase::database().transaction();
 	QSqlQuery query;         // update proximity
-	foreach(QString related, relatedWords) {
+	foreach(QString related, relatedPhrases) {
 		query.exec(tr("update Dictionary set Proximity = \
-					  (select Proximity from Dictionary where Phrase = \"%1\")+1 \
+						  (select Proximity from Dictionary where Phrase = \"%1\")+1 \
 					  where Phrase = \"%1\"").arg(related));
 	}
 
 	// set itself the max proximity
-	query.exec(tr("update Dictionary set Proximity = (select max(Proximity)+1 from Dictionary) \
+	query.exec(tr("update Dictionary set Proximity = \
+					  (select max(Proximity)+1 from Dictionary where ID <> %1) \
 				  where ID = %1").arg(currentPhraseID));
+	QSqlDatabase::database().commit();
+
+	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
+	jumpToID(currentPhraseID);                                              // keep highlighting
+}
+
+// thesaurus returns related tags
+void PageDictionary::onTagThesaurus(const QStringList &relatedTags)
+{
+	if(relatedTags.isEmpty())
+		return;
+
+	QSqlDatabase::database().transaction();
+
+	// get the IDs of relatedTags
+	QSqlQuery query;
+	QStringList tagIDs;
+	foreach(QString tagName, relatedTags)
+	{
+		query.exec(tr("select ID from DictionaryTags where Name = \"%1\"").arg(tagName));
+		while(query.next())
+			tagIDs << query.value(0).toString();
+	}
+
+	// calculate proximity by proximate tags:
+	// 1. count the # of all other phrases that have these tags
+	// 2. associate the # with the phrases
+	query.exec(tr("select Dictionary.ID, count(PhraseTag.Phrase) Proximity from Dictionary, PhraseTag \
+				  where Tag in (%1) \
+				  and ID != %2 and ID = PhraseTag.Phrase \
+				  group by PhraseTag.Phrase").arg(tagIDs.join(",")).arg(currentPhraseID));
+
+	// update proximity
+	QSqlQuery subQuery;
+	while(query.next()) {
+		subQuery.exec(tr("update Dictionary set Proximity = \
+						 (select Proximity from Dictionary where ID = %1) + %2 \
+						 where ID = %1")
+			.arg(query.value(0).toInt())
+			.arg(query.value(1).toInt()));
+	}
+
+	// give itself the max proximity
+	query.exec(tr("update Dictionary set Proximity = (select max(Proximity)+1 from Dictionary where ID <> %1) \
+				  where ID = %1").arg(currentPhraseID));
+
+	QSqlDatabase::database().commit();
 
 	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
 	jumpToID(currentPhraseID);                                              // keep highlighting

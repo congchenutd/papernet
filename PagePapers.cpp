@@ -7,6 +7,7 @@
 #include "../EnglishName/EnglishName.h"
 #include "Navigator.h"
 #include "AddTagDlg.h"
+#include "Thesaurus.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextStream>
@@ -25,6 +26,7 @@ PagePapers::PagePapers(QWidget *parent)
 	currentRow = -1;
 	currentPaperID = -1;
 	setting = MySetting<UserSetting>::getInstance();
+	thesaurus = new BigHugeThesaurus(this);
 
 	ui.setupUi(this);
 	ui.tvPapers->init("PagePapers");   // set the table name for the view
@@ -76,6 +78,9 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagToPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
+
+	connect(thesaurus, SIGNAL(response(QStringList)), this, SLOT(onThesaurus(QStringList)));
+
 }
 
 void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
@@ -414,29 +419,87 @@ void PagePapers::onShowRelated()
 	hideRelated();
 
 	QSqlDatabase::database().transaction();
-	QSqlQuery query, subQuery;
 
-	// calculate proximity
+	// gather related tags: tags this phrase has (direct), and their proximate tags (from tagThesaurus)
+	QSqlQuery query;    // query direct tags' names
+	query.exec(tr("select Tags.Name from Tags, PaperTag \
+				   where PaperTag.Paper = %1 and PaperTag.Tag = Tags.ID").arg(currentPaperID));
+	while(query.next())
+		thesaurus->request(query.value(0).toString());   // query proximate tags with this direct tag
+
+	// calculate proximity by direct tags:
+	// 1. find in PaperTag all direct tags
+	// 2. count the # of all other papers that have these tags
+	// 3. associate the # with the papers
 	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
-				  where Tag in (select Tag from PaperTag where Paper = %1) \
-				  and Paper != %1 and ID = Paper \
-				  group by Paper").arg(currentPaperID));
+				   where Tag in (select Tag from PaperTag where Paper = %1) \
+						 and PaperTag.Paper != %1 and Papers.ID = PaperTag.Paper \
+				   group by PaperTag.Paper").arg(currentPaperID));
 
 	// save proximity
+	QSqlQuery subQuery;
 	while(query.next()) {
-		subQuery.exec(tr("update Papers set Proximity = %1 where ID = %2")
-			.arg(query.value(1).toInt())
-			.arg(query.value(0).toInt()));
+		subQuery.exec(tr("update Papers set Proximity = %2 where ID = %1")
+			.arg(query.value(0).toInt())
+			.arg(query.value(1).toInt()));
 	}
 
 	// set itself the max proximity
-	query.exec(tr("update Papers set Proximity = (select max(Proximity)+1 from Papers) \
+	query.exec(tr("update Papers set Proximity = \
+					  (select max(Proximity)+1 from Papers where ID <> %1) \
 				  where ID = %1").arg(currentPaperID));
 	QSqlDatabase::database().commit();
 
 	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);  // sort
 	jumpToID(currentPaperID);                                         // keep highlighting
 }
+
+void PagePapers::onThesaurus(const QStringList& relatedTags)
+{
+	if(relatedTags.isEmpty())
+		return;
+
+	QSqlDatabase::database().transaction();
+
+	// get the IDs of relatedTags
+	QSqlQuery query;
+	QStringList tagIDs;
+	foreach(QString tagName, relatedTags)
+	{
+		query.exec(tr("select ID from Tags where Name = \"%1\"").arg(tagName));
+		while(query.next())
+			tagIDs << query.value(0).toString();
+	}
+
+	// calculate proximity by proximate tags:
+	// 1. count the # of all other papers that have these tags
+	// 2. associate the # with the papers
+	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
+				   where Tag in (%1) \
+						 and PaperTag.Paper != %2 and Papers.ID = PaperTag.Paper \
+				   group by PaperTag.Paper").arg(tagIDs.join(",")).arg(currentPaperID));
+
+	// update proximity
+	QSqlQuery subQuery;
+	while(query.next()) {
+		subQuery.exec(tr("update Papers set Proximity = \
+							 (select Proximity from Papers where ID = %1) + %2 \
+						 where ID = %1")
+			.arg(query.value(0).toInt())
+			.arg(query.value(1).toInt()));
+	}
+
+	// give itself the max proximity
+	query.exec(tr("update Papers set Proximity = \
+					  (select max(Proximity)+1 from Papers where ID <> %1) \
+				  where ID = %1").arg(currentPaperID));
+
+	QSqlDatabase::database().commit();
+
+	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);  // sort
+	jumpToID(currentPaperID);                                         // keep highlighting
+}
+
 
 void PagePapers::hideRelated()
 {

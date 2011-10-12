@@ -291,10 +291,10 @@ void PageDictionary::onShowRelated()
 	jumpToID(currentPhraseID);                                              // keep highlighting
 }
 
+// thesaurus returns the result of related words
 void PageDictionary::onThesaurus(const QStringList& relatedWords)
 {
-	//update Dictionary set Proximity = (select Proximity from Dictionary where ID = 1)+5 where ID = 1
-	QSqlQuery query;
+	QSqlQuery query;         // update proximity
 	foreach(QString related, relatedWords) {
 		query.exec(tr("update Dictionary set Proximity = \
 					  (select Proximity from Dictionary where Phrase = \"%1\")+1 \

@@ -409,6 +409,7 @@ void PagePapers::onFilterPapers(bool AND)
 
 void PagePapers::onShowRelated()
 {
+	onResetPapers();
 	hideCoauthor();   // reset coloring
 	hideRelated();
 

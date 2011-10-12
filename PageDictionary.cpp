@@ -260,6 +260,7 @@ int PageDictionary::getID(int row) const {
 
 void PageDictionary::onShowRelated()
 {
+	onResetPhrases();
 	hideRelated();    // reset coloring
 
 	// ------------ calculate proximity by tags -------------

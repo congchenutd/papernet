@@ -31,7 +31,7 @@ private slots:
 	void onAddTag();
 	void onAddTagToPhrase();
 	void onDelTagFromPhrase();
-	void onFilterPhrases();     // by tags
+	void onFilterPhrases(bool AND = false);     // by tags
 	void onResetPhrases();
 	void onTagDoubleClicked(const QString& label);
 

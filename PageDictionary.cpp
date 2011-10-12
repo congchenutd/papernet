@@ -33,11 +33,11 @@ PageDictionary::PageDictionary(QWidget *parent)
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
 	connect(ui.tableView, SIGNAL(showRelated()),              this, SLOT(onShowRelated()));
-	connect(ui.widgetWordCloud, SIGNAL(filter()),    this, SLOT(onFilterPhrases()));
-	connect(ui.widgetWordCloud, SIGNAL(unfilter()),  this, SLOT(onResetPhrases()));
-	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
-	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPhrase()));
-	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPhrase()));
+	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPhrases(bool)));
+	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPhrases()));
+	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
+	connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagToPhrase()));
+	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPhrase()));
 	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
 }
 
@@ -165,15 +165,31 @@ void PageDictionary::onDelTagFromPhrase()
 	highLightTags();
 }
 
-void PageDictionary::onFilterPhrases()
+void PageDictionary::onFilterPhrases(bool AND)
 {
 	hideRelated();
-	QStringList tagClauses;
+	QStringList tagIDs;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
-	foreach(WordLabel* tag, tags)   // create filter from selected tags
-		tagClauses << tr("Tag = %1").arg(getTagID("DictionaryTags", tag->text()));
-	model.setFilter(tr("ID in (select Phrase from PhraseTag where %1)")
-									.arg(tagClauses.join(" OR ")));
+	foreach(WordLabel* tag, tags)
+		tagIDs << tr("%1").arg(getTagID("DictionaryTags", tag->text()));
+	if(!AND)
+		model.setFilter(
+			tr("ID in (select Phrase from PhraseTag where Tag in (%1))").arg(tagIDs.join(",")));
+	else
+	{
+		QSqlQuery query;    // create a temp table for selected tags id
+		query.exec(tr("create view SelectedTags as select * from DictionaryTags\
+					  where ID in (%1)").arg(tagIDs.join(",")));
+
+		// select phrases that contain all the selected tags
+		model.setFilter("not exists \
+						 (select * from SelectedTags where \
+						 not exists \
+							 (select * from PhraseTag where \
+							 phrase=Dictionary.ID and Tag=SelectedTags.ID))");
+
+		query.exec(tr("drop view SelectedTags"));   // remove the temp table
+	}
 }
 
 void PageDictionary::highLightTags()

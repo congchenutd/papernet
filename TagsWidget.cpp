@@ -6,34 +6,37 @@
 #include <QSqlQuery>
 
 TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
-{}
+{
+	actionNewTag   = new QAction(QIcon(":/MainWindow/Images/AddTag.png"),     tr("New tag"), this);
+	actionFilter   = new QAction(QIcon(":/MainWindow/Images/ShowTagged.png"), tr("Show tagged (OR)"), this);
+	actionUnFilter = new QAction(QIcon(":/MainWindow/Images/Cancel.png"),     tr("Show all"), this);
+	actionAdd      = new QAction(QIcon(":/MainWindow/Images/Backward.png"),   tr("Add"),      this);
+	actionRemove   = new QAction(QIcon(":/MainWindow/Images/Forward.png"),    tr("Remove"), this);
+	actionRename   = new QAction(QIcon(":/MainWindow/Images/EditTag.png"),    tr("Rename"), this);
+	actionDel      = new QAction(QIcon(":/MainWindow/Images/DelTag.png"),     tr("Delete tag"), this);
+
+	connect(actionNewTag,   SIGNAL(triggered()), this, SIGNAL(newTag()));
+	connect(actionUnFilter, SIGNAL(triggered()), this, SIGNAL(unfilter()));
+	connect(actionAdd,      SIGNAL(triggered()), this, SIGNAL(addTag()));
+	connect(actionRemove,   SIGNAL(triggered()), this, SIGNAL(removeTag()));
+	connect(actionFilter,   SIGNAL(triggered()), this, SLOT(onFilter()));
+	connect(actionRename,   SIGNAL(triggered()), this, SLOT(onRename()));
+	connect(actionDel,      SIGNAL(triggered()), this, SLOT(onDel()));
+}
 
 void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
-	QMenu menu(this);
-	QAction actionNewTag  (QIcon(":/MainWindow/Images/AddTag.png"),     tr("New Tag"), this);
-	QAction actionFilter  (QIcon(":/MainWindow/Images/ShowTagged.png"), tr("Show Tagged"), this);
-	QAction actionUnFilter(QIcon(":/MainWindow/Images/Cancel.png"),     tr("Show All"), this);
-	QAction actionAdd     (QIcon(":/MainWindow/Images/Backward.png"),   tr("Add to Paper"),      this);
-	QAction actionRemove  (QIcon(":/MainWindow/Images/Forward.png"),    tr("Remove from Paper"), this);
-	QAction actionRename  (QIcon(":/MainWindow/Images/EditTag.png"),    tr("Rename"), this);
-	QAction actionDel     (QIcon(":/MainWindow/Images/DelTag.png"),     tr("Delete Tag"), this);
-	connect(&actionNewTag,   SIGNAL(triggered()), this, SIGNAL(newTag()));
-	connect(&actionFilter,   SIGNAL(triggered()), this, SIGNAL(filter()));
-	connect(&actionUnFilter, SIGNAL(triggered()), this, SIGNAL(unfilter()));
-	connect(&actionAdd,      SIGNAL(triggered()), this, SIGNAL(addTag()));
-	connect(&actionRemove,   SIGNAL(triggered()), this, SIGNAL(removeTag()));
-	connect(&actionRename,   SIGNAL(triggered()), this, SLOT(onRename()));
-	connect(&actionDel,      SIGNAL(triggered()), this, SLOT(onDel()));
-	menu.addAction(&actionNewTag);
-	menu.addAction(&actionUnFilter);
+	TagsWidgetMenu menu(actionFilter, this);
+	menu.addAction(actionNewTag);
+	menu.addAction(actionUnFilter);
 	if(childAt(event->pos()) != 0)     // click on a tag
 	{
-		menu.addAction(&actionFilter);
-		menu.addAction(&actionAdd);
-		menu.addAction(&actionRemove);
-		menu.addAction(&actionRename);
-		menu.addAction(&actionDel);
+		menu.setAND(controlIsPressed());   // init actionFilter
+		menu.addAction(actionFilter);
+		menu.addAction(actionAdd);
+		menu.addAction(actionRemove);
+		menu.addAction(actionRename);
+		menu.addAction(actionDel);
 	}
 	menu.exec(event->globalPos());
 }
@@ -137,4 +140,24 @@ void TagsWidget::updateTagSize(int tagID)
 	query.exec(tr("update %1 set Size=%2 where ID=%3")
 			   .arg(tagTableName).arg(size).arg(tagID));
 	rebuild();
+}
+
+void TagsWidget::onFilter() {
+	emit filter(actionFilter->text() == tr("Show tagged (AND)"));
+}
+
+
+/////////////////////////////////////////////////////////////
+TagsWidgetMenu::TagsWidgetMenu(QAction* action, QWidget* parent)
+	: QMenu(parent), actionFilter(action) {}
+
+void TagsWidgetMenu::keyPressEvent(QKeyEvent* event)
+{
+	setAND(event->modifiers() == Qt::ControlModifier);
+	QMenu::keyPressEvent(event);
+}
+
+// change if actionFilter shows AND/OR
+void TagsWidgetMenu::setAND(bool AND) {
+	actionFilter->setText(AND ? tr("Show tagged (AND)") : tr("Show tagged (OR)"));
 }

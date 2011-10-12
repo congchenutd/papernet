@@ -2,6 +2,7 @@
 #define TAGSWIDGET_H
 
 #include "../WordCloud/WordCloudWidget.h"
+#include <QMenu>
 
 class TagsWidget : public WordCloudWidget
 {
@@ -24,9 +25,10 @@ private:
 private slots:
 	void onDel();
 	void onRename();
+	void onFilter();
 
 signals:
-	void filter();
+	void filter(bool controlPressed);
 	void unfilter();
 	void removeTag();
 	void addTag();
@@ -36,6 +38,27 @@ private:
 	QString tagTableName;
 	QString relationTableName;
 	QString relationSectionName;
+
+	QAction* actionNewTag;
+	QAction* actionFilter;
+	QAction* actionUnFilter;
+	QAction* actionAdd;
+	QAction* actionRemove;
+	QAction* actionRename;
+	QAction* actionDel;
+};
+
+class TagsWidgetMenu : public QMenu
+{
+public:
+	TagsWidgetMenu(QAction* action, QWidget* parent = 0);
+	void setAND(bool AND);
+
+protected:
+	virtual void keyPressEvent(QKeyEvent*);
+
+private:
+	QAction* actionFilter;
 };
 
 #endif // TAGSWIDGET_H

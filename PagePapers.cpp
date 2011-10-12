@@ -70,11 +70,11 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvQuotes, SIGNAL(delQuotes()),      this, SLOT(onDelQuotes()));
 	connect(ui.tvQuotes, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditQuote(QModelIndex)));
 
-	connect(ui.widgetWordCloud, SIGNAL(filter()),    this, SLOT(onFilterPapers()));
-	connect(ui.widgetWordCloud, SIGNAL(unfilter()),  this, SLOT(onResetPapers()));
-	connect(ui.widgetWordCloud, SIGNAL(newTag()),    this, SLOT(onAddTag()));
-	connect(ui.widgetWordCloud, SIGNAL(addTag()),    this, SLOT(onAddTagToPaper()));
-	connect(ui.widgetWordCloud, SIGNAL(removeTag()), this, SLOT(onDelTagFromPaper()));
+	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPapers(bool)));
+	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPapers()));
+	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
+	connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagToPaper()));
+	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
 }
 
@@ -380,16 +380,31 @@ void PagePapers::onResetPapers()
 }
 
 // filter papers with tags
-void PagePapers::onFilterPapers()
+void PagePapers::onFilterPapers(bool AND)
 {
 	hideRelated();
 	hideCoauthor();
-	QStringList tagClauses;
+	QStringList tagIDs;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
-		tagClauses << tr("Tag = %1").arg(getTagID("Tags", tag->text()));
-	modelPapers.setFilter(tr("ID in (select Paper from PaperTag where %1)")
-								.arg(tagClauses.join(" OR ")));
+		tagIDs << tr("%1").arg(getTagID("Tags", tag->text()));
+	if(!AND)
+		modelPapers.setFilter(
+			tr("ID in (select Paper from PaperTag where Tag in (%1))").arg(tagIDs.join(",")));
+	else
+	{
+		QSqlQuery query;    // create a temp table for selected tags id
+		query.exec(tr("create view SelectedTags as select * from Tags where ID in (%1)").arg(tagIDs.join(",")));
+
+		// select papers that contain all the selected tags
+		modelPapers.setFilter("not exists \
+							   (select * from SelectedTags where \
+								   not exists \
+								   (select * from PaperTag where \
+									Paper=Papers.ID and Tag=SelectedTags.ID))");
+
+		query.exec(tr("drop view SelectedTags"));   // remove the temp table
+	}
 }
 
 void PagePapers::onShowRelated()

@@ -35,14 +35,14 @@ void AutoSizeTableView::saveSectionSizes()
 void AutoSizeTableView::adjustColumns()
 {
 	int i = model()->columnCount() - 1;
-	if(horizontalHeader()->stretchLastSection()) {
-		while(i >= 0) {                       // find and skip last non-zero
-			if(sectionSizes.value(i) > 0) {
+	if(horizontalHeader()->stretchLastSection())
+	{
+		for(; i >=0; --i)
+			if(sectionSizes.value(i) > 0)
+			{
 				--i;
-				break;
+				break;       // find and skip last non-zero
 			}
-			--i;
-		}
 	}
 
 	for(; i >= 0; --i)

@@ -14,13 +14,11 @@ PaperDlg::PaperDlg(QWidget *parent)
 	QSqlTableModel* tagModel = new QSqlTableModel(this);
 	tagModel->setTable("Tags");
 	tagModel->select();
-
-	completer = new QCompleter(this);
+	QCompleter* completer = new QCompleter(this);
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 	completer->setModel(tagModel);
 	completer->setCompletionColumn(TAG_NAME);
 	completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
-
 	ui.leTags->setCompleter(completer);
 }
 

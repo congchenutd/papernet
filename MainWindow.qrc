@@ -25,5 +25,6 @@
         <file>Images/Cancel.png</file>
         <file>Images/EditTag.png</file>
         <file>Images/ShowTagged.png</file>
+        <file>Images/SearchFile.png</file>
     </qresource>
 </RCC>

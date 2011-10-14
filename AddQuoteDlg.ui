@@ -89,7 +89,7 @@
          </property>
          <property name="icon">
           <iconset resource="MainWindow.qrc">
-           <normaloff>:/MainWindow/Images/Open.png</normaloff>:/MainWindow/Images/Open.png</iconset>
+           <normaloff>:/MainWindow/Images/SearchFile.png</normaloff>:/MainWindow/Images/SearchFile.png</iconset>
          </property>
         </widget>
        </item>

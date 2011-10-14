@@ -370,8 +370,8 @@ void PagePapers::onResetPapers()
 	hideColoring();
 	modelPapers.setTable("Papers");
 	modelPapers.select();
-//	while(modelPapers.canFetchMore())
-//		modelPapers.fetchMore();
+	while(modelPapers.canFetchMore())
+		modelPapers.fetchMore();
 	modelPapers.setHeaderData(PAPER_READ,     Qt::Horizontal, "R");
 	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");

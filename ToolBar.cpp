@@ -77,7 +77,7 @@ void SearchBar::onClear()
 {
 	leSearch->clearFocus();
 	leSearch->clear();
-	emit search(QString());
+	emit clearSearch();
 }
 
 void SearchBar::onFocus()

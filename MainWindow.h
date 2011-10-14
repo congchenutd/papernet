@@ -32,6 +32,7 @@ private slots:
 	void onAdd();
 	void onDel();
 	void onSearch(const QString& target);
+	void onClearSearch();
 	void onForward();
 	void onBackward();
 	void onTableInvalid(bool valid);

@@ -25,6 +25,8 @@ public:
 	virtual void del();
 	virtual void search(const QString& target);
 	virtual void jumpToID(int id);
+	virtual void jumpToCurrent() { jumpToID(currentPaperID); }
+	virtual void reset() { onResetPapers(); }
 
 private slots:
 	void onImport();
@@ -54,8 +56,7 @@ signals:
 
 private:
 	int  getPaperID(int row) const;
-	void hideRelated();
-	void hideCoauthor();
+	void hideColoring();    // related and coauthor coloring
 	void mergeRecord(int row, const ImportResult& record);
 	void insertRecord(const ImportResult& record);
 	void updateRecord(int row, const PaperDlg& dlg);

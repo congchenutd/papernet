@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(ui.actionBackward, SIGNAL(triggered()), this, SLOT(onBackward()));
 	connect(ui.actionForward,  SIGNAL(triggered()), this, SLOT(onForward()));
 	connect(ui.toolBarSearch, SIGNAL(search(QString)), this, SLOT(onSearch(QString)));
+	connect(ui.toolBarSearch, SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
 	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
 
 	connect(pagePapers,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
@@ -111,8 +112,8 @@ void MainWindow::onPapers()
 	currentPage = ui.pagePapers;
 	ui.actionPapers->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(0);
-	ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(true);
+	currentPage->jumpToCurrent();
 }
 
 void MainWindow::onQuotes()
@@ -120,8 +121,8 @@ void MainWindow::onQuotes()
 	currentPage = ui.pageQuotes;
 	ui.actionQuotes->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(1);
-	ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(false);
+	currentPage->jumpToCurrent();
 }
 
 void MainWindow::onDictionary()
@@ -129,8 +130,8 @@ void MainWindow::onDictionary()
 	currentPage = ui.pageDictionary;
 	ui.actionDictionary->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(2);
-	ui.toolBarSearch->onClear();
 	ui.actionImportPaper->setVisible(false);
+	currentPage->jumpToCurrent();
 }
 
 void MainWindow::jumpToPaper(const QString& title)
@@ -157,6 +158,9 @@ void MainWindow::onDel() {
 }
 void MainWindow::onSearch(const QString& target) {
 	currentPage->search(target);
+}
+void MainWindow::onClearSearch() {
+	currentPage->reset();
 }
 void MainWindow::onForward() {
 	navigateTo(navigator->forward());
@@ -189,3 +193,4 @@ void MainWindow::navigateTo(const FootStep& footStep)
 }
 
 MainWindow* MainWindow::instance = 0;
+

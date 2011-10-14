@@ -16,6 +16,7 @@ public:
 	virtual void del();
 	virtual void search(const QString& target);
 	virtual void jumpToID(int id);
+	virtual void reset() { resetQuotes(); }
 
 private slots:
 	void onCurrentRowChanged();

@@ -85,7 +85,7 @@ PagePapers::PagePapers(QWidget *parent)
 
 void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 {
-	emit tableValid(idx.isValid());
+//	emit tableValid(idx.isValid());
 	if(idx.isValid())
 	{
 		currentRow = idx.row();
@@ -109,6 +109,7 @@ void PagePapers::jumpToID(int id)
 		currentRow = row;
 		ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
 		ui.tvPapers->setFocus();
+		ui.tvPapers->scrollTo(modelPapers.index(row, PAPER_TITLE));
 	}
 }
 
@@ -294,8 +295,7 @@ void PagePapers::mergeRecord(int row, const ImportResult &record)
 // keep selecting current paper
 void PagePapers::onSubmitPaper()
 {
-	hideRelated();
-	hideCoauthor();
+	hideColoring();
 	int backup = currentPaperID;
 	if(!modelPapers.submitAll())
 		QMessageBox::critical(this, tr("Error"), tr("Database submission failed!"));
@@ -307,18 +307,15 @@ PagePapers::~PagePapers() {
 	//onSubmitPaper();   // everything should have been manually submitted
 }
 
-void PagePapers::search(const QString& target)
-{
-	if(target.isEmpty())
-		onResetPapers();
-	else
+void PagePapers::search(const QString& target) {
+	if(!target.isEmpty())
 		modelPapers.setFilter(
-		tr("Title    like \"%%1%\" or \
-			Authors  like \"%%1%\" or \
-			Year     like \"%%1%\" or \
-			Journal  like \"%%1%\" or \
-			Abstract like \"%%1%\" or \
-			Note     like \"%%1%\" ").arg(target));
+					tr("Title    like \"%%1%\" or \
+						Authors  like \"%%1%\" or \
+						Year     like \"%%1%\" or \
+						Journal  like \"%%1%\" or \
+						Abstract like \"%%1%\" or \
+						Note     like \"%%1%\" ").arg(target));
 }
 
 void PagePapers::onAddTag()
@@ -370,25 +367,23 @@ void PagePapers::onDelTagFromPaper()
 
 void PagePapers::onResetPapers()
 {
+	hideColoring();
 	modelPapers.setTable("Papers");
 	modelPapers.select();
-	while(modelPapers.canFetchMore())
-		modelPapers.fetchMore();
+//	while(modelPapers.canFetchMore())
+//		modelPapers.fetchMore();
 	modelPapers.setHeaderData(PAPER_READ,     Qt::Horizontal, "R");
 	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
-	hideRelated();
-	hideCoauthor();
 	jumpToID(currentPaperID);
 }
 
 // filter papers with tags
 void PagePapers::onFilterPapers(bool AND)
 {
-	hideRelated();
-	hideCoauthor();
+	hideColoring();
 	QStringList tagIDs;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
@@ -415,9 +410,6 @@ void PagePapers::onFilterPapers(bool AND)
 void PagePapers::onShowRelated()
 {
 	onResetPapers();
-	hideCoauthor();   // reset coloring
-	hideRelated();
-
 	QSqlDatabase::database().transaction();
 
 	// gather related tags: tags this phrase has (direct), and their proximate tags (from tagThesaurus)
@@ -500,19 +492,11 @@ void PagePapers::onThesaurus(const QStringList& relatedTags)
 	jumpToID(currentPaperID);                                         // keep highlighting
 }
 
-
-void PagePapers::hideRelated()
-{
-	QSqlDatabase::database().transaction();
-	QSqlQuery query;
-	query.exec(tr("update Papers set Proximity = 0"));
-	QSqlDatabase::database().commit();
-}
-
 void PagePapers::onShowCoauthored()
 {
-	hideRelated();    // reset coloring
-	hideCoauthor();
+	onResetPapers();
+
+	QSqlDatabase::database().transaction();
 
 	QStringList authors = modelPapers.data(
 		modelPapers.index(currentRow, PAPER_AUTHORS)).toString().split(";");
@@ -528,17 +512,10 @@ void PagePapers::onShowCoauthored()
 				}
 		}
 	modelPapers.submitAll();
+	QSqlDatabase::database().commit();
 
 	ui.tvPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);
 	jumpToID(currentPaperID);
-}
-
-void PagePapers::hideCoauthor()
-{
-	QSqlDatabase::database().transaction();
-	QSqlQuery query;
-	query.exec(tr("update Papers set Coauthor = 0"));
-	QSqlDatabase::database().commit();
 }
 
 void PagePapers::onAddQuote()
@@ -633,4 +610,13 @@ void PagePapers::onTagDoubleClicked(const QString& label)
 		onResetPapers();
 	else
 		onFilterPapers();
+}
+
+void PagePapers::hideColoring()
+{
+	QSqlDatabase::database().transaction();
+	QSqlQuery query;
+	query.exec(tr("update Papers set Coauthor = 0"));
+	query.exec(tr("update Papers set Proximity = 0"));
+	QSqlDatabase::database().commit();
 }

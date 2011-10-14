@@ -58,6 +58,7 @@ private slots:
 
 signals:
 	void search(const QString& target);
+	void clearSearch();
 	void fullTextSearch(const QString& target);
 
 private:

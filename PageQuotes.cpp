@@ -24,9 +24,7 @@ PageQuotes::PageQuotes(QWidget *parent)
 
 void PageQuotes::search(const QString& target)
 {
-	if(target.isEmpty())
-		resetQuotes();
-	else
+	if(!target.isEmpty())
 		model.setFilter(tr("Title like \"%%1%\" or \
 							Quote like \"%%1%\" ").arg(target));
 }

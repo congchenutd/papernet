@@ -20,6 +20,8 @@ public:
 	virtual void del();
 	virtual void search(const QString& target);
 	virtual void jumpToID(int id);
+	virtual void jumpToCurrent() { jumpToID(currentPhraseID); }
+	virtual void reset() { onResetPhrases(); }
 
 private slots:
 	void onEdit();

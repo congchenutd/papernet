@@ -236,6 +236,7 @@ void PageDictionary::jumpToID(int id)
 		currentRow = row;
 		ui.tableView->selectRow(currentRow);  // will trigger onCurrentRowChanged()
 		ui.tableView->setFocus();
+		ui.tableView->scrollTo(model.index(row, DICTIONARY_PHRASE));
 	}
 }
 
@@ -249,9 +250,7 @@ void PageDictionary::onTagDoubleClicked(const QString& label)
 
 void PageDictionary::search(const QString& target)
 {
-	if(target.isEmpty())
-		onResetPhrases();
-	else
+	if(!target.isEmpty())
 		model.setFilter(tr("Phrase like \"%%1%\" or \
 						    Explanation like \"%%1%\" ").arg(target));
 }

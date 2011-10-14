@@ -43,6 +43,7 @@ void PageQuotes::onClicked(const QModelIndex& idx) {
 
 void PageQuotes::add()
 {
+	reset();
 	AddQuoteDlg* dlg = new AddQuoteDlg(this);    // non-modal
 	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
 	dlg->setWindowTitle(tr("Add Quote"));

@@ -45,6 +45,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 
 void PageDictionary::add()
 {
+	reset();
 	AddPhraseDlg dlg(this);
 	dlg.setWindowTitle(tr("Add Phrase"));
 	if(dlg.exec() == QDialog::Accepted)
@@ -105,6 +106,7 @@ void PageDictionary::updateTags(const QStringList& tags)
 		}
 		ui.widgetWordCloud->addTagToItem(tagID, currentPhraseID);
 	}
+	highLightTags();
 }
 
 void PageDictionary::onCurrentRowChanged()

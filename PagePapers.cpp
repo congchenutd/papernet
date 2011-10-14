@@ -115,7 +115,7 @@ void PagePapers::jumpToID(int id)
 
 void PagePapers::add()
 {
-//	onSubmitPaper();
+	reset();
 	PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Add Paper"));
 	if(dlg.exec() == QDialog::Accepted)
@@ -201,6 +201,7 @@ int PagePapers::getPaperID(int row) const {
 
 void PagePapers::onImport()
 {
+	reset();
 	QString lastPath = setting->getLastImportPath();
 	QStringList files = QFileDialog::getOpenFileNames(
 		this, "Select one or more files to open", lastPath,
@@ -247,7 +248,6 @@ void PagePapers::onImport()
 	}
 
 	onSubmitPaper();
-//	onResetPapers();   // can't remember why
 }
 
 void PagePapers::insertRecord(const ImportResult &record)

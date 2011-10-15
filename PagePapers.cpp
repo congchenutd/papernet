@@ -303,10 +303,6 @@ void PagePapers::onSubmitPaper()
 	jumpToID(backup);
 }
 
-PagePapers::~PagePapers() {
-	//onSubmitPaper();   // everything should have been manually submitted
-}
-
 void PagePapers::search(const QString& target) {
 	if(!target.isEmpty())
 		modelPapers.setFilter(

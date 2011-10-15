@@ -4,7 +4,7 @@
 #include <QSqlTableModel>
 
 AddPhraseDlg::AddPhraseDlg(QWidget *parent)
-	: QDialog(parent)
+	: QDialog(parent), newPhrase(true)
 {
 	ui.setupUi(this);
 
@@ -22,23 +22,28 @@ AddPhraseDlg::AddPhraseDlg(QWidget *parent)
 QString AddPhraseDlg::getPhrase() const {
 	return ui.tePhrase->toPlainText();
 }
-
 QString AddPhraseDlg::getExplanation() const {
 	return ui.teExplanation->toPlainText();
 }
-
-void AddPhraseDlg::setPhrase(const QString& phrase) {
+void AddPhraseDlg::setPhrase(const QString& phrase)
+{
 	ui.tePhrase->setPlainText(phrase);
+	newPhrase = phrase.isEmpty();
 }
-
 void AddPhraseDlg::setExplanation(const QString& explanation) {
 	ui.teExplanation->setPlainText(explanation);
 }
-
 QStringList AddPhraseDlg::getTags() const {
 	return ui.leTags->text().split(";");
 }
-
 void AddPhraseDlg::setTags(const QStringList &tags) {
 	ui.leTags->setText(tags.join(";"));
+}
+
+void AddPhraseDlg::accept()
+{
+	if(newPhrase && phraseExists(getPhrase()))
+		setWindowTitle(tr("Error: the phrase already exists!"));
+	else
+		QDialog::accept();
 }

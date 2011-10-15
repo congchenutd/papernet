@@ -10,6 +10,8 @@ class AddPhraseDlg : public QDialog
 
 public:
 	AddPhraseDlg(QWidget *parent = 0);
+	virtual void accept();
+
 	QString getPhrase()      const;
 	QString getExplanation() const;
 	QStringList getTags()    const;
@@ -19,6 +21,7 @@ public:
 
 private:
 	Ui::AddPhraseDlg ui;
+	bool newPhrase;
 };
 
 #endif // ADDPHRASEDLG_H

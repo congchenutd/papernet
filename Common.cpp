@@ -545,3 +545,14 @@ int idToRow(QAbstractItemModel* model, int idSection, int id)
 		model->index(0, idSection), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
 	return !indexes.isEmpty() ? indexes.at(0).row() : -1;
 }
+
+bool paperExists(const QString &title) {
+	return getPaperID(title) > -1;
+}
+
+bool phraseExists(const QString& phrase)
+{
+	QSqlQuery query;
+	query.exec(QObject::tr("select * from Dictionary where Phrase = \"%1\"").arg(phrase));
+	return query.next();
+}

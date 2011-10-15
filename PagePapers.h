@@ -18,7 +18,6 @@ class PagePapers : public Page
 
 public:
 	PagePapers(QWidget* parent = 0);
-	~PagePapers();
 	void saveGeometry();
 
 	virtual void add();

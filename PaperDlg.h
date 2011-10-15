@@ -10,6 +10,7 @@ class PaperDlg : public QDialog
 
 public:
 	PaperDlg(QWidget *parent = 0);
+	virtual void accept();
 
 	QString getTitle   () const;
 	QString getAuthors () const;
@@ -28,6 +29,7 @@ public:
 
 private:
 	Ui::PaperDlgClass ui;
+	bool newPaper;
 };
 
 #endif // PAPERDLG_H

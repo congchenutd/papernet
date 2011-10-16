@@ -54,6 +54,12 @@ void AddQuoteDlg::onCurrentRowChanged()
 
 void AddQuoteDlg::accept()
 {
+	if(ui.leTitle->text().isEmpty())  // force user to input title
+	{
+		ui.leTitle->setFocus();
+		return;
+	}
+
 	QSqlDatabase::database().transaction();
 	updateQuote(quoteID, ui.leTitle->text(), ui.teContent->toPlainText());
 

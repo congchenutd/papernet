@@ -342,7 +342,7 @@ int getMaxCoauthor()
 
 void updateQuote(int id, const QString& title, const QString& content)
 {
-	if(id < 0 || title.isEmpty() || content.isEmpty())
+	if(id < 0 || title.isEmpty())
 		return;
 
 	QSqlQuery query;

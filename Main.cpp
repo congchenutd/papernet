@@ -39,7 +39,8 @@ int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 
-	loadDB();
+//	loadDB();
+	dbName = "PaperNet.db";
 	attachmentDir = "./Attachments/";
 	emptyDir = attachmentDir + "Empty";
 	pdfDir = "./PDF";
@@ -55,6 +56,6 @@ int main(int argc, char *argv[])
 	wnd.showMaximized();
 
 	int result = app.exec();
-	saveDB();
+//	saveDB();
 	return result;
 }

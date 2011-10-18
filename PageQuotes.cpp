@@ -15,6 +15,7 @@ PageQuotes::PageQuotes(QWidget *parent)
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(QUOTE_ID);
 	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
+	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));

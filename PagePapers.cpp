@@ -92,7 +92,7 @@ void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 		currentPaperID = getPaperID(idx.row());
 		highLightTags();
 		updateQuotes();
-		ui.widgetAttachments->setPaper(currentPaperID);
+		reloadAttachments();
 	}
 }
 
@@ -148,6 +148,7 @@ void PagePapers::onEditPaper()
 	updateRecord(currentRow, dlg);
 	onSubmitPaper();
 	renameTitle(oldTitle, dlg.getTitle());
+	reloadAttachments();           // refresh attached files after renaming
 	if(!dlg.getNote().isEmpty())   // paper with notes indicates its been read
 		setPaperRead(currentPaperID);
 	updateTags(dlg.getTags());
@@ -615,4 +616,8 @@ void PagePapers::hideColoring()
 	query.exec(tr("update Papers set Coauthor = 0"));
 	query.exec(tr("update Papers set Proximity = 0"));
 	QSqlDatabase::database().commit();
+}
+
+void PagePapers::reloadAttachments() {
+	ui.widgetAttachments->setPaper(currentPaperID);
 }

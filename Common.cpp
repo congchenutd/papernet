@@ -321,8 +321,8 @@ void renameTitle(const QString& oldName, const QString& newName)
 		return;
 	QFile::rename(pdfDir + "/" + oldName + ".pdf",              // rename [title].pdf
 				  pdfDir + "/" + newName + ".pdf");
-	QDir(".").rename(attachmentDir + makeValidTitle(oldName),
-					 attachmentDir + makeValidTitle(newName));  // rename attachment dir
+	QDir::current().rename(attachmentDir + makeValidTitle(oldName),
+						   attachmentDir + makeValidTitle(newName));  // rename attachment dir
 }
 
 int getMaxProximity(const QString& tableName)

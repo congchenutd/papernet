@@ -64,6 +64,7 @@ private:
 	void highLightTags();
 	int  getQuoteID(int row) const;
 	void loadSplitterSizes();
+	void reloadAttachments();
 
 private:
 	Ui::PagePapersClass ui;

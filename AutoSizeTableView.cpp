@@ -40,7 +40,7 @@ void AutoSizeTableView::adjustColumns()
 		for(; i >=0; --i)
 			if(sectionSizes.value(i) > 0)
 			{
-				--i;
+				resizeColumnToContents(i--);
 				break;       // find and skip last non-zero
 			}
 	}

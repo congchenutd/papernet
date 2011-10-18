@@ -37,6 +37,8 @@ public:
 	QString getLastImportPath()     const;
 	QString getLastAttachmentPath() const;
 	QString getTempLocation()       const;
+	QString getCompileDate()        const;
+
 	void setFont              (const QFont& font);
 	void setBackupDays        (int days);
 	void setKeepAttachments   (bool keep);

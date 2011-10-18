@@ -7,7 +7,6 @@ extern QString dbName;
 extern QString attachmentDir;
 extern QString emptyDir;
 extern QString pdfDir;
-extern QString compileDate;
 
 void overwritingCopy(const QString& src, const QString& dest)
 {
@@ -36,15 +35,6 @@ void saveDB()
 	overwritingCopy(dbName, "PaperNet.db");   // save the working copy
 }
 
-void loadCompileDate()
-{
-	// this resource file will be generated after running CompileDate.bat
-	QResource resource(":/MainWindow/CompileDate.txt");
-	compileDate = (char*)resource.data();
-	if(compileDate.isEmpty())
-		compileDate = "Unknown";
-}
-
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
@@ -53,7 +43,6 @@ int main(int argc, char *argv[])
 	attachmentDir = "./Attachments/";
 	emptyDir = attachmentDir + "Empty";
 	pdfDir = "./PDF";
-	loadCompileDate();
 
 	QDir::current().mkdir(attachmentDir);
 	QDir::current().mkdir(pdfDir);

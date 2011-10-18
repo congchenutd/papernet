@@ -24,7 +24,6 @@ QString dbName;
 QString attachmentDir;
 QString emptyDir;
 QString pdfDir;
-QString compileDate;
 
 bool openDB(const QString& name)
 {

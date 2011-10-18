@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <cstdlib>
 #include <QProcessEnvironment>
+#include <QResource>
 
 OptionDlg::OptionDlg(QWidget *parent)
 	: QDialog(parent)
@@ -114,4 +115,12 @@ void UserSetting::setLastAttachmentPath(const QString& path) {
 }
 void UserSetting::setTempLocation(const QString& temp) {
 	setValue("TempLocation", temp);
+}
+
+QString UserSetting::getCompileDate() const
+{
+	// this resource file will be generated after running CompileDate.bat
+	QResource resource(":/MainWindow/CompileDate.txt");
+	QString result = (char*)resource.data();
+	return result.isEmpty() ? "Unknown" : result;
 }

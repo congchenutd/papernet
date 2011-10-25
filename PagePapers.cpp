@@ -50,7 +50,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->hideColumn(PAPER_ADDEDTIME);
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
-	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	sortByTitle();
 
 	ui.widgetWordCloud->setTableNames("Tags", "PaperTag", "Paper");
 	ui.tvQuotes->setModel(&modelQuotes);
@@ -301,6 +301,7 @@ void PagePapers::onSubmitPaper()
 	if(!modelPapers.submitAll())
 		QMessageBox::critical(this, tr("Error"), tr("Database submission failed!"));
 	currentPaperID = backup;
+	sortByTitle();
 	jumpToID(backup);
 }
 
@@ -373,7 +374,7 @@ void PagePapers::onResetPapers()
 	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
-	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	sortByTitle();
 	jumpToID(currentPaperID);
 }
 
@@ -439,8 +440,8 @@ void PagePapers::onShowRelated()
 				  where ID = %1").arg(currentPaperID));
 	QSqlDatabase::database().commit();
 
-	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);  // sort
-	jumpToID(currentPaperID);                                         // keep highlighting
+	sortByProximity();
+	jumpToID(currentPaperID);    // keep highlighting
 }
 
 void PagePapers::onThesaurus(const QStringList& relatedTags)
@@ -485,8 +486,8 @@ void PagePapers::onThesaurus(const QStringList& relatedTags)
 
 	QSqlDatabase::database().commit();
 
-	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);  // sort
-	jumpToID(currentPaperID);                                         // keep highlighting
+	sortByProximity();
+	jumpToID(currentPaperID);   // keep highlighting
 }
 
 void PagePapers::onShowCoauthored()
@@ -511,7 +512,7 @@ void PagePapers::onShowCoauthored()
 	modelPapers.submitAll();
 	QSqlDatabase::database().commit();
 
-	ui.tvPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);
+	sortByProximity();
 	jumpToID(currentPaperID);
 }
 
@@ -620,4 +621,12 @@ void PagePapers::hideColoring()
 
 void PagePapers::reloadAttachments() {
 	ui.widgetAttachments->setPaper(currentPaperID);
+}
+
+void PagePapers::sortByTitle() {
+	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+}
+
+void PagePapers::sortByProximity() {
+	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
 }

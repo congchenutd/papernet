@@ -15,7 +15,7 @@ PageQuotes::PageQuotes(QWidget *parent)
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(QUOTE_ID);
 	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
-	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
+	sortByTitle();
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
@@ -79,15 +79,17 @@ void PageQuotes::resetQuotes()
 	model.select();
 	while(model.canFetchMore())
 		model.fetchMore();
-	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
+	sortByTitle();
 }
 
 int PageQuotes::getID(int row) const {
 	return model.data(model.index(row, QUOTE_ID)).toInt();
 }
 
-void PageQuotes::onAccepted() {
+void PageQuotes::onAccepted()
+{
 	model.select();
+	sortByTitle();
 }
 
 void PageQuotes::jumpToID(int id)
@@ -99,4 +101,8 @@ void PageQuotes::jumpToID(int id)
 		ui.tableView->selectRow(currentRow);  // will trigger onCurrentRowChanged()
 		ui.tableView->setFocus();
 	}
+}
+
+void PageQuotes::sortByTitle() {
+	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
 }

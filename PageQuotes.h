@@ -30,6 +30,7 @@ signals:
 private:
 	void resetQuotes();
 	int getID(int row) const;
+	void sortByTitle();
 
 private:
 	Ui::PageQuotesClass ui;

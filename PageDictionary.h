@@ -47,6 +47,8 @@ private:
 	void updateTags(const QStringList& tags);
 	void highLightTags();
 	void hideRelated();
+	void sortByPhrase();
+	void sortByProximity();
 
 private:
 	Ui::PageDictionary ui;

@@ -65,6 +65,8 @@ private:
 	int  getQuoteID(int row) const;
 	void loadSplitterSizes();
 	void reloadAttachments();
+	void sortByTitle();
+	void sortByProximity();
 
 private:
 	Ui::PagePapersClass ui;

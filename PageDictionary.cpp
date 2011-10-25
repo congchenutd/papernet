@@ -25,7 +25,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 	ui.tableView->hideColumn(DICTIONARY_ID);
 	ui.tableView->hideColumn(DICTIONARY_PROXIMITY);
 	ui.tableView->resizeColumnToContents(DICTIONARY_PHRASE);
-	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
+	sortByPhrase();
 
 	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag", "Phrase");
 	ui.splitter->restoreState(UserSetting::getInstance()->value("SplitterDictionary").toByteArray());
@@ -217,7 +217,7 @@ void PageDictionary::onResetPhrases()
 	model.select();
 	while(model.canFetchMore())
 		model.fetchMore();
-	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
+	sortByPhrase();
 	jumpToID(currentPhraseID);
 }
 
@@ -227,6 +227,7 @@ void PageDictionary::submit()
 	hideRelated();
 	int backupID = currentPhraseID;
 	model.submitAll();
+	sortByPhrase();
 	jumpToID(backupID);
 }
 
@@ -303,8 +304,8 @@ void PageDictionary::onShowRelated()
 	// -------------- update proximity by proximate phrases ---------------
 	phraseThesaurus->request(model.data(model.index(currentRow, DICTIONARY_PHRASE)).toString());
 
-	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
-	jumpToID(currentPhraseID);                                              // keep highlighting
+	sortByProximity();
+	jumpToID(currentPhraseID);     // keep highlighting
 }
 
 // thesaurus returns related phrases
@@ -327,8 +328,8 @@ void PageDictionary::onPhraseThesaurus(const QStringList& relatedPhrases)
 				  where ID = %1").arg(currentPhraseID));
 	QSqlDatabase::database().commit();
 
-	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
-	jumpToID(currentPhraseID);                                              // keep highlighting
+	sortByProximity();
+	jumpToID(currentPhraseID);    // keep highlighting
 }
 
 // thesaurus returns related tags
@@ -373,12 +374,20 @@ void PageDictionary::onTagThesaurus(const QStringList &relatedTags)
 
 	QSqlDatabase::database().commit();
 
-	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);  // sort
-	jumpToID(currentPhraseID);                                              // keep highlighting
+	sortByProximity();
+	jumpToID(currentPhraseID);    // keep highlighting
 }
 
 void PageDictionary::hideRelated()
 {
 	QSqlQuery query;
 	query.exec(tr("update Dictionary set Proximity = 0"));   // reset proximity
+}
+
+void PageDictionary::sortByPhrase() {
+	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
+}
+
+void PageDictionary::sortByProximity() {
+	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);
 }

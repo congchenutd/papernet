@@ -301,7 +301,7 @@ void PagePapers::onSubmitPaper()
 	if(!modelPapers.submitAll())
 		QMessageBox::critical(this, tr("Error"), tr("Database submission failed!"));
 	currentPaperID = backup;
-	sortByTitle();
+//	sortByTitle();
 	jumpToID(backup);
 }
 
@@ -493,7 +493,6 @@ void PagePapers::onThesaurus(const QStringList& relatedTags)
 void PagePapers::onShowCoauthored()
 {
 	onResetPapers();
-
 	QSqlDatabase::database().transaction();
 
 	QStringList authors = modelPapers.data(
@@ -512,7 +511,7 @@ void PagePapers::onShowCoauthored()
 	modelPapers.submitAll();
 	QSqlDatabase::database().commit();
 
-	sortByProximity();
+	ui.tvPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);  // sort by author
 	jumpToID(currentPaperID);
 }
 

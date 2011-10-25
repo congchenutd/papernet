@@ -265,7 +265,6 @@ int PageDictionary::getID(int row) const {
 void PageDictionary::onShowRelated()
 {
 	onResetPhrases();
-	hideRelated();    // reset coloring
 
 	// ------------ calculate proximity by tags -------------
 	QSqlDatabase::database().transaction();
@@ -344,11 +343,8 @@ void PageDictionary::onTagThesaurus(const QStringList &relatedTags)
 	QSqlQuery query;
 	QStringList tagIDs;
 	foreach(QString tagName, relatedTags)
-	{
-		query.exec(tr("select ID from DictionaryTags where Name = \"%1\"").arg(tagName));
-		while(query.next())
-			tagIDs << query.value(0).toString();
-	}
+		if(int tagID = getTagID("DictionaryTags", tagName) > 0)
+			tagIDs << QString::number(tagID);
 
 	// calculate proximity by proximate tags:
 	// 1. count the # of all other phrases that have these tags

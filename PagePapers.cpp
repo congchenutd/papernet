@@ -456,7 +456,7 @@ void PagePapers::onThesaurus(const QStringList& relatedTags)
 	QStringList tagIDs;
 	foreach(QString tagName, relatedTags)
 	{
-		query.exec(tr("select ID from Tags where Name = \"%1\"").arg(tagName));
+		query.exec(tr("select ID from Tags where Name = \'%1\' ").arg(tagName));
 		while(query.next())
 			tagIDs << query.value(0).toString();
 	}

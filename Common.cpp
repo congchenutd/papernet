@@ -347,17 +347,17 @@ void updateQuote(int id, const QString& title, const QString& content)
 	QSqlQuery query;
 	query.exec(QObject::tr("select * from Quotes where ID = %1").arg(id));
 	if(query.next())
-		query.exec(QObject::tr("update Quotes set Title = \"%1\", Quote =\"%2\" \
+		query.exec(QObject::tr("update Quotes set Title = \'%1\', Quote =\'%2\' \
 							   where ID = %3").arg(title).arg(content).arg(id));
 	else
-		query.exec(QObject::tr("insert into Quotes values (%1, \"%2\", \"%3\")")
+		query.exec(QObject::tr("insert into Quotes values (%1, \'%2\', \'%3\')")
 										.arg(id).arg(title).arg(content));
 }
 
 int getPaperID(const QString& title)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from Papers where Title = \"%1\"").arg(title));
+	query.exec(QObject::tr("select ID from Papers where Title = \'%1\'").arg(title));
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
@@ -378,7 +378,7 @@ void addSimplePaper(int id, const QString& title)
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("insert into Papers(ID, Title) values (%1, \"%2\")")
+	query.exec(QObject::tr("insert into Papers(ID, Title) values (%1, \'%2\')")
 													.arg(id).arg(title));
 }
 
@@ -450,7 +450,7 @@ void updateAttached(int paperID)  // update Attached section of Papers table
 int getQuoteID(const QString& title)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from Quotes where Title = \"%1\"").arg(title));
+	query.exec(QObject::tr("select ID from Quotes where Title = \'%1\' ").arg(title));
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
@@ -516,7 +516,7 @@ void renameTag(const QString& tableName, const QString& oldName, const QString& 
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("update %1 set Name = \"%2\" where Name = \"%3\"")
+	query.exec(QObject::tr("update %1 set Name = \'%2\' where Name = \'%3\' ")
 			   .arg(tableName).arg(newName).arg(oldName));
 }
 
@@ -531,8 +531,8 @@ QStringList getTagsOfPhrase(int phraseID)
 {
 	QStringList tags;
 	QSqlQuery query;
-	query.exec(QObject::tr("select Name from DictionaryTags, PhraseTag where Phrase=%1 and Tag=ID")
-															.arg(phraseID));
+	query.exec(QObject::tr("select Name from DictionaryTags, PhraseTag \
+						   where Phrase=%1 and Tag=ID").arg(phraseID));
 	while(query.next())
 		tags << query.value(0).toString();
 	return tags;
@@ -552,6 +552,6 @@ bool paperExists(const QString &title) {
 bool phraseExists(const QString& phrase)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select * from Dictionary where Phrase = \"%1\"").arg(phrase));
+	query.exec(QObject::tr("select * from Dictionary where Phrase = \'%1\' ").arg(phrase));
 	return query.next();
 }

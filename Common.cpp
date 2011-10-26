@@ -124,7 +124,7 @@ int getTagID(const QString& tableName, const QString& tagName)
 	if(tagName.isEmpty())
 		return -1;
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from %1 where Name = \"%2\"").arg(tableName).arg(tagName));
+	query.exec(QObject::tr("select ID from %1 where Name = \'%2\'").arg(tableName).arg(tagName));
 	return query.next() ? query.value(0).toInt() : -1;
 }
 

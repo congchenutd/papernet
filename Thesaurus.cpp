@@ -9,7 +9,7 @@ Thesaurus::Thesaurus(QObject *parent) : QObject(parent)
 {
 	networkAccessManager = new QNetworkAccessManager(this);
 	connect(networkAccessManager, SIGNAL(finished(QNetworkReply*)),
-		this, SLOT(parse(QNetworkReply*)));
+			this, SLOT(parse(QNetworkReply*)));
 }
 
 void Thesaurus::request(const QString& word) const {

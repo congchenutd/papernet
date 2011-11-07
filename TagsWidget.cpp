@@ -1,12 +1,16 @@
 #include "TagsWidget.h"
 #include "Common.h"
 #include "AddTagDlg.h"
+#include "OptionDlg.h"
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QSqlQuery>
 
 TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
 {
+	int minFont = UserSetting::getInstance()->getFont().pointSize();
+	setFontSize(minFont, minFont*2);
+
 	actionNewTag   = new QAction(QIcon(":/MainWindow/Images/AddTag.png"),     tr("New tag"), this);
 	actionFilter   = new QAction(QIcon(":/MainWindow/Images/ShowTagged.png"), tr("Show tagged (OR)"), this);
 	actionUnFilter = new QAction(QIcon(":/MainWindow/Images/Cancel.png"),     tr("Show all"), this);

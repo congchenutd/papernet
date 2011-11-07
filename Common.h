@@ -44,6 +44,7 @@ void makeFullTextFiles();
 void hideFile(const QString& filePath);
 QString getPDFPath(int paperID);
 void openUrl(const QString& url);
+QString suggestAttachmentName(const QString& fileName);
 
 // tags
 int getMaxProximity(const QString& tableName);

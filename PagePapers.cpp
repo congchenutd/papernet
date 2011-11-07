@@ -243,7 +243,12 @@ void PagePapers::onImport()
 
 				// FIXME: this works only when there is one record
 				// change it to EndNote(i)
-				addAttachment(currentPaperID, "EndNote." + QFileInfo(fileName).suffix(), fileName);
+				addAttachment(currentPaperID, suggestAttachmentName(fileName), fileName);
+
+				// add the pdf file with the same name
+				QString pdfFileName = QFileInfo(fileName).path() + QFileInfo(fileName).baseName() + ".pdf";
+				if(QFile::exists(pdfFileName))
+					addAttachment(currentPaperID, suggestAttachmentName(pdfFileName), pdfFileName);
 			}
 		}
 	}

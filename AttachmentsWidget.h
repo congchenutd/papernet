@@ -29,9 +29,6 @@ private slots:
 	void onDel();
 	void onOpen(const QModelIndex& idx);
 
-private:
-	QString suggestName(const QString &fileName);
-
 signals:
 	void paperRead();
 

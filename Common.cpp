@@ -555,3 +555,14 @@ bool phraseExists(const QString& phrase)
 	query.exec(QObject::tr("select * from Dictionary where Phrase = \'%1\' ").arg(phrase));
 	return query.next();
 }
+
+QString suggestAttachmentName(const QString& fileName)
+{
+	if(fileName.endsWith(".pdf", Qt::CaseInsensitive))
+		return "Paper.pdf";
+	else if(fileName.endsWith(".ris", Qt::CaseInsensitive))
+		return "EndNote.ris";
+	else if(fileName.endsWith(".enw", Qt::CaseInsensitive))
+		return "EndNote.enw";
+	return QFileInfo(fileName).fileName();
+}

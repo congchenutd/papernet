@@ -397,7 +397,8 @@ void PagePapers::onFilterPapers(bool AND)
 	else
 	{
 		QSqlQuery query;    // create a temp table for selected tags id
-		query.exec(tr("create view SelectedTags as select * from Tags where ID in (%1)").arg(tagIDs.join(",")));
+		query.exec(tr("create view SelectedTags as select * from Tags where ID in (%1)")
+									.arg(tagIDs.join(",")));
 
 		// select papers that contain all the selected tags
 		modelPapers.setFilter("not exists \
@@ -461,7 +462,9 @@ void PagePapers::onThesaurus(const QStringList& relatedTags)
 	QStringList tagIDs;
 	foreach(QString tagName, relatedTags)
 	{
-		query.exec(tr("select ID from Tags where Name = \'%1\' ").arg(tagName));
+		query.prepare("select ID from Tags where Name = :tagName ");
+		query.bindValue(":tagName", tagName);
+		query.exec();
 		while(query.next())
 			tagIDs << query.value(0).toString();
 	}

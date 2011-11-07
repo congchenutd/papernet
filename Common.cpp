@@ -124,7 +124,9 @@ int getTagID(const QString& tableName, const QString& tagName)
 	if(tagName.isEmpty())
 		return -1;
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from %1 where Name = \'%2\'").arg(tableName).arg(tagName));
+	query.prepare(QObject::tr("select ID from %1 where Name = :tagName").arg(tableName));
+	query.bindValue(":tagName", tagName);
+	query.exec();
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
@@ -347,17 +349,21 @@ void updateQuote(int id, const QString& title, const QString& content)
 	QSqlQuery query;
 	query.exec(QObject::tr("select * from Quotes where ID = %1").arg(id));
 	if(query.next())
-		query.exec(QObject::tr("update Quotes set Title = \'%1\', Quote =\'%2\' \
-							   where ID = %3").arg(title).arg(content).arg(id));
+		query.prepare("update Quotes set Title=:title, Quote=:content where ID=:id");
 	else
-		query.exec(QObject::tr("insert into Quotes values (%1, \'%2\', \'%3\')")
-										.arg(id).arg(title).arg(content));
+		query.prepare("insert into Quotes values (:id, :title, :content)");
+	query.bindValue(":id",      id);
+	query.bindValue(":title",   title);
+	query.bindValue(":content", content);
+	query.exec();
 }
 
 int getPaperID(const QString& title)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from Papers where Title = \'%1\'").arg(title));
+	query.prepare("select ID from Papers where Title = :title");
+	query.bindValue(":title", title);
+	query.exec();
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
@@ -378,8 +384,10 @@ void addSimplePaper(int id, const QString& title)
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("insert into Papers(ID, Title) values (%1, \'%2\')")
-													.arg(id).arg(title));
+	query.prepare("insert into Papers(ID, Title) values (:id, :title)");
+	query.bindValue(":id",    id);
+	query.bindValue(":title", title);
+	query.exec();
 }
 
 void delQuote(int id)
@@ -450,7 +458,9 @@ void updateAttached(int paperID)  // update Attached section of Papers table
 int getQuoteID(const QString& title)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select ID from Quotes where Title = \'%1\' ").arg(title));
+	query.prepare("select ID from Quotes where Title = :title");
+	query.bindValue(":title", title);
+	query.exec();
 	return query.next() ? query.value(0).toInt() : -1;
 }
 
@@ -516,8 +526,10 @@ void renameTag(const QString& tableName, const QString& oldName, const QString& 
 		return;
 
 	QSqlQuery query;
-	query.exec(QObject::tr("update %1 set Name = \'%2\' where Name = \'%3\' ")
-			   .arg(tableName).arg(newName).arg(oldName));
+	query.prepare(QObject::tr("update %1 set Name=:newName where Name=:oldName").arg(tableName));
+	query.bindValue(":newName", newName);
+	query.bindValue(":oldName", oldName);
+	query.exec();
 }
 
 void delPhrase(int id)
@@ -552,7 +564,9 @@ bool paperExists(const QString &title) {
 bool phraseExists(const QString& phrase)
 {
 	QSqlQuery query;
-	query.exec(QObject::tr("select * from Dictionary where Phrase = \'%1\' ").arg(phrase));
+	query.prepare("select * from Dictionary where Phrase = :phrase");
+	query.bindValue(":phrase", phrase);
+	query.exec();
 	return query.next();
 }
 

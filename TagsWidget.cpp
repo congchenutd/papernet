@@ -93,8 +93,10 @@ void TagsWidget::addTag(int id, const QString& text)
 
 	// add to db
 	QSqlQuery query;
-	query.exec(tr("insert into %1 values(%2, \'%3\', 0)")
-			   .arg(tagTableName).arg(id).arg(text));
+	query.prepare(tr("insert into %1 values(:id, :text, 0)").arg(tagTableName));
+	query.bindValue(":id",   id);
+	query.bindValue(":text", text);
+	query.exec();
 
 	addWord(text);
 	normalizeSizes();

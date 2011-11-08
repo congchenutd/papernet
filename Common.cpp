@@ -502,6 +502,7 @@ void hideFile(const QString& filePath)
 #endif
 
 #ifdef Q_WS_MAC   // don't know how to do it in Mac
+	Q_UNUSED(filePath);
 #endif
 }
 

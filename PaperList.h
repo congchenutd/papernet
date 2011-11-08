@@ -5,6 +5,7 @@
 #include <QSqlTableModel>
 #include "ui_PaperList.h"
 
+// A read-only list of papers
 class PaperList : public QDialog
 {
 	Q_OBJECT

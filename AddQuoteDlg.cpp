@@ -25,7 +25,7 @@ AddQuoteDlg::AddQuoteDlg(QWidget *parent)
 void AddQuoteDlg::onAddRef()
 {
 	bool ok;
-	QString ref = QInputDialog::getText(this, tr("Add Reference"), tr("Reference"),
+	QString ref = QInputDialog::getText(this, tr("Add Reference"), tr("Title"),
 							QLineEdit::Normal, QString(""), &ok);
 	if(ok && !ref.isEmpty())
 		addRef(ref);
@@ -38,7 +38,7 @@ void AddQuoteDlg::onDelRef()
 	{
 		QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
 
-		// sort reversely, s.t. removeRow doesn't damage the index
+		// sort reversely, s.t. removeRow won't affect the index
 		qSort(idxList.begin(), idxList.end(), qGreater<QModelIndex>());
 		foreach(QModelIndex idx, idxList)
 			model.removeRow(idx.row());
@@ -80,7 +80,7 @@ void AddQuoteDlg::accept()
 
 	QSqlDatabase::database().commit();
 
-	deleteLater();
+	deleteLater();   // NOTE: non-modal dialog, kill by itself
 	return QDialog::accept();
 }
 
@@ -132,9 +132,9 @@ void AddQuoteDlg::resizeEvent(QResizeEvent*) {
 void AddQuoteDlg::onSwitchToPapers()
 {
 	QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
-	QString paper = idxList.isEmpty()
-				  ? QString() : model.data(idxList.front(), Qt::DisplayRole).toString();
-	MainWindow::getInstance()->jumpToPaper(paper);
+	QString paper = idxList.isEmpty() ? QString()
+									  : model.data(idxList.front(), Qt::DisplayRole).toString();
+	MainWindow::getInstance()->jumpToPaper(paper);   // select the paper
 }
 
 void AddQuoteDlg::onSwitchToQuotes() {

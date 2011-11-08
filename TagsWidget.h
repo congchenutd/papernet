@@ -4,6 +4,7 @@
 #include "../WordCloud/WordCloudWidget.h"
 #include <QMenu>
 
+// A widget of Tags based on WordCloud
 class TagsWidget : public WordCloudWidget
 {
 	Q_OBJECT
@@ -22,12 +23,12 @@ protected:
 private:
 	void updateTagSize(int tagID);
 
-private slots:
+private slots:                            // for menu actions
 	void onDel();
 	void onRename();
 	void onFilter();
 
-signals:
+signals:                                  // for menu actions
 	void filter(bool controlPressed);
 	void unfilter();
 	void removeTag();
@@ -35,11 +36,11 @@ signals:
 	void newTag();
 
 private:
-	QString tagTableName;
-	QString relationTableName;
-	QString relationSectionName;
+	QString tagTableName;           // (Paper)Tags, or DictionaryTags
+	QString relationTableName;      // PaperTag, or PhraseTag
+	QString relationSectionName;    // section name in the relation table, Paper, or Phrase
 
-	QAction* actionNewTag;
+	QAction* actionNewTag;    // for the menu
 	QAction* actionFilter;
 	QAction* actionUnFilter;
 	QAction* actionAdd;
@@ -48,6 +49,7 @@ private:
 	QAction* actionDel;
 };
 
+// The menu used by TagsWidget
 class TagsWidgetMenu : public QMenu
 {
 public:

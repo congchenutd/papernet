@@ -15,22 +15,22 @@ public:
 
 	void setQuoteID(int id);
 	void addRef(const QString& title);
+	virtual void accept();
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
 
 private slots:
 	void onCurrentRowChanged();
-	void onAddRef();
+	void onAddRef();               // create a new ref
 	void onDelRef();
 	void onSelectRef();            // select existing ref
-	virtual void accept();
 	void onSwitchToPapers();
 	void onSwitchToQuotes();
 
 private:
 	Ui::AddQuoteDlgClass ui;
-	QStringListModel model;
+	QStringListModel model;        // list the references
 	int quoteID;
 };
 

@@ -3,6 +3,7 @@
 
 #include "AutoSizeTableView.h"
 
+// Support context menu
 class PaperTableView : public AutoSizeTableView
 {
 	Q_OBJECT

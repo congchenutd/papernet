@@ -10,12 +10,12 @@ class QPushButton;
 class QCheckBox;
 
 // A tool bar with a context menu (show small icon, show text)
-class ToolBar : public QToolBar
+class MainToolBar : public QToolBar
 {
 	Q_OBJECT
 
 public:
-	ToolBar(QWidget* parent = 0);
+	MainToolBar(QWidget* parent = 0);
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event);

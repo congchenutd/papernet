@@ -14,7 +14,7 @@ public:
 	virtual void del() = 0;
 	virtual void search(const QString&) = 0;
 	virtual void reset() = 0;              // reset the model
-	virtual void jumpToID(int id) = 0;     // "click" on an ID
+	virtual void jumpToID(int id) = 0;     // "click" on an row
 	virtual void jumpToCurrent() {}
 };
 #endif // Page_h__

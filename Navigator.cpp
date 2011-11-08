@@ -41,7 +41,7 @@ FootStep Navigator::forward()
 }
 
 bool Navigator::validateHistory() {
-	return history.size() > 1;
+	return history.size() > 1;   // at lease one footstep (current)
 }
 
 bool Navigator::validateFuture() {

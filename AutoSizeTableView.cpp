@@ -16,7 +16,7 @@ void AutoSizeTableView::init(const QString& parentObjectName)
 
 void AutoSizeTableView::resizeEvent(QResizeEvent* event)
 {
-	if(adjustingCount++ < 2)   // skip the first 2 events during initialization
+	if(adjustingCount++ < 2)   // UGLY: skip the first 2 events during initialization
 		adjustColumns();
 	QTableView::resizeEvent(event);
 }
@@ -26,8 +26,13 @@ void AutoSizeTableView::saveSectionSizes()
 	setting->beginGroup(groupName);
 	for(int i = 0; i < model()->columnCount(); ++i)
 	{
-		double ratio = (double)(horizontalHeader()->sectionSize(i)) / width();
-		setting->setValue(QString::number(i), qMax(0.01, qMin(0.9, ratio)));
+		if(isColumnHidden(i))
+			setting->setValue(QString::number(i), 0);
+		else
+		{
+			double ratio = (double)(horizontalHeader()->sectionSize(i)) / width();
+			setting->setValue(QString::number(i), qMax(0.01, qMin(0.9, ratio)));
+		}
 	}
 	setting->endGroup();
 }
@@ -38,13 +43,10 @@ void AutoSizeTableView::adjustColumns()
 	if(horizontalHeader()->stretchLastSection())
 	{
 		for(; i >=0; --i)
-			if(sectionSizes.value(i) > 0)
-			{
-				resizeColumnToContents(i--);
-				break;       // find and skip last non-zero
-			}
+			if(sectionSizes.value(i) > 0)     // find and skip the last non-zero column
+				break;
 	}
 
-	for(; i >= 0; --i)
+	for(; i >= 0; --i)                        // apply the sizes
 		setColumnWidth(i, width() * sectionSizes.value(i));
 }

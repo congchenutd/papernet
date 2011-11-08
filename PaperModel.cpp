@@ -9,7 +9,7 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 	if(!idx.isValid())
 		return QSqlTableModel::data(idx, role);
 
-	// for related and coauthor
+	// for related/coauthored
 	if(role == Qt::BackgroundRole)
 	{
 		float maxProximity = getMaxProximity("Papers");
@@ -29,7 +29,7 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 		}
 	}
 
-	// make new paper's title bold
+	// make the titles of unread papers bold
 	if(idx.column() == PAPER_TITLE)
 	{
 		if(role == Qt::FontRole && !data(index(idx.row(), PAPER_READ)).toBool())
@@ -39,19 +39,7 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 			return f;
 		}
 	}
-	// tagged
-	else if(idx.column() == PAPER_TAGGED)
-	{
-		if(role == Qt::DisplayRole)
-			return QString();
-		if(role == Qt::DecorationRole)
-		{
-			int paperID = data(index(idx.row(), PAPER_ID), Qt::DisplayRole).toInt();
-			if(isTagged(paperID))
-				return QIcon(":/MainWindow/Images/Tag.png");
-		}
-	}
-	// attached
+	// use icons to represent attachment status
 	else if(idx.column() == PAPER_ATTACHED)
 	{
 		if(role == Qt::DisplayRole)

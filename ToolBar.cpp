@@ -8,7 +8,7 @@
 #include <QCheckBox>
 #include <QApplication>
 
-ToolBar::ToolBar(QWidget *parent)
+MainToolBar::MainToolBar(QWidget *parent)
 	: QToolBar(parent)
 {
 	// actions for the context menu
@@ -23,7 +23,7 @@ ToolBar::ToolBar(QWidget *parent)
 	onShowText (MySetting<UserSetting>::getInstance()->value("ShowText").toBool());
 }
 
-void ToolBar::contextMenuEvent(QContextMenuEvent* event)
+void MainToolBar::contextMenuEvent(QContextMenuEvent* event)
 {
 	QMenu menu(this);
 	menu.addAction(actionSmallIcon);
@@ -31,14 +31,14 @@ void ToolBar::contextMenuEvent(QContextMenuEvent* event)
 	menu.exec(event->globalPos());
 }
 
-void ToolBar::onSmallIcon(bool small)
+void MainToolBar::onSmallIcon(bool small)
 {
 	setIconSize(small ? QSize(24, 24) : QSize(48, 32));
 	actionSmallIcon->setChecked(small);
 	MySetting<UserSetting>::getInstance()->setValue("SmallIcon", small);
 }
 
-void ToolBar::onShowText(bool show)
+void MainToolBar::onShowText(bool show)
 {
 	setToolButtonStyle(show ? Qt::ToolButtonTextUnderIcon : Qt::ToolButtonIconOnly);
 	actionShowText->setChecked(show);

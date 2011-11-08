@@ -18,7 +18,6 @@ PaperList::PaperList(QWidget *parent)
 	ui.tableView->hideColumn(PAPER_PROXIMITY);
 	ui.tableView->hideColumn(PAPER_COAUTHOR);
 	ui.tableView->hideColumn(PAPER_READ);
-	ui.tableView->hideColumn(PAPER_TAGGED);
 	ui.tableView->hideColumn(PAPER_ATTACHED);
 	ui.tableView->resizeColumnToContents(PAPER_TITLE);
 

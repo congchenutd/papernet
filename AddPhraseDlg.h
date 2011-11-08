@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "ui_AddPhraseDlg.h"
 
+// A dialog to add and edit phrase
 class AddPhraseDlg : public QDialog
 {
 	Q_OBJECT

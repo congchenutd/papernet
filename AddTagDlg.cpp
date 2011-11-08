@@ -6,7 +6,6 @@ AddTagDlg::AddTagDlg(const QString& tableName, QWidget* parent) : QDialog(parent
 {
 	ui.setupUi(this);
 
-	// a compeleter gives a hint of the input
 	model.setTable(tableName);
 	model.select();
 

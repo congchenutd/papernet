@@ -3,6 +3,7 @@
 
 #include <QTableView>
 
+// Support context menu
 class QuotesTableView : public QTableView
 {
 	Q_OBJECT

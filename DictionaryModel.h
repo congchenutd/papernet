@@ -3,6 +3,8 @@
 
 #include <QSqlTableModel>
 
+// A table model for dictionary
+// Show related phrase in gradient color
 class DictionaryModel : public QSqlTableModel
 {
 	Q_OBJECT

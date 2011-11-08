@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "ui_LinkDlg.h"
 
+// Add hyperlink to a paper
 class LinkDlg : public QDialog
 {
 	Q_OBJECT

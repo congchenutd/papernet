@@ -3,6 +3,7 @@
 
 #include "AutoSizeTableView.h"
 
+// Show a context menu for dictionary
 class DictionaryTableView : public AutoSizeTableView
 {
 	Q_OBJECT

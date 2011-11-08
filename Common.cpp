@@ -44,7 +44,6 @@ void createTables()
 	query.exec("create table Papers( \
 					ID       int primary key, \
 					Read     bool, \
-					Tagged   bool, \
 					Attached bool, \
 					Title    varchar unique, \
 					Authors  varchar, \
@@ -277,7 +276,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 	QString filePath = getAttachmentPath(paperID, attachmentName);
 	QString url = filePath;
 
-	// Paper.pdf is not a real file, convert it to real pdf file
+	// Paper.pdf is not a real file, convert it to real pdf location
 	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
 		url = convertSlashes(getPDFPath(paperID));
 
@@ -377,7 +376,7 @@ void addPaperQuote(int paperID, int quoteID)
 										.arg(paperID).arg(quoteID));
 }
 
-// add a paper without detail info
+// add a paper without detailed info
 void addSimplePaper(int id, const QString& title)
 {
 	if(id < 0 || title.isEmpty())

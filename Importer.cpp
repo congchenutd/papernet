@@ -29,10 +29,11 @@ bool NonXmlImporter::import(const QString& fileName)
 		if(line.startsWith(getFirstHead()))
 		{
 			results << ImportResult();           // insert a new record
-			currentResult = results.end() - 1;   // point to the new one
+			currentResult = results.end() - 1;   // point to the newly inserted
 			continue;
 		}
 
+		// collect all sections
 		foreach(QString titleHead, getTitleHeads())
 			if(line.startsWith(titleHead))
 				currentResult->title = trimHead(line, titleHead);

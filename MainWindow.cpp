@@ -40,9 +40,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(ui.toolBarSearch, SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
 	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
 
-	connect(pagePapers,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
-	connect(pageQuotes,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
-	connect(pageDictionary, SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
+//	connect(pagePapers,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
+//	connect(pageQuotes,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
+//	connect(pageDictionary, SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
 
 	connect(navigator, SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
 	connect(navigator, SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
@@ -61,7 +61,7 @@ void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About",
 		tr("<h3><b>PaperNet: A Better Paper Manager</b></h3>"
-		"<p>Build on %1</p>"
+		"<p>Built on %1</p>"
 		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>")
 		.arg(UserSetting::getInstance()->getCompileDate()));
 }
@@ -82,7 +82,7 @@ void MainWindow::closeEvent(QCloseEvent*)
 void MainWindow::delOldBackup()
 {
 	const QDate today = QDate::currentDate();
-	const int   days  = MySetting<UserSetting>::getInstance()->getBackupDays();
+	const int   days  = UserSetting::getInstance()->getBackupDays();
 	const QFileInfoList fileInfos =
 		QDir("Backup").entryInfoList(QStringList() << "*.db", QDir::Files);
 	foreach(QFileInfo fileInfo, fileInfos)
@@ -168,11 +168,11 @@ void MainWindow::onBackward() {
 	navigateTo(navigator->backward());
 }
 
-void MainWindow::onTableInvalid(bool valid) {
-	//if(Page* page = dynamic_cast<Page*>(sender()))
-	//	if(currentPage == page)
-	//		ui.actionDel->setEnabled(valid);
-}
+//void MainWindow::onTableInvalid(bool valid) {
+//	if(Page* page = dynamic_cast<Page*>(sender()))
+//		if(currentPage == page)
+//			ui.actionDel->setEnabled(valid);
+//}
 
 void MainWindow::navigateTo(const FootStep& footStep)
 {

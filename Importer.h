@@ -5,6 +5,8 @@
 #include <QList>
 #include <QStringList>
 
+// A family of citation file importers
+
 class Importer;
 class ImporterFactory
 {

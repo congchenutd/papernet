@@ -9,7 +9,7 @@
 TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
 {
 	int minFont = UserSetting::getInstance()->getFont().pointSize();
-	setFontSize(minFont, minFont*2);
+	setSizeRange(minFont, minFont*2);
 
 	actionNewTag   = new QAction(QIcon(":/MainWindow/Images/AddTag.png"),     tr("New tag"), this);
 	actionFilter   = new QAction(QIcon(":/MainWindow/Images/ShowTagged.png"), tr("Show tagged (OR)"), this);
@@ -33,7 +33,7 @@ void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 	TagsWidgetMenu menu(actionFilter, this);
 	menu.addAction(actionNewTag);
 	menu.addAction(actionUnFilter);
-	if(childAt(event->pos()) != 0)     // click on a tag
+	if(childAt(event->pos()) != 0)         // click on a tag
 	{
 		menu.setAND(controlIsPressed());   // init actionFilter
 		menu.addAction(actionFilter);
@@ -48,10 +48,10 @@ void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 void TagsWidget::onDel()
 {
 	QList<WordLabel*> selected = getSelected();
-	foreach(WordLabel* word, selected)   // del selected
+	foreach(WordLabel* word, selected)       // delete all selected
 	{
-		removeWord(word);
-		delTag(tagTableName, word->text());  // db stuff
+		removeWord(word);                    // from the cloud
+		delTag(tagTableName, word->text());  // from db
 	}
 }
 
@@ -78,15 +78,15 @@ void TagsWidget::onRename()
 	if(selected.size() > 1)
 		return;
 
-	WordLabel* word = selected.front();
+	WordLabel* word = selected.front();                    // one at a time
 	QString oldName = word->text();
 	AddTagDlg dlg(tagTableName, this);
 	dlg.setWindowTitle(tr("Edit Tag"));
 	dlg.setText(oldName);
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		renameWord(word, dlg.getText());
-		renameTag(tagTableName, oldName, dlg.getText());   // db
+		renameWord(word, dlg.getText());                   // update the cloud
+		renameTag(tagTableName, oldName, dlg.getText());   // update the db
 	}
 }
 
@@ -95,17 +95,19 @@ void TagsWidget::addTag(int id, const QString& text)
 	if(text.isEmpty())
 		return;
 
-	// add to db
+	// add to the db
 	QSqlQuery query;
 	query.prepare(tr("insert into %1 values(:id, :text, 0)").arg(tagTableName));
 	query.bindValue(":id",   id);
 	query.bindValue(":text", text);
 	query.exec();
 
+	// add to the cloud
 	addWord(text);
 	normalizeSizes();
 }
 
+// associate the tag with the item
 void TagsWidget::addTagToItem(int tagID, int itemID)
 {
 	QSqlQuery query;
@@ -114,6 +116,8 @@ void TagsWidget::addTagToItem(int tagID, int itemID)
 	updateTagSize(tagID);   // recalculate tag size
 }
 
+
+// deassociate the tag with the item
 void TagsWidget::removeTagFromItem(int tagID, int itemID)
 {
 	QSqlQuery query;
@@ -125,6 +129,7 @@ void TagsWidget::removeTagFromItem(int tagID, int itemID)
 	updateTagSize(tagID);   // recalculate tag size
 }
 
+// init
 void TagsWidget::setTableNames(const QString& tagName, const QString& relationName, const QString& relationSection)
 {
 	tagTableName        = tagName;
@@ -159,11 +164,11 @@ TagsWidgetMenu::TagsWidgetMenu(QAction* action, QWidget* parent)
 
 void TagsWidgetMenu::keyPressEvent(QKeyEvent* event)
 {
-	setAND(event->modifiers() == Qt::ControlModifier);
+	setAND(event->modifiers() == Qt::ControlModifier);   // ctrl pressed on not
 	QMenu::keyPressEvent(event);
 }
 
-// change if actionFilter shows AND/OR
+// show AND/OR on the filter action
 void TagsWidgetMenu::setAND(bool AND) {
 	actionFilter->setText(AND ? tr("Show tagged (AND)") : tr("Show tagged (OR)"));
 }

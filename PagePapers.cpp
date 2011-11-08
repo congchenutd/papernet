@@ -41,7 +41,6 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->setModel(&modelPapers);
 	ui.tvPapers->hideColumn(PAPER_ID);
 	ui.tvPapers->hideColumn(PAPER_READ);
-	ui.tvPapers->hideColumn(PAPER_TAGGED);
 	ui.tvPapers->hideColumn(PAPER_JOURNAL);
 	ui.tvPapers->hideColumn(PAPER_ABSTRACT);
 	ui.tvPapers->hideColumn(PAPER_NOTE);
@@ -376,7 +375,6 @@ void PagePapers::onResetPapers()
 	while(modelPapers.canFetchMore())
 		modelPapers.fetchMore();
 	modelPapers.setHeaderData(PAPER_READ,     Qt::Horizontal, "R");
-	modelPapers.setHeaderData(PAPER_TAGGED,   Qt::Horizontal, "!");
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
 	sortByTitle();

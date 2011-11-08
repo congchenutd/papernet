@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "ui_PaperDlg.h"
 
+// add/edit paper
 class PaperDlg : public QDialog
 {
 	Q_OBJECT

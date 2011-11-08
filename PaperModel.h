@@ -4,6 +4,7 @@
 #include <QSqlTableModel>
 #include <QIcon>
 
+// A table model for papers
 class PaperModel : public QSqlTableModel
 {
 	Q_OBJECT

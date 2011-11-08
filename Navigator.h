@@ -3,6 +3,7 @@
 #include <QStack>
 #include <QObject>
 
+// navigation history record
 class Page;
 struct FootStep
 {
@@ -22,6 +23,7 @@ struct FootStep
 	int   id;
 };
 
+// tracks navigation history
 class Navigator : public QObject
 {
 	Q_OBJECT

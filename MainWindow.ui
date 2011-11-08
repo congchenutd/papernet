@@ -69,7 +69,7 @@
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="ToolBar" name="toolBarMain">
+  <widget class="MainToolBar" name="toolBarMain">
    <property name="windowTitle">
     <string>Main toolbar</string>
    </property>
@@ -253,7 +253,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ToolBar</class>
+   <class>MainToolBar</class>
    <extends>QToolBar</extends>
    <header>ToolBar.h</header>
   </customwidget>

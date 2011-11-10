@@ -2,6 +2,7 @@
 #include "PaperList.h"
 #include "Common.h"
 #include "MainWindow.h"
+#include "NewReferenceDlg.h"
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QSqlQuery>
@@ -24,11 +25,9 @@ AddQuoteDlg::AddQuoteDlg(QWidget *parent)
 
 void AddQuoteDlg::onAddRef()
 {
-	bool ok;
-	QString ref = QInputDialog::getText(this, tr("Add Reference"), tr("Title"),
-							QLineEdit::Normal, QString(""), &ok);
-	if(ok && !ref.isEmpty())
-		addRef(ref);
+	NewReferenceDlg dlg(this);
+	if(dlg.exec() == QDialog::Accepted && !dlg.getTitle().isEmpty())
+		addRef(dlg.getTitle());
 }
 
 void AddQuoteDlg::onDelRef()

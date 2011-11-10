@@ -49,7 +49,8 @@ HEADERS += AddPhraseDlg.h \
 		   ../WordCloud/FlowLayout.h \
 		   ../EnglishName/EnglishName.h \
 		   DictionaryModel.h \
-		   Thesaurus.h
+		   Thesaurus.h \
+    NewReferenceDlg.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -61,7 +62,8 @@ FORMS += AddPhraseDlg.ui \
          PagePapers.ui \
          PageQuotes.ui \
          PaperDlg.ui \
-         PaperList.ui
+         PaperList.ui \
+    NewReferenceDlg.ui
 SOURCES += AddPhraseDlg.cpp \
            AddQuoteDlg.cpp \
            AddTagDlg.cpp \
@@ -90,8 +92,12 @@ SOURCES += AddPhraseDlg.cpp \
 		   ../WordCloud/FlowLayout.cpp      \
            ../EnglishName/EnglishName.cpp \
 		   DictionaryModel.cpp \
-		   Thesaurus.cpp
+		   Thesaurus.cpp \
+    NewReferenceDlg.cpp
 RESOURCES += MainWindow.qrc
+
+
+
 
 
 

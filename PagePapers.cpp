@@ -303,7 +303,7 @@ void PagePapers::onSubmitPaper()
 	hideColoring();
 	int backup = currentPaperID;
 	if(!modelPapers.submitAll())
-		QMessageBox::critical(this, tr("Error"), tr("Database submission failed!"));
+		QMessageBox::critical(this, tr("Error"), modelPapers.lastError().text());
 	currentPaperID = backup;
 //	sortByTitle();
 	jumpToID(backup);
@@ -369,6 +369,9 @@ void PagePapers::onDelTagFromPaper()
 
 void PagePapers::onResetPapers()
 {
+	QSqlQuery query;
+	query.exec(tr("drop view SelectedTags"));   // remove the temp table
+
 	hideColoring();
 	modelPapers.setTable("Papers");
 	modelPapers.select();
@@ -384,11 +387,15 @@ void PagePapers::onResetPapers()
 // filter papers with tags
 void PagePapers::onFilterPapers(bool AND)
 {
+	dropTempView();
 	hideColoring();
+
+	// get selected tags
 	QStringList tagIDs;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
 		tagIDs << tr("%1").arg(getTagID("Tags", tag->text()));
+
 	if(!AND)
 		modelPapers.setFilter(
 			tr("ID in (select Paper from PaperTag where Tag in (%1))").arg(tagIDs.join(",")));
@@ -404,8 +411,6 @@ void PagePapers::onFilterPapers(bool AND)
 								   not exists \
 								   (select * from PaperTag where \
 									Paper=Papers.ID and Tag=SelectedTags.ID))");
-
-		query.exec(tr("drop view SelectedTags"));   // remove the temp table
 	}
 }
 

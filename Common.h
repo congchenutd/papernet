@@ -53,6 +53,7 @@ void delTag   (const QString& tableName, const QString& tagName);
 void renameTag(const QString& tableName, const QString& oldName, const QString& newName);
 QStringList getTagsOfPaper (int paperID);
 QStringList getTagsOfPhrase(int phraseID);
+void dropTempView();
 
 // paper title
 QString getPaperTitle(int paperID);

@@ -171,11 +171,15 @@ void PageDictionary::onDelTagFromPhrase()
 
 void PageDictionary::onFilterPhrases(bool AND)
 {
+	dropTempView();
 	hideRelated();
+
+	// get selected tags
 	QStringList tagIDs;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 	foreach(WordLabel* tag, tags)
 		tagIDs << tr("%1").arg(getTagID("DictionaryTags", tag->text()));
+
 	if(!AND)
 		model.setFilter(
 			tr("ID in (select Phrase from PhraseTag where Tag in (%1))").arg(tagIDs.join(",")));
@@ -191,8 +195,6 @@ void PageDictionary::onFilterPhrases(bool AND)
 						 not exists \
 							 (select * from PhraseTag where \
 							 phrase=Dictionary.ID and Tag=SelectedTags.ID))");
-
-		query.exec(tr("drop view SelectedTags"));   // remove the temp table
 	}
 }
 

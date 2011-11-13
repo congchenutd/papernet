@@ -580,3 +580,9 @@ QString suggestAttachmentName(const QString& fileName)
 		return "EndNote.enw";
 	return QFileInfo(fileName).fileName();
 }
+
+void dropTempView()
+{
+	QSqlQuery query;
+	query.exec("drop view SelectedTags");   // remove the temp table
+}

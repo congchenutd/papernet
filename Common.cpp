@@ -340,6 +340,8 @@ int getMaxCoauthor()
 	return query.next() ? query.value(0).toInt() : 0;
 }
 
+// update the quote with the id
+// insert new one if not exists
 void updateQuote(int id, const QString& title, const QString& content)
 {
 	if(id < 0 || title.isEmpty())

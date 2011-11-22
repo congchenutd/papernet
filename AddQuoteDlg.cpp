@@ -60,6 +60,8 @@ void AddQuoteDlg::accept()
 	}
 
 	QSqlDatabase::database().transaction();
+
+	// update existing quote, or insert a new one
 	updateQuote(quoteID, ui.leTitle->text(), ui.teContent->toPlainText());
 
 	QSqlQuery query;
@@ -69,7 +71,7 @@ void AddQuoteDlg::accept()
 	foreach(QString title, list)
 	{
 		int paperID = getPaperID(title);
-		if(paperID == -1)  // not exist
+		if(paperID == -1)  // the paper not exist, create one
 		{
 			paperID = getNextID("Papers", "ID");
 			::addSimplePaper(paperID, title);
@@ -79,7 +81,7 @@ void AddQuoteDlg::accept()
 
 	QSqlDatabase::database().commit();
 
-	deleteLater();   // NOTE: non-modal dialog, kill by itself
+//	deleteLater();   // NOTE: non-modal dialog, kill by itself
 	return QDialog::accept();
 }
 

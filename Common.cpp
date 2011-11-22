@@ -158,9 +158,8 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 			return false;
 
 		// create full text
-		QString fullTextFilePath = dir + "/" + "fulltext.txt";
-		Pdf2Text(filePath.toAscii(), fullTextFilePath.toAscii());
-		hideFile(fullTextFilePath);
+		QString fullTextPath = dir + "/" + "fulltext.txt";
+		makeFullTextFile(filePath, fullTextPath);
 	}
 	else {
 		targetFilePath = dir + "/" + attachmentName;
@@ -478,6 +477,16 @@ bool fullTextSearch(int paperID, const QString& target)
 	return false;
 }
 
+void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath)
+{
+	if(QFile::exists(pdfPath))
+	{
+		QFile::remove(fulltextPath);
+		Pdf2Text(pdfPath.toAscii(), fulltextPath.toAscii());
+		hideFile(fulltextPath);
+	}
+}
+
 void makeFullTextFiles()
 {
 	QSqlQuery query;
@@ -485,25 +494,29 @@ void makeFullTextFiles()
 	while(query.next())
 	{
 		int id = query.value(0).toInt();
-		QString dir = getAttachmentDir(id);
-		QString pdf = getAttachmentPath(id, "Paper.pdf");
-		if(QFile::exists(pdf))
-		{
-			QString fullText = dir + "/" + "fulltext.txt";
-			Pdf2Text(pdf.toAscii(), fullText.toAscii());
-			hideFile(fullText);
-		}
+		QString pdf      = getAttachmentPath(id, "Paper.pdf");
+		QString fullText = getAttachmentPath(id, "fulltext.txt");
+		makeFullTextFile(pdf, fullText);
 	}
 }
 
 void hideFile(const QString& filePath)
 {
 #ifdef Q_WS_WIN
+	// This is a windows api, not from Qt
 	SetFileAttributesA(filePath.toAscii(), FILE_ATTRIBUTE_HIDDEN);
 #endif
 
-#ifdef Q_WS_MAC   // don't know how to do it in Mac
-	Q_UNUSED(filePath);
+#ifdef Q_WS_MAC
+	QString command = "setfile -a V ";
+	foreach(QChar ch, filePath)
+	{
+		if(ch.isSpace())
+			command.append("\\");
+		command.append(ch);
+	}
+	qDebug() << command;
+	QProcess::execute(command);
 #endif
 }
 

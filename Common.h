@@ -41,6 +41,7 @@ QString getAttachmentPath(int paperID, const QString& attachmentName);
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName);
 bool fullTextSearch(int paperID, const QString& target);
 void makeFullTextFiles();
+void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath);
 void hideFile(const QString& filePath);
 QString getPDFPath(int paperID);
 void openUrl(const QString& url);

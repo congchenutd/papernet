@@ -1,4 +1,5 @@
 #include "OptionDlg.h"
+#include "Common.h"
 #include <QFontDialog>
 #include <QFileDialog>
 #include <cstdlib>
@@ -11,13 +12,15 @@ OptionDlg::OptionDlg(QWidget *parent)
 	ui.setupUi(this);
 
 	// temp location is currently useless
-	ui.leTemp->setEnabled(false);
-	ui.btTemp->setEnabled(false);
+	ui.labelTempLocation->hide();
+	ui.leTemp->hide();
+	ui.btTemp->hide();
 
 	setting = MySetting<UserSetting>::getInstance();
 
 	connect(ui.btFont, SIGNAL(clicked()), this, SLOT(onFont()));
 	connect(ui.btTemp, SIGNAL(clicked()), this, SLOT(onTempLocation()));
+	connect(ui.btRebuiltFulltext, SIGNAL(clicked()), this, SLOT(onRebuildFulltext()));
 
 	// load settings
 	qApp->setFont(setting->getFont());
@@ -128,4 +131,9 @@ QString UserSetting::getCompileDate() const
 	QResource resource(":/MainWindow/CompileDate.txt");
 	QString result = (char*)resource.data();
 	return result.isEmpty() ? "Unknown" : result;
+}
+
+void OptionDlg::onRebuildFulltext()
+{
+	makeFullTextFiles();
 }

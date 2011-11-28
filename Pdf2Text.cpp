@@ -87,9 +87,9 @@ float ExtractNumber(const char* search, int lastcharoffset)
 //Check if a certain 2 character token just came along (e.g. BT):
 bool seen2(const char* search, char* recent)
 {
-	if (    recent[oldchar-3]==search[0] 
-	&& recent[oldchar-2]==search[1] 
-	&& (recent[oldchar-1]==' ' || recent[oldchar-1]==0x0d || recent[oldchar-1]==0x0a) 
+	if (    recent[oldchar-3]==search[0]
+	&& recent[oldchar-2]==search[1]
+	&& (recent[oldchar-1]==' ' || recent[oldchar-1]==0x0d || recent[oldchar-1]==0x0a)
 		&& (recent[oldchar-4]==' ' || recent[oldchar-4]==0x0d || recent[oldchar-4]==0x0a)
 		)
 	{
@@ -142,7 +142,7 @@ void ProcessOutput(FILE* file, char* output, size_t len)
 				fputc(0x0d, file);
 				fputc(0x0a, file);
 			}
-			else if (c=='(' && rbdepth==0 && !nextliteral) 
+			else if (c=='(' && rbdepth==0 && !nextliteral)
 			{
 				//Start outputting text!
 				rbdepth=1;
@@ -161,12 +161,12 @@ void ProcessOutput(FILE* file, char* output, size_t len)
 					}
 				}
 			}
-			else if (c==')' && rbdepth==1 && !nextliteral) 
+			else if (c==')' && rbdepth==1 && !nextliteral)
 			{
 				//Stop outputting text
 				rbdepth=0;
 			}
-			else if (rbdepth==1) 
+			else if (rbdepth==1)
 			{
 				//Just a normal text character:
 				if (c=='\\' && !nextliteral)
@@ -239,30 +239,34 @@ void Pdf2Text(const char* pdf, const char* text)
 				if (buffer[streamend-2]==0x0d && buffer[streamend-1]==0x0a) streamend-=2;
 				else if (buffer[streamend-1]==0x0a) streamend--;
 
-				//Assume output will fit into 10 times input buffer:
-				size_t outsize = (streamend - streamstart)*10;
-				char* output = new char [outsize]; memset(output, 0, outsize);
-
-				//Now use zlib to inflate:
-				z_stream zstrm; memset(&zstrm, 0, sizeof(zstrm));
-
-				zstrm.avail_in = streamend - streamstart + 1;
-				zstrm.avail_out = outsize;
-				zstrm.next_in = (Bytef*)(buffer + streamstart);
-				zstrm.next_out = (Bytef*)output;
-
-				int rsti = inflateInit(&zstrm);
-				if (rsti == Z_OK)
+				// FIXME: with paper "gasper: ...", streamend < streamstart, and cause mem error
+				if(streamend > streamstart)
 				{
-					int rst2 = inflate (&zstrm, Z_FINISH);
-					if (rst2 >= 0)
+					//Assume output will fit into 10 times input buffer:
+					size_t outsize = (streamend - streamstart)*10;
+					char* output = new char [outsize]; memset(output, 0, outsize);
+
+					//Now use zlib to inflate:
+					z_stream zstrm; memset(&zstrm, 0, sizeof(zstrm));
+
+					zstrm.avail_in = streamend - streamstart + 1;
+					zstrm.avail_out = outsize;
+					zstrm.next_in = (Bytef*)(buffer + streamstart);
+					zstrm.next_out = (Bytef*)output;
+
+					int rsti = inflateInit(&zstrm);
+					if (rsti == Z_OK)
 					{
-						//Ok, got something, extract the text:
-						size_t totout = zstrm.total_out;
-						ProcessOutput(fileo, output, totout);
+						int rst2 = inflate (&zstrm, Z_FINISH);
+						if (rst2 >= 0)
+						{
+							//Ok, got something, extract the text:
+							size_t totout = zstrm.total_out;
+							ProcessOutput(fileo, output, totout);
+						}
 					}
+					delete[] output; output=0;
 				}
-				delete[] output; output=0;
 				buffer+= streamend + 7;
 				filelen = filelen - (streamend+7);
 			}

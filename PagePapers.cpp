@@ -102,6 +102,13 @@ void PagePapers::onClicked(const QModelIndex& idx) {
 
 void PagePapers::jumpToID(int id)
 {
+	// avoid same id
+	static int lastID = -1;
+	if(id == lastID)
+		return;
+	lastID = id;
+
+	reset();   // ensure the paper to be shown
 	int row = idToRow(&modelPapers, PAPER_ID, id);
 	if(row > -1)
 	{

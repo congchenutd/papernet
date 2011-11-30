@@ -18,6 +18,8 @@ signals:
 	void showRelated();
 	void showCoauthored();
 	void addQuote();
+	void printMe();
+	void readMe(bool);
 };
 
 #endif // PAPERTABLEVIEW_H

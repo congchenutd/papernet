@@ -28,7 +28,7 @@ bool NonXmlImporter::import(const QString& fileName)
 		QString line = is.readLine();
 		if(line.startsWith(getFirstHead()))
 		{
-			results << ImportResult();           // insert a new record
+			results << PaperRecord();           // insert a new record
 			currentResult = results.end() - 1;   // point to the newly inserted
 			continue;
 		}
@@ -127,7 +127,7 @@ bool XmlImporter::import(const QString& fileName)
 	for(int i=0; i<records.count(); ++i)
 	{
 		QDomNode record = records.item(i);
-		ImportResult result;
+		PaperRecord result;
 
 		QDomNodeList title = record.toElement().elementsByTagName("TITLE");
 		if(title.isEmpty())

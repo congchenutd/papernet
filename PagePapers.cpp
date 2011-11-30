@@ -67,6 +67,11 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
 	connect(ui.tvPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
 	connect(ui.tvPapers, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
+	connect(ui.tvPapers, SIGNAL(printMe()),        this, SLOT(onPrintMe()));
+	connect(ui.tvPapers, SIGNAL(readMe(bool)),         this, SLOT(onReadMe(bool)));
+
+	connect(ui.widgetAttachments, SIGNAL(paperRead()), this, SLOT(onPaperRead()));
+
 	connect(ui.tvQuotes, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
 	connect(ui.tvQuotes, SIGNAL(delQuotes()),      this, SLOT(onDelQuotes()));
 	connect(ui.tvQuotes, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditQuote(QModelIndex)));
@@ -125,68 +130,70 @@ void PagePapers::add()
 	PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Add Paper"));
 	if(dlg.exec() == QDialog::Accepted)
-	{
-		int lastRow = modelPapers.rowCount();
-		modelPapers.insertRow(lastRow);
-		currentPaperID = getNextID("Papers", "ID");
-		modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
-		updateRecord(lastRow, dlg);
-		onSubmitPaper();
-		updateTags(dlg.getTags());
-	}
+		insertRecord(dlg.getPaperRecord());
 }
 
 void PagePapers::onEditPaper()
 {
 	PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Edit Paper"));
-	QString oldTitle = modelPapers.data(modelPapers.index(currentRow, PAPER_TITLE)).toString();
-	dlg.setTitle(oldTitle);
-	dlg.setAuthors (modelPapers.data(modelPapers.index(currentRow, PAPER_AUTHORS)) .toString());
-	dlg.setYear    (modelPapers.data(modelPapers.index(currentRow, PAPER_YEAR))    .toInt());
-	dlg.setJournal (modelPapers.data(modelPapers.index(currentRow, PAPER_JOURNAL)) .toString());
-	dlg.setAbstract(modelPapers.data(modelPapers.index(currentRow, PAPER_ABSTRACT)).toString());
-	dlg.setNote    (modelPapers.data(modelPapers.index(currentRow, PAPER_NOTE))    .toString());
-	dlg.setTags    (getTagsOfPaper(currentPaperID));
-	if(dlg.exec() != QDialog::Accepted)
-		return;
 
-	updateRecord(currentRow, dlg);
-	onSubmitPaper();
-	renameTitle(oldTitle, dlg.getTitle());
-	reloadAttachments();           // refresh attached files after renaming
-	if(!dlg.getNote().isEmpty())   // paper with notes indicates its been read
-		setPaperRead(currentPaperID);
-	updateTags(dlg.getTags());
+	PaperRecord record;
+	QString oldTitle = modelPapers.data(modelPapers.index(currentRow, PAPER_TITLE)).toString();
+	record.title = oldTitle;
+	record.authors  = modelPapers.data(modelPapers.index(currentRow, PAPER_AUTHORS)) .toString();
+	record.year     = modelPapers.data(modelPapers.index(currentRow, PAPER_YEAR))    .toInt();
+	record.journal  = modelPapers.data(modelPapers.index(currentRow, PAPER_JOURNAL)) .toString();
+	record.abstract = modelPapers.data(modelPapers.index(currentRow, PAPER_ABSTRACT)).toString();
+	QString oldNote = modelPapers.data(modelPapers.index(currentRow, PAPER_NOTE))    .toString();
+	record.note     = oldNote;
+	record.tags     = getTagsOfPaper(currentPaperID);
+	dlg.setPaperRecord(record);
+
+	if(dlg.exec() == QDialog::Accepted)
+	{
+		updateRecord(currentRow, dlg.getPaperRecord());
+		renameTitle(oldTitle, dlg.getTitle());
+		reloadAttachments();           // refresh attached files after renaming
+
+		// changing note -> reading
+		if(dlg.getNote() != oldNote)
+			onPaperRead();
+	}
 }
 
-void PagePapers::updateRecord(int row, const PaperDlg& dlg)
+void PagePapers::insertRecord(const PaperRecord& record)
 {
-	modelPapers.setData(modelPapers.index(row, PAPER_TITLE),    dlg.getTitle());
-	modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS),  dlg.getAuthors());
-	modelPapers.setData(modelPapers.index(row, PAPER_YEAR),     dlg.getYear());
-	modelPapers.setData(modelPapers.index(row, PAPER_JOURNAL),  dlg.getJournal());
-	modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT), dlg.getAbstract());
-	modelPapers.setData(modelPapers.index(row, PAPER_NOTE),     dlg.getNote());
+	int lastRow = modelPapers.rowCount();
+	modelPapers.insertRow(lastRow);
+	currentPaperID = getNextID("Papers", "ID");
+	modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
+
+	updateRecord(lastRow, record);
+	onReadMe(true);    // attach the ReadMe tag
+}
+
+void PagePapers::updateRecord(int row, const PaperRecord& record)
+{
+	modelPapers.setData(modelPapers.index(row, PAPER_TITLE),    record.title);
+	modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS),  record.authors);
+	modelPapers.setData(modelPapers.index(row, PAPER_YEAR),     record.year);
+	modelPapers.setData(modelPapers.index(row, PAPER_JOURNAL),  record.journal);
+	modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT), record.abstract);
+	modelPapers.setData(modelPapers.index(row, PAPER_NOTE),     record.note);
+	onSubmitPaper();
+	updateTags(record.tags);
 }
 
 void PagePapers::updateTags(const QStringList& tags)
 {
-	// remove all connections to tags
+	// remove all relations to tags
 	QSqlQuery query;
 	query.exec(tr("delete from PaperTag where Paper = %1").arg(currentPaperID));
 
-	// add connections back
-	foreach(QString tag, tags)
-	{
-		int tagID = getTagID("Tags", tag);
-		if(tagID < 0)   // new tag
-		{
-			tagID = getNextID("Tags", "ID");
-			ui.widgetWordCloud->addTag(tagID, tag);
-		}
-		ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
-	}
+	// add relations back
+	foreach(QString tagName, tags)
+		attachNewTag(tagName);
 	highLightTags();
 }
 
@@ -232,8 +239,8 @@ void PagePapers::onImport()
 			continue;
 		}
 
-		QList<ImportResult> results = importer->getResults();
-		foreach(ImportResult result, results)    // one file may have multiple records
+		QList<PaperRecord> results = importer->getResults();
+		foreach(PaperRecord result, results)    // one file may have multiple records
 		{
 			int id = ::getPaperID(result.title);
 			if(id > -1)   // merge to existing record
@@ -252,7 +259,7 @@ void PagePapers::onImport()
 				addAttachment(currentPaperID, suggestAttachmentName(fileName), fileName);
 
 				// add the pdf file with the same name
-				QString pdfFileName = QFileInfo(fileName).path() + QFileInfo(fileName).baseName() + ".pdf";
+				QString pdfFileName = QFileInfo(fileName).path() + "/" + QFileInfo(result.title).baseName() + ".pdf";
 				if(QFile::exists(pdfFileName))
 					addAttachment(currentPaperID, suggestAttachmentName(pdfFileName), pdfFileName);
 			}
@@ -262,21 +269,7 @@ void PagePapers::onImport()
 	onSubmitPaper();
 }
 
-void PagePapers::insertRecord(const ImportResult &record)
-{
-	int lastRow = modelPapers.rowCount();
-	modelPapers.insertRow(lastRow);
-	currentPaperID = getNextID("Papers", "ID");
-	modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
-	modelPapers.setData(modelPapers.index(lastRow, PAPER_TITLE),    record.title);
-	modelPapers.setData(modelPapers.index(lastRow, PAPER_AUTHORS),  record.authors);
-	modelPapers.setData(modelPapers.index(lastRow, PAPER_JOURNAL),  record.journal);
-	modelPapers.setData(modelPapers.index(lastRow, PAPER_YEAR),     record.year);
-	modelPapers.setData(modelPapers.index(lastRow, PAPER_ABSTRACT), record.abstract);
-	modelPapers.submitAll();
-}
-
-void PagePapers::mergeRecord(int row, const ImportResult &record)
+void PagePapers::mergeRecord(int row, const PaperRecord &record)
 {
 	QString title = modelPapers.data(modelPapers.index(row, PAPER_TITLE)).toString();
 	if(!title.isEmpty())
@@ -369,7 +362,14 @@ void PagePapers::onDelTagFromPaper()
 		int paperID = modelPapers.data(idx).toInt();
 		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 		foreach(WordLabel* tag, tags)
+		{
 			ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()), paperID);
+			if(tag->text() == "ReadMe")
+			{
+				setPaperRead(currentPaperID, true);     // unbold the title
+				reset();
+			}
+		}
 	}
 	highLightTags();
 }
@@ -379,6 +379,7 @@ void PagePapers::onResetPapers()
 	QSqlQuery query;
 	query.exec(tr("drop view SelectedTags"));   // remove the temp table
 
+	int backupID = currentPaperID;
 	hideColoring();
 	modelPapers.setTable("Papers");
 	modelPapers.select();
@@ -388,6 +389,7 @@ void PagePapers::onResetPapers()
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
 	sortByTitle();
+	currentPaperID = backupID;
 	jumpToID(currentPaperID);
 }
 
@@ -646,4 +648,43 @@ void PagePapers::sortByTitle() {
 
 void PagePapers::sortByProximity() {
 	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
+}
+
+void PagePapers::onPrintMe()
+{
+	attachNewTag("PrintMe");
+	highLightTags();
+}
+
+void PagePapers::onReadMe(bool readMe)
+{
+	if(readMe)
+	{
+		setPaperRead(currentPaperID, false);    // bold the title
+		reset();
+		attachNewTag("ReadMe");
+		highLightTags();
+	}
+	else
+	{
+	}
+}
+
+void PagePapers::attachNewTag(const QString& tagName)
+{
+	int tagID = getTagID("Tags", tagName);
+	if(tagID < 0)   // new tag
+	{
+		tagID = getNextID("Tags", "ID");
+		ui.widgetWordCloud->addTag(tagID, tagName);
+	}
+	ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
+}
+
+void PagePapers::onPaperRead()
+{
+	setPaperRead(currentPaperID, true);     // unbold the title
+	reset();
+	ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "ReadMe"), currentPaperID);
+	highLightTags();
 }

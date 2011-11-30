@@ -120,6 +120,9 @@ void TagsWidget::addTagToItem(int tagID, int itemID)
 // deassociate the tag with the item
 void TagsWidget::removeTagFromItem(int tagID, int itemID)
 {
+	if(tagID < 0 || itemID < 0)
+		return;
+
 	QSqlQuery query;
 	query.exec(tr("delete from %1 where %2=%3 and Tag=%4")
 			   .arg(relationTableName)

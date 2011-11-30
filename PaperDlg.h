@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "ui_PaperDlg.h"
+#include "Importer.h"
 
 // add/edit paper
 class PaperDlg : public QDialog
@@ -27,6 +28,9 @@ public:
 	void setAbstract(const QString& ab);
 	void setNote    (const QString& note);
 	void setTags    (const QStringList& tags);
+
+	PaperRecord getPaperRecord() const;
+	void        setPaperRecord(const PaperRecord& record);
 
 private:
 	Ui::PaperDlgClass ui;

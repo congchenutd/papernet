@@ -26,5 +26,7 @@
         <file>Images/EditTag.png</file>
         <file>Images/ShowTagged.png</file>
         <file>Images/SearchFile.png</file>
+        <file>Images/Print.png</file>
+        <file>Images/Read.png</file>
     </qresource>
 </RCC>

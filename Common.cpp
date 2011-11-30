@@ -436,13 +436,15 @@ AttachmentStatus isAttached(int paperID)
 	return ATTACH_PAPER;
 }
 
-void setPaperRead(int paperID)
+void setPaperRead(int paperID, bool read)
 {
 	if(paperID < 0)
 		return;
 
+	// reset read column in papers
 	QSqlQuery query;
-	query.exec(QObject::tr("update Papers set Read = \'true\' where ID = %1").arg(paperID));
+	query.exec(QObject::tr("update Papers set Read = %1 where ID = %2")
+			   .arg(read).arg(paperID));
 }
 
 void updateAttached(int paperID)  // update Attached section of Papers table

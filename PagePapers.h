@@ -8,7 +8,7 @@
 #include "PaperModel.h"
 #include "Page.h"
 
-struct ImportResult;
+struct PaperRecord;
 class PaperDlg;
 class Thesaurus;
 
@@ -37,12 +37,15 @@ private slots:
 	void onShowRelated();
 	void onShowCoauthored();
 	void onResetPapers();
+	void onPaperRead();
 
 	void onAddTag();
 	void onAddTagToPaper();
 	void onDelTagFromPaper();
 	void onFilterPapers(bool AND = false);
 	void onTagDoubleClicked(const QString& label);
+	void onPrintMe();   // two built-in tags
+	void onReadMe(bool readMe);
 
 	void onAddQuote();
 	void onEditQuote(const QModelIndex& idx);
@@ -56,9 +59,9 @@ signals:
 private:
 	int  getPaperID(int row) const;
 	void hideColoring();    // related and coauthor coloring
-	void mergeRecord(int row, const ImportResult& record);
-	void insertRecord(const ImportResult& record);
-	void updateRecord(int row, const PaperDlg& dlg);
+	void mergeRecord(int row, const PaperRecord& record);
+	void insertRecord(const PaperRecord& record);
+	void updateRecord(int row, const PaperRecord& record);
 	void updateQuotes();
 	void updateTags(const QStringList& tags);
 	void highLightTags();
@@ -67,6 +70,7 @@ private:
 	void reloadAttachments();
 	void sortByTitle();
 	void sortByProximity();
+	void attachNewTag(const QString& tagName);   // create a tag, and add it to current paper
 
 private:
 	Ui::PagePapersClass ui;

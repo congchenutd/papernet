@@ -14,19 +14,21 @@ public:
 	static Importer* getImporter(const QString& fileName);
 };
 
-struct ImportResult
+struct PaperRecord
 {
 	QString title;
 	QString authors;
 	QString journal;
 	int     year;
 	QString abstract;
+	QString note;      // not for Importer
+	QStringList tags;
 };
 
 class Importer : public QObject
 {
 protected:
-	typedef QList<ImportResult> Results;
+	typedef QList<PaperRecord> Results;
 
 public:
 	virtual ~Importer() {}

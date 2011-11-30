@@ -75,3 +75,30 @@ void PaperDlg::accept() {
 	else
 		QDialog::accept();
 }
+
+PaperRecord PaperDlg::getPaperRecord() const
+{
+	PaperRecord result;
+	result.title    = ui.leTitle->text().trimmed();
+	result.authors  = ui.leAuthors->text().trimmed();
+	result.year     = ui.sbYear->value();
+	result.journal  = ui.leJournal->text().trimmed();
+	result.abstract = ui.teAbstract->toPlainText().trimmed();
+	result.note     = ui.teNote->toPlainText();
+	result.tags     = ui.leTags->text().isEmpty() ? QStringList()
+												  : ui.leTags->text().split(";");
+	return result;
+}
+
+void PaperDlg::setPaperRecord(const PaperRecord& record)
+{
+	ui.leTitle->setText(record.title);
+	newPaper = record.title.isEmpty();
+
+	ui.leAuthors->setText(record.authors);
+	ui.leJournal->setText(record.journal);
+	ui.teAbstract->setPlainText(record.abstract);
+	ui.teNote->setPlainText(record.note);
+	ui.sbYear->setValue(record.year);
+	ui.leTags->setText(record.tags.join(";"));
+}

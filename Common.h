@@ -23,7 +23,8 @@ int idToRow(QAbstractItemModel* model, int idSection, int id);
 // papers
 void delPaper(int paperID);
 bool isTagged(int paperID);
-void setPaperRead(int paperID, bool read = true);
+bool isPaperRead(int paperID);
+bool isPaperToBePrinted(int paperID);
 int getMaxCoauthor();
 int getPaperID(const QString& title);
 bool paperExists(const QString& title);

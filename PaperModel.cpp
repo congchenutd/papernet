@@ -32,7 +32,7 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 	// make the titles of unread papers bold
 	if(idx.column() == PAPER_TITLE)
 	{
-		if(role == Qt::FontRole && !data(index(idx.row(), PAPER_READ)).toBool())
+		if(role == Qt::FontRole && !isPaperRead(data(index(idx.row(), PAPER_ID)).toInt()) )
 		{
 			QFont f = qApp->font();
 			f.setBold(true);

@@ -44,8 +44,8 @@ private slots:
 	void onDelTagFromPaper();
 	void onFilterPapers(bool AND = false);
 	void onTagDoubleClicked(const QString& label);
-	void onPrintMe();   // two built-in tags
-	void onReadMe(bool readMe);
+	void onPrintMe(bool print);   // two built-in tags
+	void onReadMe (bool readMe);
 
 	void onAddQuote();
 	void onEditQuote(const QModelIndex& idx);

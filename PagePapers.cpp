@@ -67,8 +67,8 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
 	connect(ui.tvPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
 	connect(ui.tvPapers, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
-	connect(ui.tvPapers, SIGNAL(printMe()),        this, SLOT(onPrintMe()));
-	connect(ui.tvPapers, SIGNAL(readMe(bool)),         this, SLOT(onReadMe(bool)));
+	connect(ui.tvPapers, SIGNAL(printMe(bool)),    this, SLOT(onPrintMe(bool)));
+	connect(ui.tvPapers, SIGNAL(readMe(bool)),     this, SLOT(onReadMe(bool)));
 
 	connect(ui.widgetAttachments, SIGNAL(paperRead()), this, SLOT(onPaperRead()));
 
@@ -365,10 +365,7 @@ void PagePapers::onDelTagFromPaper()
 		{
 			ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()), paperID);
 			if(tag->text() == "ReadMe")
-			{
-				setPaperRead(currentPaperID, true);     // unbold the title
-				reset();
-			}
+				reset();    // unbold the title
 		}
 	}
 	highLightTags();
@@ -650,9 +647,12 @@ void PagePapers::sortByProximity() {
 	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
 }
 
-void PagePapers::onPrintMe()
+void PagePapers::onPrintMe(bool print)
 {
-	attachNewTag("PrintMe");
+	if(print)
+		attachNewTag("PrintMe");
+	else
+		ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "PrintMe"), currentPaperID);
 	highLightTags();
 }
 
@@ -660,14 +660,12 @@ void PagePapers::onReadMe(bool readMe)
 {
 	if(readMe)
 	{
-		setPaperRead(currentPaperID, false);    // bold the title
-		reset();
+		reset();      // bold the title
 		attachNewTag("ReadMe");
 		highLightTags();
 	}
 	else
-	{
-	}
+		onPaperRead();
 }
 
 void PagePapers::attachNewTag(const QString& tagName)
@@ -683,8 +681,7 @@ void PagePapers::attachNewTag(const QString& tagName)
 
 void PagePapers::onPaperRead()
 {
-	setPaperRead(currentPaperID, true);     // unbold the title
-	reset();
+	reset();      // unbold the title
 	ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "ReadMe"), currentPaperID);
 	highLightTags();
 }

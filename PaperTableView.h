@@ -18,8 +18,15 @@ signals:
 	void showRelated();
 	void showCoauthored();
 	void addQuote();
-	void printMe();
+	void printMe(bool);
 	void readMe(bool);
+
+private:
+	QAction* actionShowRelated;
+	QAction* actionShowCoauthored;
+	QAction* actionAddQuote;
+	QAction* actionPrintMe;
+	QAction* actionReadMe;
 };
 
 #endif // PAPERTABLEVIEW_H

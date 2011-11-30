@@ -257,7 +257,7 @@ void PageDictionary::search(const QString& target)
 {
 	if(!target.isEmpty())
 		model.setFilter(tr("Phrase like \"%%1%\" or \
-						    Explanation like \"%%1%\" ").arg(target));
+							Explanation like \"%%1%\" ").arg(target));
 }
 
 int PageDictionary::getID(int row) const {
@@ -345,8 +345,11 @@ void PageDictionary::onTagThesaurus(const QStringList &relatedTags)
 	QSqlQuery query;
 	QStringList tagIDs;
 	foreach(QString tagName, relatedTags)
-		if(int tagID = getTagID("DictionaryTags", tagName) > 0)
+	{
+		int tagID = getTagID("DictionaryTags", tagName);
+		if(tagID > 0)
 			tagIDs << QString::number(tagID);
+	}
 
 	// calculate proximity by proximate tags:
 	// 1. count the # of all other phrases that have these tags

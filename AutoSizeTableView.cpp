@@ -47,7 +47,6 @@ void AutoSizeTableView::adjustColumns()
 				break;
 	}
 
-	int w = width();
 	for(; i >= 0; --i)                        // apply the sizes
 		setColumnWidth(i, width() * sectionSizes.value(i));
 }

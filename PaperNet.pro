@@ -50,7 +50,8 @@ HEADERS += AddPhraseDlg.h \
 		   ../EnglishName/EnglishName.h \
 		   DictionaryModel.h \
 		   Thesaurus.h \
-    NewReferenceDlg.h
+    NewReferenceDlg.h \
+    ThesaurusCache.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -93,8 +94,11 @@ SOURCES += AddPhraseDlg.cpp \
            ../EnglishName/EnglishName.cpp \
 		   DictionaryModel.cpp \
 		   Thesaurus.cpp \
-    NewReferenceDlg.cpp
+    NewReferenceDlg.cpp \
+    ThesaurusCache.cpp
 RESOURCES += MainWindow.qrc
+
+
 
 
 

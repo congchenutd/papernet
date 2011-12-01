@@ -1,5 +1,6 @@
 #include "OptionDlg.h"
 #include "Common.h"
+#include "ThesaurusCache.h"
 #include <QFontDialog>
 #include <QFileDialog>
 #include <cstdlib>
@@ -18,9 +19,10 @@ OptionDlg::OptionDlg(QWidget *parent)
 
 	setting = MySetting<UserSetting>::getInstance();
 
-	connect(ui.btFont, SIGNAL(clicked()), this, SLOT(onFont()));
-	connect(ui.btTemp, SIGNAL(clicked()), this, SLOT(onTempLocation()));
+	connect(ui.btFont,            SIGNAL(clicked()), this, SLOT(onFont()));
+	connect(ui.btTemp,            SIGNAL(clicked()), this, SLOT(onTempLocation()));
 	connect(ui.btRebuiltFulltext, SIGNAL(clicked()), this, SLOT(onRebuildFulltext()));
+	connect(ui.btClearCache,      SIGNAL(clicked()), this, SLOT(onClearCache()));
 
 	// load settings
 	qApp->setFont(setting->getFont());
@@ -133,7 +135,10 @@ QString UserSetting::getCompileDate() const
 	return result.isEmpty() ? "Unknown" : result;
 }
 
-void OptionDlg::onRebuildFulltext()
-{
+void OptionDlg::onRebuildFulltext() {
 	makeFullTextFiles();
+}
+
+void OptionDlg::onClearCache() {
+	ThesaurusCache::getInstance()->clear();
 }

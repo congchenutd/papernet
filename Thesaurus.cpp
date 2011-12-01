@@ -10,10 +10,27 @@ Thesaurus::Thesaurus(QObject *parent) : QObject(parent)
 	networkAccessManager = new QNetworkAccessManager(this);
 	connect(networkAccessManager, SIGNAL(finished(QNetworkReply*)),
 			this, SLOT(parse(QNetworkReply*)));
+
+	cache = ThesaurusCache::getInstance(this);
 }
 
-void Thesaurus::request(const QString& word) const {
+void Thesaurus::request(const QString& word)
+{
+	requestedWord = word;
+
+	// search local cache
+	QStringList localResult = cache->search(word);
+	if(!localResult.isEmpty())
+		emit response(localResult);
+
+	// search online
 	networkAccessManager->get(QNetworkRequest(makeUrl(word)));
+}
+
+void Thesaurus::updateCache(const QStringList& words)
+{
+	if(cache->update(requestedWord, words))
+		emit response(words);    // emit only if online thesaurus contains new words
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -33,5 +50,6 @@ void BigHugeThesaurus::parse(QNetworkReply* reply)
 		if(sections.size() == 3)
 			results << sections[2];                       // the last section is the word
 	}
-	emit response(results);
+	updateCache(results);
 }
+

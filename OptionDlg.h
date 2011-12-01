@@ -19,6 +19,7 @@ private slots:
 	void onFont();
 	void onTempLocation();
 	void onRebuildFulltext();
+	void onClearCache();
 
 private:
 	Ui::OptionDlgClass ui;

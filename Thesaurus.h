@@ -1,6 +1,7 @@
 #ifndef THESAURUS_H
 #define THESAURUS_H
 
+#include "ThesaurusCache.h"
 #include <QObject>
 #include <QUrl>
 class QNetworkAccessManager;
@@ -13,7 +14,7 @@ class Thesaurus : public QObject
 
 public:
 	Thesaurus(QObject* parent = 0);
-	void request(const QString& word) const;
+	void request(const QString& word);
 
 signals:
 	void response(const QStringList& results);
@@ -23,9 +24,12 @@ protected slots:
 
 protected:
 	virtual QUrl makeUrl(const QString& word) const = 0;   // make the url for the request
+	void updateCache(const QStringList& words);
 
 protected:
 	QNetworkAccessManager* networkAccessManager;
+	ThesaurusCache* cache;
+	QString requestedWord;
 };
 
 

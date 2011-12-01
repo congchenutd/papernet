@@ -19,6 +19,9 @@
    </property>
    <item>
     <widget class="QPushButton" name="btFont">
+     <property name="toolTip">
+      <string>Change the font of the application</string>
+     </property>
      <property name="text">
       <string>Font</string>
      </property>
@@ -29,8 +32,21 @@
    </item>
    <item>
     <widget class="QPushButton" name="btRebuiltFulltext">
+     <property name="toolTip">
+      <string>Rebuilt fulltext search indexes</string>
+     </property>
      <property name="text">
       <string>Rebuilt fulltext search</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btClearCache">
+     <property name="toolTip">
+      <string>Clear the local cache of online thesaurus</string>
+     </property>
+     <property name="text">
+      <string>Clear thesaurus cache</string>
      </property>
     </widget>
    </item>
@@ -63,6 +79,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="checkKeepAttachments">
+     <property name="toolTip">
+      <string>Attachments will not be delete if checked</string>
+     </property>
      <property name="text">
       <string>Keep attached files when the entry is deleted</string>
      </property>

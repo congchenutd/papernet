@@ -371,7 +371,7 @@ void PagePapers::onDelTagFromPaper()
 	highLightTags();
 }
 
-void PagePapers::onResetPapers()
+void PagePapers:: onResetPapers()
 {
 	QSqlQuery query;
 	query.exec(tr("drop view SelectedTags"));   // remove the temp table
@@ -660,7 +660,6 @@ void PagePapers::onReadMe(bool readMe)
 {
 	if(readMe)
 	{
-		reset();      // bold the title
 		attachNewTag("ReadMe");
 		highLightTags();
 	}
@@ -681,7 +680,6 @@ void PagePapers::attachNewTag(const QString& tagName)
 
 void PagePapers::onPaperRead()
 {
-	reset();      // unbold the title
 	ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "ReadMe"), currentPaperID);
 	highLightTags();
 }

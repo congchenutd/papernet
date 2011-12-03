@@ -47,7 +47,7 @@ void BigHugeThesaurus::parse(QNetworkReply* reply)
 	QTextStream is(reply);
 	while(!is.atEnd()) {
 		QStringList sections = is.readLine().split("|");  // a line contains 3 sections
-		if(sections.size() == 3)
+		if(sections.size() == 3 && sections[2] != requestedWord)
 			results << sections[2];                       // the last section is the word
 	}
 	updateCache(results);

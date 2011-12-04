@@ -223,10 +223,6 @@ void PagePapers::onImport()
 	if(files.isEmpty())
 		return;
 
-	// Can't remember why these two lines are here
-	//onSubmitPaper();
-	//ui.tvPapers->sortByColumn(PAPER_ID, Qt::AscendingOrder);
-
 	QString file = files.front();
 	setting->setLastImportPath(QFileInfo(file).absolutePath());
 
@@ -265,8 +261,6 @@ void PagePapers::onImport()
 			}
 		}
 	}
-
-	onSubmitPaper();
 }
 
 void PagePapers::mergeRecord(int row, const PaperRecord &record)

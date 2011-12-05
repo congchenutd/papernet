@@ -107,13 +107,6 @@ void PagePapers::onClicked(const QModelIndex& idx) {
 
 void PagePapers::jumpToID(int id)
 {
-	// avoid same id
-	static int lastID = -1;
-	if(id == lastID)
-		return;
-	lastID = id;
-
-	reset();   // ensure the paper to be shown
 	int row = idToRow(&modelPapers, PAPER_ID, id);
 	if(row > -1)
 	{
@@ -121,6 +114,7 @@ void PagePapers::jumpToID(int id)
 		ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
 		ui.tvPapers->setFocus();
 		ui.tvPapers->scrollTo(modelPapers.index(row, PAPER_TITLE));
+		reloadAttachments();
 	}
 }
 
@@ -255,9 +249,11 @@ void PagePapers::onImport()
 				addAttachment(currentPaperID, suggestAttachmentName(fileName), fileName);
 
 				// add the pdf file with the same name
-				QString pdfFileName = QFileInfo(fileName).path() + "/" + QFileInfo(result.title).baseName() + ".pdf";
+				QString pdfFileName = QFileInfo(fileName).path() + "/" + QFileInfo(fileName).baseName() + ".pdf";
 				if(QFile::exists(pdfFileName))
 					addAttachment(currentPaperID, suggestAttachmentName(pdfFileName), pdfFileName);
+
+				reloadAttachments();
 			}
 		}
 	}

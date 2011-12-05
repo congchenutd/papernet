@@ -29,8 +29,9 @@ void Thesaurus::request(const QString& word)
 
 void Thesaurus::updateCache(const QStringList& words)
 {
+	// emit only if online thesaurus contains new words
 	if(cache->update(requestedWord, words))
-		emit response(words);    // emit only if online thesaurus contains new words
+		emit response(cache->search(requestedWord));  // return the updated set
 }
 
 //////////////////////////////////////////////////////////////////////////

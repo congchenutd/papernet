@@ -136,12 +136,14 @@ void MainWindow::onDictionary()
 void MainWindow::jumpToPaper(const QString& title)
 {
 	onPapers();
+	pageQuotes->reset();                 // ensure the row is visible
 	pagePapers->jumpToID(::getPaperID(title));
 }
 
 void MainWindow::jumpToQuote(int quoteID)
 {
 	onQuotes();
+	pageQuotes->reset();                 // ensure the row is visible
 	pageQuotes->jumpToID(quoteID);
 }
 
@@ -188,6 +190,7 @@ void MainWindow::navigateTo(const FootStep& footStep)
 	else
 		onDictionary();
 
+	currentPage->reset();                 // ensure the row is visible
 	currentPage->jumpToID(footStep.id);   // jump to row
 }
 

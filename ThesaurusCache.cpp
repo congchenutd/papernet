@@ -32,7 +32,7 @@ bool ThesaurusCache::update(const QString& center, const QStringList& words)
 	QSet<QString> onlineSet = words.toSet();
 	QSet<QString> localSet = search(center).toSet();
 	QSet<QString> newWords = onlineSet - localSet;
-	if(!newWords.isEmpty())
+	if(!newWords.isEmpty())    // has something new
 	{
 		QSqlDatabase::database().transaction();
 		foreach(QString word, newWords)
@@ -45,18 +45,18 @@ bool ThesaurusCache::update(const QString& center, const QStringList& words)
 
 // Search from both directions
 // because the pair is stored uni-directionally
-QStringList ThesaurusCache::search(const QString& center) const
+QStringList ThesaurusCache::search(const QString& target) const
 {
 	QStringList result;
 	QSqlQuery query;
 	query.prepare(tr("select rhs from ThesaurusCache where lhs = :lhs order by rhs"));
-	query.bindValue(":lhs", center);
+	query.bindValue(":lhs", target);
 	query.exec();
 	while(query.next())
 		result << query.value(0).toString();
 
 	query.prepare(tr("select lhs from ThesaurusCache where rhs = :rhs order by lhs"));
-	query.bindValue(":rhs", center);
+	query.bindValue(":rhs", target);
 	query.exec();
 	while(query.next())
 		result << query.value(0).toString();

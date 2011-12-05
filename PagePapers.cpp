@@ -299,15 +299,19 @@ void PagePapers::onSubmitPaper()
 	jumpToID(backup);
 }
 
-void PagePapers::search(const QString& target) {
-	if(!target.isEmpty())
-		modelPapers.setFilter(
-					tr("Title    like \"%%1%\" or \
-						Authors  like \"%%1%\" or \
-						Year     like \"%%1%\" or \
-						Journal  like \"%%1%\" or \
-						Abstract like \"%%1%\" or \
-						Note     like \"%%1%\" ").arg(target));
+void PagePapers::search(const QString& target)
+{
+	// filter papers
+	modelPapers.setFilter(
+				tr("Title    like \"%%1%\" or \
+					Authors  like \"%%1%\" or \
+					Year     like \"%%1%\" or \
+					Journal  like \"%%1%\" or \
+					Abstract like \"%%1%\" or \
+					Note     like \"%%1%\" ").arg(target));
+
+	// highlight tags
+	ui.widgetWordCloud->search(target);
 }
 
 void PagePapers::onAddTag()
@@ -336,10 +340,7 @@ void PagePapers::onAddTagToPaper()
 }
 
 // highlight the tags of current paper
-void PagePapers::highLightTags()
-{
-	ui.widgetWordCloud->unselectAll();
-	ui.widgetWordCloud->unrelateAll();
+void PagePapers::highLightTags() {
 	ui.widgetWordCloud->highLight(getTagsOfPaper(currentPaperID));
 }
 

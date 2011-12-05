@@ -29,7 +29,7 @@ private:
     QAction* actionShowText;
 };
 
-// A line edit that shows "type to search" when it loses focus
+// A line edit that shows "type to filter" when it loses focus
 class SearchLineEdit : public QLineEdit
 {
 public:
@@ -55,6 +55,7 @@ public slots:
 private slots:
 	void onFullTextSearch();
 	void onFocus();
+	void onSearch(const QString& target);
 
 signals:
 	void search(const QString& target);

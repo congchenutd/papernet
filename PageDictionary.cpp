@@ -198,10 +198,7 @@ void PageDictionary::onFilterPhrases(bool AND)
 	}
 }
 
-void PageDictionary::highLightTags()
-{
-	ui.widgetWordCloud->unselectAll();
-	ui.widgetWordCloud->unrelateAll();
+void PageDictionary::highLightTags() {
 	ui.widgetWordCloud->highLight(getTagsOfPhrase(currentPhraseID));
 }
 
@@ -255,9 +252,11 @@ void PageDictionary::onTagDoubleClicked(const QString& label)
 
 void PageDictionary::search(const QString& target)
 {
-	if(!target.isEmpty())
-		model.setFilter(tr("Phrase like \"%%1%\" or \
-							Explanation like \"%%1%\" ").arg(target));
+	model.setFilter(tr("Phrase like \"%%1%\" or \
+						Explanation like \"%%1%\" ").arg(target));
+
+	// highlight tags
+	ui.widgetWordCloud->search(target);
 }
 
 int PageDictionary::getID(int row) const {

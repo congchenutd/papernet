@@ -66,7 +66,7 @@ SearchBar::SearchBar(QWidget* parent) : QToolBar(parent)
 	btFocus->setMaximumWidth(0);    // "hide" it
 	addWidget(btFocus);
 
-	connect(leSearch,   SIGNAL(textEdited(QString)), this, SIGNAL(search(QString)));
+	connect(leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(btFullText, SIGNAL(clicked()),           this, SLOT(onFullTextSearch()));
 	connect(btClear,    SIGNAL(clicked()),           this, SLOT(onClear()));
 	connect(btFocus,    SIGNAL(clicked()),           this, SLOT(onFocus()));
@@ -79,6 +79,7 @@ void SearchBar::onClear()
 	emit clearSearch();
 }
 
+// Ctrl+F gets or releases focus
 void SearchBar::onFocus()
 {
 	if(leSearch->hasFocus())
@@ -91,26 +92,33 @@ void SearchBar::onFullTextSearch() {
 	emit fullTextSearch(leSearch->text());
 }
 
+void SearchBar::onSearch(const QString &target)
+{
+	if(target.isEmpty())
+		onClear();
+	else
+		emit search(target);
+}
+
 //////////////////////////////////////////////////////////////////////////
 SearchLineEdit::SearchLineEdit(QWidget* parent) 
-	: QLineEdit(parent)
-{
+	: QLineEdit(parent) {
 	clear();
 }
 
 void SearchLineEdit::clear()
 {
-	QPalette p = palette();
+	QPalette p = palette();                // show tip in gray font color
 	p.setColor(QPalette::Text, Qt::gray);
 	setPalette(p);
-	setText(tr(" type to search ..."));
+	setText(tr(" type to filter ..."));
 }
 
 void SearchLineEdit::focusInEvent(QFocusEvent* event)
 {
-	if(text() == tr(" type to search ..."))
+	if(text() == tr(" type to filter ..."))
 	{
-		setPalette(qApp->palette());  // reset palette
+		setPalette(qApp->palette());  // reset palette, use default color
 		QLineEdit::clear();
 	}
 	QLineEdit::focusInEvent(event);

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-// An interface of pages, for MainWindow's menu actions
+// An interface of pages
 class Page : public QWidget
 {
 public:

@@ -70,8 +70,6 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers, SIGNAL(printMe(bool)),    this, SLOT(onPrintMe(bool)));
 	connect(ui.tvPapers, SIGNAL(readMe(bool)),     this, SLOT(onReadMe(bool)));
 
-	connect(ui.widgetAttachments, SIGNAL(paperRead()), this, SLOT(onPaperRead()));
-
 	connect(ui.tvQuotes, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
 	connect(ui.tvQuotes, SIGNAL(delQuotes()),      this, SLOT(onDelQuotes()));
 	connect(ui.tvQuotes, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditQuote(QModelIndex)));
@@ -152,7 +150,7 @@ void PagePapers::onEditPaper()
 
 		// changing note -> reading
 		if(dlg.getNote() != oldNote)
-			onPaperRead();
+			setPaperRead();
 	}
 }
 
@@ -655,7 +653,7 @@ void PagePapers::onReadMe(bool readMe)
 		highLightTags();
 	}
 	else
-		onPaperRead();
+		setPaperRead();
 }
 
 void PagePapers::attachNewTag(const QString& tagName)
@@ -669,7 +667,7 @@ void PagePapers::attachNewTag(const QString& tagName)
 	ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
 }
 
-void PagePapers::onPaperRead()
+void PagePapers::setPaperRead()
 {
 	ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "ReadMe"), currentPaperID);
 	highLightTags();

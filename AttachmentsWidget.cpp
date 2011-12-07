@@ -110,13 +110,8 @@ void AttachmentsWidget::onDel()
 	}
 }
 
-void AttachmentsWidget::onOpen(const QModelIndex& idx)
-{
+void AttachmentsWidget::onOpen(const QModelIndex& idx) {
 	openAttachment(paperID, model.data(idx).toString());
-
-	// double click a pdf
-	if(model.data(idx).toString().endsWith(".pdf", Qt::CaseInsensitive))
-		emit paperRead();   // let paper page refresh
 }
 
 void AttachmentsWidget::update()   // refresh

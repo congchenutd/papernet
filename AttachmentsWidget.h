@@ -29,9 +29,6 @@ private slots:
 	void onDel();
 	void onOpen(const QModelIndex& idx);
 
-signals:
-	void paperRead();
-
 private:
 	Ui::AttachmentsWidgetClass ui;
 

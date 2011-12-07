@@ -37,7 +37,7 @@ private slots:
 	void onShowRelated();
 	void onShowCoauthored();
 	void onResetPapers();
-	void onPaperRead();
+	void setPaperRead();
 
 	void onAddTag();
 	void onAddTagToPaper();

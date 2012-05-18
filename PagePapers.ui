@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>541</width>
-    <height>425</height>
+    <width>609</width>
+    <height>437</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,85 +50,36 @@
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tabDetails">
+       <widget class="QWidget" name="tabAbstract">
         <attribute name="title">
-         <string>Detals</string>
+         <string>Abstract</string>
         </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="margin">
-          <number>3</number>
+          <number>5</number>
          </property>
          <item>
-          <widget class="QSplitter" name="splitterDetails">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+          <widget class="QPlainTextEdit" name="teAbstract">
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
-           <widget class="QWidget" name="layoutWidget">
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <property name="spacing">
-              <number>2</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Abstract</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPlainTextEdit" name="teAbstract">
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="layoutWidget">
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <property name="spacing">
-              <number>2</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>Note</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPlainTextEdit" name="teNote">
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="layoutWidget_2">
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <property name="spacing">
-              <number>2</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_7">
-               <property name="text">
-                <string>Attachments</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="AttachmentsWidget" name="widgetAttachments" native="true">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabNote">
+        <attribute name="title">
+         <string>Note</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="margin">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QPlainTextEdit" name="teNote">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
         </layout>
@@ -153,6 +104,52 @@
             <bool>true</bool>
            </attribute>
           </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabAttachments">
+        <attribute name="title">
+         <string>Attachments</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="margin">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="AttachmentsWidget" name="widgetAttachments" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabRelated">
+        <attribute name="title">
+         <string>Related</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="margin">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="RelatedPapersWidget" name="relatedPapersWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabCoauthered">
+        <attribute name="title">
+         <string>Coauthered</string>
+        </attribute>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="margin">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="CoauthoredPapersWidgdet" name="coautheredPapersWidget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -232,7 +229,7 @@
          <x>0</x>
          <y>0</y>
          <width>85</width>
-         <height>413</height>
+         <height>425</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -278,6 +275,18 @@
    <class>TagsWidget</class>
    <extends>QWidget</extends>
    <header>TagsWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RelatedPapersWidget</class>
+   <extends>QWidget</extends>
+   <header>RelatedPapersWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CoauthoredPapersWidgdet</class>
+   <extends>QWidget</extends>
+   <header>CoauthoredPapersWidgdet.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

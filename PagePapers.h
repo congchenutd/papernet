@@ -34,10 +34,9 @@ private slots:
 	void onFullTextSearch(const QString& target);
 	void onSubmitPaper();
 	void onClicked(const QModelIndex& idx);
-	void onShowRelated();
-	void onShowCoauthored();
 	void onResetPapers();
 	void setPaperRead();
+	void onRelatedPaperClicked(int paperID);
 
 	void onAddTag();
 	void onAddTagToPaper();
@@ -51,16 +50,13 @@ private slots:
 	void onEditQuote(const QModelIndex& idx);
 	void onDelQuotes();
 
-	void onThesaurus(const QStringList& relatedTags);
-
 signals:
 	void tableValid(bool);
 
 private:
 	int  getPaperID(int row) const;
-	void hideColoring();    // related and coauthor coloring
-	void mergeRecord(int row, const PaperRecord& record);
 	void insertRecord(const PaperRecord& record);
+	void mergeRecord (int row, const PaperRecord& record);
 	void updateRecord(int row, const PaperRecord& record);
 	void updateQuotes();
 	void updateTags(const QStringList& tags);
@@ -69,7 +65,6 @@ private:
 	void loadSplitterSizes();
 	void reloadAttachments();
 	void sortByTitle();
-	void sortByProximity();
 	void attachNewTag(const QString& tagName);   // create a tag, and add it to current paper
 
 private:
@@ -81,7 +76,6 @@ private:
 	int               currentRow;
 	int               currentPaperID;
 	UserSetting*      setting;
-	Thesaurus*        thesaurus;
 };
 
 #endif // PAGEPAPERS_H

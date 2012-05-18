@@ -26,13 +26,11 @@ PagePapers::PagePapers(QWidget *parent)
 	currentRow = -1;
 	currentPaperID = -1;
 	setting = MySetting<UserSetting>::getInstance();
-	thesaurus = new BigHugeThesaurus(this);
 
 	ui.setupUi(this);
 	ui.tvPapers->init("PagePapers");   // set the table name for the view
 
 	onResetPapers();   // init model, table ...
-	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
 
 	mapper.setModel(&modelPapers);
 	mapper.addMapping(ui.teAbstract, PAPER_ABSTRACT);
@@ -40,13 +38,9 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.tvPapers->setModel(&modelPapers);
 	ui.tvPapers->hideColumn(PAPER_ID);
-	ui.tvPapers->hideColumn(PAPER_READ);
 	ui.tvPapers->hideColumn(PAPER_JOURNAL);
 	ui.tvPapers->hideColumn(PAPER_ABSTRACT);
 	ui.tvPapers->hideColumn(PAPER_NOTE);
-	ui.tvPapers->hideColumn(PAPER_PROXIMITY);
-	ui.tvPapers->hideColumn(PAPER_COAUTHOR);
-	ui.tvPapers->hideColumn(PAPER_ADDEDTIME);
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 	sortByTitle();
@@ -64,8 +58,6 @@ PagePapers::PagePapers(QWidget *parent)
 			this, SLOT(onSubmitPaper()));
 	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
 	connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
-	connect(ui.tvPapers, SIGNAL(showRelated()),    this, SLOT(onShowRelated()));
-	connect(ui.tvPapers, SIGNAL(showCoauthored()), this, SLOT(onShowCoauthored()));
 	connect(ui.tvPapers, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
 	connect(ui.tvPapers, SIGNAL(printMe(bool)),    this, SLOT(onPrintMe(bool)));
 	connect(ui.tvPapers, SIGNAL(readMe(bool)),     this, SLOT(onReadMe(bool)));
@@ -81,8 +73,8 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
 
-	connect(thesaurus, SIGNAL(response(QStringList)), this, SLOT(onThesaurus(QStringList)));
-
+	connect(ui.relatedPapersWidget,    SIGNAL(doubleClicked(int)), this, SLOT(onRelatedPaperClicked(int)));
+	connect(ui.coautheredPapersWidget, SIGNAL(doubleClicked(int)), this, SLOT(onRelatedPaperClicked(int)));
 }
 
 void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
@@ -95,6 +87,8 @@ void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 		highLightTags();
 		updateQuotes();
 		reloadAttachments();
+		ui.relatedPapersWidget   ->setCentralPaper(currentPaperID);
+		ui.coautheredPapersWidget->setCentralPaper(currentPaperID);
 	}
 }
 
@@ -288,7 +282,6 @@ void PagePapers::mergeRecord(int row, const PaperRecord &record)
 // keep selecting current paper
 void PagePapers::onSubmitPaper()
 {
-	hideColoring();
 	int backup = currentPaperID;
 	if(!modelPapers.submitAll())
 		QMessageBox::critical(this, tr("Error"), modelPapers.lastError().text());
@@ -366,12 +359,11 @@ void PagePapers:: onResetPapers()
 	query.exec(tr("drop view SelectedTags"));   // remove the temp table
 
 	int backupID = currentPaperID;
-	hideColoring();
+	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
 	modelPapers.setTable("Papers");
 	modelPapers.select();
 	while(modelPapers.canFetchMore())
 		modelPapers.fetchMore();
-	modelPapers.setHeaderData(PAPER_READ,     Qt::Horizontal, "R");
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
 	sortByTitle();
@@ -383,7 +375,6 @@ void PagePapers:: onResetPapers()
 void PagePapers::onFilterPapers(bool AND)
 {
 	dropTempView();
-	hideColoring();
 
 	// get selected tags
 	QStringList tagIDs;
@@ -407,118 +398,6 @@ void PagePapers::onFilterPapers(bool AND)
 								   (select * from PaperTag where \
 									Paper=Papers.ID and Tag=SelectedTags.ID))");
 	}
-}
-
-void PagePapers::onShowRelated()
-{
-	onResetPapers();
-	QSqlDatabase::database().transaction();
-
-	// gather related tags: tags this phrase has (direct), and their proximate tags (from tagThesaurus)
-	QSqlQuery query;    // query direct tags' names
-	query.exec(tr("select Tags.Name from Tags, PaperTag \
-				   where PaperTag.Paper = %1 and PaperTag.Tag = Tags.ID").arg(currentPaperID));
-	while(query.next())
-		thesaurus->request(query.value(0).toString());   // query proximate tags with this direct tag
-
-	// calculate proximity by direct tags:
-	// 1. find in PaperTag all direct tags
-	// 2. count the # of all other papers that have these tags
-	// 3. associate the # with the papers
-	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
-				   where Tag in (select Tag from PaperTag where Paper = %1) \
-						 and PaperTag.Paper != %1 and Papers.ID = PaperTag.Paper \
-				   group by PaperTag.Paper").arg(currentPaperID));
-
-	// save proximity
-	QSqlQuery subQuery;
-	while(query.next()) {
-		subQuery.exec(tr("update Papers set Proximity = %2 where ID = %1")
-			.arg(query.value(0).toInt())
-			.arg(query.value(1).toInt()));
-	}
-
-	// set itself the max proximity
-	query.exec(tr("update Papers set Proximity = \
-					  (select max(Proximity)+1 from Papers where ID <> %1) \
-				  where ID = %1").arg(currentPaperID));
-	QSqlDatabase::database().commit();
-
-	sortByProximity();
-	jumpToID(currentPaperID);    // keep highlighting
-}
-
-void PagePapers::onThesaurus(const QStringList& relatedTags)
-{
-	if(relatedTags.isEmpty())
-		return;
-
-	QSqlDatabase::database().transaction();
-
-	// get the IDs of relatedTags
-	QSqlQuery query;
-	QStringList tagIDs;
-	foreach(QString tagName, relatedTags)
-	{
-		query.prepare("select ID from Tags where Name = :tagName ");
-		query.bindValue(":tagName", tagName);
-		query.exec();
-		while(query.next())
-			tagIDs << query.value(0).toString();
-	}
-
-	// calculate proximity by proximate tags:
-	// 1. count the # of all other papers that have these tags
-	// 2. associate the # with the papers
-	query.exec(tr("select Papers.ID, count(Paper) Proximity from Papers, PaperTag \
-				   where Tag in (%1) \
-						 and PaperTag.Paper != %2 and Papers.ID = PaperTag.Paper \
-				   group by PaperTag.Paper").arg(tagIDs.join(",")).arg(currentPaperID));
-
-	// update proximity
-	QSqlQuery subQuery;
-	while(query.next()) {
-		subQuery.exec(tr("update Papers set Proximity = \
-							 (select Proximity from Papers where ID = %1) + %2 \
-						 where ID = %1")
-			.arg(query.value(0).toInt())
-			.arg(query.value(1).toInt()));
-	}
-
-	// give itself the max proximity
-	query.exec(tr("update Papers set Proximity = \
-					  (select max(Proximity)+1 from Papers where ID <> %1) \
-				  where ID = %1").arg(currentPaperID));
-
-	QSqlDatabase::database().commit();
-
-	sortByProximity();
-	jumpToID(currentPaperID);   // keep highlighting
-}
-
-void PagePapers::onShowCoauthored()
-{
-	onResetPapers();
-	QSqlDatabase::database().transaction();
-
-	QStringList authors = modelPapers.data(
-		modelPapers.index(currentRow, PAPER_AUTHORS)).toString().split(";");
-	foreach(QString author, authors)
-		for(int row=0; row<modelPapers.rowCount(); ++row)
-		{
-			QStringList names = modelPapers.data(modelPapers.index(row, PAPER_AUTHORS)).toString().split(";");
-			foreach(QString name, names)
-				if(EnglishName::compare(name, author))
-				{
-					int coauthor = modelPapers.data(modelPapers.index(row, PAPER_COAUTHOR)).toInt();
-					modelPapers.setData(modelPapers.index(row, PAPER_COAUTHOR), coauthor+1);
-				}
-		}
-	modelPapers.submitAll();
-	QSqlDatabase::database().commit();
-
-	ui.tvPapers->sortByColumn(PAPER_COAUTHOR, Qt::DescendingOrder);  // sort by author
-	jumpToID(currentPaperID);
 }
 
 void PagePapers::onAddQuote()
@@ -594,7 +473,6 @@ void PagePapers::loadSplitterSizes()
 {
 	ui.splitterHorizontal->restoreState(setting->value("SplitterHorizontal").toByteArray());
 	ui.splitterPapers    ->restoreState(setting->value("SplitterPapers")    .toByteArray());
-	ui.splitterDetails   ->restoreState(setting->value("SplitterDetails")   .toByteArray());
 }
 
 void PagePapers::saveGeometry()
@@ -604,7 +482,6 @@ void PagePapers::saveGeometry()
 	// splitters
 	setting->setValue("SplitterHorizontal", ui.splitterHorizontal->saveState());
 	setting->setValue("SplitterPapers",     ui.splitterPapers->saveState());
-	setting->setValue("SplitterDetails",    ui.splitterDetails->saveState());
 }
 
 void PagePapers::onTagDoubleClicked(const QString& label)
@@ -615,25 +492,12 @@ void PagePapers::onTagDoubleClicked(const QString& label)
 		onFilterPapers();
 }
 
-void PagePapers::hideColoring()
-{
-	QSqlDatabase::database().transaction();
-	QSqlQuery query;
-	query.exec(tr("update Papers set Coauthor = 0"));
-	query.exec(tr("update Papers set Proximity = 0"));
-	QSqlDatabase::database().commit();
-}
-
 void PagePapers::reloadAttachments() {
 	ui.widgetAttachments->setPaper(currentPaperID);
 }
 
 void PagePapers::sortByTitle() {
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
-}
-
-void PagePapers::sortByProximity() {
-	ui.tvPapers->sortByColumn(PAPER_PROXIMITY, Qt::DescendingOrder);
 }
 
 void PagePapers::onPrintMe(bool print)
@@ -671,4 +535,10 @@ void PagePapers::setPaperRead()
 {
 	ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "ReadMe"), currentPaperID);
 	highLightTags();
+}
+
+void PagePapers::onRelatedPaperClicked(int paperID)
+{
+	jumpToID(paperID);
+	Navigator::getInstance()->addFootStep(this, paperID);
 }

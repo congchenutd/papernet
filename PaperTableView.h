@@ -22,8 +22,6 @@ signals:
 	void readMe(bool);
 
 private:
-	QAction* actionShowRelated;
-	QAction* actionShowCoauthored;
 	QAction* actionAddQuote;
 	QAction* actionPrintMe;
 	QAction* actionReadMe;

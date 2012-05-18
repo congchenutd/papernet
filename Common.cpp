@@ -43,16 +43,13 @@ void createTables()
 	query.exec("PRAGMA foreign_keys = ON");
 	query.exec("create table Papers( \
 					ID       int primary key, \
-					Read     bool, \
 					Attached bool, \
 					Title    varchar unique, \
 					Authors  varchar, \
 					Year     date,    \
 					Journal  varchar, \
 					Abstract varchar, \
-					Note     varchar, \
-					Proximity int, \
-					Coauthor  int  \
+					Note     varchar  \
 				)");
 	query.exec("create table Tags( \
 					ID int primary key, \
@@ -259,11 +256,10 @@ void openUrl(const QString& url)
 	if(url.isEmpty())
 		return;
 
-#ifdef Q_WS_WIN
-	QDesktopServices::openUrl(QUrl(url));
-#endif
 #ifdef Q_WS_MAC
 	QDesktopServices::openUrl(QUrl::fromLocalFile(url));  // no idea why different
+#else
+	QDesktopServices::openUrl(QUrl(url));
 #endif
 }
 
@@ -291,9 +287,9 @@ void openAttachment(int paperID, const QString& attachmentName)
 			url.remove("BASEURL=");
 		}
 	}
-#endif
-
+#else
 	openUrl(url);
+#endif
 }
 
 QString getAttachmentPath(int paperID, const QString& attachmentName) {

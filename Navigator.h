@@ -7,13 +7,7 @@
 class Page;
 struct FootStep
 {
-	FootStep()
-	{
-		page = 0;
-		id = -1;
-	}
-
-	FootStep(Page* p, int i)
+	FootStep(Page* p = 0, int i = -1)
 	{
 		page = p;
 		id   = i;

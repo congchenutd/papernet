@@ -4,6 +4,14 @@ Navigator::Navigator(QObject* parent) : QObject(parent) {}
 
 void Navigator::addFootStep(Page* page, int id)
 {
+	// avoid duplication
+	if(!history.isEmpty())
+	{
+		FootStep top = history.top();
+		if(top.page == page && top.id == id)
+			return;
+	}
+
 	history.push(FootStep(page, id));
 	emit historyValid(validateHistory());
 }

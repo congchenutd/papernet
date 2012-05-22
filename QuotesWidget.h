@@ -2,6 +2,7 @@
 #define QUOTESWIDGET_H
 
 #include "ui_QuotesWidget.h"
+#include <QSqlQueryModel>
 
 class QuotesWidget : public QWidget
 {
@@ -14,6 +15,9 @@ public:
 protected:
     void showEvent(QShowEvent*);
 
+private slots:
+	void onQuoteDoubleClicked(const QModelIndex& idx);
+
 private:
     void update();
 
@@ -23,6 +27,9 @@ signals:
 private:
     Ui::QuotesWidget ui;
     int centralPaperID;
+	QSqlQueryModel model;
+
+	enum {COL_ID, COL_TITLE, COL_QUOTE};
 };
 
 #endif // QUOTESWIDGET_H

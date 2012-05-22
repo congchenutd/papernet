@@ -8,6 +8,7 @@
 #include "Navigator.h"
 #include "AddTagDlg.h"
 #include "Thesaurus.h"
+#include "MainWindow.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextStream>
@@ -73,8 +74,9 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
 
-	connect(ui.relatedPapersWidget,    SIGNAL(doubleClicked(int)), this, SLOT(onRelatedPaperClicked(int)));
-	connect(ui.coautheredPapersWidget, SIGNAL(doubleClicked(int)), this, SLOT(onRelatedPaperClicked(int)));
+	connect(ui.relatedPapersWidget,    SIGNAL(doubleClicked(int)), this, SLOT(onRelatedPaperDoubleClicked(int)));
+	connect(ui.coautheredPapersWidget, SIGNAL(doubleClicked(int)), this, SLOT(onRelatedPaperDoubleClicked(int)));
+	connect(ui.quotesWidget,           SIGNAL(doubleClicked(int)), this, SLOT(onQuoteDoubleClicked(int)));
 }
 
 void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
@@ -89,6 +91,7 @@ void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 		reloadAttachments();
 		ui.relatedPapersWidget   ->setCentralPaper(currentPaperID);
 		ui.coautheredPapersWidget->setCentralPaper(currentPaperID);
+		ui.quotesWidget          ->setCentralPaper(currentPaperID);
 	}
 }
 
@@ -535,8 +538,14 @@ void PagePapers::setPaperRead()
 	highLightTags();
 }
 
-void PagePapers::onRelatedPaperClicked(int paperID)
+void PagePapers::onRelatedPaperDoubleClicked(int paperID)
 {
 	jumpToID(paperID);
 	Navigator::getInstance()->addFootStep(this, paperID);
+}
+
+void PagePapers::onQuoteDoubleClicked(int quoteID)
+{
+	Navigator::getInstance()->addFootStep(this, currentPaperID);
+	MainWindow::getInstance()->jumpToQuote(quoteID);
 }

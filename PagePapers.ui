@@ -116,7 +116,7 @@
           <number>5</number>
          </property>
          <item>
-          <widget class="QuotesWidget" name="widget" native="true"/>
+          <widget class="QuotesWidget" name="quotesWidget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -241,7 +241,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>85</width>
+         <width>76</width>
          <height>425</height>
         </rect>
        </property>

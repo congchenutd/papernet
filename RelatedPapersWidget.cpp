@@ -5,6 +5,7 @@
 RelatedPapersWidget::RelatedPapersWidget(QWidget* parent) :	QWidget(parent)
 {
 	ui.setupUi(this);
+	centralPaperID = -1;
 
 	thesaurus = new BigHugeThesaurus(this);
 	connect(thesaurus, SIGNAL(response(QStringList)), this, SLOT(onThesaurus(QStringList)));

@@ -7,6 +7,7 @@ CoauthoredPapersWidgdet::CoauthoredPapersWidgdet(QWidget *parent) :
 	QWidget(parent)
 {
 	ui.setupUi(this);
+	centralPaperID = -1;
 
 	model.setColumnCount(3);
 	model.setHeaderData(COL_ID,         Qt::Horizontal, tr("ID"));

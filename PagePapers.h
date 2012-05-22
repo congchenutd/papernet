@@ -36,7 +36,9 @@ private slots:
 	void onClicked(const QModelIndex& idx);
 	void onResetPapers();
 	void setPaperRead();
-	void onRelatedPaperClicked(int paperID);
+
+	void onRelatedPaperDoubleClicked(int paperID);
+	void onQuoteDoubleClicked(int quoteID);
 
 	void onAddTag();
 	void onAddTagToPaper();

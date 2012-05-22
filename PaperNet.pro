@@ -53,7 +53,8 @@ HEADERS += AddPhraseDlg.h \
     NewReferenceDlg.h \
     ThesaurusCache.h \
     RelatedPapersWidget.h \
-    CoauthoredPapersWidgdet.h
+    CoauthoredPapersWidgdet.h \
+    QuotesWidget.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -68,7 +69,8 @@ FORMS += AddPhraseDlg.ui \
          PaperList.ui \
     NewReferenceDlg.ui \
     RelatedPapersWidget.ui \
-    CoauthoredPapersWidgdet.ui
+    CoauthoredPapersWidgdet.ui \
+    QuotesWidget.ui
 SOURCES += AddPhraseDlg.cpp \
            AddQuoteDlg.cpp \
            AddTagDlg.cpp \
@@ -101,7 +103,8 @@ SOURCES += AddPhraseDlg.cpp \
     NewReferenceDlg.cpp \
     ThesaurusCache.cpp \
     RelatedPapersWidget.cpp \
-    CoauthoredPapersWidgdet.cpp
+    CoauthoredPapersWidgdet.cpp \
+    QuotesWidget.cpp
 RESOURCES += MainWindow.qrc
 
 

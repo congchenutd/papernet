@@ -12,8 +12,12 @@ public:
 	CoauthoredPapersWidgdet(QWidget *parent = 0);
 	void setCentralPaper(int paperID);
 
+protected:
+    void showEvent(QShowEvent*);
+
 private:
-	void updateList(int id, const QString& title);
+    void update();
+    void updateRecord(int id, const QString& title);
 
 private slots:
 	void onPaperDoubleClicked(const QModelIndex& idx);

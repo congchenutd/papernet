@@ -14,43 +14,53 @@ CoauthoredPapersWidgdet::CoauthoredPapersWidgdet(QWidget *parent) :
 	model.setHeaderData(COL_COAUTHERED, Qt::Horizontal, tr("Coauthered"));
 	ui.listView->setModel(&model);
 	ui.listView->setModelColumn(COL_TITLE);
+
+    connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPaperDoubleClicked(QModelIndex)));
 }
 
 void CoauthoredPapersWidgdet::setCentralPaper(int paperID)
-{
-	if(!isVisible())
-		return;
-	if(paperID < 0)
-		return;
-	centralPaperID = paperID;
+{    
+    if(paperID < 0 || paperID == centralPaperID)
+        return;
+    centralPaperID = paperID;
 
-	model.removeRows(0, model.rowCount());
-	QSqlDatabase::database().transaction();
-
-	QSqlQuery query;
-	query.exec(tr("select Authors from Papers where ID = %1").arg(paperID));
-	if(query.next())
-	{
-		QStringList authors = query.value(0).toString().split(";");
-		foreach(const QString& author, authors)
-		{
-			query.exec(tr("select ID, Title, Authors from Papers"));
-			while(query.next())
-			{
-				QStringList names = query.value(2).toString().split(";");
-				foreach(const QString& name, names)
-					if(EnglishName::compare(name, author))
-						updateList(query.value(0).toInt(), query.value(1).toString());
-			}
-		}
-		model.sort(COL_TITLE);                            // sort by title 2ndly
-		model.sort(COL_COAUTHERED, Qt::DescendingOrder);  // sort by coauthered 1st
-	}
-
-	QSqlDatabase::database().commit();
+    if(isVisible())
+        update();
 }
 
-void CoauthoredPapersWidgdet::updateList(int id, const QString& title)
+void CoauthoredPapersWidgdet::showEvent(QShowEvent*) {
+    update();
+}
+
+void CoauthoredPapersWidgdet::update()
+{
+    QSqlDatabase::database().transaction();
+    model.removeRows(0, model.rowCount());
+
+    QSqlQuery query;
+    query.exec(tr("select Authors from Papers where ID = %1").arg(centralPaperID));
+    if(query.next())
+    {
+        QStringList authors = query.value(0).toString().split(";");
+        foreach(const QString& author, authors)
+        {
+            query.exec(tr("select ID, Title, Authors from Papers"));
+            while(query.next())
+            {
+                QStringList names = query.value(2).toString().split(";");
+                foreach(const QString& name, names)
+                    if(EnglishName::compare(name, author))
+                        updateRecord(query.value(0).toInt(), query.value(1).toString());
+            }
+        }
+        model.sort(COL_TITLE);                            // sort by title 2ndly
+        model.sort(COL_COAUTHERED, Qt::DescendingOrder);  // sort by coauthered 1st
+    }
+
+    QSqlDatabase::database().commit();
+}
+
+void CoauthoredPapersWidgdet::updateRecord(int id, const QString& title)
 {
 	if(id == centralPaperID)
 		return;

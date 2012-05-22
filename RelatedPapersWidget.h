@@ -12,7 +12,10 @@ class RelatedPapersWidget : public QWidget
 	
 public:
 	RelatedPapersWidget(QWidget* parent = 0);
-	void setCentralPaper(int id);
+    void setCentralPaper(int paperID);
+
+protected:
+    void showEvent(QShowEvent*);
 
 private slots:
 	void onThesaurus(const QStringList& relatedTags);
@@ -20,14 +23,15 @@ private slots:
 
 private:
 	void sort();
+    void update();
 
 signals:
 	void doubleClicked(int);
-	
+
 private:
 	Ui::RelatedPapersWidget ui;
 	Thesaurus* thesaurus;
-	int paperID;
+    int centralPaperID;
 	QStandardItemModel model;
 
 	enum {COL_ID, COL_TITLE, COL_PROXIMITY};

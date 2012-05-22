@@ -48,7 +48,7 @@
       </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="tabAbstract">
         <attribute name="title">
@@ -104,6 +104,19 @@
             <bool>true</bool>
            </attribute>
           </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabQuotes2">
+        <attribute name="title">
+         <string>Quotes2</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="margin">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QuotesWidget" name="widget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -287,6 +300,12 @@
    <class>CoauthoredPapersWidgdet</class>
    <extends>QWidget</extends>
    <header>CoauthoredPapersWidgdet.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QuotesWidget</class>
+   <extends>QWidget</extends>
+   <header>QuotesWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

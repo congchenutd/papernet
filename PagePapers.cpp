@@ -99,14 +99,12 @@ void PagePapers::onClicked(const QModelIndex& idx) {
 
 void PagePapers::jumpToID(int id)
 {
-	int row = idToRow(&modelPapers, PAPER_ID, id);
+    int row = idToRow(&modelPapers, PAPER_ID, id);
 	if(row > -1)
 	{
 		currentRow = row;
-		ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
-		ui.tvPapers->setFocus();
-		ui.tvPapers->scrollTo(modelPapers.index(row, PAPER_TITLE));
-		reloadAttachments();
+        ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
+        ui.tvPapers->scrollTo(modelPapers.index(row, PAPER_TITLE));
 	}
 }
 
@@ -435,7 +433,7 @@ void PagePapers::onDelQuotes()
 		QModelIndexList idxList = ui.tvQuotes->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
 			delQuote(getQuoteID(idx.row()));
-		onResetPapers();
+        updateQuotes();
 	}
 }
 

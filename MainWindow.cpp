@@ -108,28 +108,31 @@ void MainWindow::backup(const QString& name)
 
 void MainWindow::onPapers()
 {
-	currentPage = ui.pagePapers;
 	ui.actionPapers->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(0);
 	ui.actionImportPaper->setVisible(true);
-	currentPage->jumpToCurrent();
+    currentPage = ui.pagePapers;
+    currentPage->enter();
+    currentPage->jumpToCurrent();
 }
 
 void MainWindow::onQuotes()
 {
-	currentPage = ui.pageQuotes;
 	ui.actionQuotes->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(1);
 	ui.actionImportPaper->setVisible(false);
-	currentPage->jumpToCurrent();
+    currentPage = ui.pageQuotes;
+    currentPage->enter();
+    currentPage->jumpToCurrent();
 }
 
 void MainWindow::onDictionary()
 {
-	currentPage = ui.pageDictionary;
 	ui.actionDictionary->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(2);
 	ui.actionImportPaper->setVisible(false);
+    currentPage = ui.pageDictionary;
+    currentPage->enter();
 	currentPage->jumpToCurrent();
 }
 
@@ -137,7 +140,9 @@ void MainWindow::jumpToPaper(const QString& title)
 {
 	onPapers();
 	pageQuotes->reset();                 // ensure the row is visible
-	pagePapers->jumpToID(::getPaperID(title));
+    int paperID = ::getPaperID(title);
+    pagePapers->jumpToID(paperID);
+    navigator->addFootStep(ui.pagePapers, paperID);
 }
 
 void MainWindow::jumpToQuote(int quoteID)
@@ -145,6 +150,7 @@ void MainWindow::jumpToQuote(int quoteID)
 	onQuotes();
 	pageQuotes->reset();                 // ensure the row is visible
 	pageQuotes->jumpToID(quoteID);
+    navigator->addFootStep(ui.pageQuotes, quoteID);
 }
 
 MainWindow* MainWindow::getInstance() {

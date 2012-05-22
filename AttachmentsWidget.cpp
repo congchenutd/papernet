@@ -17,7 +17,8 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	setPaper(-1);
+    paperID = -1;
+//	setPaper(-1);
 
 	QDir(".").mkdir(attachmentDir);
 	QDir(".").mkdir(emptyDir);
@@ -48,13 +49,21 @@ void AttachmentsWidget::contextMenuEvent(QContextMenuEvent* event)
 	contextMenu.addAction(ui.actionAddLink);
 	contextMenu.addAction(ui.actionRename);
 	contextMenu.addAction(ui.actionDel);
-	contextMenu.exec(event->globalPos());
+    contextMenu.exec(event->globalPos());
+}
+
+void AttachmentsWidget::showEvent(QShowEvent *) {
+    update();
 }
 
 void AttachmentsWidget::setPaper(int id)
 {
+    if(id == -1 || paperID == id)
+        return;
 	paperID = id;
-	update();
+
+    if(isVisible())
+        update();
 }
 
 void AttachmentsWidget::onAddFile()

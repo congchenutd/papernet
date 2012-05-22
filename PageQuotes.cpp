@@ -11,7 +11,7 @@ PageQuotes::PageQuotes(QWidget *parent)
 	ui.setupUi(this);
 	ui.tableView->init("PageQuotes");   // set the table name for the view
 
-	resetQuotes();   // init model
+    reset();   // init model
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(QUOTE_ID);
 	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
@@ -45,20 +45,20 @@ void PageQuotes::onClicked(const QModelIndex& idx) {
 void PageQuotes::add()
 {
 	reset();
-	AddQuoteDlg* dlg = new AddQuoteDlg(this);    // non-modal
-	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
-	dlg->setWindowTitle(tr("Add Quote"));
-	dlg->setQuoteID(getNextID("Quotes", "ID"));
-	dlg->show();
+    AddQuoteDlg dlg(this);
+    dlg.setWindowTitle(tr("Add Quote"));
+    dlg.setQuoteID(getNextID("Quotes", "ID"));
+    if(dlg.exec() == QDialog::Accepted)
+        reset();
 }
 
 void PageQuotes::onEdit()
 {
-	AddQuoteDlg* dlg = new AddQuoteDlg(this);    // non-modal
-	connect(dlg, SIGNAL(accepted()), this, SLOT(onAccepted()));
-	dlg->setWindowTitle(tr("Edit Quote"));
-	dlg->setQuoteID(getID(currentRow));
-	dlg->show();
+    AddQuoteDlg dlg(this);
+    dlg.setWindowTitle(tr("Edit Quote"));
+    dlg.setQuoteID(getID(currentRow));
+    if(dlg.exec() == QDialog::Accepted)
+        reset();
 }
 
 void PageQuotes::del()
@@ -69,11 +69,11 @@ void PageQuotes::del()
 		QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
 			delQuote(getID(idx.row()));
-		model.select();
+        reset();
 	}
 }
 
-void PageQuotes::resetQuotes()
+void PageQuotes::reset()
 {
 	model.setTable("Quotes");
 	model.select();
@@ -84,12 +84,6 @@ void PageQuotes::resetQuotes()
 
 int PageQuotes::getID(int row) const {
 	return model.data(model.index(row, QUOTE_ID)).toInt();
-}
-
-void PageQuotes::onAccepted()
-{
-	model.select();
-	sortByTitle();
 }
 
 void PageQuotes::jumpToID(int id)

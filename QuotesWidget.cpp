@@ -12,7 +12,7 @@ QuotesWidget::QuotesWidget(QWidget* parent) : QWidget(parent)
 
 void QuotesWidget::setCentralPaper(int paperID)
 {
-	if(paperID < 0 || paperID == centralPaperID)
+    if(paperID < 0)
 		return;
 	centralPaperID = paperID;
 

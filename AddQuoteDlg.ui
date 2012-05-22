@@ -66,7 +66,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="7">
+       <item row="1" column="0" colspan="5">
         <widget class="QListView" name="listView">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -90,28 +90,6 @@
          <property name="icon">
           <iconset resource="MainWindow.qrc">
            <normaloff>:/MainWindow/Images/SearchFile.png</normaloff>:/MainWindow/Images/SearchFile.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4">
-        <widget class="QPushButton" name="btSwitchToPapers">
-         <property name="toolTip">
-          <string>Switch to papers</string>
-         </property>
-         <property name="icon">
-          <iconset resource="MainWindow.qrc">
-           <normaloff>:/MainWindow/Images/ToiletPaper.png</normaloff>:/MainWindow/Images/ToiletPaper.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="5">
-        <widget class="QPushButton" name="btSwitchToQuotes">
-         <property name="toolTip">
-          <string>Switch to Quotes Page</string>
-         </property>
-         <property name="icon">
-          <iconset resource="MainWindow.qrc">
-           <normaloff>:/MainWindow/Images/Quote.png</normaloff>:/MainWindow/Images/Quote.png</iconset>
          </property>
         </widget>
        </item>

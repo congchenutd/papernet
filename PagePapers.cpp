@@ -47,7 +47,6 @@ PagePapers::PagePapers(QWidget *parent)
 	sortByTitle();
 
 	ui.widgetWordCloud->setTableNames("Tags", "PaperTag", "Paper");
-	ui.tvQuotes->setModel(&modelQuotes);
 
 	loadSplitterSizes();
 
@@ -62,10 +61,6 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
 	connect(ui.tvPapers, SIGNAL(printMe(bool)),    this, SLOT(onPrintMe(bool)));
 	connect(ui.tvPapers, SIGNAL(readMe(bool)),     this, SLOT(onReadMe(bool)));
-
-	connect(ui.tvQuotes, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
-	connect(ui.tvQuotes, SIGNAL(delQuotes()),      this, SLOT(onDelQuotes()));
-	connect(ui.tvQuotes, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditQuote(QModelIndex)));
 
 	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPapers(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPapers()));
@@ -86,12 +81,11 @@ void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 	{
 		currentRow = idx.row();
 		currentPaperID = getPaperID(idx.row());
-		highLightTags();
-		updateQuotes();
-		reloadAttachments();
-		ui.relatedPapersWidget   ->setCentralPaper(currentPaperID);
-		ui.coautheredPapersWidget->setCentralPaper(currentPaperID);
-		ui.quotesWidget          ->setCentralPaper(currentPaperID);
+        highLightTags();
+        reloadAttachments();
+        ui.relatedPapersWidget   ->setCentralPaper(currentPaperID);
+        ui.coautheredPapersWidget->setCentralPaper(currentPaperID);
+        ui.quotesWidget          ->setCentralPaper(currentPaperID);
 	}
 }
 
@@ -108,6 +102,7 @@ void PagePapers::jumpToID(int id)
 		currentRow = row;
         ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
         ui.tvPapers->scrollTo(modelPapers.index(row, PAPER_TITLE));
+        ui.tvPapers->setFocus();
 	}
 }
 
@@ -403,45 +398,16 @@ void PagePapers::onFilterPapers(bool AND)
 
 void PagePapers::onAddQuote()
 {
-	AddQuoteDlg* dlg = new AddQuoteDlg(this);
-	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
-	dlg->setWindowTitle(tr("Add Quote"));
-	dlg->setQuoteID(getNextID("Quotes", "ID"));    // create new quote id
-	dlg->addRef(getPaperTitle(currentPaperID));    // add itself
-	dlg->show();    // not modal, s.t. can switch between paper and quote pages
-}
-
-void PagePapers::updateQuotes()
-{
-	modelQuotes.setQuery(tr("select Title, Quote from Quotes where id in \
-							  (select Quote from PaperQuote where Paper = %1) order by Title")
-							  .arg(currentPaperID));
-	ui.tvQuotes->resizeColumnToContents(0);
-}
-
-void PagePapers::onEditQuote(const QModelIndex& idx)
-{
-	AddQuoteDlg* dlg = new AddQuoteDlg(this);
-	connect(dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
-	dlg->setWindowTitle(tr("Edit Quote"));
-	dlg->setQuoteID(getQuoteID(idx.row()));
-	dlg->show();    // not modal, s.t. can switch between paper and quote pages
-}
-
-void PagePapers::onDelQuotes()
-{
-	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
-		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-	{
-		QModelIndexList idxList = ui.tvQuotes->selectionModel()->selectedRows();
-		foreach(QModelIndex idx, idxList)
-			delQuote(getQuoteID(idx.row()));
-        updateQuotes();
-	}
+    AddQuoteDlg dlg(this);
+    connect(&dlg, SIGNAL(accepted()), this, SLOT(onResetPapers()));
+    dlg.setWindowTitle(tr("Add Quote"));
+    dlg.setQuoteID(getNextID("Quotes", "ID"));    // create new quote id
+    dlg.addRef(getPaperTitle(currentPaperID));    // add itself
+    dlg.exec();
 }
 
 int PagePapers::getQuoteID(int row) const {
-	return ::getQuoteID(modelQuotes.data(modelQuotes.index(row, 0)).toString());
+    return -1;
 }
 
 void PagePapers::onFullTextSearch(const QString& target)
@@ -544,8 +510,6 @@ void PagePapers::onRelatedPaperDoubleClicked(int paperID)
 	Navigator::getInstance()->addFootStep(this, paperID);
 }
 
-void PagePapers::onQuoteDoubleClicked(int quoteID)
-{
-	Navigator::getInstance()->addFootStep(this, currentPaperID);
+void PagePapers::onQuoteDoubleClicked(int quoteID) {
 	MainWindow::getInstance()->jumpToQuote(quoteID);
 }

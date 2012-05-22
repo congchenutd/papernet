@@ -2,7 +2,6 @@
 #define PAGEPAPERS_H
 
 #include <QSqlTableModel>
-#include <QSqlQueryModel>
 #include <QDataWidgetMapper>
 #include "ui_PagePapers.h"
 #include "PaperModel.h"
@@ -49,8 +48,6 @@ private slots:
 	void onReadMe (bool readMe);
 
 	void onAddQuote();
-	void onEditQuote(const QModelIndex& idx);
-	void onDelQuotes();
 
 signals:
 	void tableValid(bool);
@@ -60,7 +57,6 @@ private:
 	void insertRecord(const PaperRecord& record);
 	void mergeRecord (int row, const PaperRecord& record);
 	void updateRecord(int row, const PaperRecord& record);
-	void updateQuotes();
 	void updateTags(const QStringList& tags);
 	void highLightTags();
 	int  getQuoteID(int row) const;
@@ -73,7 +69,6 @@ private:
 	Ui::PagePapersClass ui;
 
 	PaperModel        modelPapers;
-	QSqlQueryModel    modelQuotes;
 	QDataWidgetMapper mapper;
 	int               currentRow;
 	int               currentPaperID;

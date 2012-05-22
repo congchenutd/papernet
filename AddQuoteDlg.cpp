@@ -18,8 +18,6 @@ AddQuoteDlg::AddQuoteDlg(QWidget *parent)
 	connect(ui.btAdd,            SIGNAL(clicked()), this, SLOT(onAddRef()));
 	connect(ui.btDel,            SIGNAL(clicked()), this, SLOT(onDelRef()));
 	connect(ui.btSelect,         SIGNAL(clicked()), this, SLOT(onSelectRef()));
-	connect(ui.btSwitchToPapers, SIGNAL(clicked()), this, SLOT(onSwitchToPapers()));
-	connect(ui.btSwitchToQuotes, SIGNAL(clicked()), this, SLOT(onSwitchToQuotes()));
 	connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onSwitchToPapers()));
 }
 
@@ -81,7 +79,6 @@ void AddQuoteDlg::accept()
 
 	QSqlDatabase::database().commit();
 
-//	deleteLater();   // NOTE: non-modal dialog, kill by itself
 	return QDialog::accept();
 }
 
@@ -136,9 +133,5 @@ void AddQuoteDlg::onSwitchToPapers()
 	QString paper = idxList.isEmpty() ? QString()
 									  : model.data(idxList.front(), Qt::DisplayRole).toString();
 	MainWindow::getInstance()->jumpToPaper(paper);   // select the paper
+    reject();
 }
-
-void AddQuoteDlg::onSwitchToQuotes() {
-	MainWindow::getInstance()->jumpToQuote(quoteID);
-}
-

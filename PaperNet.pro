@@ -39,7 +39,6 @@ HEADERS += AddPhraseDlg.h \
            PaperModel.h \
            PaperTableView.h \
            Pdf2Text.h \
-           QuotesTableView.h \
            TagsWidget.h \
            ToolBar.h \
            zlib/include/zconf.h \
@@ -92,7 +91,6 @@ SOURCES += AddPhraseDlg.cpp \
            PaperModel.cpp \
            PaperTableView.cpp \
            Pdf2Text.cpp \
-           QuotesTableView.cpp \
            TagsWidget.cpp \
            ToolBar.cpp \
            ../WordCloud/WordCloudWidget.cpp \

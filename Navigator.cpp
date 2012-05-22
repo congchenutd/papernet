@@ -9,7 +9,10 @@ void Navigator::addFootStep(Page* page, int id)
 	{
 		FootStep top = history.top();
 		if(top.page == page && top.id == id)
+        {
+            emit historyValid(validateHistory());
 			return;
+        }
 	}
 
 	history.push(FootStep(page, id));
@@ -49,7 +52,7 @@ FootStep Navigator::forward()
 }
 
 bool Navigator::validateHistory() {
-	return history.size() > 1;   // at lease one footstep (current)
+    return history.size() > 1;   // at lease one footstep (current)
 }
 
 bool Navigator::validateFuture() {

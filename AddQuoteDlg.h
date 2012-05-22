@@ -26,7 +26,6 @@ private slots:
 	void onDelRef();
 	void onSelectRef();            // select existing ref
 	void onSwitchToPapers();
-	void onSwitchToQuotes();
 
 private:
 	Ui::AddQuoteDlgClass ui;

@@ -16,19 +16,19 @@ public:
 	virtual void del();
 	virtual void search(const QString& target);
 	virtual void jumpToID(int id);
-	virtual void reset() { resetQuotes(); }
+    virtual void jumpToCurrent() {}
+    virtual void reset();
+    virtual void enter() { reset(); }
 
 private slots:
 	void onCurrentRowChanged();
 	void onEdit();
-	void onAccepted();   // for the dlg to submit
 	void onClicked(const QModelIndex& idx);
 
 signals:
 	void tableValid(bool);
 
 private:
-	void resetQuotes();
 	int getID(int row) const;
 	void sortByTitle();
 

@@ -21,6 +21,7 @@ public:
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event);
+    virtual void showEvent(QShowEvent*);
 
 private slots:
 	void onAddFile();

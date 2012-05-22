@@ -48,7 +48,7 @@
       </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tabAbstract">
         <attribute name="title">
@@ -87,29 +87,6 @@
        <widget class="QWidget" name="tabQuotes">
         <attribute name="title">
          <string>Quotes</string>
-        </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <property name="margin">
-          <number>5</number>
-         </property>
-         <item>
-          <widget class="QuotesTableView" name="tvQuotes">
-           <property name="editTriggers">
-            <set>QAbstractItemView::NoEditTriggers</set>
-           </property>
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
-           </property>
-           <attribute name="horizontalHeaderStretchLastSection">
-            <bool>true</bool>
-           </attribute>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tabQuotes2">
-        <attribute name="title">
-         <string>Quotes2</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <property name="margin">
@@ -241,7 +218,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>76</width>
+         <width>85</width>
          <height>425</height>
         </rect>
        </property>
@@ -278,11 +255,6 @@
    <class>PaperTableView</class>
    <extends>QTableView</extends>
    <header>PaperTableView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QuotesTableView</class>
-   <extends>QTableView</extends>
-   <header>QuotesTableView.h</header>
   </customwidget>
   <customwidget>
    <class>TagsWidget</class>

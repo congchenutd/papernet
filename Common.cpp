@@ -480,7 +480,7 @@ void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath)
 #endif
 
 #ifdef Q_WS_MAC
-    convertorPath = "./pdftotext"
+	convertorPath = "./pdftotext";
 #endif
 
     if(!convertorPath.isEmpty() && QFile::exists(pdfPath))

@@ -43,7 +43,7 @@
   <action name="actionAddFile">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
+     <normaloff>:/Images/Add.png</normaloff>:/Images/Add.png</iconset>
    </property>
    <property name="text">
     <string>Add file</string>
@@ -52,7 +52,7 @@
   <action name="actionDel">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
+     <normaloff>:/Images/Minus.png</normaloff>:/Images/Minus.png</iconset>
    </property>
    <property name="text">
     <string>Delete</string>
@@ -64,7 +64,7 @@
   <action name="actionAddLink">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/AddLink.png</normaloff>:/MainWindow/Images/AddLink.png</iconset>
+     <normaloff>:/Images/AddLink.png</normaloff>:/Images/AddLink.png</iconset>
    </property>
    <property name="text">
     <string>Add link</string>
@@ -73,7 +73,7 @@
   <action name="actionRename">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Rename.png</normaloff>:/MainWindow/Images/Rename.png</iconset>
+     <normaloff>:/Images/Rename.png</normaloff>:/Images/Rename.png</iconset>
    </property>
    <property name="text">
     <string>Rename</string>

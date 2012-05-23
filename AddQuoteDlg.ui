@@ -48,7 +48,7 @@
          </property>
          <property name="icon">
           <iconset resource="MainWindow.qrc">
-           <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
+           <normaloff>:/Images/Add.png</normaloff>:/Images/Add.png</iconset>
          </property>
         </widget>
        </item>
@@ -62,7 +62,7 @@
          </property>
          <property name="icon">
           <iconset resource="MainWindow.qrc">
-           <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
+           <normaloff>:/Images/Minus.png</normaloff>:/Images/Minus.png</iconset>
          </property>
         </widget>
        </item>
@@ -89,7 +89,7 @@
          </property>
          <property name="icon">
           <iconset resource="MainWindow.qrc">
-           <normaloff>:/MainWindow/Images/SearchFile.png</normaloff>:/MainWindow/Images/SearchFile.png</iconset>
+           <normaloff>:/Images/SearchFile.png</normaloff>:/Images/SearchFile.png</iconset>
          </property>
         </widget>
        </item>

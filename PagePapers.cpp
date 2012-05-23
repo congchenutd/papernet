@@ -51,9 +51,11 @@ PagePapers::PagePapers(QWidget *parent)
 			this, SLOT(onSubmitPaper()));
 	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
 	connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked()));
-	connect(ui.tvPapers, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
-	connect(ui.tvPapers, SIGNAL(printMe(bool)),    this, SLOT(onPrintMe(bool)));
-	connect(ui.tvPapers, SIGNAL(readMe(bool)),     this, SLOT(onReadMe(bool)));
+	connect(ui.tvPapers, SIGNAL(addQuote()),     this, SLOT(onAddQuote()));
+	connect(ui.tvPapers, SIGNAL(printMe(bool)),  this, SLOT(onPrintMe(bool)));
+	connect(ui.tvPapers, SIGNAL(bookmark(bool)), this, SLOT(onBookmark(bool)));
+	connect(ui.tvPapers, SIGNAL(addPDF()),       this, SLOT(onAddPDF()));
+	connect(ui.tvPapers, SIGNAL(readPDF()),      this, SLOT(onReadPDF()));
 
 	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPapersByTags(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPapers()));
@@ -146,7 +148,7 @@ void PagePapers::insertRecord(const PaperRecord& record)
 	modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
 
 	updateRecord(lastRow, record);
-	onReadMe(true);    // attach the ReadMe tag
+	onBookmark(true);    // attach the ReadMe tag
 }
 
 void PagePapers::updateRecord(int row, const PaperRecord& record)
@@ -399,7 +401,18 @@ void PagePapers::onAddQuote()
     dlg.setWindowTitle(tr("Add Quote"));
     dlg.setQuoteID(getNextID("Quotes", "ID"));    // create new quote id
     dlg.addRef(getPaperTitle(currentPaperID));    // add itself
-    dlg.exec();
+	dlg.exec();
+}
+
+void PagePapers::onAddPDF()
+{
+	ui.tabWidget->setCurrentWidget(ui.tabAttachments);
+	ui.widgetAttachments->onAddFile();
+}
+
+void PagePapers::onReadPDF()
+{
+	openAttachment(currentPaperID, "Paper.pdf");
 }
 
 void PagePapers::onFullTextSearch(const QString& target)
@@ -466,7 +479,7 @@ void PagePapers::onPrintMe(bool print)
 	highLightTags();
 }
 
-void PagePapers::onReadMe(bool readMe)
+void PagePapers::onBookmark(bool readMe)
 {
 	if(readMe)
 	{

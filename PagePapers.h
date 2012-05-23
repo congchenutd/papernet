@@ -44,10 +44,12 @@ private slots:
 	void onDelTagFromPaper();
 	void onFilterPapersByTags(bool AND = false);
 	void onTagDoubleClicked(const QString& label);
-	void onPrintMe(bool print);   // two built-in tags
-	void onReadMe (bool readMe);
 
+	void onPrintMe(bool print);   // two built-in tags
+	void onBookmark (bool readMe);
 	void onAddQuote();
+	void onAddPDF();
+	void onReadPDF();
 
 signals:
 	void tableValid(bool);

@@ -29,11 +29,11 @@ QVariant PaperModel::data(const QModelIndex& idx, int role) const
 			int paperID = data(index(idx.row(), PAPER_ID), Qt::DisplayRole).toInt();
 			AttachmentStatus attachmentStatus = isAttached(paperID);
 			if(attachmentStatus == ATTACH_ENDNOTE)
-				return QIcon(":/MainWindow/Images/AttachEndNote.png");
+				return QIcon(":/Images/AttachEndNote.png");
 			else if(attachmentStatus == ATTACH_PAPER)
-				return QIcon(":/MainWindow/Images/AttachPaper.png");
+				return QIcon(":/Images/AttachPaper.png");
 			else if(attachmentStatus == ATTACH_ALL)
-				return QIcon(":/MainWindow/Images/AttachAll.png");
+				return QIcon(":/Images/AttachAll.png");
 		}
 	}
 

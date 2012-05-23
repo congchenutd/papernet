@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="MainWindow.qrc">
-    <normaloff>:/MainWindow/Images/ToiletPaper.png</normaloff>:/MainWindow/Images/ToiletPaper.png</iconset>
+    <normaloff>:/Images/ToiletPaper.png</normaloff>:/Images/ToiletPaper.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -107,7 +107,7 @@
   <action name="actionExit">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Exit.png</normaloff>:/MainWindow/Images/Exit.png</iconset>
+     <normaloff>:/Images/Exit.png</normaloff>:/Images/Exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -121,7 +121,7 @@
   <action name="actionOptions">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Options.png</normaloff>:/MainWindow/Images/Options.png</iconset>
+     <normaloff>:/Images/Options.png</normaloff>:/Images/Options.png</iconset>
    </property>
    <property name="text">
     <string>Options</string>
@@ -133,7 +133,7 @@
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/ToiletPaper.png</normaloff>:/MainWindow/Images/ToiletPaper.png</iconset>
+     <normaloff>:/Images/ToiletPaper.png</normaloff>:/Images/ToiletPaper.png</iconset>
    </property>
    <property name="text">
     <string>Papers</string>
@@ -145,7 +145,7 @@
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Quote.png</normaloff>:/MainWindow/Images/Quote.png</iconset>
+     <normaloff>:/Images/Quote.png</normaloff>:/Images/Quote.png</iconset>
    </property>
    <property name="text">
     <string>Quotes</string>
@@ -157,7 +157,7 @@
   <action name="actionAdd">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Add.png</normaloff>:/MainWindow/Images/Add.png</iconset>
+     <normaloff>:/Images/Add.png</normaloff>:/Images/Add.png</iconset>
    </property>
    <property name="text">
     <string>Add</string>
@@ -169,7 +169,7 @@
   <action name="actionDel">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Minus.png</normaloff>:/MainWindow/Images/Minus.png</iconset>
+     <normaloff>:/Images/Minus.png</normaloff>:/Images/Minus.png</iconset>
    </property>
    <property name="text">
     <string>Delete</string>
@@ -181,7 +181,7 @@
   <action name="actionImportPaper">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Import.png</normaloff>:/MainWindow/Images/Import.png</iconset>
+     <normaloff>:/Images/Import.png</normaloff>:/Images/Import.png</iconset>
    </property>
    <property name="text">
     <string>Import paper</string>
@@ -201,7 +201,7 @@
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Dictionary.png</normaloff>:/MainWindow/Images/Dictionary.png</iconset>
+     <normaloff>:/Images/Dictionary.png</normaloff>:/Images/Dictionary.png</iconset>
    </property>
    <property name="text">
     <string>Dictionary</string>
@@ -213,7 +213,7 @@
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Backward.png</normaloff>:/MainWindow/Images/Backward.png</iconset>
+     <normaloff>:/Images/Backward.png</normaloff>:/Images/Backward.png</iconset>
    </property>
    <property name="text">
     <string>Go backward</string>
@@ -228,7 +228,7 @@
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/MainWindow/Images/Forward.png</normaloff>:/MainWindow/Images/Forward.png</iconset>
+     <normaloff>:/Images/Forward.png</normaloff>:/Images/Forward.png</iconset>
    </property>
    <property name="text">
     <string>Go forward</string>

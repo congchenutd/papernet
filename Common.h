@@ -28,9 +28,9 @@ int getMaxCoauthor();
 int getPaperID(const QString& title);
 bool paperExists(const QString& title);
 void updateAttached(int paperID);
-AttachmentStatus isAttached(int paperID);
 
 // attachments
+AttachmentStatus isAttached(int paperID);
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName);
 void delAttachment(int paperID, const QString& attachmentName);
 void delAttachments(int paperID);

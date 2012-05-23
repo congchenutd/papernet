@@ -19,12 +19,16 @@ signals:
 	void showCoauthored();
 	void addQuote();
 	void printMe(bool);
-	void readMe(bool);
+	void bookmark(bool);
+	void addPDF();
+	void readPDF();
 
 private:
 	QAction* actionAddQuote;
 	QAction* actionPrintMe;
-	QAction* actionReadMe;
+	QAction* actionBookmark;
+	QAction* actionAddPDF;
+	QAction* actionReadPDF;
 };
 
 #endif // PAPERTABLEVIEW_H

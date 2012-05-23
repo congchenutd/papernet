@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "OptionDlg.h"
-#include "Pdf2Text.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
@@ -287,9 +286,8 @@ void openAttachment(int paperID, const QString& attachmentName)
 			url.remove("BASEURL=");
 		}
 	}
-#else
-	openUrl(url);
 #endif
+	openUrl(url);
 }
 
 QString getAttachmentPath(int paperID, const QString& attachmentName) {

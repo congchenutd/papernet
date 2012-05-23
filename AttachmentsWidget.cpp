@@ -158,6 +158,6 @@ QIcon AttachmentIconProvider::icon(const QFileInfo& info) const
 {
 	// special icon for pdf, looks better than the system's
 	if(info.fileName().compare("Paper.pdf", Qt::CaseInsensitive) == 0)
-		return QIcon(":/MainWindow/Images/PDF.png");
+		return QIcon(":/Images/PDF.png");
 	return QFileIconProvider::icon(info);
 }

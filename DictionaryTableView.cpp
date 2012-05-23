@@ -10,7 +10,7 @@ void DictionaryTableView::contextMenuEvent(QContextMenuEvent* event)
 	if(!indexAt(event->pos()).isValid())   // must click on a row
 		return;
 
-	QAction actionShowRelated(QIcon(":/MainWindow/Images/Related.png"), tr("Show Related"), this);
+	QAction actionShowRelated(QIcon(":/Images/Related.png"), tr("Show Related"), this);
 	connect(&actionShowRelated, SIGNAL(triggered()), this, SIGNAL(showRelated()));
 
 	QMenu menu(this);

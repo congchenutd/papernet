@@ -11,13 +11,13 @@ TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
 	int minFont = UserSetting::getInstance()->getFont().pointSize();
 	setSizeRange(minFont, minFont*2);
 
-	actionNewTag   = new QAction(QIcon(":/MainWindow/Images/AddTag.png"),     tr("New tag"), this);
-	actionFilter   = new QAction(QIcon(":/MainWindow/Images/ShowTagged.png"), tr("Show tagged (OR)"), this);
-	actionUnFilter = new QAction(QIcon(":/MainWindow/Images/Cancel.png"),     tr("Show all"), this);
-	actionAdd      = new QAction(QIcon(":/MainWindow/Images/Backward.png"),   tr("Add"),      this);
-	actionRemove   = new QAction(QIcon(":/MainWindow/Images/Forward.png"),    tr("Remove"), this);
-	actionRename   = new QAction(QIcon(":/MainWindow/Images/EditTag.png"),    tr("Rename"), this);
-	actionDel      = new QAction(QIcon(":/MainWindow/Images/DelTag.png"),     tr("Delete tag"), this);
+	actionNewTag   = new QAction(QIcon(":/Images/AddTag.png"),     tr("New tag"), this);
+	actionFilter   = new QAction(QIcon(":/Images/ShowTagged.png"), tr("Show tagged (OR)"), this);
+	actionUnFilter = new QAction(QIcon(":/Images/Cancel.png"),     tr("Show all"), this);
+	actionAdd      = new QAction(QIcon(":/Images/Backward.png"),   tr("Add"),      this);
+	actionRemove   = new QAction(QIcon(":/Images/Forward.png"),    tr("Remove"), this);
+	actionRename   = new QAction(QIcon(":/Images/EditTag.png"),    tr("Rename"), this);
+	actionDel      = new QAction(QIcon(":/Images/DelTag.png"),     tr("Delete tag"), this);
 
 	connect(actionNewTag,   SIGNAL(triggered()), this, SIGNAL(newTag()));
 	connect(actionUnFilter, SIGNAL(triggered()), this, SIGNAL(unfilter()));

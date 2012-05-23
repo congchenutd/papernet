@@ -51,11 +51,11 @@ SearchBar::SearchBar(QWidget* parent) : QToolBar(parent)
 	addWidget(leSearch = new SearchLineEdit(this));
 	addWidget(new QLabel(" "));
 
-	btFullText = new QPushButton(QIcon(":/MainWindow/Images/FullText.png"), QString());
+	btFullText = new QPushButton(QIcon(":/Images/FullText.png"), QString());
 	btFullText->setToolTip(tr("Full text search"));
 	addWidget(btFullText);
 
-	QPushButton* btClear = new QPushButton(QIcon(":/MainWindow/Images/Cancel.png"), QString(), this);
+	QPushButton* btClear = new QPushButton(QIcon(":/Images/Cancel.png"), QString(), this);
 	btClear->setShortcut(QKeySequence(Qt::Key_Escape));
 	btClear->setToolTip(tr("Clear search result"));
 	addWidget(btClear);

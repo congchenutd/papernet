@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/MainWindow">
+    <qresource prefix="/">
         <file>Images/Backward.png</file>
         <file>Images/Forward.png</file>
         <file>Images/Dictionary.png</file>
@@ -19,7 +19,6 @@
         <file>Images/Import.png</file>
         <file>Images/Exit.png</file>
         <file>Images/ToiletPaper.png</file>
-        <file>CompileDate.txt</file>
         <file>Images/AddTag.png</file>
         <file>Images/DelTag.png</file>
         <file>Images/Cancel.png</file>
@@ -28,5 +27,7 @@
         <file>Images/SearchFile.png</file>
         <file>Images/Print.png</file>
         <file>Images/Read.png</file>
+        <file>Images/Bookmark.png</file>
+        <file>CompileDate.txt</file>
     </qresource>
 </RCC>

@@ -23,8 +23,9 @@ protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event);
     virtual void showEvent(QShowEvent*);
 
-private slots:
+public slots:
 	void onAddFile();
+private slots:
 	void onAddLink();
 	void onRename();
 	void onDel();

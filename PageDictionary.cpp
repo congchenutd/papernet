@@ -118,6 +118,7 @@ void PageDictionary::onCurrentRowChanged()
 	{
 		currentPhraseID = model.data(model.index(currentRow, TAG_ID)).toInt();
 		highLightTags();
+        ui.widgetRelatedPhrases->setCentralPhraseID(currentPhraseID);
 	}
 	emit tableValid(valid);
 }
@@ -202,14 +203,18 @@ void PageDictionary::highLightTags() {
 	ui.widgetWordCloud->highLight(getTagsOfPhrase(currentPhraseID));
 }
 
-void PageDictionary::loadGeometry() {
-	ui.splitter->restoreState(UserSetting::getInstance()->getSplitterSizes("Dictionary"));
+void PageDictionary::loadGeometry()
+{
+    UserSetting* setting = UserSetting::getInstance();
+    ui.splitterVertical  ->restoreState(setting->getSplitterSizes("DictionaryVertical"));
+    ui.splitterHorizontal->restoreState(setting->getSplitterSizes("DictionaryHorizontal"));
 }
 
 void PageDictionary::saveGeometry()
 {
 	UserSetting* setting = UserSetting::getInstance();
-	setting->setSplitterSizes("Dictionary", ui.splitter->saveState());
+    setting->setSplitterSizes("DictionaryVertical",   ui.splitterVertical  ->saveState());
+    setting->setSplitterSizes("DictionaryHorizontal", ui.splitterHorizontal->saveState());
 }
 
 void PageDictionary::onResetPhrases()

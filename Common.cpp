@@ -474,12 +474,22 @@ bool fullTextSearch(int paperID, const QString& target)
 
 void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath)
 {
-	if(QFile::exists(pdfPath))
+    QString convertorPath;
+#ifdef Q_WS_WIN
+    convertorPath = "./pdftotext.exe";
+#endif
+
+#ifdef Q_WS_MAC
+    convertorPath = "./pdftotext"
+#endif
+
+    if(!convertorPath.isEmpty() && QFile::exists(pdfPath))
 	{
 		QFile::remove(fulltextPath);
-		Pdf2Text(pdfPath.toAscii(), fulltextPath.toAscii());
+        QProcess* process = new QProcess;
+        process->start(convertorPath, QStringList() << pdfPath << fulltextPath);
 		hideFile(fulltextPath);
-	}
+    }
 }
 
 void makeFullTextFiles()
@@ -489,9 +499,9 @@ void makeFullTextFiles()
 	while(query.next())
 	{
 		int id = query.value(0).toInt();
-		QString pdf      = getAttachmentPath(id, "Paper.pdf");
-		QString fullText = getAttachmentPath(id, "fulltext.txt");
-		makeFullTextFile(pdf, fullText);
+        QString pdfPath      = getPDFPath(id);
+        QString fullTextPath = getAttachmentPath(id, "fulltext.txt");
+        makeFullTextFile(pdfPath, fullTextPath);
 	}
 }
 

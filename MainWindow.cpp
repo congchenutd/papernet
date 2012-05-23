@@ -49,9 +49,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	// load settings
 	UserSetting* setting = UserSetting::getInstance();
 	qApp->setFont(setting->getFont());
-	int page = setting->getPageIndex();
-	ui.stackedWidget->setCurrentIndex(page);
-	actionGroup->actions().at(page)->setChecked(true);
+    onPapers();
 }
 
 void MainWindow::onOptions()
@@ -79,7 +77,6 @@ void MainWindow::closeEvent(QCloseEvent*)
 	}
 	pagePapers->saveGeometry();   // save the settings before the dtr
 	pageDictionary->saveGeometry();
-	setting->setPageIndex(ui.stackedWidget->currentIndex());
 	setting->destroySettingManager();
 }
 

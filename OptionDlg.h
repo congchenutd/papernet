@@ -42,7 +42,6 @@ public:
 	QString getCompileDate()        const;
 	QByteArray getSplitterSizes(const QString& splitterName) const;
 	int     getPapersTabIndex() const;
-	int     getPageIndex() const;
 
 	void setFont              (const QFont& font);
 	void setBackupDays        (int days);
@@ -52,7 +51,6 @@ public:
 	void setTempLocation      (const QString& temp);
 	void setSplitterSizes(const QString& splitterName, const QByteArray& sizes);
 	void setPapersTabIndex(int tab);
-	void setPageIndex(int page);
 
 private:
 	void loadDefaults();

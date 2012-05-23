@@ -91,6 +91,7 @@ void UserSetting::loadDefaults()
 	setValue("SmallIcon", false);
 	setValue("ShowText",  false);
 	setTempLocation(QProcessEnvironment::systemEnvironment().value("TMP", "."));
+    setPapersTabIndex(0);
 }
 
 QFont UserSetting::getFont() const
@@ -157,12 +158,4 @@ int UserSetting::getPapersTabIndex() const {
 
 void UserSetting::setPapersTabIndex(int tab) {
 	setValue("Indexes/PapersTab", tab);
-}
-
-int UserSetting::getPageIndex() const {
-	return value("Indexes/Page").toInt();
-}
-
-void UserSetting::setPageIndex(int page) {
-	setValue("Indexes/Page", page);
 }

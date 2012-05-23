@@ -4,20 +4,16 @@
 
 TEMPLATE = app
 TARGET =
-DEPENDPATH += . zlib/include
-INCLUDEPATH +=	. zlib/include \
-				../EnglishName \
+INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
 				../MySetting
 
 QT += sql xml network
-ICON = Images/ToiletPaper.icns
 win32 {
-	QMAKE_LIBDIR += zlib/lib
 	RC_FILE = PaperNet.rc
 }
 macx {
-	LIBS += /usr/lib/libz.dylib
+	ICON = Images/ToiletPaper.icns
 }
 
 # Input
@@ -41,11 +37,8 @@ HEADERS += AddPhraseDlg.h \
            PaperList.h \
            PaperModel.h \
            PaperTableView.h \
-           Pdf2Text.h \
            TagsWidget.h \
            ToolBar.h \
-           zlib/include/zconf.h \
-           zlib/include/zlib.h \
            ../MySetting/MySetting.h \
            ../WordCloud/WordCloudWidget.h \
 		   ../WordCloud/FlowLayout.h \
@@ -93,7 +86,6 @@ SOURCES += AddPhraseDlg.cpp \
            PaperList.cpp \
            PaperModel.cpp \
            PaperTableView.cpp \
-           Pdf2Text.cpp \
            TagsWidget.cpp \
            ToolBar.cpp \
            ../WordCloud/WordCloudWidget.cpp \
@@ -101,7 +93,7 @@ SOURCES += AddPhraseDlg.cpp \
            ../EnglishName/EnglishName.cpp \
 		   DictionaryModel.cpp \
 		   Thesaurus.cpp \
-    NewReferenceDlg.cpp \
+	NewReferenceDlg.cpp \
     ThesaurusCache.cpp \
     RelatedPapersWidget.cpp \
     CoauthoredPapersWidgdet.cpp \

@@ -32,17 +32,17 @@ private slots:
 	void onEditPaper();
 	void onFullTextSearch(const QString& target);
 	void onSubmitPaper();
-	void onClicked(const QModelIndex& idx);
+	void onClicked();
 	void onResetPapers();
 	void setPaperRead();
 
 	void onRelatedPaperDoubleClicked(int paperID);
 	void onQuoteDoubleClicked(int quoteID);
 
-	void onAddTag();
+	void onNewTag();
 	void onAddTagToPaper();
 	void onDelTagFromPaper();
-	void onFilterPapers(bool AND = false);
+	void onFilterPapersByTags(bool AND = false);
 	void onTagDoubleClicked(const QString& label);
 	void onPrintMe(bool print);   // two built-in tags
 	void onReadMe (bool readMe);
@@ -53,16 +53,14 @@ signals:
 	void tableValid(bool);
 
 private:
-	int  getPaperID(int row) const;
+	int  rowToID(int row) const;
 	void insertRecord(const PaperRecord& record);
 	void mergeRecord (int row, const PaperRecord& record);
 	void updateRecord(int row, const PaperRecord& record);
 	void updateTags(const QStringList& tags);
 	void highLightTags();
-	int  getQuoteID(int row) const;
-	void loadSplitterSizes();
+	void loadGeometry();
 	void reloadAttachments();
-	void sortByTitle();
 	void attachNewTag(const QString& tagName);   // create a tag, and add it to current paper
 
 private:

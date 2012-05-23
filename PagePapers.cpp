@@ -1,24 +1,18 @@
 #include "PagePapers.h"
 #include "Common.h"
-#include "OptionDlg.h"
 #include "PaperDlg.h"
 #include "AddQuoteDlg.h"
 #include "Importer.h"
-#include "../EnglishName/EnglishName.h"
+#include "EnglishName.h"
 #include "Navigator.h"
 #include "AddTagDlg.h"
-#include "Thesaurus.h"
 #include "MainWindow.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextStream>
-#include <QDesktopServices>
-#include <QUrl>
-#include <QInputDialog>
 #include <QSqlQuery>
-#include <QMenu>
-#include <QFileInfo>
 #include <QSqlError>
+#include <QFileInfo>
 #include <QProgressDialog>
 
 PagePapers::PagePapers(QWidget *parent)
@@ -26,7 +20,7 @@ PagePapers::PagePapers(QWidget *parent)
 {
 	currentRow = -1;
 	currentPaperID = -1;
-	setting = MySetting<UserSetting>::getInstance();
+	setting = UserSetting::getInstance();
 
 	ui.setupUi(this);
 	ui.tvPapers->init("PagePapers");   // set the table name for the view
@@ -44,11 +38,10 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->hideColumn(PAPER_NOTE);
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
-	sortByTitle();
 
 	ui.widgetWordCloud->setTableNames("Tags", "PaperTag", "Paper");
 
-	loadSplitterSizes();
+	loadGeometry();
 
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
 			&mapper, SLOT(setCurrentModelIndex(QModelIndex)));
@@ -57,14 +50,14 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
 			this, SLOT(onSubmitPaper()));
 	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
-	connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
+	connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked()));
 	connect(ui.tvPapers, SIGNAL(addQuote()),       this, SLOT(onAddQuote()));
 	connect(ui.tvPapers, SIGNAL(printMe(bool)),    this, SLOT(onPrintMe(bool)));
 	connect(ui.tvPapers, SIGNAL(readMe(bool)),     this, SLOT(onReadMe(bool)));
 
-	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPapers(bool)));
+	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPapersByTags(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPapers()));
-	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
+	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onNewTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagToPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
@@ -80,7 +73,7 @@ void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 	if(idx.isValid())
 	{
 		currentRow = idx.row();
-		currentPaperID = getPaperID(idx.row());
+		currentPaperID = rowToID(currentRow);
         highLightTags();
         reloadAttachments();
         ui.relatedPapersWidget   ->setCentralPaper(currentPaperID);
@@ -90,19 +83,21 @@ void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
 }
 
 // only triggered by mouse click, not programmatically
-void PagePapers::onClicked(const QModelIndex& idx) {
-	Navigator::getInstance()->addFootStep(this, getPaperID(idx.row()));
+void PagePapers::onClicked() {
+	Navigator::getInstance()->addFootStep(this, currentPaperID);
+	// TODO: move to onCurrentRowChanged?
 }
 
 void PagePapers::jumpToID(int id)
 {
-    int row = idToRow(&modelPapers, PAPER_ID, id);
-	if(row > -1)
+	if(id < 0)
+		return;
+	if(int row = idToRow(&modelPapers, PAPER_ID, id))
 	{
 		currentRow = row;
-        ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
-        ui.tvPapers->scrollTo(modelPapers.index(row, PAPER_TITLE));
-        ui.tvPapers->setFocus();
+		ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
+		ui.tvPapers->scrollTo(modelPapers.index(row, PAPER_TITLE));
+		ui.tvPapers->setFocus();
 	}
 }
 
@@ -138,8 +133,7 @@ void PagePapers::onEditPaper()
 		renameTitle(oldTitle, dlg.getTitle());
 		reloadAttachments();           // refresh attached files after renaming
 
-		// changing note -> reading
-		if(dlg.getNote() != oldNote)
+		if(dlg.getNote() != oldNote)   // changing note equals reading
 			setPaperRead();
 	}
 }
@@ -186,12 +180,12 @@ void PagePapers::del()
 	{
 		QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)     // find all selected indexes
-			delPaper(getPaperID(idx.row()));  // delete in the db
+			delPaper(rowToID(idx.row()));  // delete in the db
 		modelPapers.select();                 // reload db
 	}
 }
 
-int PagePapers::getPaperID(int row) const {
+int PagePapers::rowToID(int row) const {
 	return row > -1 ? modelPapers.data(modelPapers.index(row, PAPER_ID)).toInt() : -1;
 }
 
@@ -249,6 +243,9 @@ void PagePapers::onImport()
 
 void PagePapers::mergeRecord(int row, const PaperRecord &record)
 {
+	if(row < 0)
+		return;
+
 	QString title = modelPapers.data(modelPapers.index(row, PAPER_TITLE)).toString();
 	if(!title.isEmpty())
 		title += "; " + record.title;
@@ -282,7 +279,6 @@ void PagePapers::onSubmitPaper()
 	if(!modelPapers.submitAll())
 		QMessageBox::critical(this, tr("Error"), modelPapers.lastError().text());
 	currentPaperID = backup;
-//	sortByTitle();
 	jumpToID(backup);
 }
 
@@ -301,7 +297,7 @@ void PagePapers::search(const QString& target)
 	ui.widgetWordCloud->search(target);
 }
 
-void PagePapers::onAddTag()
+void PagePapers::onNewTag()
 {
 	AddTagDlg dlg("Tags", this);
 	if(dlg.exec() == QDialog::Accepted)
@@ -342,8 +338,8 @@ void PagePapers::onDelTagFromPaper()
 		foreach(WordLabel* tag, tags)
 		{
 			ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()), paperID);
-			if(tag->text() == "ReadMe")
-				reset();    // unbold the title
+			if(tag->text() == "ReadMe")   // ReadMe tag is removed
+				reset();                  // unbold the title
 		}
 	}
 	highLightTags();
@@ -351,8 +347,7 @@ void PagePapers::onDelTagFromPaper()
 
 void PagePapers:: onResetPapers()
 {
-	QSqlQuery query;
-	query.exec(tr("drop view SelectedTags"));   // remove the temp table
+	dropTempView();
 
 	int backupID = currentPaperID;
 	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -362,16 +357,16 @@ void PagePapers:: onResetPapers()
 		modelPapers.fetchMore();
 	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
-	sortByTitle();
+	modelPapers.sort(PAPER_TITLE, Qt::AscendingOrder);
+	// FIXME: sort by view does not work
+
 	currentPaperID = backupID;
 	jumpToID(currentPaperID);
 }
 
 // filter papers with tags
-void PagePapers::onFilterPapers(bool AND)
+void PagePapers::onFilterPapersByTags(bool AND)
 {
-	dropTempView();
-
 	// get selected tags
 	QStringList tagIDs;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
@@ -383,6 +378,7 @@ void PagePapers::onFilterPapers(bool AND)
 			tr("ID in (select Paper from PaperTag where Tag in (%1))").arg(tagIDs.join(",")));
 	else
 	{
+		dropTempView();
 		QSqlQuery query;    // create a temp table for selected tags id
 		query.exec(tr("create view SelectedTags as select * from Tags where ID in (%1)")
 									.arg(tagIDs.join(",")));
@@ -406,10 +402,6 @@ void PagePapers::onAddQuote()
     dlg.exec();
 }
 
-int PagePapers::getQuoteID(int row) const {
-    return -1;
-}
-
 void PagePapers::onFullTextSearch(const QString& target)
 {
 	onResetPapers();
@@ -424,8 +416,8 @@ void PagePapers::onFullTextSearch(const QString& target)
 	for(int row = 0; row < rowCount; ++row)
 	{
 		progress.setValue(row);
-		if(fullTextSearch(getPaperID(row), target))        // if found in this paper
-			filter << tr("ID = %1").arg(getPaperID(row));  // add the paper to filter
+		if(fullTextSearch(rowToID(row), target))        // if found in this paper
+			filter << tr("ID = %1").arg(rowToID(row));  // add the paper to filter
 		if(progress.wasCanceled())
 			break;
 	}
@@ -436,10 +428,11 @@ void PagePapers::onFullTextSearch(const QString& target)
 		modelPapers.setFilter(filter.join(" OR "));        // filter out papers
 }
 
-void PagePapers::loadSplitterSizes()
+void PagePapers::loadGeometry()
 {
-	ui.splitterHorizontal->restoreState(setting->value("SplitterHorizontal").toByteArray());
-	ui.splitterPapers    ->restoreState(setting->value("SplitterPapers")    .toByteArray());
+	ui.splitterHorizontal->restoreState(setting->getSplitterSizes("PapersHorizontal"));
+	ui.splitterPapers    ->restoreState(setting->getSplitterSizes("PapersVertical"));
+	ui.tabWidget->setCurrentIndex(setting->getPapersTabIndex());
 }
 
 void PagePapers::saveGeometry()
@@ -447,8 +440,9 @@ void PagePapers::saveGeometry()
 	ui.tvPapers->saveSectionSizes();  // sections
 
 	// splitters
-	setting->setValue("SplitterHorizontal", ui.splitterHorizontal->saveState());
-	setting->setValue("SplitterPapers",     ui.splitterPapers->saveState());
+	setting->setSplitterSizes("PapersHorizontal", ui.splitterHorizontal->saveState());
+	setting->setSplitterSizes("PapersVertical",   ui.splitterPapers    ->saveState());
+	setting->setPapersTabIndex(ui.tabWidget->currentIndex());
 }
 
 void PagePapers::onTagDoubleClicked(const QString& label)
@@ -456,15 +450,11 @@ void PagePapers::onTagDoubleClicked(const QString& label)
 	if(label.isEmpty())
 		onResetPapers();
 	else
-		onFilterPapers();
+		onFilterPapersByTags();
 }
 
 void PagePapers::reloadAttachments() {
 	ui.widgetAttachments->setPaper(currentPaperID);
-}
-
-void PagePapers::sortByTitle() {
-	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 }
 
 void PagePapers::onPrintMe(bool print)

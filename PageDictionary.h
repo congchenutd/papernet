@@ -34,7 +34,7 @@ private slots:
 	void onAddTag();
 	void onAddTagToPhrase();
 	void onDelTagFromPhrase();
-	void onFilterPhrases(bool AND = false);     // by tags
+	void onFilterPhrasesByTags(bool AND = false);     // by tags
 	void onResetPhrases();
 	void onTagDoubleClicked(const QString& label);
 
@@ -49,6 +49,7 @@ private:
 	void hideRelated();
 	void sortByPhrase();
 	void sortByProximity();
+	void loadGeometry();
 
 private:
 	Ui::PageDictionary ui;

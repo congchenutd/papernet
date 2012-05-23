@@ -5,7 +5,10 @@
 TEMPLATE = app
 TARGET =
 DEPENDPATH += . zlib/include
-INCLUDEPATH += . zlib/include
+INCLUDEPATH +=	. zlib/include \
+				../EnglishName \
+				../WordCloud \
+				../MySetting
 
 QT += sql xml network
 ICON = Images/ToiletPaper.icns

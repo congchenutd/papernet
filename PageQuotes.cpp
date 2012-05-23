@@ -15,7 +15,6 @@ PageQuotes::PageQuotes(QWidget *parent)
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(QUOTE_ID);
 	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
-	sortByTitle();
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
@@ -39,7 +38,7 @@ void PageQuotes::onCurrentRowChanged()
 }
 
 void PageQuotes::onClicked(const QModelIndex& idx) {
-	Navigator::getInstance()->addFootStep(this, getID(idx.row()));  // track navigation
+	Navigator::getInstance()->addFootStep(this, rowToID(idx.row()));  // track navigation
 }
 
 void PageQuotes::add()
@@ -56,7 +55,7 @@ void PageQuotes::onEdit()
 {
     AddQuoteDlg dlg(this);
     dlg.setWindowTitle(tr("Edit Quote"));
-    dlg.setQuoteID(getID(currentRow));
+	dlg.setQuoteID(rowToID(currentRow));
     if(dlg.exec() == QDialog::Accepted)
         reset();
 }
@@ -68,7 +67,7 @@ void PageQuotes::del()
 	{
 		QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delQuote(getID(idx.row()));
+			delQuote(rowToID(idx.row()));
         reset();
 	}
 }
@@ -79,10 +78,10 @@ void PageQuotes::reset()
 	model.select();
 	while(model.canFetchMore())
 		model.fetchMore();
-	sortByTitle();
+	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
 }
 
-int PageQuotes::getID(int row) const {
+int PageQuotes::rowToID(int row) const {
 	return model.data(model.index(row, QUOTE_ID)).toInt();
 }
 
@@ -95,8 +94,4 @@ void PageQuotes::jumpToID(int id)
 		ui.tableView->selectRow(currentRow);  // will trigger onCurrentRowChanged()
 		ui.tableView->setFocus();
 	}
-}
-
-void PageQuotes::sortByTitle() {
-	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
 }

@@ -18,7 +18,6 @@ public:
 	virtual void jumpToID(int id);
     virtual void jumpToCurrent() {}
     virtual void reset();
-    virtual void enter() { reset(); }
 
 private slots:
 	void onCurrentRowChanged();
@@ -29,8 +28,7 @@ signals:
 	void tableValid(bool);
 
 private:
-	int getID(int row) const;
-	void sortByTitle();
+	int rowToID(int row) const;
 
 private:
 	Ui::PageQuotesClass ui;

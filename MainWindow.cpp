@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	navigator = Navigator::getInstance();
 
 	ui.setupUi(this);
-	onPapers();     // paper page by default
 
 	pagePapers     = static_cast<PagePapers*>    (ui.stackedWidget->widget(0));
 	pageQuotes     = static_cast<PageQuotes*>    (ui.stackedWidget->widget(1));
@@ -25,20 +24,20 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	actionGroup->addAction(ui.actionQuotes);
 	actionGroup->addAction(ui.actionDictionary);
 
+	connect(ui.actionAboutQt,     SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionOptions,     SIGNAL(triggered()), this, SLOT(onOptions()));
 	connect(ui.actionAbout,       SIGNAL(triggered()), this, SLOT(onAbout()));
 	connect(ui.actionPapers,      SIGNAL(triggered()), this, SLOT(onPapers()));
 	connect(ui.actionQuotes,      SIGNAL(triggered()), this, SLOT(onQuotes()));
 	connect(ui.actionDictionary,  SIGNAL(triggered()), this, SLOT(onDictionary()));
-	connect(ui.actionAboutQt,     SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-	connect(ui.actionImportPaper, SIGNAL(triggered()), pagePapers, SLOT(onImport()));
-	connect(ui.actionAdd, SIGNAL(triggered()), this, SLOT(onAdd()));
-	connect(ui.actionDel, SIGNAL(triggered()), this, SLOT(onDel()));
-	connect(ui.actionBackward, SIGNAL(triggered()), this, SLOT(onBackward()));
-	connect(ui.actionForward,  SIGNAL(triggered()), this, SLOT(onForward()));
-	connect(ui.toolBarSearch, SIGNAL(search(QString)), this, SLOT(onSearch(QString)));
-	connect(ui.toolBarSearch, SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
-	connect(ui.toolBarSearch, SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
+	connect(ui.actionAdd,         SIGNAL(triggered()), this, SLOT(onAdd()));
+	connect(ui.actionDel,         SIGNAL(triggered()), this, SLOT(onDel()));
+	connect(ui.actionBackward,    SIGNAL(triggered()), this, SLOT(onBackward()));
+	connect(ui.actionForward,     SIGNAL(triggered()), this, SLOT(onForward()));
+	connect(ui.toolBarSearch,     SIGNAL(search(QString)), this, SLOT(onSearch(QString)));
+	connect(ui.toolBarSearch,     SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
+	connect(ui.actionImportPaper, SIGNAL(triggered()),             pagePapers, SLOT(onImport()));
+	connect(ui.toolBarSearch,     SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
 
 //	connect(pagePapers,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
 //	connect(pageQuotes,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
@@ -48,7 +47,11 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(navigator, SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
 
 	// load settings
-	qApp->setFont(MySetting<UserSetting>::getInstance()->getFont());
+	UserSetting* setting = UserSetting::getInstance();
+	qApp->setFont(setting->getFont());
+	int page = setting->getPageIndex();
+	ui.stackedWidget->setCurrentIndex(page);
+	actionGroup->actions().at(page)->setChecked(true);
 }
 
 void MainWindow::onOptions()
@@ -76,6 +79,7 @@ void MainWindow::closeEvent(QCloseEvent*)
 	}
 	pagePapers->saveGeometry();   // save the settings before the dtr
 	pageDictionary->saveGeometry();
+	setting->setPageIndex(ui.stackedWidget->currentIndex());
 	setting->destroySettingManager();
 }
 
@@ -112,7 +116,6 @@ void MainWindow::onPapers()
 	ui.stackedWidget->setCurrentIndex(0);
 	ui.actionImportPaper->setVisible(true);
     currentPage = ui.pagePapers;
-    currentPage->enter();
     currentPage->jumpToCurrent();
 }
 
@@ -122,7 +125,7 @@ void MainWindow::onQuotes()
 	ui.stackedWidget->setCurrentIndex(1);
 	ui.actionImportPaper->setVisible(false);
     currentPage = ui.pageQuotes;
-    currentPage->enter();
+	currentPage->reset();
     currentPage->jumpToCurrent();
 }
 
@@ -132,7 +135,6 @@ void MainWindow::onDictionary()
 	ui.stackedWidget->setCurrentIndex(2);
 	ui.actionImportPaper->setVisible(false);
     currentPage = ui.pageDictionary;
-    currentPage->enter();
 	currentPage->jumpToCurrent();
 }
 

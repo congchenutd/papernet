@@ -29,8 +29,3 @@ int main(int argc, char *argv[])
 
 	return app.exec();
 }
-
-// TODO: fix Papers table in the deployed
-// remove column: proximity, coauthored, read
-
-// TODO: move movelQuotes/tvQuotes in PagePapers to a seperate widget

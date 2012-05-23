@@ -58,7 +58,7 @@ void AttachmentsWidget::showEvent(QShowEvent *) {
 
 void AttachmentsWidget::setPaper(int id)
 {
-    if(id == -1 || paperID == id)
+	if(id == -1)
         return;
 	paperID = id;
 

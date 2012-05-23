@@ -5,7 +5,7 @@ AutoSizeTableView::AutoSizeTableView(QWidget *parent)
 
 void AutoSizeTableView::init(const QString& parentObjectName)
 {
-	groupName = parentObjectName + " Section Sizes";
+	groupName = parentObjectName + "SectionSizes";
 	setting = UserSetting::getInstance();
 	setting->beginGroup(groupName);
 	QStringList keys = setting->allKeys();

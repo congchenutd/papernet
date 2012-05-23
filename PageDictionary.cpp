@@ -28,14 +28,14 @@ PageDictionary::PageDictionary(QWidget *parent)
 	sortByPhrase();
 
 	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag", "Phrase");
-	ui.splitter->restoreState(UserSetting::getInstance()->value("SplitterDictionary").toByteArray());
+	loadGeometry();
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
 	connect(ui.tableView, SIGNAL(showRelated()),              this, SLOT(onShowRelated()));
-	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPhrases(bool)));
+	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPhrasesByTags(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagToPhrase()));
@@ -169,9 +169,8 @@ void PageDictionary::onDelTagFromPhrase()
 	highLightTags();
 }
 
-void PageDictionary::onFilterPhrases(bool AND)
+void PageDictionary::onFilterPhrasesByTags(bool AND)
 {
-	dropTempView();
 	hideRelated();
 
 	// get selected tags
@@ -185,6 +184,7 @@ void PageDictionary::onFilterPhrases(bool AND)
 			tr("ID in (select Phrase from PhraseTag where Tag in (%1))").arg(tagIDs.join(",")));
 	else
 	{
+		dropTempView();
 		QSqlQuery query;    // create a temp table for selected tags id
 		query.exec(tr("create view SelectedTags as select * from DictionaryTags\
 					  where ID in (%1)").arg(tagIDs.join(",")));
@@ -202,10 +202,14 @@ void PageDictionary::highLightTags() {
 	ui.widgetWordCloud->highLight(getTagsOfPhrase(currentPhraseID));
 }
 
+void PageDictionary::loadGeometry() {
+	ui.splitter->restoreState(UserSetting::getInstance()->getSplitterSizes("Dictionary"));
+}
+
 void PageDictionary::saveGeometry()
 {
 	UserSetting* setting = UserSetting::getInstance();
-	setting->setValue("SplitterDictionary", ui.splitter->saveState());
+	setting->setSplitterSizes("Dictionary", ui.splitter->saveState());
 }
 
 void PageDictionary::onResetPhrases()
@@ -247,7 +251,7 @@ void PageDictionary::onTagDoubleClicked(const QString& label)
 	if(label.isEmpty())
 		onResetPhrases();
 	else
-		onFilterPhrases();
+		onFilterPhrasesByTags();
 }
 
 void PageDictionary::search(const QString& target)

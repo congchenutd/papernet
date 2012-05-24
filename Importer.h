@@ -22,7 +22,7 @@ struct PaperRecord
 	int     year;
 	QString abstract;
 	QString note;      // not for Importer
-	QStringList tags;
+	QStringList tags;  // not for Importer
 };
 
 class Importer : public QObject

@@ -28,7 +28,7 @@ bool NonXmlImporter::import(const QString& fileName)
 		QString line = is.readLine();
 		if(line.startsWith(getFirstHead()))
 		{
-			results << PaperRecord();           // insert a new record
+			results << PaperRecord();            // insert a new record
 			currentResult = results.end() - 1;   // point to the newly inserted
 			continue;
 		}

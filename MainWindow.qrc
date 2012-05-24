@@ -3,15 +3,12 @@
         <file>Images/Backward.png</file>
         <file>Images/Forward.png</file>
         <file>Images/Dictionary.png</file>
-        <file>Images/Quote.png</file>
         <file>Images/Rename.png</file>
         <file>Images/PDF.png</file>
         <file>Images/FullText.png</file>
         <file>Images/AttachAll.png</file>
         <file>Images/AttachEndNote.png</file>
         <file>Images/AttachPaper.png</file>
-        <file>Images/Coauthor.png</file>
-        <file>Images/Related.png</file>
         <file>Images/Options.png</file>
         <file>Images/AddLink.png</file>
         <file>Images/Add.png</file>
@@ -29,5 +26,6 @@
         <file>Images/Read.png</file>
         <file>Images/Bookmark.png</file>
         <file>CompileDate.txt</file>
+        <file>Images/Quote.png</file>
     </qresource>
 </RCC>

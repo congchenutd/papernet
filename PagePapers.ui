@@ -93,7 +93,7 @@
           <number>5</number>
          </property>
          <item>
-          <widget class="QuotesWidget" name="quotesWidget" native="true"/>
+          <widget class="QuotesWidget" name="widgetQuotes" native="true"/>
          </item>
         </layout>
        </widget>
@@ -126,7 +126,7 @@
           <number>5</number>
          </property>
          <item>
-          <widget class="RelatedPapersWidget" name="relatedPapersWidget" native="true"/>
+          <widget class="RelatedPapersWidget" name="widgetRelated" native="true"/>
          </item>
         </layout>
        </widget>
@@ -139,7 +139,7 @@
           <number>5</number>
          </property>
          <item>
-          <widget class="CoauthoredPapersWidgdet" name="coautheredPapersWidget" native="true"/>
+          <widget class="CoauthoredPapersWidgdet" name="widgetCoauthered" native="true"/>
          </item>
         </layout>
        </widget>
@@ -246,6 +246,12 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>TagsWidget</class>
+   <extends>QWidget</extends>
+   <header>TagsWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>AttachmentsWidget</class>
    <extends>QWidget</extends>
    <header>AttachmentsWidget.h</header>
@@ -255,12 +261,6 @@
    <class>PaperTableView</class>
    <extends>QTableView</extends>
    <header>PaperTableView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>TagsWidget</class>
-   <extends>QWidget</extends>
-   <header>TagsWidget.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>RelatedPapersWidget</class>

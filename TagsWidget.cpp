@@ -35,6 +35,7 @@ void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 	menu.addAction(actionUnFilter);
 	if(childAt(event->pos()) != 0)         // click on a tag
 	{
+        menu.addSeparator();
 		menu.setAND(controlIsPressed());   // init actionFilter
 		menu.addAction(actionFilter);
 		menu.addAction(actionAdd);

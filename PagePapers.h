@@ -36,7 +36,7 @@ private slots:
 	void onResetPapers();
 	void setPaperRead();
 
-	void onRelatedPaperDoubleClicked(int paperID);
+    void onRelatedDoubleClicked(int paperID);
 	void onQuoteDoubleClicked(int quoteID);
 
 	void onNewTag();

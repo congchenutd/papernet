@@ -604,3 +604,31 @@ void dropTempView()
 	QSqlQuery query;
 	query.exec("drop view SelectedTags");   // remove the temp table
 }
+
+Phrase findPhrase(int id)
+{
+    Phrase result;
+    QSqlQuery query;
+    query.exec(QObject::tr("select Phrase, Explanation from Dictionary where ID = %1").arg(id));
+    if(query.next())
+    {
+        result.id          = id;
+        result.name        = query.value(0).toString();
+        result.explanation = query.value(1).toString();
+    }
+    return result;
+}
+
+Phrase findPhrase(const QString& phraseName)
+{
+    Phrase result;
+    QSqlQuery query;
+    query.exec(QObject::tr("select ID, Explanation from Dictionary where Phrase = %1").arg(phraseName));
+    if(query.next())
+    {
+        result.name        = phraseName;
+        result.id          = query.value(0).toInt();
+        result.explanation = query.value(1).toString();
+    }
+    return result;
+}

@@ -23,7 +23,6 @@ HEADERS += AddPhraseDlg.h \
            AttachmentsWidget.h \
            AutoSizeTableView.h \
            Common.h \
-           DictionaryTableView.h \
            Importer.h \
            LinkDlg.h \
            MainWindow.h \
@@ -43,7 +42,6 @@ HEADERS += AddPhraseDlg.h \
            ../WordCloud/WordCloudWidget.h \
 		   ../WordCloud/FlowLayout.h \
 		   ../EnglishName/EnglishName.h \
-		   DictionaryModel.h \
 		   Thesaurus.h \
     NewReferenceDlg.h \
     ThesaurusCache.h \
@@ -74,7 +72,6 @@ SOURCES += AddPhraseDlg.cpp \
            AttachmentsWidget.cpp \
            AutoSizeTableView.cpp \
            Common.cpp \
-           DictionaryTableView.cpp \
            Importer.cpp \
            LinkDlg.cpp \
            Main.cpp \
@@ -93,7 +90,6 @@ SOURCES += AddPhraseDlg.cpp \
            ../WordCloud/WordCloudWidget.cpp \
 		   ../WordCloud/FlowLayout.cpp      \
            ../EnglishName/EnglishName.cpp \
-		   DictionaryModel.cpp \
 		   Thesaurus.cpp \
 	NewReferenceDlg.cpp \
     ThesaurusCache.cpp \

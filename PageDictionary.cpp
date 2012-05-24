@@ -4,7 +4,6 @@
 #include "AddTagDlg.h"
 #include "OptionDlg.h"
 #include "Navigator.h"
-#include "Thesaurus.h"
 #include <QMessageBox>
 #include <QSqlQuery>
 
@@ -16,16 +15,11 @@ PageDictionary::PageDictionary(QWidget *parent)
 	currentPhraseID = -1;
 
 	onResetPhrases();   // init model
-	phraseThesaurus = new BigHugeThesaurus(this);
-	tagThesaurus    = new BigHugeThesaurus(this);
-	connect(phraseThesaurus, SIGNAL(response(QStringList)), this, SLOT(onPhraseThesaurus(QStringList)));
-	connect(tagThesaurus,    SIGNAL(response(QStringList)), this, SLOT(onTagThesaurus   (QStringList)));
-
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
 	ui.tableView->hideColumn(DICTIONARY_PROXIMITY);
 	ui.tableView->resizeColumnToContents(DICTIONARY_PHRASE);
-	sortByPhrase();
+    ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
 
 	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag", "Phrase");
 	loadGeometry();
@@ -34,13 +28,13 @@ PageDictionary::PageDictionary(QWidget *parent)
 			this, SLOT(onCurrentRowChanged()));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
-	connect(ui.tableView, SIGNAL(showRelated()),              this, SLOT(onShowRelated()));
-	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPhrasesByTags(bool)));
+    connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterByTags(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagToPhrase()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPhrase()));
 	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
+    connect(ui.widgetRelated,   SIGNAL(doubleClicked(int)),     this, SLOT(onRelatedDoubleClicked(int)));
 }
 
 void PageDictionary::add()
@@ -56,7 +50,7 @@ void PageDictionary::add()
 		model.setData(model.index(lastRow, DICTIONARY_ID),          currentPhraseID);
 		model.setData(model.index(lastRow, DICTIONARY_PHRASE),      dlg.getPhrase());
 		model.setData(model.index(lastRow, DICTIONARY_EXPLANATION), dlg.getExplanation());
-		submit();
+        model.submitAll();
 		updateTags(dlg.getTags());
 	}
 }
@@ -68,7 +62,7 @@ void PageDictionary::del()
 	{
 		QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
-			delPhrase(getID(idx.row()));
+            delPhrase(rowToID(idx.row()));
 		model.select();
 	}
 }
@@ -84,7 +78,7 @@ void PageDictionary::onEdit()
 	{
 		model.setData(model.index(currentRow, DICTIONARY_PHRASE),      dlg.getPhrase());
 		model.setData(model.index(currentRow, DICTIONARY_EXPLANATION), dlg.getExplanation());
-		submit();
+        model.submitAll();
 		updateTags(dlg.getTags());
 	}
 }
@@ -118,13 +112,13 @@ void PageDictionary::onCurrentRowChanged()
 	{
 		currentPhraseID = model.data(model.index(currentRow, TAG_ID)).toInt();
 		highLightTags();
-        ui.widgetRelatedPhrases->setCentralPhraseID(currentPhraseID);
+        ui.widgetRelated->setCentralPhraseID(currentPhraseID);
 	}
 	emit tableValid(valid);
 }
 
 void PageDictionary::onClicked(const QModelIndex& idx) {
-	Navigator::getInstance()->addFootStep(this, getID(idx.row()));   // navigation
+    Navigator::getInstance()->addFootStep(this, rowToID(idx.row()));   // navigation
 }
 
 // new tag
@@ -170,10 +164,8 @@ void PageDictionary::onDelTagFromPhrase()
 	highLightTags();
 }
 
-void PageDictionary::onFilterPhrasesByTags(bool AND)
+void PageDictionary::onFilterByTags(bool AND)
 {
-	hideRelated();
-
 	// get selected tags
 	QStringList tagIDs;
 	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
@@ -219,24 +211,12 @@ void PageDictionary::saveGeometry()
 
 void PageDictionary::onResetPhrases()
 {
-	hideRelated();   // reset coloring
 	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
 	model.setTable("Dictionary");
 	model.select();
-	while(model.canFetchMore())
-		model.fetchMore();
-	sortByPhrase();
+//	while(model.canFetchMore())
+//		model.fetchMore();
 	jumpToID(currentPhraseID);
-}
-
-// submit, while keep selecting current phrase
-void PageDictionary::submit()
-{
-	hideRelated();
-	int backupID = currentPhraseID;
-	model.submitAll();
-	sortByPhrase();
-	jumpToID(backupID);
 }
 
 void PageDictionary::jumpToID(int id)
@@ -256,7 +236,13 @@ void PageDictionary::onTagDoubleClicked(const QString& label)
 	if(label.isEmpty())
 		onResetPhrases();
 	else
-		onFilterPhrasesByTags();
+        onFilterByTags();
+}
+
+void PageDictionary::onRelatedDoubleClicked(int phraseID)
+{
+    jumpToID(phraseID);
+    Navigator::getInstance()->addFootStep(this, phraseID);
 }
 
 void PageDictionary::search(const QString& target)
@@ -268,135 +254,6 @@ void PageDictionary::search(const QString& target)
 	ui.widgetWordCloud->search(target);
 }
 
-int PageDictionary::getID(int row) const {
+int PageDictionary::rowToID(int row) const {
 	return model.data(model.index(row, DICTIONARY_ID)).toInt();
-}
-
-void PageDictionary::onShowRelated()
-{
-	onResetPhrases();
-
-	// ------------ calculate proximity by tags -------------
-	QSqlDatabase::database().transaction();
-
-	// gather related tags: tags this phrase has (direct), and their proximate tags (from tagThesaurus)
-	QSqlQuery query;    // query direct tags' names
-	query.exec(tr("select Name from DictionaryTags, PhraseTag \
-				   where Phrase = %1 and ID = Tag").arg(currentPhraseID));
-	while(query.next())
-		tagThesaurus->request(query.value(0).toString());   // query proximate tags with this direct tag
-
-	// calculate proximity by direct tags:
-	// 1. find in PhraseTag all direct tags
-	// 2. count the # of all other phrases that have these tags
-	// 3. associate the # with the phrases
-	query.exec(tr("select Dictionary.ID, count(PhraseTag.Phrase) Proximity \
-				  from Dictionary, PhraseTag \
-				  where Tag in (select Tag from PhraseTag where Phrase = %1) \
-						and ID != %1 and ID = PhraseTag.Phrase \
-				  group by PhraseTag.Phrase").arg(currentPhraseID));
-
-	// save proximity
-	QSqlQuery subQuery;
-	while(query.next()) {
-		subQuery.exec(tr("update Dictionary set Proximity = %1 where ID = %2")
-			.arg(query.value(1).toInt())
-			.arg(query.value(0).toInt()));
-	}
-
-	// give itself the max proximity
-	query.exec(tr("update Dictionary set Proximity = \
-					  (select max(Proximity)+1 from Dictionary where ID <> %1) \
-				  where ID = %1").arg(currentPhraseID));
-	QSqlDatabase::database().commit();
-
-	// -------------- update proximity by proximate phrases ---------------
-	phraseThesaurus->request(model.data(model.index(currentRow, DICTIONARY_PHRASE)).toString());
-
-	sortByProximity();
-	jumpToID(currentPhraseID);     // keep highlighting
-}
-
-// thesaurus returns related phrases
-void PageDictionary::onPhraseThesaurus(const QStringList& relatedPhrases)
-{
-	if(relatedPhrases.isEmpty())
-		return;
-
-	QSqlDatabase::database().transaction();
-	QSqlQuery query;         // update proximity
-	foreach(QString related, relatedPhrases) {
-		query.exec(tr("update Dictionary set Proximity = \
-						  (select Proximity from Dictionary where Phrase = \"%1\")+1 \
-					  where Phrase = \"%1\"").arg(related));
-	}
-
-	// set itself the max proximity
-	query.exec(tr("update Dictionary set Proximity = \
-					  (select max(Proximity)+1 from Dictionary where ID <> %1) \
-				  where ID = %1").arg(currentPhraseID));
-	QSqlDatabase::database().commit();
-
-	sortByProximity();
-	jumpToID(currentPhraseID);    // keep highlighting
-}
-
-// thesaurus returns related tags
-void PageDictionary::onTagThesaurus(const QStringList &relatedTags)
-{
-	if(relatedTags.isEmpty())
-		return;
-
-	QSqlDatabase::database().transaction();
-
-	// get the IDs of relatedTags
-	QSqlQuery query;
-	QStringList tagIDs;
-	foreach(QString tagName, relatedTags)
-	{
-		int tagID = getTagID("DictionaryTags", tagName);
-		if(tagID > 0)
-			tagIDs << QString::number(tagID);
-	}
-
-	// calculate proximity by proximate tags:
-	// 1. count the # of all other phrases that have these tags
-	// 2. associate the # with the phrases
-	query.exec(tr("select Dictionary.ID, count(PhraseTag.Phrase) Proximity from Dictionary, PhraseTag \
-				  where Tag in (%1) \
-				  and ID != %2 and ID = PhraseTag.Phrase \
-				  group by PhraseTag.Phrase").arg(tagIDs.join(",")).arg(currentPhraseID));
-
-	// update proximity
-	QSqlQuery subQuery;
-	while(query.next()) {
-		subQuery.exec(tr("update Dictionary set Proximity = \
-						 (select Proximity from Dictionary where ID = %1) + %2 \
-						 where ID = %1")
-			.arg(query.value(0).toInt())
-			.arg(query.value(1).toInt()));
-	}
-
-	// give itself the max proximity
-	query.exec(tr("update Dictionary set Proximity = (select max(Proximity)+1 from Dictionary where ID <> %1) \
-				  where ID = %1").arg(currentPhraseID));
-
-	QSqlDatabase::database().commit();
-
-	sortByProximity();
-	jumpToID(currentPhraseID);    // keep highlighting
-}
-
-void PageDictionary::hideRelated()
-{
-	QSqlQuery query;
-	query.exec(tr("update Dictionary set Proximity = 0"));   // reset proximity
-}
-
-void PageDictionary::sortByPhrase() {
-	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
-}
-
-void PageDictionary::sortByProximity() {
-	ui.tableView->sortByColumn(DICTIONARY_PROXIMITY, Qt::DescendingOrder);
 }

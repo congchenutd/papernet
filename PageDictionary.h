@@ -4,9 +4,7 @@
 #include <QSqlTableModel>
 #include "ui_PageDictionary.h"
 #include "Page.h"
-#include "DictionaryModel.h"
-
-class Thesaurus;
+#include <QSqlTableModel>
 
 class PageDictionary : public Page
 {
@@ -27,37 +25,30 @@ private slots:
 	void onEdit();
 	void onCurrentRowChanged();
 	void onClicked(const QModelIndex& idx);
-	void onShowRelated();
-	void onPhraseThesaurus(const QStringList& relatedWords);
-	void onTagThesaurus   (const QStringList& relatedTags);
 
 	void onAddTag();
 	void onAddTagToPhrase();
 	void onDelTagFromPhrase();
-	void onFilterPhrasesByTags(bool AND = false);     // by tags
+    void onFilterByTags(bool AND = false);
 	void onResetPhrases();
 	void onTagDoubleClicked(const QString& label);
+
+    void onRelatedDoubleClicked(int phraseID);
 
 signals:
 	void tableValid(bool);
 
 private:
-	int getID(int row) const;
-	void submit();
+    int rowToID(int row) const;
 	void updateTags(const QStringList& tags);
 	void highLightTags();
-	void hideRelated();
-	void sortByPhrase();
-	void sortByProximity();
 	void loadGeometry();
 
 private:
 	Ui::PageDictionary ui;
-	DictionaryModel model;
+    QSqlTableModel model;
 	int currentRow;
 	int currentPhraseID;
-	Thesaurus* phraseThesaurus;
-	Thesaurus* tagThesaurus;
 };
 
 #endif // PAGEDICTIONARY_H

@@ -4,8 +4,6 @@
 #include "ui_RelatedPapersWidget.h"
 #include <QStandardItemModel>
 
-class Thesaurus;
-
 class RelatedPapersWidget : public QWidget
 {
 	Q_OBJECT
@@ -18,11 +16,9 @@ protected:
     void showEvent(QShowEvent*);
 
 private slots:
-	void onThesaurus(const QStringList& relatedTags);
-	void onPaperDoubleClicked(const QModelIndex& idx);
+	void onRelatedDoubleClicked(const QModelIndex& idx);
 
 private:
-	void sort();
     void update();
 
 signals:
@@ -30,7 +26,6 @@ signals:
 
 private:
 	Ui::RelatedPapersWidget ui;
-	Thesaurus* thesaurus;
     int centralPaperID;
 	QStandardItemModel model;
 

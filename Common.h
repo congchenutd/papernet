@@ -74,4 +74,16 @@ int getQuoteID(const QString& title);
 void delPhrase(int id);
 bool phraseExists(const QString& phrase);
 
+struct Phrase
+{
+    Phrase(int i = -1, const QString& n = QString(), const QString& e = QString())
+        : id(i), name(n), explanation(e) {}
+    int id;
+    QString name;
+    QString explanation;
+};
+
+Phrase findPhrase(int id);
+Phrase findPhrase(const QString& phraseName);
+
 #endif // Common_h__

@@ -23,7 +23,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="DictionaryTableView" name="tableView">
+      <widget class="QTableView" name="tableView">
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
@@ -37,7 +37,7 @@
         <bool>true</bool>
        </attribute>
       </widget>
-      <widget class="RelatedPhraseWidget" name="widgetRelatedPhrases" native="true"/>
+      <widget class="RelatedPhraseWidget" name="widgetRelated" native="true"/>
      </widget>
      <widget class="QScrollArea" name="scrollArea">
       <property name="palette">
@@ -137,11 +137,6 @@
    <extends>QWidget</extends>
    <header>TagsWidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>DictionaryTableView</class>
-   <extends>QTableView</extends>
-   <header>DictionaryTableView.h</header>
   </customwidget>
   <customwidget>
    <class>RelatedPhraseWidget</class>

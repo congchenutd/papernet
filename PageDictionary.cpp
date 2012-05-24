@@ -17,7 +17,6 @@ PageDictionary::PageDictionary(QWidget *parent)
 	onResetPhrases();   // init model
 	ui.tableView->setModel(&model);
 	ui.tableView->hideColumn(DICTIONARY_ID);
-	ui.tableView->hideColumn(DICTIONARY_PROXIMITY);
 	ui.tableView->resizeColumnToContents(DICTIONARY_PHRASE);
     ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
 

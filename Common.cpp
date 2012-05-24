@@ -73,8 +73,7 @@ void createTables()
 	query.exec("create table Dictionary( \
 					ID int primary key,  \
 					Phrase      varchar, \
-					Explanation varchar, \
-					Proximity   int      \
+					Explanation varchar  \
 			   )");
 	query.exec("create table DictionaryTags( \
 					ID int primary key, \

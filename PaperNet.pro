@@ -48,7 +48,11 @@ HEADERS += AddPhraseDlg.h \
     RelatedPapersWidget.h \
     CoauthoredPapersWidgdet.h \
     QuotesWidget.h \
-    RelatedPhraseWidget.h
+    RelatedPhraseWidget.h \
+    RefParser.h \
+    RefFormatSpec.h \
+    Reference.h \
+    Exporter.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -96,7 +100,11 @@ SOURCES += AddPhraseDlg.cpp \
     RelatedPapersWidget.cpp \
     CoauthoredPapersWidgdet.cpp \
     QuotesWidget.cpp \
-    RelatedPhraseWidget.cpp
+    RelatedPhraseWidget.cpp \
+    RefParser.cpp \
+    RefFormatSpec.cpp \
+    Reference.cpp \
+    Exporter.cpp
 RESOURCES += MainWindow.qrc
 
 

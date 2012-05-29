@@ -40,7 +40,7 @@
      <x>0</x>
      <y>0</y>
      <width>525</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -89,7 +89,8 @@
    <addaction name="actionBackward"/>
    <addaction name="actionForward"/>
    <addaction name="separator"/>
-   <addaction name="actionImportPaper"/>
+   <addaction name="actionImportRef"/>
+   <addaction name="actionExportRef"/>
    <addaction name="actionAdd"/>
    <addaction name="actionDel"/>
   </widget>
@@ -178,16 +179,16 @@
     <string>Delete</string>
    </property>
   </action>
-  <action name="actionImportPaper">
+  <action name="actionImportRef">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
      <normaloff>:/Images/Import.png</normaloff>:/Images/Import.png</iconset>
    </property>
    <property name="text">
-    <string>Import paper</string>
+    <string>Import</string>
    </property>
    <property name="toolTip">
-    <string>Import paper</string>
+    <string>Import references</string>
    </property>
   </action>
   <action name="actionAboutQt">
@@ -235,6 +236,18 @@
    </property>
    <property name="toolTip">
     <string>Go forward</string>
+   </property>
+  </action>
+  <action name="actionExportRef">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Images/Export.png</normaloff>:/Images/Export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export</string>
+   </property>
+   <property name="toolTip">
+    <string>Export selected references</string>
    </property>
   </action>
  </widget>

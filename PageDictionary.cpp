@@ -23,10 +23,11 @@ PageDictionary::PageDictionary(QWidget *parent)
 	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag", "Phrase");
 	loadGeometry();
 
-	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-			this, SLOT(onCurrentRowChanged()));
+    connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(onSelectionChanged(QItemSelection)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
+
     connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterByTags(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
@@ -102,18 +103,16 @@ void PageDictionary::updateTags(const QStringList& tags)
 	highLightTags();
 }
 
-void PageDictionary::onCurrentRowChanged()
+void PageDictionary::onSelectionChanged(const QItemSelection& selected)
 {
-	QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
-	bool valid = !idxList.isEmpty();
-	currentRow = valid ? idxList.front().row() : -1;
-	if(valid)
-	{
-		currentPhraseID = model.data(model.index(currentRow, TAG_ID)).toInt();
-		highLightTags();
+    if(!selected.isEmpty())
+    {
+        currentRow = selected.indexes().front().row();
+        currentPhraseID = rowToID(currentRow);
+        highLightTags();
         ui.widgetRelated->setCentralPhraseID(currentPhraseID);
-	}
-	emit tableValid(valid);
+    }
+    emit selectionValid(!selected.isEmpty());
 }
 
 void PageDictionary::onClicked(const QModelIndex& idx) {

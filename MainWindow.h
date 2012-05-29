@@ -35,7 +35,7 @@ private slots:
 	void onClearSearch();
 	void onForward();
 	void onBackward();
-//	void onTableInvalid(bool valid);
+    void onSelectionValid(bool valid);
 
 private:
 	void delOldBackup();

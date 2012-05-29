@@ -16,8 +16,8 @@ PageQuotes::PageQuotes(QWidget *parent)
 	ui.tableView->hideColumn(QUOTE_ID);
 	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
 
-	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-			this, SLOT(onCurrentRowChanged()));
+    connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(onSelectionChanged(QItemSelection)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
 }
@@ -29,12 +29,11 @@ void PageQuotes::search(const QString& target)
 							Quote like \"%%1%\" ").arg(target));
 }
 
-void PageQuotes::onCurrentRowChanged()
+void PageQuotes::onSelectionChanged(const QItemSelection& selected)
 {
-	QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
-	bool valid = !idxList.isEmpty();
-	currentRow = valid ? idxList.front().row() : -1;
-	emit tableValid(valid);
+    if(!selected.isEmpty())
+        currentRow = selected.indexes().front().row();
+    emit selectionValid(!selected.isEmpty());
 }
 
 void PageQuotes::onClicked(const QModelIndex& idx) {

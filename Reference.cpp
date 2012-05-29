@@ -2,6 +2,10 @@
 #include "EnglishName.h"
 #include <QStringList>
 
+bool Reference::containsField(const QString& field) const {
+    return fields.contains(field);
+}
+
 void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
 {
     // pages -> startpage, endpage
@@ -19,12 +23,12 @@ void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
     else if(fieldName == "startpage" || fieldName == "endpage")
     {
         fields[fieldName] = fieldValue;
-        if(fields.contains("startpage") && fields.contains("endpage"))
+        if(containsField("startpage") && containsField("endpage"))
             fields["pages"] = fields["startpage"].toString() + "-" + fields["endpage"].toString();
     }
 
     // append to existing authors
-    else if(fieldName == "authors" && fields.contains(fieldName))
+    else if(fieldName == "authors" && containsField(fieldName))
         fields[fieldName] = fields[fieldName].toStringList() << fieldValue.toStringList();
 
     else
@@ -34,11 +38,11 @@ void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
 QVariant Reference::getValue(const QString& fieldName) const
 {
     // startpage, endpage -> pages
-    if(fieldName == "pages" && fields.contains("startpage") && fields.contains("endpage"))
+    if(fieldName == "pages" && containsField("startpage") && containsField("endpage"))
         return fields["startpage"].toString() + "-" + fields["endpage"].toString();
 
     else
-        return fields.contains(fieldName) ? fields[fieldName] : QVariant();
+        return containsField(fieldName) ? fields[fieldName] : QVariant();
 }
 
 void Reference::generateID()
@@ -57,4 +61,8 @@ void Reference::generateID()
     QString year = fields["year"].toString();
 
     fields["id"] = lastNameOfFirstAuthor + year;
+}
+
+Reference::Fields Reference::getAllFields() const {
+    return fields;
 }

@@ -27,5 +27,6 @@
         <file>Images/Bookmark.png</file>
         <file>CompileDate.txt</file>
         <file>Images/Quote.png</file>
+        <file>Images/Export.png</file>
     </qresource>
 </RCC>

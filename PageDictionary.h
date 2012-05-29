@@ -22,8 +22,8 @@ public:
 	virtual void reset() { onResetPhrases(); }
 
 private slots:
+    void onSelectionChanged(const QItemSelection& selected);
 	void onEdit();
-	void onCurrentRowChanged();
 	void onClicked(const QModelIndex& idx);
 
 	void onAddTag();
@@ -36,10 +36,10 @@ private slots:
     void onRelatedDoubleClicked(int phraseID);
 
 signals:
-	void tableValid(bool);
+    void selectionValid(bool);
 
 private:
-    int rowToID(int row) const;
+    int  rowToID(int row) const;
 	void updateTags(const QStringList& tags);
 	void highLightTags();
 	void loadGeometry();

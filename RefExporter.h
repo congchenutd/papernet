@@ -19,7 +19,7 @@ class NullExporter : public IRefExporter
 {
 public:
 	QString toString(const Reference&, const RefFormatSpec&) const {
-		return QObject::tr("Error: Export format not defined!");
+        return QObject::tr("Error: Null Exporter!");
     }
 };
 

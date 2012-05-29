@@ -1,5 +1,7 @@
 #include "PaperDlg.h"
 #include "Common.h"
+#include "Reference.h"
+#include "EnglishName.h"
 #include <QDate>
 #include <QSqlTableModel>
 #include <QCompleter>
@@ -9,8 +11,13 @@ PaperDlg::PaperDlg(QWidget *parent)
 {
 	ui.setupUi(this);
 	resize(800, 600);
-	ui.sbYear->setValue(QDate::currentDate().year());
 
+    // year
+    int currentYear = QDate::currentDate().year();
+    ui.sbYear->setValue(currentYear);
+    ui.sbYear->setMaximum(currentYear);
+
+    // auto complete for tags
 	QSqlTableModel* tagModel = new QSqlTableModel(this);
 	tagModel->setTable("Tags");
 	tagModel->select();
@@ -22,29 +29,55 @@ PaperDlg::PaperDlg(QWidget *parent)
 	ui.leTags->setCompleter(completer);
 }
 
-QString PaperDlg::getTitle() const {
-	return ui.leTitle->text().trimmed();
-}
-QString PaperDlg::getAuthors() const {
-	return ui.leAuthors->text().trimmed();
-}
-int PaperDlg::getYear() const {
-	return ui.sbYear->value();
+// getters
+QString PaperDlg::getType() const {
+    return ui.comboType->currentText();
 }
 QString PaperDlg::getJournal() const {
-	return ui.leJournal->text().trimmed();
+    return ui.lePublication->text().simplified();
 }
 QString PaperDlg::getAbstract() const {
-	return ui.teAbstract->toPlainText().trimmed();
+    return ui.teAbstract->toPlainText().simplified();
+}
+int PaperDlg::getVolume() const {
+    return ui.sbVolume->value();
+}
+int PaperDlg::getIssue() const {
+    return ui.sbIssue->value();
+}
+int PaperDlg::getStartPage() const {
+    return ui.sbStartPage->value();
+}
+int PaperDlg::getEndPage() const {
+    return ui.sbEndPage->value();
+}
+QString PaperDlg::getPublisher() const {
+    return ui.lePublisher->text().simplified();
+}
+QString PaperDlg::getEditors() const {
+    return ui.leEditors->text().simplified();
+}
+QString PaperDlg::getUrl() const {
+    return ui.leUrl->text().simplified();
 }
 QString PaperDlg::getNote() const {
 	return ui.teNote->toPlainText();
 }
-QStringList PaperDlg::getTags() const {
-	return ui.leTags->text().isEmpty() ? QStringList()
-									   : ui.leTags->text().split(";");
+
+QStringList PaperDlg::getTags() const
+{
+    QStringList result;
+    QString tagString = ui.leTags->text();
+    if(tagString.isEmpty())
+        return result;
+
+    QStringList tags = tagString.split(";");
+    foreach(const QString& tag, tags)
+        result << tag.simplified();
+    return result;
 }
 
+// setters
 void PaperDlg::setTitle(const QString& title)
 {
 	ui.leTitle->setText(title);
@@ -54,7 +87,7 @@ void PaperDlg::setAuthors(const QString& authors) {
 	ui.leAuthors->setText(authors);
 }
 void PaperDlg::setJournal(const QString& journal) {
-	ui.leJournal->setText(journal);
+    ui.lePublication->setText(journal);
 }
 void PaperDlg::setAbstract(const QString& ab) {
 	ui.teAbstract->setPlainText(ab);
@@ -63,42 +96,71 @@ void PaperDlg::setNote(const QString& note) {
 	ui.teNote->setPlainText(note);
 }
 void PaperDlg::setYear(int year){
-	ui.sbYear->setValue(year);
+    ui.sbYear->setValue(year);
+}
+void PaperDlg::setType(const QString &type)
+{
+    int index = ui.comboType->findText(type);
+    if(index > -1)
+        ui.comboType->setCurrentIndex(index);
 }
 void PaperDlg::setTags(const QStringList& tags) {
 	ui.leTags->setText(tags.join(";"));
 }
 
+
 void PaperDlg::accept() {
-	if(newPaper && paperExists(getTitle()))
-		setWindowTitle(tr("Error: the title already exists!"));
-	else
+//	if(newPaper && paperExists(getTitle()))
+//		setWindowTitle(tr("Error: the title already exists!"));
+//	else
 		QDialog::accept();
 }
 
-PaperRecord PaperDlg::getPaperRecord() const
+Reference PaperDlg::getReference() const
 {
-	PaperRecord result;
-	result.title    = ui.leTitle->text().trimmed();
-	result.authors  = ui.leAuthors->text().trimmed();
-	result.year     = ui.sbYear->value();
-	result.journal  = ui.leJournal->text().trimmed();
-	result.abstract = ui.teAbstract->toPlainText().trimmed();
-	result.note     = ui.teNote->toPlainText();
-	result.tags     = ui.leTags->text().isEmpty() ? QStringList()
-												  : ui.leTags->text().split(";");
-	return result;
+    Reference ref;
+    ref.setValue("title",       ui.leTitle      ->text().simplified());
+    ref.setValue("publication", ui.lePublication->text().simplified());
+    ref.setValue("publisher",   ui.lePublisher  ->text().simplified());
+    ref.setValue("address",     ui.leAddress    ->text().simplified());
+    ref.setValue("url",         ui.leUrl        ->text().simplified());
+
+    ref.setValue("abstract", ui.teAbstract->toPlainText().simplified());
+    ref.setValue("note",     ui.teNote    ->toPlainText().simplified());
+
+    ref.setValue("editors", ui.leEditors->text().simplified());
+    ref.setValue("authors", EnglishName::fromLineToList(ui.leAuthors->text()));
+    ref.setValue("tags",    getTags());
+
+    ref.setValue("year",      ui.sbYear     ->value());
+    ref.setValue("volume",    ui.sbVolume   ->value());
+    ref.setValue("issue",     ui.sbIssue    ->value());
+    ref.setValue("startpage", ui.sbStartPage->value());
+    ref.setValue("endpage",   ui.sbEndPage  ->value());
+
+    ref.setValue("type", ui.comboType->currentText());
+    return ref;
 }
 
-void PaperDlg::setPaperRecord(const PaperRecord& record)
+void PaperDlg::setReference(const Reference& ref)
 {
-	ui.leTitle->setText(record.title);
-	newPaper = record.title.isEmpty();
+    ui.comboType->setCurrentText(ref.getValue("type").toString());
+    ui.sbYear     ->setValue(ref.getValue("year")     .toInt());
+    ui.sbVolume   ->setValue(ref.getValue("volume")   .toInt());
+    ui.sbIssue    ->setValue(ref.getValue("issue")    .toInt());
+    ui.sbStartPage->setValue(ref.getValue("startpage").toInt());
+    ui.sbEndPage  ->setValue(ref.getValue("endpage")  .toInt());
 
-	ui.leAuthors->setText(record.authors);
-	ui.leJournal->setText(record.journal);
-	ui.teAbstract->setPlainText(record.abstract);
-	ui.teNote->setPlainText(record.note);
-	ui.sbYear->setValue(record.year);
-	ui.leTags->setText(record.tags.join(";"));
+    ui.leTitle      ->setText(ref.getValue("title")      .toString());
+    ui.lePublication->setText(ref.getValue("publication").toString());
+    ui.lePublisher  ->setText(ref.getValue("publisher")  .toString());
+    ui.leAddress    ->setText(ref.getValue("address")    .toString());
+    ui.leUrl        ->setText(ref.getValue("url")        .toString());
+
+    ui.teAbstract->setPlainText(ref.getValue("abstract").toString());
+    ui.teNote    ->setPlainText(ref.getValue("note")    .toString());
+
+    ui.leAuthors->setText(ref.getValue("authors").toStringList().join("; "));
+    ui.leEditors->setText(ref.getValue("editors").toStringList().join("; "));
+    ui.leTags   ->setText(ref.getValue("tags")   .toStringList().join("; "));
 }

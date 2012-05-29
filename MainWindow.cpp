@@ -24,24 +24,25 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	actionGroup->addAction(ui.actionQuotes);
 	actionGroup->addAction(ui.actionDictionary);
 
-	connect(ui.actionAboutQt,     SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-	connect(ui.actionOptions,     SIGNAL(triggered()), this, SLOT(onOptions()));
-	connect(ui.actionAbout,       SIGNAL(triggered()), this, SLOT(onAbout()));
-	connect(ui.actionPapers,      SIGNAL(triggered()), this, SLOT(onPapers()));
-	connect(ui.actionQuotes,      SIGNAL(triggered()), this, SLOT(onQuotes()));
-	connect(ui.actionDictionary,  SIGNAL(triggered()), this, SLOT(onDictionary()));
-	connect(ui.actionAdd,         SIGNAL(triggered()), this, SLOT(onAdd()));
-	connect(ui.actionDel,         SIGNAL(triggered()), this, SLOT(onDel()));
-	connect(ui.actionBackward,    SIGNAL(triggered()), this, SLOT(onBackward()));
-	connect(ui.actionForward,     SIGNAL(triggered()), this, SLOT(onForward()));
-	connect(ui.toolBarSearch,     SIGNAL(search(QString)), this, SLOT(onSearch(QString)));
-	connect(ui.toolBarSearch,     SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
-	connect(ui.actionImportPaper, SIGNAL(triggered()),             pagePapers, SLOT(onImport()));
-	connect(ui.toolBarSearch,     SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
+    connect(ui.actionAboutQt,    SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    connect(ui.actionOptions,    SIGNAL(triggered()), this, SLOT(onOptions()));
+    connect(ui.actionAbout,      SIGNAL(triggered()), this, SLOT(onAbout()));
+    connect(ui.actionPapers,     SIGNAL(triggered()), this, SLOT(onPapers()));
+    connect(ui.actionQuotes,     SIGNAL(triggered()), this, SLOT(onQuotes()));
+    connect(ui.actionDictionary, SIGNAL(triggered()), this, SLOT(onDictionary()));
+    connect(ui.actionAdd,        SIGNAL(triggered()), this, SLOT(onAdd()));
+    connect(ui.actionDel,        SIGNAL(triggered()), this, SLOT(onDel()));
+    connect(ui.actionBackward,   SIGNAL(triggered()), this, SLOT(onBackward()));
+    connect(ui.actionForward,    SIGNAL(triggered()), this, SLOT(onForward()));
+    connect(ui.toolBarSearch,    SIGNAL(search(QString)), this, SLOT(onSearch(QString)));
+    connect(ui.toolBarSearch,    SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
+    connect(ui.actionImportRef,  SIGNAL(triggered()),             pagePapers, SLOT(onImport()));
+    connect(ui.actionExportRef,  SIGNAL(triggered()),             pagePapers, SLOT(onExport()));
+    connect(ui.toolBarSearch,    SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
 
-//	connect(pagePapers,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
-//	connect(pageQuotes,     SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
-//	connect(pageDictionary, SIGNAL(tableValid(bool)), this, SLOT(onTableInvalid(bool)));
+    connect(pagePapers,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
+    connect(pageQuotes,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
+    connect(pageDictionary, SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
 
 	connect(navigator, SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
 	connect(navigator, SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
@@ -111,28 +112,34 @@ void MainWindow::onPapers()
 {
 	ui.actionPapers->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(0);
-	ui.actionImportPaper->setVisible(true);
+    ui.actionImportRef->setVisible(true);
+    ui.actionExportRef->setVisible(true);
     currentPage = ui.pagePapers;
     currentPage->jumpToCurrent();
+    onSelectionValid(false);
 }
 
 void MainWindow::onQuotes()
 {
 	ui.actionQuotes->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(1);
-	ui.actionImportPaper->setVisible(false);
+    ui.actionImportRef->setVisible(false);
+    ui.actionExportRef->setVisible(false);
     currentPage = ui.pageQuotes;
-	currentPage->reset();
+    currentPage->reset();          // quotes may be changd by paper page
     currentPage->jumpToCurrent();
+    onSelectionValid(false);
 }
 
 void MainWindow::onDictionary()
 {
 	ui.actionDictionary->setChecked(true);
 	ui.stackedWidget->setCurrentIndex(2);
-	ui.actionImportPaper->setVisible(false);
+    ui.actionImportRef->setVisible(false);
+    ui.actionExportRef->setVisible(false);
     currentPage = ui.pageDictionary;
 	currentPage->jumpToCurrent();
+    onSelectionValid(false);
 }
 
 void MainWindow::jumpToPaper(const QString& title)
@@ -172,14 +179,14 @@ void MainWindow::onForward() {
 	navigateTo(navigator->forward());
 }
 void MainWindow::onBackward() {
-	navigateTo(navigator->backward());
+    navigateTo(navigator->backward());
 }
 
-//void MainWindow::onTableInvalid(bool valid) {
-//	if(Page* page = dynamic_cast<Page*>(sender()))
-//		if(currentPage == page)
-//			ui.actionDel->setEnabled(valid);
-//}
+void MainWindow::onSelectionValid(bool valid)
+{
+    ui.actionDel      ->setEnabled(valid);
+    ui.actionExportRef->setEnabled(valid);
+}
 
 void MainWindow::navigateTo(const FootStep& footStep)
 {

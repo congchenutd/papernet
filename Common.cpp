@@ -40,16 +40,25 @@ void createTables()
 {
 	QSqlQuery query;
 	query.exec("PRAGMA foreign_keys = ON");
-	query.exec("create table Papers( \
-					ID       int primary key, \
-					Attached bool, \
-					Title    varchar unique, \
-					Authors  varchar, \
-					Year     date,    \
-					Journal  varchar, \
-					Abstract varchar, \
-					Note     varchar  \
-				)");
+    query.exec("create table Papers( \
+               ID          int primary key, \
+               Attached    bool,    \
+               Title       varchar unique, \
+               Authors     varchar, \
+               Year        date,    \
+               Type        varchar, \
+               Publication varchar, \
+               Abstract    varchar, \
+               Volume      int, \
+               Issue       int, \
+               Startpage   int, \
+               Endpage     int, \
+               Publisher   varchar, \
+               Editors     varchar, \
+               Address     varchar, \
+               Url         varchar, \
+               Note        varchar  \
+               )");
 	query.exec("create table Tags( \
 					ID int primary key, \
 					Name varchar unique, \

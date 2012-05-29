@@ -12,7 +12,7 @@ PaperList::PaperList(QWidget *parent)
 	ui.tableView->setModel(&model);
 	ui.tableView->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	ui.tableView->hideColumn(PAPER_ID);
-	ui.tableView->hideColumn(PAPER_JOURNAL);
+    ui.tableView->hideColumn(PAPER_PUBLICATION);
 	ui.tableView->hideColumn(PAPER_ABSTRACT);
 	ui.tableView->hideColumn(PAPER_NOTE);
 	ui.tableView->hideColumn(PAPER_ATTACHED);
@@ -37,10 +37,10 @@ void PaperList::onSearch(const QString& target)
 		model.select();
 	else
 		model.setFilter(
-			tr("Title    like \"%%1%\" or \
-				Authors  like \"%%1%\" or \
-				Year     like \"%%1%\" or \
-				Journal  like \"%%1%\" or \
-				Abstract like \"%%1%\" or \
-				Note     like \"%%1%\" ").arg(target));
+            tr("Title       like \"%%1%\" or \
+                Authors     like \"%%1%\" or \
+                Year        like \"%%1%\" or \
+                Publication like \"%%1%\" or \
+                Abstract    like \"%%1%\" or \
+                Note        like \"%%1%\" ").arg(target));
 }

@@ -1,4 +1,4 @@
-#include "Exporter.h"
+#include "RefExporter.h"
 #include "Reference.h"
 #include "RefFormatSpec.h"
 #include <QStringList>
@@ -33,7 +33,8 @@ QString LineRefExporter::toString(const Reference& ref, const RefFormatSpec& spe
 
 	// field lines
 	QString templateField = spec.getFieldTemplate();
-	for(Reference::Fields::const_iterator it = ref.fields.begin(); it != ref.fields.end(); ++it)
+    Reference::Fields fields = ref.getAllFields();
+    for(Reference::Fields::const_iterator it = fields.begin(); it != fields.end(); ++it)
     {
         QString name = it.key();
         QString text = fieldDictionary->getText(name);

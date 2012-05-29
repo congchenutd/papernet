@@ -3,15 +3,19 @@
 #include "PaperDlg.h"
 #include "AddQuoteDlg.h"
 #include "Importer.h"
-#include "EnglishName.h"
 #include "Navigator.h"
 #include "AddTagDlg.h"
 #include "MainWindow.h"
+#include "RefFormatSpec.h"
+#include "RefParser.h"
+#include "RefExporter.h"
+#include "EnglishName.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextStream>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QSqlRecord>
 #include <QFileInfo>
 #include <QProgressDialog>
 
@@ -33,9 +37,8 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.tvPapers->setModel(&modelPapers);
 	ui.tvPapers->hideColumn(PAPER_ID);
-	ui.tvPapers->hideColumn(PAPER_JOURNAL);
-	ui.tvPapers->hideColumn(PAPER_ABSTRACT);
-	ui.tvPapers->hideColumn(PAPER_NOTE);
+//    for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
+//        ui.tvPapers->hideColumn(col);
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 
@@ -45,8 +48,9 @@ PagePapers::PagePapers(QWidget *parent)
 
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
 			&mapper, SLOT(setCurrentModelIndex(QModelIndex)));
-	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-			this, SLOT(onCurrentRowChanged(QModelIndex)));
+    connect(ui.tvPapers->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(onSelectionChanged(QItemSelection)));
+
 	connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
 			this, SLOT(onSubmitPaper()));
 	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
@@ -56,6 +60,7 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers, SIGNAL(bookmark(bool)), this, SLOT(onBookmark(bool)));
 	connect(ui.tvPapers, SIGNAL(addPDF()),       this, SLOT(onAddPDF()));
 	connect(ui.tvPapers, SIGNAL(readPDF()),      this, SLOT(onReadPDF()));
+
 
 	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPapersByTags(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPapers()));
@@ -69,19 +74,19 @@ PagePapers::PagePapers(QWidget *parent)
     connect(ui.widgetQuotes,     SIGNAL(doubleClicked(int)), this, SLOT(onQuoteDoubleClicked(int)));
 }
 
-void PagePapers::onCurrentRowChanged(const QModelIndex& idx)
+void PagePapers::onSelectionChanged(const QItemSelection& selected)
 {
-//	emit tableValid(idx.isValid());
-	if(idx.isValid())
-	{
-		currentRow = idx.row();
-		currentPaperID = rowToID(currentRow);
+    if(!selected.isEmpty())
+    {
+        currentRow = selected.indexes().front().row();
+        currentPaperID = rowToID(currentRow);
         highLightTags();
         reloadAttachments();
         ui.widgetRelated   ->setCentralPaper(currentPaperID);
         ui.widgetCoauthered->setCentralPaper(currentPaperID);
         ui.widgetQuotes    ->setCentralPaper(currentPaperID);
-	}
+    }
+    emit selectionValid(!selected.isEmpty());
 }
 
 // only triggered by mouse click, not programmatically
@@ -109,58 +114,65 @@ void PagePapers::add()
 	PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Add Paper"));
 	if(dlg.exec() == QDialog::Accepted)
-		insertRecord(dlg.getPaperRecord());
+        insertReference(dlg.getReference());
 }
 
 void PagePapers::onEditPaper()
 {
 	PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Edit Paper"));
-
-	PaperRecord record;
-	QString oldTitle = modelPapers.data(modelPapers.index(currentRow, PAPER_TITLE)).toString();
-	record.title = oldTitle;
-	record.authors  = modelPapers.data(modelPapers.index(currentRow, PAPER_AUTHORS)) .toString();
-	record.year     = modelPapers.data(modelPapers.index(currentRow, PAPER_YEAR))    .toInt();
-	record.journal  = modelPapers.data(modelPapers.index(currentRow, PAPER_JOURNAL)) .toString();
-	record.abstract = modelPapers.data(modelPapers.index(currentRow, PAPER_ABSTRACT)).toString();
-	QString oldNote = modelPapers.data(modelPapers.index(currentRow, PAPER_NOTE))    .toString();
-	record.note     = oldNote;
-	record.tags     = getTagsOfPaper(currentPaperID);
-	dlg.setPaperRecord(record);
+    Reference oldRef = exportReference(currentRow);
+    dlg.setReference(oldRef);
 
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		updateRecord(currentRow, dlg.getPaperRecord());
-		renameTitle(oldTitle, dlg.getTitle());
-		reloadAttachments();           // refresh attached files after renaming
+        Reference newRef = dlg.getReference();
+        updateReference(currentRow, newRef);
+        onSubmitPaper();
 
-		if(dlg.getNote() != oldNote)   // changing note equals reading
-			setPaperRead();
+        QString oldTitle = oldRef.getValue("title").toString();
+        QString newTitle = newRef.getValue("title").toString();
+        if(oldTitle != newTitle)
+        {
+            renameTitle(oldTitle, newTitle);
+            reloadAttachments();           // refresh attached files after renaming
+        }
+
+        if(newRef.getValue("note") != oldRef.getValue("note"))   // changing note means reading
+            setPaperRead();
 	}
 }
 
-void PagePapers::insertRecord(const PaperRecord& record)
+void PagePapers::insertReference(const Reference& ref)
 {
-	int lastRow = modelPapers.rowCount();
-	modelPapers.insertRow(lastRow);
-	currentPaperID = getNextID("Papers", "ID");
-	modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
+    int lastRow = modelPapers.rowCount();
+    modelPapers.insertRow(lastRow);
+    currentPaperID = getNextID("Papers", "ID");
+    modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
 
-	updateRecord(lastRow, record);
-	onBookmark(true);    // attach the ReadMe tag
+    updateReference(lastRow, ref);
+    onBookmark(true);    // attach the ReadMe tag
 }
 
-void PagePapers::updateRecord(int row, const PaperRecord& record)
+void PagePapers::updateReference(int row, const Reference& ref)
 {
-	modelPapers.setData(modelPapers.index(row, PAPER_TITLE),    record.title);
-	modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS),  record.authors);
-	modelPapers.setData(modelPapers.index(row, PAPER_YEAR),     record.year);
-	modelPapers.setData(modelPapers.index(row, PAPER_JOURNAL),  record.journal);
-	modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT), record.abstract);
-	modelPapers.setData(modelPapers.index(row, PAPER_NOTE),     record.note);
-	onSubmitPaper();
-	updateTags(record.tags);
+    modelPapers.setData(modelPapers.index(row, PAPER_TITLE),       ref.getValue("title"));
+    modelPapers.setData(modelPapers.index(row, PAPER_YEAR),        ref.getValue("year"));
+    modelPapers.setData(modelPapers.index(row, PAPER_TYPE),        ref.getValue("type"));
+    modelPapers.setData(modelPapers.index(row, PAPER_PUBLICATION), ref.getValue("publication"));
+    modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT),    ref.getValue("abstract"));
+    modelPapers.setData(modelPapers.index(row, PAPER_VOLUME),      ref.getValue("volume"));
+    modelPapers.setData(modelPapers.index(row, PAPER_ISSUE),       ref.getValue("issue"));
+    modelPapers.setData(modelPapers.index(row, PAPER_STARTPAGE),   ref.getValue("startpage"));
+    modelPapers.setData(modelPapers.index(row, PAPER_ENDPAGE),     ref.getValue("endpage"));
+    modelPapers.setData(modelPapers.index(row, PAPER_PUBLISHER),   ref.getValue("publisher"));
+    modelPapers.setData(modelPapers.index(row, PAPER_EDITORS),     ref.getValue("editors"));
+    modelPapers.setData(modelPapers.index(row, PAPER_ADDRESS),     ref.getValue("address"));
+    modelPapers.setData(modelPapers.index(row, PAPER_URL),         ref.getValue("url"));
+    modelPapers.setData(modelPapers.index(row, PAPER_NOTE),        ref.getValue("note"));
+    modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS),     ref.getValue("authors").toStringList().join("; "));
+    updateTags(ref.getValue("tags").toStringList());
+    onSubmitPaper();
 }
 
 void PagePapers::updateTags(const QStringList& tags)
@@ -182,8 +194,8 @@ void PagePapers::del()
 	{
 		QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)     // find all selected indexes
-			delPaper(rowToID(idx.row()));  // delete in the db
-		modelPapers.select();                 // reload db
+            delPaper(rowToID(idx.row()));     // delete in the db
+        modelPapers.select();                 // reload db
 	}
 }
 
@@ -193,84 +205,62 @@ int PagePapers::rowToID(int row) const {
 
 void PagePapers::onImport()
 {
-	reset();
-	QString lastPath = setting->getLastImportPath();
-	QStringList files = QFileDialog::getOpenFileNames(
-		this, "Select one or more files to open", lastPath,
-		"Reference (*.enw *.ris *.xml);;All files (*.*)");
-	if(files.isEmpty())
-		return;
+    // get input files
+    QString lastPath = setting->getLastImportPath();
+    QStringList files = QFileDialog::getOpenFileNames(
+        this, "Import references", lastPath,
+        "Reference (*.enw *.ris *.bib);;All files (*.*)");
+    if(files.isEmpty())
+        return;
+    setting->setLastImportPath(QFileInfo(files.front()).absolutePath());
 
-	QString file = files.front();
-	setting->setLastImportPath(QFileInfo(file).absolutePath());
+    foreach(QString filePath, files)
+    {
+        // find spec and parser
+        QString extension = QFileInfo(filePath).suffix();
+        IRefParser*    parser = ParserFactory::getInstance()->getParser(extension);
+        RefFormatSpec* spec   = SpecFactory  ::getInstance()->getSpec(extension);
+        if(!spec)
+        {
+            QMessageBox::critical(this, tr("Error"),
+                                  tr("Can not find the specification for this reference format!"));
+            return;
+        }
 
-	foreach(QString fileName, files)
-	{
-		Importer* importer = ImporterFactory::getImporter(fileName);
-		if(!importer->import(fileName))
-		{
-			delete importer;
-			continue;
-		}
+        // open file
+        QFile file(filePath);
+        if(!file.open(QFile::ReadOnly))
+        {
+            QMessageBox::critical(this, tr("Error"),
+                                  tr("Can not open file %1").arg(filePath));
+            continue;
+        }
 
-		QList<PaperRecord> results = importer->getResults();
-		foreach(PaperRecord result, results)    // one file may have multiple records
-		{
-			int id = ::getPaperID(result.title);
-			if(id > -1)   // merge to existing record
-			{
-				if(QMessageBox::warning(this, tr("Title exists"), tr("Do you want to merge into the existing record?"),
-						QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-					mergeRecord(idToRow(&modelPapers, PAPER_ID, id), result);
-				}
-			}
-			else
-			{
-				insertRecord(result);
+        // parse
+        QList<Reference> references = parser->parse(file.readAll(), spec);
+        if(references.isEmpty())
+            continue;
 
-				// FIXME: this works only when there is one record
-				// change it to EndNote(i)
-				addAttachment(currentPaperID, suggestAttachmentName(fileName), fileName);
+        foreach(const Reference& ref, references)
+        {
+            QString title = ref.getValue("title").toString();
+            if(paperExists(title)) {
+                QMessageBox::warning(this, tr("Title exists"),
+                                     tr("\"%1\" already exists in the database, and is skipped").arg(title));
+            }
+            else
+            {
+                insertReference(ref);   // currentPaperID will equals that of the newly added
 
-				// add the pdf file with the same name
-				QString pdfFileName = QFileInfo(fileName).path() + "/" + QFileInfo(fileName).baseName() + ".pdf";
-				if(QFile::exists(pdfFileName))
-					addAttachment(currentPaperID, suggestAttachmentName(pdfFileName), pdfFileName);
+                // add the pdf file with the same name
+                QString pdfPath = QFileInfo(filePath).path() + "/" + QFileInfo(filePath).baseName() + ".pdf";
+                if(QFile::exists(pdfPath))
+                    addAttachment(currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
 
-				reloadAttachments();
-			}
-		}
-	}
-}
-
-void PagePapers::mergeRecord(int row, const PaperRecord &record)
-{
-	if(row < 0)
-		return;
-
-	QString title = modelPapers.data(modelPapers.index(row, PAPER_TITLE)).toString();
-	if(!title.isEmpty())
-		title += "; " + record.title;
-	modelPapers.setData(modelPapers.index(row, PAPER_TITLE), title);
-
-	QString authors = modelPapers.data(modelPapers.index(row, PAPER_AUTHORS)).toString();
-	if(!authors.isEmpty())
-		authors += "; " + record.authors;
-	modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS), authors);
-
-	QString journal = modelPapers.data(modelPapers.index(row, PAPER_JOURNAL)).toString();
-	if(!journal.isEmpty())
-		journal += "; " + record.journal;
-	modelPapers.setData(modelPapers.index(row, PAPER_JOURNAL), journal);
-
-	modelPapers.setData(modelPapers.index(row, PAPER_YEAR), record.year);
-
-	QString abstract = modelPapers.data(modelPapers.index(row, PAPER_ABSTRACT)).toString();
-	if(!abstract.isEmpty())
-		abstract += "\r\n\r\n" + record.abstract;
-	modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT), abstract);
-
-	modelPapers.submitAll();
+                reloadAttachments();
+            }
+        }
+    }
 }
 
 // submit the model
@@ -281,6 +271,7 @@ void PagePapers::onSubmitPaper()
 	if(!modelPapers.submitAll())
 		QMessageBox::critical(this, tr("Error"), modelPapers.lastError().text());
 	currentPaperID = backup;
+    qApp->processEvents();
 	jumpToID(backup);
 }
 
@@ -288,12 +279,12 @@ void PagePapers::search(const QString& target)
 {
 	// filter papers
 	modelPapers.setFilter(
-				tr("Title    like \"%%1%\" or \
-					Authors  like \"%%1%\" or \
-					Year     like \"%%1%\" or \
-					Journal  like \"%%1%\" or \
-					Abstract like \"%%1%\" or \
-					Note     like \"%%1%\" ").arg(target));
+                tr("Title       like \"%%1%\" or \
+                    Authors     like \"%%1%\" or \
+                    Year        like \"%%1%\" or \
+                    Publication like \"%%1%\" or \
+                    Abstract    like \"%%1%\" or \
+                    Note        like \"%%1%\" ").arg(target));
 
 	// highlight tags
 	ui.widgetWordCloud->search(target);
@@ -498,7 +489,7 @@ void PagePapers::attachNewTag(const QString& tagName)
 		tagID = getNextID("Tags", "ID");
 		ui.widgetWordCloud->addTag(tagID, tagName);
 	}
-	ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
+    ui.widgetWordCloud->addTagToItem(tagID, currentPaperID);
 }
 
 void PagePapers::setPaperRead()
@@ -515,4 +506,60 @@ void PagePapers::onRelatedDoubleClicked(int paperID)
 
 void PagePapers::onQuoteDoubleClicked(int quoteID) {
 	MainWindow::getInstance()->jumpToQuote(quoteID);
+}
+
+Reference PagePapers::exportReference(int row) const
+{
+    Reference ref;
+    QSqlRecord record = modelPapers.record(row);
+    for(int col = 0; col < record.count(); ++col)
+    {
+        QString fieldName = record.fieldName(col).toLower();
+        QVariant fieldValue = record.value(col);
+        if(fieldName == "authors")
+            ref.setValue(fieldName, EnglishName::fromLineToList(fieldValue.toString()));
+        else if(fieldName != "id" && fieldName != "attached")
+            ref.setValue(fieldName, fieldValue);
+    }
+
+    ref.setValue("tags", getTagsOfPaper(rowToID(row)));  // NOTE: tags is not stored in the paper table
+    return ref;
+}
+
+void PagePapers::onExport()
+{
+    // get selected rows
+    QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
+    if(idxList.isEmpty())
+        return;
+
+    // get file name
+    QString lastPath = setting->getLastImportPath();
+    QString filePath = QFileDialog::getSaveFileName(this, tr("Export reference"), lastPath,
+                                                    "Reference (*.enw *.ris *.bib);;All files (*.*)");
+    if(filePath.isEmpty())
+        return;
+    setting->setLastImportPath(QFileInfo(filePath).absolutePath());
+
+    // find spec
+    QString extension = QFileInfo(filePath).suffix().toLower();
+    RefFormatSpec* spec = SpecFactory::getInstance()->getSpec(extension);
+    if(spec == 0)
+    {
+        QMessageBox::critical(this, tr("Error"),
+                              tr("Can not find the specification for this reference format!"));
+        return;
+    }
+
+    QFile file(filePath);
+    if(file.open(QFile::WriteOnly | QFile::Truncate))
+    {
+        IRefExporter* exporter = ExporterFactory::getInstance()->getExporter(extension);
+        QTextStream os(&file);
+        foreach(QModelIndex idx, idxList)    // save each row
+        {
+            Reference ref = exportReference(idx.row());
+            os << exporter->toString(ref, *spec) << "\r\n";
+        }
+    }
 }

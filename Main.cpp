@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 #include "Common.h"
-#include <QResource>
 
 extern QString userName;
 extern QString dbName;

@@ -20,12 +20,12 @@ public:
     virtual void reset();
 
 private slots:
-	void onCurrentRowChanged();
+    void onSelectionChanged(const QItemSelection& selected);
 	void onEdit();
 	void onClicked(const QModelIndex& idx);
 
 signals:
-	void tableValid(bool);
+    void selectionValid(bool);
 
 private:
 	int rowToID(int row) const;

@@ -6,6 +6,7 @@
 #include "ui_PagePapers.h"
 #include "PaperModel.h"
 #include "Page.h"
+#include "Reference.h"
 
 struct PaperRecord;
 class PaperDlg;
@@ -28,23 +29,26 @@ public:
 
 private slots:
 	void onImport();
-	void onCurrentRowChanged(const QModelIndex& idx);
+    void onExport();
+    void onSelectionChanged(const QItemSelection& selected);
 	void onEditPaper();
 	void onFullTextSearch(const QString& target);
 	void onSubmitPaper();
 	void onClicked();
 	void onResetPapers();
-	void setPaperRead();
 
+    // related and quotes
     void onRelatedDoubleClicked(int paperID);
-	void onQuoteDoubleClicked(int quoteID);
+    void onQuoteDoubleClicked  (int quoteID);
 
+    // tags
 	void onNewTag();
 	void onAddTagToPaper();
 	void onDelTagFromPaper();
 	void onFilterPapersByTags(bool AND = false);
 	void onTagDoubleClicked(const QString& label);
 
+    // menu signals
 	void onPrintMe(bool print);   // two built-in tags
 	void onBookmark (bool readMe);
 	void onAddQuote();
@@ -52,18 +56,20 @@ private slots:
 	void onReadPDF();
 
 signals:
-	void tableValid(bool);
+    void selectionValid(bool);
 
 private:
 	int  rowToID(int row) const;
-	void insertRecord(const PaperRecord& record);
-	void mergeRecord (int row, const PaperRecord& record);
-	void updateRecord(int row, const PaperRecord& record);
+    void setPaperRead();
 	void updateTags(const QStringList& tags);
 	void highLightTags();
 	void loadGeometry();
 	void reloadAttachments();
 	void attachNewTag(const QString& tagName);   // create a tag, and add it to current paper
+
+    void insertReference(const Reference& ref);
+    void updateReference(int row, const Reference& ref);
+    Reference exportReference(int row) const;
 
 private:
 	Ui::PagePapersClass ui;

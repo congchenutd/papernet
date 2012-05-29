@@ -49,10 +49,11 @@ HEADERS += AddPhraseDlg.h \
     CoauthoredPapersWidgdet.h \
     QuotesWidget.h \
     RelatedPhraseWidget.h \
-    RefParser.h \
-    RefFormatSpec.h \
-    Reference.h \
-    Exporter.h
+	RefParser.h \
+	RefFormatSpec.h \
+	RefExporter.h \
+	Reference.h \
+    ../MyComboBox/SetTextComboBox.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -69,7 +70,7 @@ FORMS += AddPhraseDlg.ui \
     RelatedPapersWidget.ui \
     CoauthoredPapersWidgdet.ui \
     QuotesWidget.ui \
-    RelatedPhraseWidget.ui
+	RelatedPhraseWidget.ui
 SOURCES += AddPhraseDlg.cpp \
            AddQuoteDlg.cpp \
            AddTagDlg.cpp \
@@ -101,10 +102,11 @@ SOURCES += AddPhraseDlg.cpp \
     CoauthoredPapersWidgdet.cpp \
     QuotesWidget.cpp \
     RelatedPhraseWidget.cpp \
-    RefParser.cpp \
-    RefFormatSpec.cpp \
-    Reference.cpp \
-    Exporter.cpp
+	RefParser.cpp \
+	RefFormatSpec.cpp \
+	RefExporter.cpp \
+	Reference.cpp \
+    ../MyComboBox/SetTextComboBox.cpp
 RESOURCES += MainWindow.qrc
 
 

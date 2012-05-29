@@ -6,7 +6,8 @@ TEMPLATE = app
 TARGET =
 INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
-				../MySetting
+				../MySetting \
+				../MyComboBox
 
 QT += sql xml network
 win32 {

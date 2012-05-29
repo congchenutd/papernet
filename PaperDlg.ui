@@ -311,7 +311,7 @@
   <customwidget>
    <class>SetTextComboBox</class>
    <extends>QComboBox</extends>
-   <header>../MyComboBox/SetTextComboBox.h</header>
+   <header>SetTextComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -54,8 +54,8 @@ void RelatedPhraseWidget::setCentralPhraseID(int id)
     while(query.next()) {
             model->updateRecord(Phrase(query.value(0).toInt(),
                                        query.value(1).toString(),
-                                       query.value(2).toString()),
-                                query.value(3).toInt());
+									   query.value(2).toString()),
+									   query.value(3).toInt());
     }
 
     // -------------- update proximity by proximate phrases ---------------

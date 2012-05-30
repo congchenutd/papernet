@@ -71,7 +71,7 @@ void CoauthoredPapersWidgdet::updateRecord(int id, const QString& title)
 		return;
 	QModelIndexList idxes = model.match(model.index(0, COL_ID),
 										Qt::DisplayRole, id, 1, Qt::MatchExactly);
-	if(idxes.isEmpty())
+	if(idxes.isEmpty())    // new record
 	{
 		int lastRow = model.rowCount();
 		model.insertRow(lastRow);
@@ -79,11 +79,9 @@ void CoauthoredPapersWidgdet::updateRecord(int id, const QString& title)
 		model.setData(model.index(lastRow, COL_TITLE),      title);
 		model.setData(model.index(lastRow, COL_COAUTHERED), 1);
 	}
-	else
+	else                   // update existing record
 	{
 		int row = idxes.front().row();
-		model.setData(model.index(row, COL_ID),    id);
-		model.setData(model.index(row, COL_TITLE), title);
 		int coauthored = model.data(model.index(row, COL_COAUTHERED)).toInt();
 		model.setData(model.index(row, COL_COAUTHERED), coauthored + 1);
 	}

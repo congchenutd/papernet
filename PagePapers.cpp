@@ -99,7 +99,7 @@ void PagePapers::jumpToID(int id)
 	if(int row = idToRow(&model, PAPER_ID, id))
 	{
 		currentRow = row;
-		ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
+		ui.tvPapers->selectRow(currentRow);  // will trigger onSelectionChanged()
 		ui.tvPapers->scrollTo(model.index(row, PAPER_TITLE));
 		ui.tvPapers->setFocus();
 	}
@@ -122,20 +122,19 @@ void PagePapers::onEditPaper()
 
 	if(dlg.exec() == QDialog::Accepted)
 	{
-        Reference newRef = dlg.getReference();
-        updateReference(currentRow, newRef);
-        onSubmitPaper();
+		Reference newRef = dlg.getReference();
+		updateReference(currentRow, newRef);
 
-        QString oldTitle = oldRef.getValue("title").toString();
-        QString newTitle = newRef.getValue("title").toString();
-        if(oldTitle != newTitle)
-        {
-            renameTitle(oldTitle, newTitle);
-            reloadAttachments();           // refresh attached files after renaming
-        }
+//        QString oldTitle = oldRef.getValue("title").toString();
+//        QString newTitle = newRef.getValue("title").toString();
+//        if(oldTitle != newTitle)
+//        {
+//            renameTitle(oldTitle, newTitle);
+//            reloadAttachments();           // refresh attached files after renaming
+//        }
 
-        if(newRef.getValue("note") != oldRef.getValue("note"))   // changing note means reading
-            setPaperRead();
+//        if(newRef.getValue("note") != oldRef.getValue("note"))   // changing note means reading
+//            setPaperRead();
 	}
 }
 
@@ -168,7 +167,7 @@ void PagePapers::updateReference(int row, const Reference& ref)
 	model.setData(model.index(row, PAPER_NOTE),        ref.getValue("note"));
 	model.setData(model.index(row, PAPER_AUTHORS),     ref.getValue("authors").toStringList().join("; "));
     updateTags(ref.getValue("tags").toStringList());
-    onSubmitPaper();
+	onSubmitPaper();
 }
 
 void PagePapers::updateTags(const QStringList& tags)
@@ -267,7 +266,7 @@ void PagePapers::onSubmitPaper()
 	if(!model.submitAll())
 		QMessageBox::critical(this, tr("Error"), model.lastError().text());
 	currentPaperID = backup;
-    qApp->processEvents();
+//	qApp->processEvents();
 	jumpToID(backup);
 }
 
@@ -510,7 +509,7 @@ Reference PagePapers::exportReference(int row) const
 			continue;
         QVariant fieldValue = record.value(col);
         if(fieldName == "authors")
-			ref.setValue(fieldName, Reference::fromLineToList(fieldValue.toString()));
+			ref.setValue(fieldName, splitAuthorsList(fieldValue.toString()));
 		else
             ref.setValue(fieldName, fieldValue);
     }

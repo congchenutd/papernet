@@ -16,7 +16,6 @@ public:
 	virtual void accept();
 
 	QString     getTitle() const;
-    QStringList getTags () const;
 	void setTitle(const QString& title);
 	void setType (const QString& type);
 

@@ -1,6 +1,6 @@
 #include "CoauthoredPapersWidgdet.h"
-#include "../EnglishName/EnglishName.h"
-#include <QSqlDatabase>
+#include "Common.h"
+#include "EnglishName.h"
 #include <QSqlQuery>
 
 CoauthoredPapersWidgdet::CoauthoredPapersWidgdet(QWidget *parent) :
@@ -38,17 +38,21 @@ void CoauthoredPapersWidgdet::update()
     QSqlDatabase::database().transaction();
     model.removeRows(0, model.rowCount());
 
+	// find authors from central paper
     QSqlQuery query;
     query.exec(tr("select Authors from Papers where ID = %1").arg(centralPaperID));
     if(query.next())
     {
-        QStringList authors = query.value(0).toString().split(";");
+		QStringList authors = splitLine(query.value(0).toString(), ";");
         foreach(const QString& author, authors)
         {
-            query.exec(tr("select ID, Title, Authors from Papers"));
+			// for each other paper
+			query.exec(tr("select ID, Title, Authors from Papers where ID != %1")
+					   .arg(centralPaperID));
             while(query.next())
             {
-                QStringList names = query.value(2).toString().split(";");
+				// see if it has common names with the central paper
+				QStringList names = splitLine(query.value(2).toString(), ";");
                 foreach(const QString& name, names)
                     if(EnglishName::compare(name, author))
                         updateRecord(query.value(0).toInt(), query.value(1).toString());

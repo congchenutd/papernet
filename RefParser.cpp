@@ -1,5 +1,6 @@
 #include "RefParser.h"
 #include "EnglishName.h"
+#include "Common.h"
 #include <QRegExp>
 #include <QSettings>
 #include <QFile>
@@ -95,7 +96,7 @@ QStringList LineRefParser::parseAuthors(const QString& authors) const
 	if(separator.isEmpty())   // one line is one author
         result << authors;
 	else                      // all authors in one line
-		result << Reference::fromLineToList(authors);
+		result << splitAuthorsList(authors);
     return result;
 }
 

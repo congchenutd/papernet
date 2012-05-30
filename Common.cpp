@@ -1,5 +1,6 @@
 #include "Common.h"
 #include "OptionDlg.h"
+#include "EnglishName.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
@@ -639,4 +640,28 @@ Phrase findPhrase(const QString& phraseName)
         result.explanation = query.value(1).toString();
     }
     return result;
+}
+
+QStringList splitLine(const QString& line, const QString& separator)
+{
+	QStringList result;
+	QStringList sections = line.split(separator);
+	foreach(const QString& section, sections)
+	{
+		QString simplified = section.simplified();
+		if(!simplified.isEmpty())
+			result << section.simplified();
+	}
+	return result;
+}
+
+QStringList splitAuthorsList(const QString& authorsLine,
+							 const QString& separator,
+							 const QString& format)
+{
+	QStringList result;
+	QStringList authorList = splitLine(authorsLine, separator);
+	foreach(const QString& author, authorList)
+		result << EnglishName(author).toString(format);
+	return result;
 }

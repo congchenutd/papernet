@@ -34,19 +34,6 @@ QString PaperDlg::getTitle() const {
 	return ui.leTitle->text();
 }
 
-QStringList PaperDlg::getTags() const
-{
-    QStringList result;
-    QString tagString = ui.leTags->text();
-    if(tagString.isEmpty())
-        return result;
-
-    QStringList tags = tagString.split(";");
-    foreach(const QString& tag, tags)
-        result << tag.simplified();
-    return result;
-}
-
 // setters
 void PaperDlg::setTitle(const QString& title)
 {
@@ -81,8 +68,8 @@ Reference PaperDlg::getReference() const
     ref.setValue("note",     ui.teNote    ->toPlainText().simplified());
 
     ref.setValue("editors", ui.leEditors->text().simplified());
-	ref.setValue("authors", Reference::fromLineToList(ui.leAuthors->text()));
-    ref.setValue("tags",    getTags());
+	ref.setValue("authors", splitAuthorsList(ui.leAuthors->text()));
+	ref.setValue("tags",    splitLine(ui.leTags->text(), ";"));
 
     ref.setValue("year",      ui.sbYear     ->value());
     ref.setValue("volume",    ui.sbVolume   ->value());
@@ -103,7 +90,7 @@ void PaperDlg::setReference(const Reference& ref)
     ui.sbStartPage->setValue(ref.getValue("startpage").toInt());
     ui.sbEndPage  ->setValue(ref.getValue("endpage")  .toInt());
 
-    ui.leTitle      ->setText(ref.getValue("title")      .toString());
+	setTitle(ref.getValue("title").toString());
     ui.lePublication->setText(ref.getValue("publication").toString());
     ui.lePublisher  ->setText(ref.getValue("publisher")  .toString());
     ui.leAddress    ->setText(ref.getValue("address")    .toString());

@@ -42,12 +42,11 @@ void PageQuotes::onClicked(const QModelIndex& idx) {
 
 void PageQuotes::add()
 {
-	reset();
     AddQuoteDlg dlg(this);
     dlg.setWindowTitle(tr("Add Quote"));
     dlg.setQuoteID(getNextID("Quotes", "ID"));
     if(dlg.exec() == QDialog::Accepted)
-        reset();
+		reset();   // just refresh, dlg will submit the changes
 }
 
 void PageQuotes::onEdit()
@@ -56,7 +55,7 @@ void PageQuotes::onEdit()
     dlg.setWindowTitle(tr("Edit Quote"));
 	dlg.setQuoteID(rowToID(currentRow));
     if(dlg.exec() == QDialog::Accepted)
-        reset();
+		reset();   // just refresh, dlg will submit the changes
 }
 
 void PageQuotes::del()
@@ -67,7 +66,7 @@ void PageQuotes::del()
 		QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)
 			delQuote(rowToID(idx.row()));
-        reset();
+		reset();   // just refresh, dlg will submit the changes
 	}
 }
 
@@ -90,7 +89,7 @@ void PageQuotes::jumpToID(int id)
 	if(row > -1)
 	{
 		currentRow = row;
-		ui.tableView->selectRow(currentRow);  // will trigger onCurrentRowChanged()
+		ui.tableView->selectRow(currentRow);  // will trigger onSelectionChanged()
 		ui.tableView->setFocus();
 	}
 }

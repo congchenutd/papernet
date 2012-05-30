@@ -34,10 +34,10 @@ void AddPhraseDlg::setExplanation(const QString& explanation) {
 	ui.teExplanation->setPlainText(explanation);
 }
 QStringList AddPhraseDlg::getTags() const {
-	return ui.leTags->text().split(";");
+	return splitLine(ui.leTags->text(), ";");
 }
 void AddPhraseDlg::setTags(const QStringList &tags) {
-	ui.leTags->setText(tags.join(";"));
+	ui.leTags->setText(tags.join("; "));
 }
 
 void AddPhraseDlg::accept()

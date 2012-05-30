@@ -20,6 +20,14 @@ void createTables();
 int getNextID(const QString& tableName, const QString& sectionName);
 int idToRow(QAbstractItemModel* model, int idSection, int id);
 
+// separated list -> QStringList, unnecessary spaces removed
+QStringList splitLine(const QString& line, const QString& separator);
+
+// same as above, name formatted
+QStringList splitAuthorsList(const QString& authorsLine,
+							 const QString& separator = ";",
+							 const QString& format = "L,;m;F");
+
 // papers
 void delPaper(int paperID);
 bool isTagged(int paperID);

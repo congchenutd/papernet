@@ -222,7 +222,7 @@ void PageDictionary::jumpToID(int id)
 	if(row > -1)
 	{
 		currentRow = row;
-		ui.tableView->selectRow(currentRow);  // will trigger onCurrentRowChanged()
+		ui.tableView->selectRow(currentRow);  // will trigger onSelectionChanged()
 		ui.tableView->setFocus();
 		ui.tableView->scrollTo(model.index(row, DICTIONARY_PHRASE));
 	}

@@ -6,8 +6,7 @@ TEMPLATE = app
 TARGET =
 INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
-				../MySetting \
-				../MyComboBox
+				../MySetting
 
 QT += sql xml network
 win32 {
@@ -24,7 +23,6 @@ HEADERS += AddPhraseDlg.h \
            AttachmentsWidget.h \
            AutoSizeTableView.h \
            Common.h \
-           Importer.h \
            LinkDlg.h \
            MainWindow.h \
            Navigator.h \
@@ -53,8 +51,7 @@ HEADERS += AddPhraseDlg.h \
 	RefParser.h \
 	RefFormatSpec.h \
 	RefExporter.h \
-	Reference.h \
-    ../MyComboBox/SetTextComboBox.h
+	Reference.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -78,7 +75,6 @@ SOURCES += AddPhraseDlg.cpp \
            AttachmentsWidget.cpp \
            AutoSizeTableView.cpp \
            Common.cpp \
-           Importer.cpp \
            LinkDlg.cpp \
            Main.cpp \
            MainWindow.cpp \
@@ -106,8 +102,7 @@ SOURCES += AddPhraseDlg.cpp \
 	RefParser.cpp \
 	RefFormatSpec.cpp \
 	RefExporter.cpp \
-	Reference.cpp \
-    ../MyComboBox/SetTextComboBox.cpp
+	Reference.cpp
 RESOURCES += MainWindow.qrc
 
 

@@ -95,7 +95,7 @@ QStringList LineRefParser::parseAuthors(const QString& authors) const
 	if(separator.isEmpty())   // one line is one author
         result << authors;
 	else                      // all authors in one line
-        result << EnglishName::fromLineToList(authors);
+		result << Reference::fromLineToList(authors);
     return result;
 }
 

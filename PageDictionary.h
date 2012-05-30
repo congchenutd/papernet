@@ -28,7 +28,7 @@ private slots:
 
 	void onAddTag();
 	void onAddTagToPhrase();
-	void onDelTagFromPhrase();
+	void onRemoveTagFromPhrase();
     void onFilterByTags(bool AND = false);
 	void onResetPhrases();
 	void onTagDoubleClicked(const QString& label);

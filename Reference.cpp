@@ -64,5 +64,16 @@ void Reference::generateID()
 }
 
 Reference::Fields Reference::getAllFields() const {
-    return fields;
+	return fields;
+}
+
+QStringList Reference::fromLineToList(const QString& authorsLine,
+									  const QString& separator,
+									  const QString& format)
+{
+	QStringList result;
+	QStringList authorList = authorsLine.split(separator);
+	foreach(const QString& author, authorList)
+		result << EnglishName(author).toString(format);
+	return result;
 }

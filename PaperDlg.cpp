@@ -30,38 +30,8 @@ PaperDlg::PaperDlg(QWidget *parent)
 }
 
 // getters
-QString PaperDlg::getType() const {
-    return ui.comboType->currentText();
-}
-QString PaperDlg::getJournal() const {
-    return ui.lePublication->text().simplified();
-}
-QString PaperDlg::getAbstract() const {
-    return ui.teAbstract->toPlainText().simplified();
-}
-int PaperDlg::getVolume() const {
-    return ui.sbVolume->value();
-}
-int PaperDlg::getIssue() const {
-    return ui.sbIssue->value();
-}
-int PaperDlg::getStartPage() const {
-    return ui.sbStartPage->value();
-}
-int PaperDlg::getEndPage() const {
-    return ui.sbEndPage->value();
-}
-QString PaperDlg::getPublisher() const {
-    return ui.lePublisher->text().simplified();
-}
-QString PaperDlg::getEditors() const {
-    return ui.leEditors->text().simplified();
-}
-QString PaperDlg::getUrl() const {
-    return ui.leUrl->text().simplified();
-}
-QString PaperDlg::getNote() const {
-	return ui.teNote->toPlainText();
+QString PaperDlg::getTitle() const {
+	return ui.leTitle->text();
 }
 
 QStringList PaperDlg::getTags() const
@@ -83,43 +53,25 @@ void PaperDlg::setTitle(const QString& title)
 	ui.leTitle->setText(title);
 	newPaper = title.isEmpty();
 }
-void PaperDlg::setAuthors(const QString& authors) {
-	ui.leAuthors->setText(authors);
-}
-void PaperDlg::setJournal(const QString& journal) {
-    ui.lePublication->setText(journal);
-}
-void PaperDlg::setAbstract(const QString& ab) {
-	ui.teAbstract->setPlainText(ab);
-}
-void PaperDlg::setNote(const QString& note) {
-	ui.teNote->setPlainText(note);
-}
-void PaperDlg::setYear(int year){
-    ui.sbYear->setValue(year);
-}
+
 void PaperDlg::setType(const QString &type)
 {
     int index = ui.comboType->findText(type);
     if(index > -1)
         ui.comboType->setCurrentIndex(index);
 }
-void PaperDlg::setTags(const QStringList& tags) {
-	ui.leTags->setText(tags.join(";"));
-}
-
 
 void PaperDlg::accept() {
-//	if(newPaper && paperExists(getTitle()))
-//		setWindowTitle(tr("Error: the title already exists!"));
-//	else
+	if(newPaper && paperExists(getTitle()))
+		setWindowTitle(tr("Error: the title already exists!"));
+	else
 		QDialog::accept();
 }
 
 Reference PaperDlg::getReference() const
 {
     Reference ref;
-    ref.setValue("title",       ui.leTitle      ->text().simplified());
+	ref.setValue("title",       getTitle());
     ref.setValue("publication", ui.lePublication->text().simplified());
     ref.setValue("publisher",   ui.lePublisher  ->text().simplified());
     ref.setValue("address",     ui.leAddress    ->text().simplified());
@@ -129,7 +81,7 @@ Reference PaperDlg::getReference() const
     ref.setValue("note",     ui.teNote    ->toPlainText().simplified());
 
     ref.setValue("editors", ui.leEditors->text().simplified());
-    ref.setValue("authors", EnglishName::fromLineToList(ui.leAuthors->text()));
+	ref.setValue("authors", Reference::fromLineToList(ui.leAuthors->text()));
     ref.setValue("tags",    getTags());
 
     ref.setValue("year",      ui.sbYear     ->value());
@@ -144,7 +96,7 @@ Reference PaperDlg::getReference() const
 
 void PaperDlg::setReference(const Reference& ref)
 {
-    ui.comboType->setCurrentText(ref.getValue("type").toString());
+	setType(ref.getValue("type").toString());
     ui.sbYear     ->setValue(ref.getValue("year")     .toInt());
     ui.sbVolume   ->setValue(ref.getValue("volume")   .toInt());
     ui.sbIssue    ->setValue(ref.getValue("issue")    .toInt());

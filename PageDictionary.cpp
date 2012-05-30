@@ -26,20 +26,19 @@ PageDictionary::PageDictionary(QWidget *parent)
     connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(onSelectionChanged(QItemSelection)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
-	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
+	connect(ui.tableView, SIGNAL(clicked      (QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 
     connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterByTags(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagToPhrase()));
-	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPhrase()));
+	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onRemoveTagFromPhrase()));
 	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
     connect(ui.widgetRelated,   SIGNAL(doubleClicked(int)),     this, SLOT(onRelatedDoubleClicked(int)));
 }
 
 void PageDictionary::add()
 {
-	reset();
 	AddPhraseDlg dlg(this);
 	dlg.setWindowTitle(tr("Add Phrase"));
 	if(dlg.exec() == QDialog::Accepted)
@@ -148,7 +147,7 @@ void PageDictionary::onAddTagToPhrase()
 }
 
 // del selected tags from selected phrases
-void PageDictionary::onDelTagFromPhrase()
+void PageDictionary::onRemoveTagFromPhrase()
 {
 	QModelIndexList rows = ui.tableView->selectionModel()->selectedRows(PAPER_ID);
 	foreach(QModelIndex idx, rows)
@@ -245,7 +244,7 @@ void PageDictionary::onRelatedDoubleClicked(int phraseID)
 
 void PageDictionary::search(const QString& target)
 {
-	model.setFilter(tr("Phrase like \"%%1%\" or \
+	model.setFilter(tr("Phrase      like \"%%1%\" or \
 						Explanation like \"%%1%\" ").arg(target));
 
 	// highlight tags

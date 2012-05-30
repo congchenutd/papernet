@@ -28,14 +28,14 @@ public:
 	virtual void reset() { onResetPapers(); }
 
 private slots:
-	void onImport();
-    void onExport();
     void onSelectionChanged(const QItemSelection& selected);
 	void onEditPaper();
 	void onFullTextSearch(const QString& target);
 	void onSubmitPaper();
 	void onClicked();
 	void onResetPapers();
+	void onImport();
+	void onExport();
 
     // related and quotes
     void onRelatedDoubleClicked(int paperID);
@@ -65,20 +65,19 @@ private:
 	void highLightTags();
 	void loadGeometry();
 	void reloadAttachments();
-	void attachNewTag(const QString& tagName);   // create a tag, and add it to current paper
+	void attachNewTag(const QString& tagName);   // create and add a tag to current paper
 
     void insertReference(const Reference& ref);
     void updateReference(int row, const Reference& ref);
-    Reference exportReference(int row) const;
+	Reference exportReference(int row) const;   // row -> Reference
 
 private:
 	Ui::PagePapersClass ui;
 
-	PaperModel        modelPapers;
-	QDataWidgetMapper mapper;
-	int               currentRow;
-	int               currentPaperID;
-	UserSetting*      setting;
+	PaperModel   model;
+	int          currentRow;
+	int          currentPaperID;
+	UserSetting* setting;
 };
 
 #endif // PAGEPAPERS_H

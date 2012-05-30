@@ -2,17 +2,14 @@
 #include "Common.h"
 #include "PaperDlg.h"
 #include "AddQuoteDlg.h"
-#include "Importer.h"
 #include "Navigator.h"
 #include "AddTagDlg.h"
 #include "MainWindow.h"
 #include "RefFormatSpec.h"
 #include "RefParser.h"
 #include "RefExporter.h"
-#include "EnglishName.h"
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QTextStream>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
@@ -31,11 +28,12 @@ PagePapers::PagePapers(QWidget *parent)
 
 	onResetPapers();   // init model, table ...
 
-	mapper.setModel(&modelPapers);
-	mapper.addMapping(ui.teAbstract, PAPER_ABSTRACT);
-	mapper.addMapping(ui.teNote,     PAPER_NOTE);
+	QDataWidgetMapper* mapper = new QDataWidgetMapper(this);
+	mapper->setModel(&model);
+	mapper->addMapping(ui.teAbstract, PAPER_ABSTRACT);
+	mapper->addMapping(ui.teNote,     PAPER_NOTE);
 
-	ui.tvPapers->setModel(&modelPapers);
+	ui.tvPapers->setModel(&model);
 	ui.tvPapers->hideColumn(PAPER_ID);
 //    for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
 //        ui.tvPapers->hideColumn(col);
@@ -47,7 +45,7 @@ PagePapers::PagePapers(QWidget *parent)
 	loadGeometry();
 
 	connect(ui.tvPapers->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-			&mapper, SLOT(setCurrentModelIndex(QModelIndex)));
+			mapper, SLOT(setCurrentModelIndex(QModelIndex)));
     connect(ui.tvPapers->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(onSelectionChanged(QItemSelection)));
 
@@ -60,7 +58,6 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers, SIGNAL(bookmark(bool)), this, SLOT(onBookmark(bool)));
 	connect(ui.tvPapers, SIGNAL(addPDF()),       this, SLOT(onAddPDF()));
 	connect(ui.tvPapers, SIGNAL(readPDF()),      this, SLOT(onReadPDF()));
-
 
 	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPapersByTags(bool)));
 	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPapers()));
@@ -99,20 +96,19 @@ void PagePapers::jumpToID(int id)
 {
 	if(id < 0)
 		return;
-	if(int row = idToRow(&modelPapers, PAPER_ID, id))
+	if(int row = idToRow(&model, PAPER_ID, id))
 	{
 		currentRow = row;
 		ui.tvPapers->selectRow(currentRow);  // will trigger onCurrentRowChanged()
-		ui.tvPapers->scrollTo(modelPapers.index(row, PAPER_TITLE));
+		ui.tvPapers->scrollTo(model.index(row, PAPER_TITLE));
 		ui.tvPapers->setFocus();
 	}
 }
 
 void PagePapers::add()
 {
-	reset();
 	PaperDlg dlg(this);
-	dlg.setWindowTitle(tr("Add Paper"));
+	dlg.setWindowTitle(tr("Add Reference"));
 	if(dlg.exec() == QDialog::Accepted)
         insertReference(dlg.getReference());
 }
@@ -120,7 +116,7 @@ void PagePapers::add()
 void PagePapers::onEditPaper()
 {
 	PaperDlg dlg(this);
-	dlg.setWindowTitle(tr("Edit Paper"));
+	dlg.setWindowTitle(tr("Edit Reference"));
     Reference oldRef = exportReference(currentRow);
     dlg.setReference(oldRef);
 
@@ -145,10 +141,10 @@ void PagePapers::onEditPaper()
 
 void PagePapers::insertReference(const Reference& ref)
 {
-    int lastRow = modelPapers.rowCount();
-    modelPapers.insertRow(lastRow);
+	int lastRow = model.rowCount();
+	model.insertRow(lastRow);
     currentPaperID = getNextID("Papers", "ID");
-    modelPapers.setData(modelPapers.index(lastRow, PAPER_ID), currentPaperID);
+	model.setData(model.index(lastRow, PAPER_ID), currentPaperID);
 
     updateReference(lastRow, ref);
     onBookmark(true);    // attach the ReadMe tag
@@ -156,21 +152,21 @@ void PagePapers::insertReference(const Reference& ref)
 
 void PagePapers::updateReference(int row, const Reference& ref)
 {
-    modelPapers.setData(modelPapers.index(row, PAPER_TITLE),       ref.getValue("title"));
-    modelPapers.setData(modelPapers.index(row, PAPER_YEAR),        ref.getValue("year"));
-    modelPapers.setData(modelPapers.index(row, PAPER_TYPE),        ref.getValue("type"));
-    modelPapers.setData(modelPapers.index(row, PAPER_PUBLICATION), ref.getValue("publication"));
-    modelPapers.setData(modelPapers.index(row, PAPER_ABSTRACT),    ref.getValue("abstract"));
-    modelPapers.setData(modelPapers.index(row, PAPER_VOLUME),      ref.getValue("volume"));
-    modelPapers.setData(modelPapers.index(row, PAPER_ISSUE),       ref.getValue("issue"));
-    modelPapers.setData(modelPapers.index(row, PAPER_STARTPAGE),   ref.getValue("startpage"));
-    modelPapers.setData(modelPapers.index(row, PAPER_ENDPAGE),     ref.getValue("endpage"));
-    modelPapers.setData(modelPapers.index(row, PAPER_PUBLISHER),   ref.getValue("publisher"));
-    modelPapers.setData(modelPapers.index(row, PAPER_EDITORS),     ref.getValue("editors"));
-    modelPapers.setData(modelPapers.index(row, PAPER_ADDRESS),     ref.getValue("address"));
-    modelPapers.setData(modelPapers.index(row, PAPER_URL),         ref.getValue("url"));
-    modelPapers.setData(modelPapers.index(row, PAPER_NOTE),        ref.getValue("note"));
-    modelPapers.setData(modelPapers.index(row, PAPER_AUTHORS),     ref.getValue("authors").toStringList().join("; "));
+	model.setData(model.index(row, PAPER_TITLE),       ref.getValue("title"));
+	model.setData(model.index(row, PAPER_YEAR),        ref.getValue("year"));
+	model.setData(model.index(row, PAPER_TYPE),        ref.getValue("type"));
+	model.setData(model.index(row, PAPER_PUBLICATION), ref.getValue("publication"));
+	model.setData(model.index(row, PAPER_ABSTRACT),    ref.getValue("abstract"));
+	model.setData(model.index(row, PAPER_VOLUME),      ref.getValue("volume"));
+	model.setData(model.index(row, PAPER_ISSUE),       ref.getValue("issue"));
+	model.setData(model.index(row, PAPER_STARTPAGE),   ref.getValue("startpage"));
+	model.setData(model.index(row, PAPER_ENDPAGE),     ref.getValue("endpage"));
+	model.setData(model.index(row, PAPER_PUBLISHER),   ref.getValue("publisher"));
+	model.setData(model.index(row, PAPER_EDITORS),     ref.getValue("editors"));
+	model.setData(model.index(row, PAPER_ADDRESS),     ref.getValue("address"));
+	model.setData(model.index(row, PAPER_URL),         ref.getValue("url"));
+	model.setData(model.index(row, PAPER_NOTE),        ref.getValue("note"));
+	model.setData(model.index(row, PAPER_AUTHORS),     ref.getValue("authors").toStringList().join("; "));
     updateTags(ref.getValue("tags").toStringList());
     onSubmitPaper();
 }
@@ -195,12 +191,12 @@ void PagePapers::del()
 		QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
 		foreach(QModelIndex idx, idxList)     // find all selected indexes
             delPaper(rowToID(idx.row()));     // delete in the db
-        modelPapers.select();                 // reload db
+		model.select();                 // reload db
 	}
 }
 
 int PagePapers::rowToID(int row) const {
-	return row > -1 ? modelPapers.data(modelPapers.index(row, PAPER_ID)).toInt() : -1;
+	return row > -1 ? model.data(model.index(row, PAPER_ID)).toInt() : -1;
 }
 
 void PagePapers::onImport()
@@ -208,8 +204,8 @@ void PagePapers::onImport()
     // get input files
     QString lastPath = setting->getLastImportPath();
     QStringList files = QFileDialog::getOpenFileNames(
-        this, "Import references", lastPath,
-        "Reference (*.enw *.ris *.bib);;All files (*.*)");
+							this, "Import references", lastPath,
+							"Reference (*.enw *.ris *.bib);;All files (*.*)");
     if(files.isEmpty())
         return;
     setting->setLastImportPath(QFileInfo(files.front()).absolutePath());
@@ -268,8 +264,8 @@ void PagePapers::onImport()
 void PagePapers::onSubmitPaper()
 {
 	int backup = currentPaperID;
-	if(!modelPapers.submitAll())
-		QMessageBox::critical(this, tr("Error"), modelPapers.lastError().text());
+	if(!model.submitAll())
+		QMessageBox::critical(this, tr("Error"), model.lastError().text());
 	currentPaperID = backup;
     qApp->processEvents();
 	jumpToID(backup);
@@ -278,7 +274,7 @@ void PagePapers::onSubmitPaper()
 void PagePapers::search(const QString& target)
 {
 	// filter papers
-	modelPapers.setFilter(
+	model.setFilter(
                 tr("Title       like \"%%1%\" or \
                     Authors     like \"%%1%\" or \
                     Year        like \"%%1%\" or \
@@ -307,7 +303,7 @@ void PagePapers::onAddTagToPaper()
 	QModelIndexList rows = ui.tvPapers->selectionModel()->selectedRows(PAPER_ID);
 	foreach(QModelIndex idx, rows)  // for all selected papers
 	{
-		int paperID = modelPapers.data(idx).toInt();
+		int paperID = model.data(idx).toInt();
 		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 		foreach(WordLabel* tag, tags)   // add all selected tags to selected papers
 			ui.widgetWordCloud->addTagToItem(getTagID("Tags", tag->text()), paperID);
@@ -326,14 +322,10 @@ void PagePapers::onDelTagFromPaper()
 	QModelIndexList rows = ui.tvPapers->selectionModel()->selectedRows(PAPER_ID);
 	foreach(QModelIndex idx, rows)
 	{
-		int paperID = modelPapers.data(idx).toInt();
+		int paperID = model.data(idx).toInt();
 		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
 		foreach(WordLabel* tag, tags)
-		{
 			ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", tag->text()), paperID);
-			if(tag->text() == "ReadMe")   // ReadMe tag is removed
-				reset();                  // unbold the title
-		}
 	}
 	highLightTags();
 }
@@ -343,18 +335,18 @@ void PagePapers:: onResetPapers()
 	dropTempView();
 
 	int backupID = currentPaperID;
-	modelPapers.setEditStrategy(QSqlTableModel::OnManualSubmit);
-	modelPapers.setTable("Papers");
-	modelPapers.select();
-	while(modelPapers.canFetchMore())
-		modelPapers.fetchMore();
-	modelPapers.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
+	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
+	model.setTable("Papers");
+	model.select();
+	while(model.canFetchMore())
+		model.fetchMore();
+	model.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
-	modelPapers.sort(PAPER_TITLE, Qt::AscendingOrder);
+	model.sort(PAPER_TITLE, Qt::AscendingOrder);
 	// FIXME: sort by view does not work
 
 	currentPaperID = backupID;
-	jumpToID(currentPaperID);
+	jumpToCurrent();
 }
 
 // filter papers with tags
@@ -367,21 +359,21 @@ void PagePapers::onFilterPapersByTags(bool AND)
 		tagIDs << tr("%1").arg(getTagID("Tags", tag->text()));
 
 	if(!AND)
-		modelPapers.setFilter(
+		model.setFilter(
 			tr("ID in (select Paper from PaperTag where Tag in (%1))").arg(tagIDs.join(",")));
 	else
 	{
 		dropTempView();
 		QSqlQuery query;    // create a temp table for selected tags id
-		query.exec(tr("create view SelectedTags as select * from Tags where ID in (%1)")
-									.arg(tagIDs.join(",")));
+		query.exec(tr("create view SelectedTags as \
+					   select * from Tags where ID in (%1)").arg(tagIDs.join(",")));
 
 		// select papers that contain all the selected tags
-		modelPapers.setFilter("not exists \
-							   (select * from SelectedTags where \
-								   not exists \
-								   (select * from PaperTag where \
-									Paper=Papers.ID and Tag=SelectedTags.ID))");
+		model.setFilter("not exists \
+						(select * from SelectedTags where \
+							 not exists \
+							 (select * from PaperTag where \
+							 Paper=Papers.ID and Tag=SelectedTags.ID))");
 	}
 }
 
@@ -397,12 +389,11 @@ void PagePapers::onAddQuote()
 
 void PagePapers::onAddPDF()
 {
-	ui.tabWidget->setCurrentWidget(ui.tabAttachments);
+	ui.tabWidget->setCurrentWidget(ui.tabAttachments);  // show attachment tab
 	ui.widgetAttachments->onAddFile();
 }
 
-void PagePapers::onReadPDF()
-{
+void PagePapers::onReadPDF() {
 	openAttachment(currentPaperID, "Paper.pdf");
 }
 
@@ -412,7 +403,7 @@ void PagePapers::onFullTextSearch(const QString& target)
 	if(target.isEmpty())
 		return;
 
-	int rowCount = modelPapers.rowCount();
+	int rowCount = model.rowCount();
 	QProgressDialog progress(tr("Searching..."), tr("Abort"), 0, rowCount, this);
 	progress.setWindowModality(Qt::WindowModal);
 
@@ -420,6 +411,7 @@ void PagePapers::onFullTextSearch(const QString& target)
 	for(int row = 0; row < rowCount; ++row)
 	{
 		progress.setValue(row);
+		qApp->processEvents();
 		if(fullTextSearch(rowToID(row), target))        // if found in this paper
 			filter << tr("ID = %1").arg(rowToID(row));  // add the paper to filter
 		if(progress.wasCanceled())
@@ -429,7 +421,7 @@ void PagePapers::onFullTextSearch(const QString& target)
 	if(filter.isEmpty())
 		QMessageBox::information(this, tr("Full text search"), tr("No such paper!"));
 	else
-		modelPapers.setFilter(filter.join(" OR "));        // filter out papers
+		model.setFilter(filter.join(" OR "));        // filter out papers
 }
 
 void PagePapers::loadGeometry()
@@ -473,12 +465,10 @@ void PagePapers::onPrintMe(bool print)
 void PagePapers::onBookmark(bool readMe)
 {
 	if(readMe)
-	{
 		attachNewTag("ReadMe");
-		highLightTags();
-	}
 	else
 		setPaperRead();
+	highLightTags();
 }
 
 void PagePapers::attachNewTag(const QString& tagName)
@@ -508,17 +498,20 @@ void PagePapers::onQuoteDoubleClicked(int quoteID) {
 	MainWindow::getInstance()->jumpToQuote(quoteID);
 }
 
+// row -> Reference
 Reference PagePapers::exportReference(int row) const
 {
     Reference ref;
-    QSqlRecord record = modelPapers.record(row);
+	QSqlRecord record = model.record(row);
     for(int col = 0; col < record.count(); ++col)
     {
         QString fieldName = record.fieldName(col).toLower();
+		if(fieldName == "id" || fieldName == "attached")
+			continue;
         QVariant fieldValue = record.value(col);
         if(fieldName == "authors")
-            ref.setValue(fieldName, EnglishName::fromLineToList(fieldValue.toString()));
-        else if(fieldName != "id" && fieldName != "attached")
+			ref.setValue(fieldName, Reference::fromLineToList(fieldValue.toString()));
+		else
             ref.setValue(fieldName, fieldValue);
     }
 

@@ -51,7 +51,8 @@ HEADERS += AddPhraseDlg.h \
 	RefParser.h \
 	RefFormatSpec.h \
 	RefExporter.h \
-	Reference.h
+	Reference.h \
+    Convertor.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -102,7 +103,8 @@ SOURCES += AddPhraseDlg.cpp \
 	RefParser.cpp \
 	RefFormatSpec.cpp \
 	RefExporter.cpp \
-	Reference.cpp
+	Reference.cpp \
+    Convertor.cpp
 RESOURCES += MainWindow.qrc
 
 

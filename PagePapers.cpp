@@ -125,16 +125,16 @@ void PagePapers::onEditPaper()
 		Reference newRef = dlg.getReference();
 		updateReference(currentRow, newRef);
 
-//        QString oldTitle = oldRef.getValue("title").toString();
-//        QString newTitle = newRef.getValue("title").toString();
-//        if(oldTitle != newTitle)
-//        {
-//            renameTitle(oldTitle, newTitle);
-//            reloadAttachments();           // refresh attached files after renaming
-//        }
+        QString oldTitle = oldRef.getValue("title").toString();
+        QString newTitle = newRef.getValue("title").toString();
+        if(oldTitle != newTitle)
+        {
+            renameTitle(oldTitle, newTitle);
+            reloadAttachments();           // refresh attached files after renaming
+        }
 
-//        if(newRef.getValue("note") != oldRef.getValue("note"))   // changing note means reading
-//            setPaperRead();
+        if(newRef.getValue("note") != oldRef.getValue("note"))   // changing note means reading
+            setPaperRead();
 	}
 }
 
@@ -188,9 +188,11 @@ void PagePapers::del()
 				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
 		QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
-		foreach(QModelIndex idx, idxList)     // find all selected indexes
+        QSqlDatabase::database().transaction();
+        foreach(QModelIndex idx, idxList)     // find all selected indexes
             delPaper(rowToID(idx.row()));     // delete in the db
-		model.select();                 // reload db
+        QSqlDatabase::database().commit();
+        model.select();                       // reload db
 	}
 }
 
@@ -236,6 +238,7 @@ void PagePapers::onImport()
         if(references.isEmpty())
             continue;
 
+        QSqlDatabase::database().transaction();
         foreach(const Reference& ref, references)
         {
             QString title = ref.getValue("title").toString();
@@ -255,6 +258,7 @@ void PagePapers::onImport()
                 reloadAttachments();
             }
         }
+        QSqlDatabase::database().commit();
     }
 }
 
@@ -266,7 +270,6 @@ void PagePapers::onSubmitPaper()
 	if(!model.submitAll())
 		QMessageBox::critical(this, tr("Error"), model.lastError().text());
 	currentPaperID = backup;
-//	qApp->processEvents();
 	jumpToID(backup);
 }
 
@@ -528,7 +531,7 @@ void PagePapers::onExport()
     // get file name
     QString lastPath = setting->getLastImportPath();
     QString filePath = QFileDialog::getSaveFileName(this, tr("Export reference"), lastPath,
-                                                    "Reference (*.enw *.ris *.bib);;All files (*.*)");
+                        "Endnote (*.enw);;Reference Manager (*.ris);;Bibtex (*.bib);;All files (*.*)");
     if(filePath.isEmpty())
         return;
     setting->setLastImportPath(QFileInfo(filePath).absolutePath());

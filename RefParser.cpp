@@ -1,6 +1,7 @@
 #include "RefParser.h"
 #include "EnglishName.h"
 #include "Common.h"
+#include "Convertor.h"
 #include <QRegExp>
 #include <QSettings>
 #include <QFile>
@@ -71,8 +72,10 @@ Reference LineRefParser::parseRecord(const QString& record) const
         {
             QString fieldValue = rxField.cap(2).simplified();
 
-            // combo fields
-			if(fieldName == "authors")
+            // special fields
+            if(fieldName == "title")
+                result.setValue(fieldName, CaseConvertor().convert(fieldValue));
+            else if(fieldName == "authors")
                 result.setValue(fieldName, parseAuthors(fieldValue));
 			else if(fieldName == "pages")
                 result.setValue(fieldName, parsePages(fieldValue));

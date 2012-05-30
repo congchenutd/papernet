@@ -11,10 +11,10 @@ int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 
-	dbName = "PaperNet.db";
+	dbName        = "PaperNet.db";
 	attachmentDir = "./Attachments/";
-	emptyDir = attachmentDir + "Empty";
-	pdfDir = "./PDF";
+	emptyDir      = attachmentDir + "Empty";
+	pdfDir        = "./PDF";
 
 	QDir::current().mkdir(attachmentDir);
 	QDir::current().mkdir(pdfDir);

@@ -35,8 +35,8 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.tvPapers->setModel(&model);
 	ui.tvPapers->hideColumn(PAPER_ID);
-//    for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
-//        ui.tvPapers->hideColumn(col);
+	for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
+		ui.tvPapers->hideColumn(col);
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 

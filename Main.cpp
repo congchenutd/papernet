@@ -1,11 +1,9 @@
 #include "MainWindow.h"
 #include "Common.h"
 
-extern QString userName;
 extern QString dbName;
 extern QString attachmentDir;
 extern QString emptyDir;
-extern QString pdfDir;
 
 int main(int argc, char *argv[])
 {
@@ -14,10 +12,8 @@ int main(int argc, char *argv[])
 	dbName        = "PaperNet.db";
 	attachmentDir = "./Attachments/";
 	emptyDir      = attachmentDir + "Empty";
-	pdfDir        = "./PDF";
-
 	QDir::current().mkdir(attachmentDir);
-	QDir::current().mkdir(pdfDir);
+	QDir::current().mkdir(emptyDir);
 
 	if(!openDB(dbName))
 		return 1;

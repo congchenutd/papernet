@@ -20,10 +20,6 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
     paperID = -1;
 //	setPaper(-1);
 
-	QDir(".").mkdir(attachmentDir);
-	QDir(".").mkdir(emptyDir);
-
-	model.setIconProvider(iconProvider = new AttachmentIconProvider);
 	model.setRootPath(attachmentDir);
 	model.setResolveSymlinks(false);
 	ui.listView->setModel(&model);
@@ -127,7 +123,7 @@ void AttachmentsWidget::update()   // refresh
 {
 	QString dir = getAttachmentDir(paperID);
 	if(QDir(dir).entryList().isEmpty())
-		dir = emptyDir;
+		dir.clear();
 	ui.listView->setRootIndex(model.index(dir));
 	updateAttached(paperID);	   // update the model's attached status
 }
@@ -143,21 +139,4 @@ void AttachmentsWidget::onRename()
 
 	if(!renameAttachment(paperID, oldName, newName))
 		QMessageBox::critical(this, tr("Error"), tr("Rename failed!"));
-}
-
-AttachmentsWidget::~AttachmentsWidget() {
-	delete iconProvider;
-}
-
-
-//////////////////////////////////////////////////////////////////////////
-AttachmentIconProvider::AttachmentIconProvider()
-: QFileIconProvider() {}
-
-QIcon AttachmentIconProvider::icon(const QFileInfo& info) const
-{
-	// special icon for pdf, looks better than the system's
-	if(info.fileName().compare("Paper.pdf", Qt::CaseInsensitive) == 0)
-		return QIcon(":/Images/PDF.png");
-	return QFileIconProvider::icon(info);
 }

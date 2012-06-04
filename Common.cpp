@@ -19,11 +19,9 @@
 #include "windows.h"
 #endif
 
-QString userName;
 QString dbName;
 QString attachmentDir;
 QString emptyDir;
-QString pdfDir;
 
 bool openDB(const QString& name)
 {
@@ -113,7 +111,7 @@ void delPaper(int paperID)
 		return;
 
 	// delete attached files
-	if(!MySetting<UserSetting>::getInstance()->getKeepAttachments())
+	if(!UserSetting::getInstance()->getKeepAttachments())
 		delAttachments(paperID);
 
 	// delete db entries
@@ -145,6 +143,11 @@ void delTag(const QString& tableName, const QString& tagName)
 	query.exec(QObject::tr("delete from PhraseTag where Tag=%1").arg(tagID));
 }
 
+QString getFullTextFilePath(int paperID, const QString &attachmentName) {
+	return	getAttachmentDir(paperID) +
+			"/." + QFileInfo(attachmentName).baseName() + ".fulltext";
+}
+
 bool addAttachment(int paperID, const QString& attachmentName, const QString& filePath)
 {
 	if(paperID < 0 || attachmentName.isEmpty() || filePath.isEmpty())
@@ -152,24 +155,10 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 
 	QString dir = getAttachmentDir(paperID);
 	QDir::current().mkdir(dir);  // make attachment dir for this paper
-	QString targetFilePath;
-	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)   // pdf
-	{
-		targetFilePath = getPDFPath(paperID);
+	if(attachmentName.toLower().endsWith(".pdf"))   // create full text for pdf
+		makeFullTextFile(filePath, getFullTextFilePath(paperID, attachmentName));
 
-		// create shortcut
-		QFile link(dir + "/Paper.pdf");
-		if(!link.open(QFile::WriteOnly | QFile::Truncate))
-			return false;
-
-		// create full text
-		QString fullTextPath = dir + "/" + "fulltext.txt";
-		makeFullTextFile(filePath, fullTextPath);
-	}
-	else {
-		targetFilePath = dir + "/" + attachmentName;
-	}
-
+	QString targetFilePath = dir + "/" + attachmentName;
 	return QFile::copy(filePath, targetFilePath);
 }
 
@@ -179,12 +168,9 @@ void delAttachment(int paperID, const QString& attachmentName)
 	if(paperID < 0 || attachmentName.isEmpty())
 		return;
 
-	QFile::remove(getAttachmentPath(paperID, attachmentName));            // attachment itself
-	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)     // for pdf
-	{
-		QFile::remove(getPDFPath(paperID));                               // remove [title].pdf
-		QFile::remove(getAttachmentDir(paperID) + "/" + "fulltext.txt");  // remove full text file
-	}
+	QFile::remove(getAttachmentPath(paperID, attachmentName));         // attachment itself
+	if(attachmentName.toLower().endsWith(".pdf"))                      // for pdf
+		QFile::remove(getFullTextFilePath(paperID, attachmentName));   // remove full text file
 	QDir(attachmentDir).rmdir(getValidTitle(paperID));    // del attachment dir, invalid if not empty
 }
 
@@ -198,7 +184,6 @@ void delAttachments(int paperID)
 	foreach(QFileInfo info, files)                       // del all files in the attachment dir
 		QFile::remove(info.filePath());
 	QDir(attachmentDir).rmdir(getValidTitle(paperID));   // del attachment dir
-	QFile::remove(getPDFPath(paperID));                  // del [title].pdf
 }
 
 QString getPaperTitle(int paperID)
@@ -225,7 +210,7 @@ QString makeValidTitle(const QString& title)
 }
 
 QString getAttachmentDir(int paperID) {
-	return paperID > -1 ? attachmentDir + getValidTitle(paperID) : emptyDir;
+	return paperID > -1 ? attachmentDir + getValidTitle(paperID) : QString();
 }
 
 QString getValidTitle(int paperID) {
@@ -279,12 +264,8 @@ void openAttachment(int paperID, const QString& attachmentName)
 	QString filePath = getAttachmentPath(paperID, attachmentName);
 	QString url = filePath;
 
-	// Paper.pdf is not a real file, convert it to real pdf location
-	if(attachmentName.compare("Paper.pdf", Qt::CaseInsensitive) == 0)
-		url = convertSlashes(getPDFPath(paperID));
-
 #ifdef Q_WS_MAC
-	if(attachmentName.endsWith(".url", Qt::CaseInsensitive))  // mac opens url differently
+	if(attachmentName.toLower().endsWith(".url"))  // mac opens url differently
 	{
 		QFile file(filePath);
 		if(file.open(QFile::ReadOnly))
@@ -300,7 +281,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 }
 
 QString getAttachmentPath(int paperID, const QString& attachmentName) {
-	return convertSlashes(attachmentDir + getValidTitle(paperID) + "/" + attachmentName);
+	return convertSlashes(getAttachmentDir(paperID) + "/" + attachmentName);
 }
 
 QString convertSlashes(const QString& link)
@@ -315,15 +296,14 @@ QString convertSlashes(const QString& link)
 }
 
 bool renameAttachment(int paperID, const QString& oldName, const QString& newName) {
-	return QFile::rename(getAttachmentPath(paperID, oldName), getAttachmentPath(paperID, newName));
+	return QFile::rename(getAttachmentPath(paperID, oldName),
+						 getAttachmentPath(paperID, newName));
 }
 
 void renameTitle(const QString& oldName, const QString& newName)
 {
 	if(oldName == newName || oldName.isEmpty() || newName.isEmpty())
 		return;
-	QFile::rename(pdfDir + "/" + oldName + ".pdf",              // rename [title].pdf
-				  pdfDir + "/" + newName + ".pdf");
 	QDir::current().rename(attachmentDir + makeValidTitle(oldName),
 						   attachmentDir + makeValidTitle(newName));  // rename attachment dir
 }
@@ -471,11 +451,16 @@ bool fullTextSearch(int paperID, const QString& target)
 	if(paperID < 0 || target.isEmpty())
 		return false;
 
-	QString fullTextFilePath = getAttachmentDir(paperID) + "/fulltext.txt";
-	QFile file(fullTextFilePath);
-	if(file.open(QFile::ReadOnly))
-		if(file.readAll().indexOf(target) > -1)
-			return true;
+	// for all fulltext files in the attachment dir
+	QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::Hidden);
+	foreach(QFileInfo info, files)
+		if(info.suffix().toLower() == "fulltext")
+		{
+			QFile file(info.filePath());
+			if(file.open(QFile::ReadOnly))
+				if(file.readAll().indexOf(target) > -1)
+					return true;
+		}
 	return false;
 }
 
@@ -493,8 +478,7 @@ void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath)
     if(!convertorPath.isEmpty() && QFile::exists(pdfPath))
 	{
 		QFile::remove(fulltextPath);
-        QProcess* process = new QProcess;
-        process->start(convertorPath, QStringList() << pdfPath << fulltextPath);
+		QProcess::execute(convertorPath, QStringList() << pdfPath << fulltextPath);
 		hideFile(fulltextPath);
     }
 }
@@ -505,35 +489,27 @@ void makeFullTextFiles()
 	query.exec("select ID from Papers");
 	while(query.next())
 	{
-		int id = query.value(0).toInt();
-        QString pdfPath      = getPDFPath(id);
-        QString fullTextPath = getAttachmentPath(id, "fulltext.txt");
-        makeFullTextFile(pdfPath, fullTextPath);
+		int paperID = query.value(0).toInt();
+		// for all pdf files
+		QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::Hidden);
+		foreach(QFileInfo info, files)
+			if(info.suffix().toLower() == "pdf")
+				makeFullTextFile(info.filePath(),
+								 getFullTextFilePath(paperID, info.baseName()));
 	}
 }
 
 void hideFile(const QString& filePath)
 {
 #ifdef Q_WS_WIN
-	// This is a windows api, not from Qt
+	// This is a windows API, not from Qt
 	SetFileAttributesA(filePath.toAscii(), FILE_ATTRIBUTE_HIDDEN);
 #endif
 
 #ifdef Q_WS_MAC
-	QString command = "setfile -a V ";
-	foreach(QChar ch, filePath)
-	{
-		if(ch.isSpace())
-			command.append("\\");
-		command.append(ch);
-	}
-	qDebug() << command;
-	QProcess::execute(command);
+	Q_UNUSED(filePath)
+	// .XX is always hidden on Mac
 #endif
-}
-
-QString getPDFPath(int paperID) {
-	return pdfDir + "/" + getValidTitle(paperID) + ".pdf";
 }
 
 QStringList getTagsOfPaper(int paperID)

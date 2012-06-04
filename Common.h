@@ -40,6 +40,7 @@ void updateAttached(int paperID);
 
 // attachments
 AttachmentStatus isAttached(int paperID);
+QString getFullTextFilePath(int paperID, const QString& attachmentName);
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName);
 void delAttachment(int paperID, const QString& attachmentName);
 void delAttachments(int paperID);
@@ -52,7 +53,6 @@ bool fullTextSearch(int paperID, const QString& target);
 void makeFullTextFiles();
 void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath);
 void hideFile(const QString& filePath);
-QString getPDFPath(int paperID);
 void openUrl(const QString& url);
 QString suggestAttachmentName(const QString& fileName);
 

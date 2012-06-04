@@ -3,10 +3,7 @@
 
 #include <QWidget>
 #include <QFileSystemModel>
-#include <QFileIconProvider>
 #include "ui_AttachmentsWidget.h"
-
-class AttachmentIconProvider;
 
 class AttachmentsWidget : public QWidget
 {
@@ -14,7 +11,6 @@ class AttachmentsWidget : public QWidget
 
 public:
 	AttachmentsWidget(QWidget *parent = 0);
-	~AttachmentsWidget();
 
 	void setPaper(int id);
 	void update();
@@ -37,14 +33,6 @@ private:
 	int paperID;
 	QFileSystemModel model;
 	QModelIndex currentIndex;
-	AttachmentIconProvider* iconProvider;
-};
-
-class AttachmentIconProvider : public QFileIconProvider
-{
-public:
-	AttachmentIconProvider();
-	virtual QIcon icon(const QFileInfo& info) const;
 };
 
 #endif // ATTACHMENTSWIDGET_H

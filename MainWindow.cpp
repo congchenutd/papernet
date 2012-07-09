@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
     connect(ui.toolBarSearch,    SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
     connect(ui.actionImportRef,  SIGNAL(triggered()),             pagePapers, SLOT(onImport()));
     connect(ui.actionExportRef,  SIGNAL(triggered()),             pagePapers, SLOT(onExport()));
+    connect(ui.actionReadPDF,    SIGNAL(triggered()),             pagePapers, SLOT(onReadPDF()));
     connect(ui.toolBarSearch,    SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
 
     connect(pagePapers,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
@@ -114,6 +115,7 @@ void MainWindow::onPapers()
 	ui.stackedWidget->setCurrentIndex(0);
     ui.actionImportRef->setVisible(true);
     ui.actionExportRef->setVisible(true);
+    ui.actionReadPDF  ->setVisible(true);
     currentPage = ui.pagePapers;
     currentPage->jumpToCurrent();
     onSelectionValid(false);
@@ -125,6 +127,7 @@ void MainWindow::onQuotes()
 	ui.stackedWidget->setCurrentIndex(1);
     ui.actionImportRef->setVisible(false);
     ui.actionExportRef->setVisible(false);
+    ui.actionReadPDF  ->setVisible(false);
     currentPage = ui.pageQuotes;
     currentPage->reset();          // quotes may be changd by paper page
     currentPage->jumpToCurrent();
@@ -137,6 +140,7 @@ void MainWindow::onDictionary()
 	ui.stackedWidget->setCurrentIndex(2);
     ui.actionImportRef->setVisible(false);
     ui.actionExportRef->setVisible(false);
+    ui.actionReadPDF  ->setVisible(false);
     currentPage = ui.pageDictionary;
 	currentPage->jumpToCurrent();
     onSelectionValid(false);

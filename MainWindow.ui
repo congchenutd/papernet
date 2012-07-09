@@ -93,6 +93,7 @@
    <addaction name="actionExportRef"/>
    <addaction name="actionAdd"/>
    <addaction name="actionDel"/>
+   <addaction name="actionReadPDF"/>
   </widget>
   <widget class="SearchBar" name="toolBarSearch">
    <property name="windowTitle">
@@ -248,6 +249,18 @@
    </property>
    <property name="toolTip">
     <string>Export selected references</string>
+   </property>
+  </action>
+  <action name="actionReadPDF">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Images/Read.png</normaloff>:/Images/Read.png</iconset>
+   </property>
+   <property name="text">
+    <string>Read PDF</string>
+   </property>
+   <property name="toolTip">
+    <string>Read PDF</string>
    </property>
   </action>
  </widget>

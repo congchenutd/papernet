@@ -8,7 +8,7 @@ INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
 				../MySetting
 
-QT += sql xml network
+QT += sql network
 win32 {
 	RC_FILE = PaperNet.rc
 }

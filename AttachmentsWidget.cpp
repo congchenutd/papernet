@@ -8,7 +8,6 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QMessageBox>
-#include <QDebug>
 
 extern QString attachmentDir;
 extern QString emptyDir;
@@ -18,7 +17,6 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 {
 	ui.setupUi(this);
     paperID = -1;
-//	setPaper(-1);
 
 	model.setRootPath(attachmentDir);
 	model.setResolveSymlinks(false);
@@ -122,8 +120,8 @@ void AttachmentsWidget::onOpen(const QModelIndex& idx) {
 void AttachmentsWidget::update()   // refresh
 {
 	QString dir = getAttachmentDir(paperID);
-	if(QDir(dir).entryList().isEmpty())
-		dir.clear();
+    if(QDir(dir).entryList().isEmpty())
+        dir = emptyDir;
 	ui.listView->setRootIndex(model.index(dir));
 	updateAttached(paperID);	   // update the model's attached status
 }

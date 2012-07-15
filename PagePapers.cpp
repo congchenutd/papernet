@@ -530,8 +530,9 @@ void PagePapers::onExport()
 
     // get file name
     QString lastPath = setting->getLastImportPath();
-    QString filePath = QFileDialog::getSaveFileName(this, tr("Export reference"), lastPath,
-                        "Endnote (*.enw);;Reference Manager (*.ris);;Bibtex (*.bib);;All files (*.*)");
+    QString filePath = QFileDialog::getSaveFileName(this, tr("Export reference"),
+                                                    lastPath + getPaperTitle(currentPaperID),
+                                                    "Endnote (*.enw);;Reference Manager (*.ris);;Bibtex (*.bib);;All files (*.*)");
     if(filePath.isEmpty())
         return;
     setting->setLastImportPath(QFileInfo(filePath).absolutePath());

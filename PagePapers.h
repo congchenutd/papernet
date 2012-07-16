@@ -49,14 +49,16 @@ private slots:
 	void onTagDoubleClicked(const QString& label);
 
     // menu signals
-	void onPrintMe(bool print);   // two built-in tags
+    void onPrintMe  (bool print);   // two built-in tags
 	void onBookmark (bool readMe);
+
 	void onAddQuote();
 	void onAddPDF();
 	void onReadPDF();
 
 signals:
     void selectionValid(bool);
+    void hasPDF(bool);
 
 private:
 	int  rowToID(int row) const;

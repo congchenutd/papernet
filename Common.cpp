@@ -406,7 +406,7 @@ AttachmentStatus isAttached(int paperID)
 		suffixes << info.suffix().toLower();
 
 	QSet<QString> citations;
-	citations << "enw" << "ris";
+    citations << "enw" << "ris" << "bib";
 
 	QSet<QString> suffixesEndnote = suffixes;
 	if(!suffixesEndnote.intersect(citations).isEmpty()) // has endnote files

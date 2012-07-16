@@ -82,6 +82,7 @@ void PagePapers::onSelectionChanged(const QItemSelection& selected)
         ui.widgetRelated   ->setCentralPaper(currentPaperID);
         ui.widgetCoauthered->setCentralPaper(currentPaperID);
         ui.widgetQuotes    ->setCentralPaper(currentPaperID);
+        emit hasPDF(isAttached(currentPaperID) >= ATTACH_PAPER);
     }
     emit selectionValid(!selected.isEmpty());
 }
@@ -94,15 +95,13 @@ void PagePapers::onClicked() {
 
 void PagePapers::jumpToID(int id)
 {
-	if(id < 0)
-		return;
-	if(int row = idToRow(&model, PAPER_ID, id))
-	{
-		currentRow = row;
-		ui.tvPapers->selectRow(currentRow);  // will trigger onSelectionChanged()
-		ui.tvPapers->scrollTo(model.index(row, PAPER_TITLE));
-		ui.tvPapers->setFocus();
-	}
+    int row = idToRow(&model, PAPER_ID, id);
+    if(row < 0)
+        row = 0;
+    currentRow = row;
+    ui.tvPapers->selectRow(currentRow);  // will trigger onSelectionChanged()
+    ui.tvPapers->scrollTo(model.index(row, PAPER_TITLE));
+    ui.tvPapers->setFocus();
 }
 
 void PagePapers::add()

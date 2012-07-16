@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
     connect(pagePapers,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
     connect(pageQuotes,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
     connect(pageDictionary, SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
+    connect(pagePapers,     SIGNAL(hasPDF(bool)), ui.actionReadPDF, SLOT(setEnabled(bool)));
 
 	connect(navigator, SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
 	connect(navigator, SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
@@ -118,7 +119,7 @@ void MainWindow::onPapers()
     ui.actionReadPDF  ->setVisible(true);
     currentPage = ui.pagePapers;
     currentPage->jumpToCurrent();
-    onSelectionValid(false);
+//    onSelectionValid(false);         // select row 0 by default
 }
 
 void MainWindow::onQuotes()
@@ -149,7 +150,7 @@ void MainWindow::onDictionary()
 void MainWindow::jumpToPaper(const QString& title)
 {
 	onPapers();
-	pageQuotes->reset();                 // ensure the row is visible
+    pagePapers->reset();                 // ensure the row is visible
     int paperID = ::getPaperID(title);
     pagePapers->jumpToID(paperID);
     navigator->addFootStep(ui.pagePapers, paperID);

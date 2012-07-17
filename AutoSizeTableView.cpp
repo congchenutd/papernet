@@ -40,13 +40,23 @@ void AutoSizeTableView::saveSectionSizes()
 void AutoSizeTableView::adjustColumns()
 {
 	int i = model()->columnCount() - 1;
-	if(horizontalHeader()->stretchLastSection())
-	{
-		for(; i >=0; --i)
-			if(sectionSizes.value(i) > 0)     // find and skip the last non-zero column
-				break;
-	}
+    int lastNonZero = i;
+    if(horizontalHeader()->stretchLastSection())
+        for(; i >=0; --i)
+            if(sectionSizes.value(i) > 0)     // find and skip the last non-zero column
+            {
+                lastNonZero = i;
+                break;
+            }
 
-	for(; i >= 0; --i)                        // apply the sizes
-		setColumnWidth(i, width() * sectionSizes.value(i));
+    int remainingWidth = width();
+    for(; i >= 0; --i)                    // apply the sizes
+    {
+        int width = this->width() * sectionSizes.value(i);
+        setColumnWidth(i, width);
+        remainingWidth -= width;
+    }
+
+    if(horizontalHeader()->stretchLastSection() && remainingWidth > 0)
+        setColumnWidth(lastNonZero, remainingWidth);
 }

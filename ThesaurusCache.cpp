@@ -2,7 +2,6 @@
 #include <QSqlQuery>
 #include <QVariant>
 #include <QSet>
-#include <QSqlError>
 
 ThesaurusCache* ThesaurusCache::instance = 0;
 
@@ -49,6 +48,7 @@ QStringList ThesaurusCache::search(const QString& target) const
 {
 	QStringList result;
 	QSqlQuery query;
+
 	query.prepare(tr("select rhs from ThesaurusCache where lhs = :lhs order by rhs"));
 	query.bindValue(":lhs", target);
 	query.exec();

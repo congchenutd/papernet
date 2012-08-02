@@ -52,9 +52,9 @@ Reference LineRefParser::parseRecord(const QString& record) const
 
 	// get record type
     QString type = getType(record);
-    result.setValue("type", type);
 	if(type.isEmpty())
         return result;
+	result.setValue("type", type);
 
     // get dictionary for this type
     FieldDictionary* dictionary = formatSpec->getFieldDictionary(type);
@@ -99,7 +99,7 @@ QStringList LineRefParser::parseAuthors(const QString& authors) const
 	if(separator.isEmpty())   // one line is one author
         result << authors;
 	else                      // all authors in one line
-		result << splitAuthorsList(authors);
+		result << splitAuthorsList(authors, separator);
     return result;
 }
 

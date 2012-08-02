@@ -241,13 +241,15 @@ void PagePapers::onImport()
         foreach(const Reference& ref, references)
         {
             QString title = ref.getValue("title").toString();
+			if(title.isEmpty())
+				continue;
             if(paperExists(title)) {
                 QMessageBox::warning(this, tr("Title exists"),
                                      tr("\"%1\" already exists in the database, and is skipped").arg(title));
             }
             else
             {
-                insertReference(ref);   // currentPaperID will equals that of the newly added
+				insertReference(ref);   // currentPaperID will be equal to that of the newly added
 
                 // add the pdf file with the same name
                 QString pdfPath = QFileInfo(filePath).path() + "/" + QFileInfo(filePath).baseName() + ".pdf";

@@ -1,4 +1,5 @@
 #include "RefFormatSpec.h"
+#include "RefParser.h"
 #include <QFile>
 #include <QSettings>
 #include <QStringList>
@@ -46,8 +47,8 @@ QString FieldDictionary::getText(const QString& name) const {
 bool RefFormatSpec::load(const QString& ext)
 {
     clear();
+    extension = ext;
 
-    QString extension = ext.toLower();
     QString defFileName = extension + "Specification.ini";
     if(!QFile::exists(defFileName))
         return false;
@@ -111,6 +112,7 @@ bool RefFormatSpec::load(const QString& ext)
 
 void RefFormatSpec::clear()
 {
+    extension       .clear();
 	patternType     .clear();
 	patternField    .clear();
 	templateRecord  .clear();
@@ -141,6 +143,10 @@ FieldDictionary* RefFormatSpec::getFieldDictionary(const QString& typeName) cons
     return fieldDictionaries.contains(typeName) ? fieldDictionaries[typeName] : 0;
 }
 
+IRefParser* RefFormatSpec::getParser() const {
+    return ParserFactory::getInstance()->getParser(extension);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 SpecFactory* SpecFactory::instance = 0;
@@ -166,5 +172,10 @@ RefFormatSpec* SpecFactory::getSpec(const QString& ext)
         specs.insert(extension, spec);
         return spec;
     }
+    return 0;
+}
+
+RefFormatSpec* SpecFactory::guessRefFormat(const QString& content)
+{
     return 0;
 }

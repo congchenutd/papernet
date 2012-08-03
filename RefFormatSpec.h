@@ -37,6 +37,8 @@ private:
     DoubleMap map;
 };
 
+class IRefParser;
+
 // Definition of a reference file format
 class RefFormatSpec
 {
@@ -51,12 +53,14 @@ public:
     QString getTypeName(const QString& typeText) const;
     QString getTypeText(const QString& typeName) const;
     FieldDictionary* getFieldDictionary(const QString& typeName) const;
+    IRefParser*      getParser() const;
 
 private:
     void clear();
     void addType(const QString& text, const QString& name, FieldDictionary* dictionary);
 
 private:
+    QString       extension;
 	DoubleMap     typeDictionary;                       // Type text -> type name
     QMap<QString, FieldDictionary*> fieldDictionaries;  // Type name -> field dictionary
 
@@ -79,6 +83,7 @@ class SpecFactory
 public:
     static SpecFactory* getInstance();
     RefFormatSpec* getSpec(const QString& ext);
+    RefFormatSpec* guessRefFormat(const QString& content);
 
 private:
     SpecFactory() {}

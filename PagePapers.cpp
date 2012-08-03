@@ -218,14 +218,15 @@ void PagePapers::onImport()
 		if(extension == "pdf")
 			continue;
 
-        IRefParser*    parser = ParserFactory::getInstance()->getParser(extension);
-		RefFormatSpec* spec   = SpecFactory  ::getInstance()->getSpec  (extension);
+        RefFormatSpec* spec = SpecFactory::getInstance()->getSpec  (extension);
         if(!spec)
         {
             QMessageBox::critical(this, tr("Error"),
                                   tr("Can not find the specification for this reference format!"));
             return;
         }
+
+        IRefParser* parser = spec->getParser();  // TODO: Error handling for null parser?
 
         // open file
         QFile file(filePath);

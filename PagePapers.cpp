@@ -211,7 +211,6 @@ void PagePapers::onImport()
     setting->setLastImportPath(QFileInfo(files.front()).absolutePath());
 
 	int lastRefID = -1;
-	QStringList pdfFiles;
     foreach(QString filePath, files)
     {
         // find spec and parser
@@ -259,22 +258,21 @@ void PagePapers::onImport()
             }
         }
 
-		if(lastRefID > -1)
-		{
-			foreach(QString filePath, files)
-			{
-				QString extension = QFileInfo(filePath).suffix().toLower();
-				if(extension == "pdf")
-				{
-					addAttachment(lastRefID, suggestAttachmentName(filePath), filePath);
-					reloadAttachments();
-				}
-			}
-		}
 
         QSqlDatabase::database().commit();
     }
 
+    if(lastRefID > -1)
+    {
+        foreach(QString filePath, files)
+        {
+            if(QFileInfo(filePath).suffix().toLower() == "pdf")
+            {
+                addAttachment(lastRefID, suggestAttachmentName(filePath), filePath);
+                reloadAttachments();
+            }
+        }
+    }
 
 }
 

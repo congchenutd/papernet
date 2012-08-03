@@ -165,21 +165,26 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 
 QString autoRename(const QString& original)
 {
-	if(!QFile::exists(original))
-		return original;
 	QString extension = QFileInfo(original).suffix().toLower();
 	QString baseName  = QFileInfo(original).baseName();
-	QRegExp rxNumber("\\(\\d+\\)");
-	if(rxNumber.indexIn(baseName) > -1)
-	{
-		int number = rxNumber.cap(1).toInt();
-		baseName.replace(rxNumber, QString::number(number + 1));
-	}
-	else
-	{
-		baseName += "(1)";
-	}
-	return QFileInfo(original).path() + "/" + baseName + "." + extension;
+
+    QString result = original;
+    while(QFile::exists(result))
+    {
+        QRegExp rxNumber("\\((\\d+)\\)");
+        if(rxNumber.indexIn(baseName) > -1)   // find (number) and increase number
+        {
+            int number = rxNumber.cap(1).toInt();
+            baseName.replace(rxNumber, "(" + QString::number(number + 1) + ")");
+        }
+        else
+        {
+            baseName += "(1)";                // add (1)
+        }
+        result = QFileInfo(original).path() + "/" + baseName + "." + extension;
+    }
+
+    return result;
 }
 
 // del one attachment of the paper

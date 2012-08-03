@@ -262,6 +262,7 @@ void PagePapers::onImport()
         QSqlDatabase::database().commit();
     }
 
+    // add all pdf files to the last ref
     if(lastRefID > -1)
     {
         foreach(QString filePath, files)

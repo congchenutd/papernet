@@ -55,6 +55,7 @@ void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath);
 void hideFile(const QString& filePath);
 void openUrl(const QString& url);
 QString suggestAttachmentName(const QString& fileName);
+QString autoRename(const QString& original);
 
 // tags
 int getMaxProximity(const QString& tableName);

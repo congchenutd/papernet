@@ -143,7 +143,7 @@ void delTag(const QString& tableName, const QString& tagName)
 	query.exec(QObject::tr("delete from PhraseTag where Tag=%1").arg(tagID));
 }
 
-QString getFullTextFilePath(int paperID, const QString &attachmentName) {
+QString getFullTextFilePath(int paperID, const QString& attachmentName) {
 	return	getAttachmentDir(paperID) +
 			"/." + QFileInfo(attachmentName).baseName() + ".fulltext";
 }
@@ -155,11 +155,31 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 
 	QString dir = getAttachmentDir(paperID);
 	QDir::current().mkdir(dir);  // make attachment dir for this paper
-	if(attachmentName.toLower().endsWith(".pdf"))   // create full text for pdf
-		makeFullTextFile(filePath, getFullTextFilePath(paperID, attachmentName));
 
-	QString targetFilePath = dir + "/" + attachmentName;
+	QString targetFilePath = autoRename(dir + "/" + attachmentName);
+	if(attachmentName.toLower().endsWith(".pdf"))   // create full text for pdf
+		makeFullTextFile(filePath, getFullTextFilePath(paperID, targetFilePath));
+
 	return QFile::copy(filePath, targetFilePath);
+}
+
+QString autoRename(const QString& original)
+{
+	if(!QFile::exists(original))
+		return original;
+	QString extension = QFileInfo(original).suffix().toLower();
+	QString baseName  = QFileInfo(original).baseName();
+	QRegExp rxNumber("\\(\\d+\\)");
+	if(rxNumber.indexIn(baseName) > -1)
+	{
+		int number = rxNumber.cap(1).toInt();
+		baseName.replace(rxNumber, QString::number(number + 1));
+	}
+	else
+	{
+		baseName += "(1)";
+	}
+	return QFileInfo(original).path() + "/" + baseName + "." + extension;
 }
 
 // del one attachment of the paper

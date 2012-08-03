@@ -6,208 +6,79 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>442</width>
-    <height>613</height>
+    <width>596</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PaperDlg</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="12" column="0">
-    <widget class="QLabel" name="label_14">
-     <property name="text">
-      <string>Address</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="1">
-    <widget class="QLineEdit" name="leEditors"/>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="label_12">
-     <property name="text">
-      <string>Publisher</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="1">
-    <widget class="QLineEdit" name="leUrl"/>
-   </item>
-   <item row="14" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="label_13">
-     <property name="text">
-      <string>Editors</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_10">
-     <property name="text">
-      <string>Pages</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="1">
-    <widget class="QLineEdit" name="leAddress"/>
-   </item>
-   <item row="7" column="1">
-    <widget class="QLineEdit" name="leTags"/>
-   </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="label_15">
-     <property name="text">
-      <string>Url</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="1">
-    <widget class="QLineEdit" name="lePublisher"/>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Tags</string>
-     </property>
-    </widget>
-   </item>
+   <property name="verticalSpacing">
+    <number>10</number>
+   </property>
    <item row="8" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Volume</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Title</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Type</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="leTitle"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="Authors">
-     <property name="text">
-      <string>Authors</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QComboBox" name="comboType">
-     <item>
-      <property name="text">
-       <string>journal</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>proceeding</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>conference</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>book</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>book chapter</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>technical report</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>thesis</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>electronic</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="leAuthors"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Publication</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLineEdit" name="lePublication"/>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Year</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QSpinBox" name="sbYear">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximum">
-      <number>3000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Abstract</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QPlainTextEdit" name="teAbstract"/>
-   </item>
-   <item row="6" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>Note</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Tags</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1" colspan="3">
     <widget class="QPlainTextEdit" name="teNote"/>
    </item>
-   <item row="8" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item row="10" column="3">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1" colspan="3">
+    <widget class="QPlainTextEdit" name="teAbstract"/>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Abstract</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QSpinBox" name="sbYear">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximum">
+        <number>3000</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string> Volume</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QSpinBox" name="sbVolume">
        <property name="sizePolicy">
@@ -230,7 +101,7 @@
      <item>
       <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>Issue</string>
+        <string> Issue</string>
        </property>
       </widget>
      </item>
@@ -253,10 +124,13 @@
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item row="9" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string> Pages</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QSpinBox" name="sbStartPage">
        <property name="sizePolicy">
@@ -304,26 +178,157 @@
      </item>
     </layout>
    </item>
+   <item row="2" column="1" colspan="3">
+    <widget class="QLineEdit" name="lePublication"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="Authors">
+     <property name="text">
+      <string>Authors</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLineEdit" name="leAddress"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_14">
+     <property name="text">
+      <string>Address</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Title</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QLabel" name="label_12">
+     <property name="text">
+      <string>Publisher</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3">
+    <widget class="QLineEdit" name="leEditors"/>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_15">
+     <property name="text">
+      <string>Url</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QLabel" name="label_13">
+     <property name="text">
+      <string>Editors</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Publication</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Year</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="3">
+    <widget class="QLineEdit" name="leAuthors"/>
+   </item>
+   <item row="0" column="1" colspan="3">
+    <widget class="QLineEdit" name="leTitle"/>
+   </item>
+   <item row="6" column="1" colspan="3">
+    <widget class="QLineEdit" name="leUrl"/>
+   </item>
+   <item row="4" column="1">
+    <widget class="QComboBox" name="comboType">
+     <item>
+      <property name="text">
+       <string>journal</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>proceeding</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>conference</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>book</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>book chapter</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>technical report</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>thesis</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>electronic</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <widget class="QLineEdit" name="lePublisher"/>
+   </item>
+   <item row="9" column="1" colspan="3">
+    <widget class="QLineEdit" name="leTags"/>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>leTitle</tabstop>
-  <tabstop>comboType</tabstop>
   <tabstop>leAuthors</tabstop>
   <tabstop>lePublication</tabstop>
   <tabstop>sbYear</tabstop>
-  <tabstop>teAbstract</tabstop>
-  <tabstop>teNote</tabstop>
-  <tabstop>leTags</tabstop>
   <tabstop>sbVolume</tabstop>
   <tabstop>sbIssue</tabstop>
   <tabstop>sbStartPage</tabstop>
   <tabstop>sbEndPage</tabstop>
-  <tabstop>lePublisher</tabstop>
+  <tabstop>comboType</tabstop>
   <tabstop>leEditors</tabstop>
   <tabstop>leAddress</tabstop>
+  <tabstop>lePublisher</tabstop>
   <tabstop>leUrl</tabstop>
+  <tabstop>teAbstract</tabstop>
+  <tabstop>teNote</tabstop>
+  <tabstop>leTags</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>

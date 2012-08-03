@@ -10,7 +10,8 @@ PaperDlg::PaperDlg(QWidget *parent)
 	: QDialog(parent), newPaper(true)
 {
 	ui.setupUi(this);
-	resize(800, 600);
+	resize(800, 700);
+	ui.leTitle->setFocus();
 
     // year
     int currentYear = QDate::currentDate().year();
@@ -38,6 +39,7 @@ QString PaperDlg::getTitle() const {
 void PaperDlg::setTitle(const QString& title)
 {
 	ui.leTitle->setText(title);
+	ui.leTitle->setCursorPosition(0);
 	newPaper = title.isEmpty();
 }
 

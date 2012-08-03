@@ -205,17 +205,22 @@ void PagePapers::onImport()
     QString lastPath = setting->getLastImportPath();
     QStringList files = QFileDialog::getOpenFileNames(
 							this, "Import references", lastPath,
-							"Reference (*.enw *.ris *.bib);;All files (*.*)");
+							"Reference (*.enw *.ris *.bib *.pdf);;All files (*.*)");
     if(files.isEmpty())
         return;
     setting->setLastImportPath(QFileInfo(files.front()).absolutePath());
 
+	int lastRefID = -1;
+	QStringList pdfFiles;
     foreach(QString filePath, files)
     {
         // find spec and parser
-        QString extension = QFileInfo(filePath).suffix();
+		QString extension = QFileInfo(filePath).suffix().toLower();
+		if(extension == "pdf")
+			continue;
+
         IRefParser*    parser = ParserFactory::getInstance()->getParser(extension);
-        RefFormatSpec* spec   = SpecFactory  ::getInstance()->getSpec(extension);
+		RefFormatSpec* spec   = SpecFactory  ::getInstance()->getSpec  (extension);
         if(!spec)
         {
             QMessageBox::critical(this, tr("Error"),
@@ -250,17 +255,27 @@ void PagePapers::onImport()
             else
             {
 				insertReference(ref);   // currentPaperID will be equal to that of the newly added
-
-                // add the pdf file with the same name
-                QString pdfPath = QFileInfo(filePath).path() + "/" + QFileInfo(filePath).baseName() + ".pdf";
-                if(QFile::exists(pdfPath))
-                    addAttachment(currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
-
-                reloadAttachments();
+				lastRefID = currentPaperID;
             }
         }
+
+		if(lastRefID > -1)
+		{
+			foreach(QString filePath, files)
+			{
+				QString extension = QFileInfo(filePath).suffix().toLower();
+				if(extension == "pdf")
+				{
+					addAttachment(lastRefID, suggestAttachmentName(filePath), filePath);
+					reloadAttachments();
+				}
+			}
+		}
+
         QSqlDatabase::database().commit();
     }
+
+
 }
 
 // submit the model

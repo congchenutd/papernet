@@ -6,7 +6,6 @@
 #include "AddTagDlg.h"
 #include "MainWindow.h"
 #include "RefFormatSpec.h"
-#include "RefParser.h"
 #include "RefExporter.h"
 #include <QMessageBox>
 #include <QFileDialog>
@@ -15,6 +14,7 @@
 #include <QSqlRecord>
 #include <QFileInfo>
 #include <QProgressDialog>
+#include <QClipboard>
 
 PagePapers::PagePapers(QWidget *parent)
 	: Page(parent)
@@ -199,34 +199,65 @@ int PagePapers::rowToID(int row) const {
 	return row > -1 ? model.data(model.index(row, PAPER_ID)).toInt() : -1;
 }
 
+void PagePapers::importReferences(const QList<Reference>& references)
+{
+    currentPaperID = -1;
+    if(references.isEmpty())
+        return;
+
+    QSqlDatabase::database().transaction();
+    foreach(const Reference& ref, references)
+    {
+        QString title = ref.getValue("title").toString();
+        if(title.isEmpty())
+            continue;
+        if(paperExists(title))
+            QMessageBox::warning(this, tr("Title exists"),
+                                 tr("\"%1\" already exists in the database, and is skipped").arg(title));
+        else
+            insertReference(ref);   // currentPaperID will be equal to that of the newly added
+    }
+    QSqlDatabase::database().commit();
+}
+
 void PagePapers::onImport()
 {
+    // try clipboard first
+    QClipboard* clipboard = QApplication::clipboard();
+    QString content = clipboard->text();
+    if(!content.isEmpty())
+    {
+        QList<Reference> references = SpecFactory::getInstance()->parseContent(content);
+        if(!references.isEmpty())
+        {
+            importReferences(references);
+            return;
+        }
+    }
+
     // get input files
-    QString lastPath = setting->getLastImportPath();
     QStringList files = QFileDialog::getOpenFileNames(
-							this, "Import references", lastPath,
+                            this, "Import references", setting->getLastImportPath(),
 							"Reference (*.enw *.ris *.bib *.pdf);;All files (*.*)");
     if(files.isEmpty())
         return;
     setting->setLastImportPath(QFileInfo(files.front()).absolutePath());
 
-	int lastRefID = -1;
     foreach(QString filePath, files)
     {
-        // find spec and parser
+        // ignore pdfs
 		QString extension = QFileInfo(filePath).suffix().toLower();
 		if(extension == "pdf")
 			continue;
 
-        RefFormatSpec* spec = SpecFactory::getInstance()->getSpec  (extension);
+        // find spec
+        RefFormatSpec* spec = SpecFactory::getInstance()->getSpec(extension);
         if(!spec)
         {
             QMessageBox::critical(this, tr("Error"),
                                   tr("Can not find the specification for this reference format!"));
             return;
         }
-
-        IRefParser* parser = spec->getParser();  // TODO: Error handling for null parser?
 
         // open file
         QFile file(filePath);
@@ -238,44 +269,18 @@ void PagePapers::onImport()
         }
 
         // parse
-        QList<Reference> references = parser->parse(file.readAll(), spec);
-        if(references.isEmpty())
-            continue;
-
-        QSqlDatabase::database().transaction();
-        foreach(const Reference& ref, references)
-        {
-            QString title = ref.getValue("title").toString();
-			if(title.isEmpty())
-				continue;
-            if(paperExists(title)) {
-                QMessageBox::warning(this, tr("Title exists"),
-                                     tr("\"%1\" already exists in the database, and is skipped").arg(title));
-            }
-            else
-            {
-				insertReference(ref);   // currentPaperID will be equal to that of the newly added
-				lastRefID = currentPaperID;
-            }
-        }
-
-
-        QSqlDatabase::database().commit();
+        QList<Reference> references = spec->parse(file.readAll());
+        importReferences(references);  // currentPaperID = -1 if failed
     }
 
     // add all pdf files to the last ref
-    if(lastRefID > -1)
-    {
+    if(currentPaperID > -1)
         foreach(QString filePath, files)
-        {
             if(QFileInfo(filePath).suffix().toLower() == "pdf")
             {
-                addAttachment(lastRefID, suggestAttachmentName(filePath), filePath);
+                addAttachment(currentPaperID, suggestAttachmentName(filePath), filePath);
                 reloadAttachments();
             }
-        }
-    }
-
 }
 
 // submit the model

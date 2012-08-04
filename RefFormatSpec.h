@@ -5,6 +5,7 @@
 #include <QString>
 #include <QPair>
 #include <QMap>
+#include "Reference.h"
 
 // A case-insensitive double map
 class DoubleMap
@@ -43,7 +44,7 @@ class IRefParser;
 class RefFormatSpec
 {
 public:
-    bool load(const QString& ext);
+    bool load(const QString& format);
     QString getTypePattern()      const { return patternType;      }
     QString getFieldPattern()     const { return patternField;     }
     QString getRecordTemplate()   const { return templateRecord;   }
@@ -54,13 +55,14 @@ public:
     QString getTypeText(const QString& typeName) const;
     FieldDictionary* getFieldDictionary(const QString& typeName) const;
     IRefParser*      getParser() const;
+    QList<Reference> parse(const QString& content);
 
 private:
     void clear();
     void addType(const QString& text, const QString& name, FieldDictionary* dictionary);
 
 private:
-    QString       extension;
+    QString       formatName;
 	DoubleMap     typeDictionary;                       // Type text -> type name
     QMap<QString, FieldDictionary*> fieldDictionaries;  // Type name -> field dictionary
 
@@ -82,8 +84,8 @@ class SpecFactory
 {
 public:
     static SpecFactory* getInstance();
-    RefFormatSpec* getSpec(const QString& ext);
-    RefFormatSpec* guessRefFormat(const QString& content);
+    RefFormatSpec* getSpec(const QString& format);
+    QList<Reference> parseContent(const QString& content);
 
 private:
     SpecFactory() {}
@@ -93,7 +95,7 @@ private:
 
 private:
     static SpecFactory* instance;
-	QMap<QString, RefFormatSpec*> specs;     // extension -> spec
+    QMap<QString, RefFormatSpec*> specs;     // format -> spec
 };
 
 

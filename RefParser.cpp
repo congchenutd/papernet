@@ -128,10 +128,10 @@ ParserFactory* ParserFactory::getInstance()
     return instance;
 }
 
-IRefParser* ParserFactory::getParser(const QString& ext) const
+IRefParser* ParserFactory::getParser(const QString& formatName) const
 {
-    QString extension = ext.toLower();
-    return parsers.contains(extension) ? parsers[extension] : parsers["null"];
+    QString format = formatName.toLower();
+    return parsers.contains(format) ? parsers[format] : parsers["null"];
 }
 
 ParserFactory::ParserFactory()

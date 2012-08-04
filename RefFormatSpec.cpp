@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QStringList>
+#include <QDir>
 
 bool DoubleMap::contains1(const QString& t1) const {
     return !value2(t1).isEmpty();
@@ -44,12 +45,12 @@ QString FieldDictionary::getText(const QString& name) const {
 
 
 //////////////////////////////////////////////////////////////////////
-bool RefFormatSpec::load(const QString& ext)
+bool RefFormatSpec::load(const QString& format)
 {
     clear();
-    extension = ext;
+    formatName = format;
 
-    QString defFileName = extension + "Specification.ini";
+    QString defFileName = "./Specifications/" + formatName + ".spec";
     if(!QFile::exists(defFileName))
         return false;
 
@@ -112,7 +113,7 @@ bool RefFormatSpec::load(const QString& ext)
 
 void RefFormatSpec::clear()
 {
-    extension       .clear();
+    formatName      .clear();
 	patternType     .clear();
 	patternField    .clear();
 	templateRecord  .clear();
@@ -144,7 +145,11 @@ FieldDictionary* RefFormatSpec::getFieldDictionary(const QString& typeName) cons
 }
 
 IRefParser* RefFormatSpec::getParser() const {
-    return ParserFactory::getInstance()->getParser(extension);
+    return ParserFactory::getInstance()->getParser(formatName);
+}
+
+QList<Reference> RefFormatSpec::parse(const QString& content) {
+    return getParser()->parse(content, this);
 }
 
 
@@ -158,24 +163,33 @@ SpecFactory* SpecFactory::getInstance()
     return instance;
 }
 
-RefFormatSpec* SpecFactory::getSpec(const QString& ext)
+RefFormatSpec* SpecFactory::getSpec(const QString& format)
 {
     // spec exists
-    QString extension = ext.toLower();
-    if(specs.contains(extension))
-        return specs[extension];
+    QString fmt = format.toLower();
+    if(specs.contains(fmt))
+        return specs[fmt];
 
     // load a new spec
     RefFormatSpec* spec = new RefFormatSpec;
-    if(spec->load(extension))
+    if(spec->load(fmt))
     {
-        specs.insert(extension, spec);
+        specs.insert(fmt, spec);
         return spec;
     }
     return 0;
 }
 
-RefFormatSpec* SpecFactory::guessRefFormat(const QString& content)
+QList<Reference> SpecFactory::parseContent(const QString& content)
 {
-    return 0;
+    QFileInfoList infos = QDir("./Specifications").entryInfoList(QStringList() << "*.spec");
+    foreach(QFileInfo info, infos)
+    {
+        RefFormatSpec* spec = getSpec(info.baseName());
+        QList<Reference> references = spec->parse(content);
+        if(!references.isEmpty())
+            return references;
+    }
+
+    return QList<Reference>();
 }

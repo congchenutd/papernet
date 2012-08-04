@@ -71,6 +71,7 @@ private:
 
     void insertReference(const Reference& ref);
     void updateReference(int row, const Reference& ref);
+    void importReferences(const QList<Reference>& references);
 	Reference exportReference(int row) const;   // row -> Reference
 
 private:

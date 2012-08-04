@@ -41,7 +41,7 @@ class ParserFactory
 {
 public:
     static ParserFactory* getInstance();
-    IRefParser* getParser(const QString& ext) const;
+    IRefParser* getParser(const QString& formatName) const;
 
 private:
     ParserFactory();
@@ -51,7 +51,7 @@ private:
 
 private:
     static ParserFactory* instance;
-	QMap<QString, IRefParser*> parsers;   // extension -> parser
+    QMap<QString, IRefParser*> parsers;   // format -> parser
 };
 
 

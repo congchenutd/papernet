@@ -27,8 +27,7 @@ int main(int argc, char *argv[])
     {
         QStringList files;
         for(int i = 1; i < argc; ++i)
-            files += QString(argv[i]);
-//        QMessageBox::information(0, "", files.join(";"));
+			files << QString(argv[i]);
         wnd.importRefFromFiles(files);
     }
 

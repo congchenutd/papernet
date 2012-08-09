@@ -15,9 +15,9 @@ AddQuoteDlg::AddQuoteDlg(QWidget *parent)
 
 	connect(ui.listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
-	connect(ui.btAdd,            SIGNAL(clicked()), this, SLOT(onAddRef()));
-	connect(ui.btDel,            SIGNAL(clicked()), this, SLOT(onDelRef()));
-	connect(ui.btSelect,         SIGNAL(clicked()), this, SLOT(onSelectRef()));
+	connect(ui.btAdd,    SIGNAL(clicked()), this, SLOT(onAddRef()));
+	connect(ui.btDel,    SIGNAL(clicked()), this, SLOT(onDelRef()));
+	connect(ui.btSelect, SIGNAL(clicked()), this, SLOT(onSelectRef()));
 	connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onSwitchToPapers()));
 }
 

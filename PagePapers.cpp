@@ -96,12 +96,11 @@ void PagePapers::onClicked() {
 
 void PagePapers::jumpToID(int id)
 {
-    int row = idToRow(&model, PAPER_ID, id);
-    if(row < 0)
-        row = 0;
-    currentRow = row;
+	currentRow = idToRow(&model, PAPER_ID, id);
+	if(currentRow < 0)
+		currentRow = 0;
     ui.tvPapers->selectRow(currentRow);  // will trigger onSelectionChanged()
-    ui.tvPapers->scrollTo(model.index(row, PAPER_TITLE));
+	ui.tvPapers->scrollTo(model.index(currentRow, PAPER_TITLE));
     ui.tvPapers->setFocus();
 }
 
@@ -117,14 +116,15 @@ void PagePapers::onEditPaper()
 {
 	PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Edit Reference"));
-    Reference oldRef = exportReference(currentRow);
+	Reference oldRef = exportReference(currentRow);
     dlg.setReference(oldRef);
 
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		Reference newRef = dlg.getReference();
-		updateReference(currentRow, newRef);
+		updateReference(currentRow, newRef);   // apply the change
 
+		// renaming title affects attachments
         QString oldTitle = oldRef.getValue("title").toString();
         QString newTitle = newRef.getValue("title").toString();
         if(oldTitle != newTitle)
@@ -144,7 +144,6 @@ void PagePapers::insertReference(const Reference& ref)
 	model.insertRow(lastRow);
     currentPaperID = getNextID("Papers", "ID");
 	model.setData(model.index(lastRow, PAPER_ID), currentPaperID);
-
     updateReference(lastRow, ref);
     onBookmark(true);    // attach the ReadMe tag
 }
@@ -179,6 +178,7 @@ void PagePapers::updateTags(const QStringList& tags)
 	// add relations back
 	foreach(QString tagName, tags)
 		attachNewTag(tagName);
+
 	highLightTags();
 }
 
@@ -197,13 +197,15 @@ void PagePapers::del()
 }
 
 int PagePapers::rowToID(int row) const {
-	return row > -1 ? model.data(model.index(row, PAPER_ID)).toInt() : -1;
+	return row > -1 && row < model.rowCount() ? model.data(model.index(row, PAPER_ID)).toInt()
+											  : -1;
 }
 
 void PagePapers::importFromFiles(const QStringList& filePaths)
 {
     foreach(const QString& filePath, filePaths)
     {
+		// reference only
         QString extension = QFileInfo(filePath).suffix().toLower();
         if((extension != "bib" && extension != "enw" && extension != "ris") || extension == "pdf")
             continue;
@@ -231,6 +233,7 @@ void PagePapers::importFromFiles(const QStringList& filePaths)
         importReferences(references);  // currentPaperID = -1 if failed
     }
 
+	// pdfs
     foreach(QString filePath, filePaths)
         if(QFileInfo(filePath).suffix().toLower() == "pdf")
             importPDF(filePath);
@@ -258,7 +261,7 @@ void PagePapers::importReferences(const QList<Reference>& references)
                 QMessageBox::warning(this, tr("Title exists"),
                                      tr("\"%1\" already exists in the database, and is skipped").arg(title));
             else
-                insertReference(ref);   // currentPaperID will be equal to that of the newly added
+				insertReference(ref);   // currentPaperID will be equal to the ID of the newly added
         }
     }
     QSqlDatabase::database().commit();
@@ -267,7 +270,7 @@ void PagePapers::importReferences(const QList<Reference>& references)
 void PagePapers::importPDF(const QString& pdfPath)
 {
     PaperList dlg(this);
-    dlg.setWindowTitle(tr("To which paper %1 will be attached?").arg(QFileInfo(pdfPath).fileName()));
+	dlg.setWindowTitle(tr("To which paper will %1 be attached?").arg(QFileInfo(pdfPath).fileName()));
     if(dlg.exec() == QDialog::Accepted)
     {
         jumpToID(getPaperID(dlg.getSelected().front()));   // the selection must be non-empty

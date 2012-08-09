@@ -27,6 +27,8 @@ public:
 	virtual void jumpToCurrent() { jumpToID(currentPaperID); }
 	virtual void reset() { onResetPapers(); }
 
+    void importFromFiles(const QStringList& filePaths);
+
 private slots:
     void onSelectionChanged(const QItemSelection& selected);
 	void onEditPaper();
@@ -72,6 +74,7 @@ private:
     void insertReference(const Reference& ref);
     void updateReference(int row, const Reference& ref);
     void importReferences(const QList<Reference>& references);
+    void importPDF(const QString& pdfPath);
 	Reference exportReference(int row) const;   // row -> Reference
 
 private:

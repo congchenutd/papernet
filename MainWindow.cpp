@@ -164,6 +164,12 @@ void MainWindow::jumpToQuote(int quoteID)
     navigator->addFootStep(ui.pageQuotes, quoteID);
 }
 
+void MainWindow::importRefFromFiles(const QStringList& filePaths)
+{
+    onPapers();    // switch to paper page
+    static_cast<PagePapers*>(currentPage)->importFromFiles(filePaths);
+}
+
 MainWindow* MainWindow::getInstance() {
 	return instance;
 }

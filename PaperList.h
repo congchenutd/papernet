@@ -11,10 +11,11 @@ class PaperList : public QDialog
 	Q_OBJECT
 
 public:
-	PaperList(QWidget *parent = 0);
+    PaperList(QWidget* parent = 0);
 	QStringList getSelected() const;
 
 private slots:
+    void onSelectionChanged(const QItemSelection& selected);
 	void onSearch(const QString& target);
 
 private:

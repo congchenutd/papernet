@@ -19,6 +19,7 @@ public:
 	static MainWindow* getInstance();
 	void jumpToPaper(const QString& title);
 	void jumpToQuote(int quoteID);
+    void importRefFromFiles(const QStringList& filePaths);
 
 protected:
 	virtual void closeEvent(QCloseEvent*);

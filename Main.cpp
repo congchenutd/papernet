@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "Common.h"
+#include <QMessageBox>
 
 extern QString dbName;
 extern QString attachmentDir;
@@ -21,6 +22,15 @@ int main(int argc, char *argv[])
 
 	MainWindow wnd;
 	wnd.showMaximized();
+
+    if(argc > 1)
+    {
+        QStringList files;
+        for(int i = 1; i < argc; ++i)
+            files += QString(argv[i]);
+//        QMessageBox::information(0, "", files.join(";"));
+        wnd.importRefFromFiles(files);
+    }
 
 	return app.exec();
 }

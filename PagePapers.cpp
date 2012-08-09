@@ -7,6 +7,7 @@
 #include "MainWindow.h"
 #include "RefFormatSpec.h"
 #include "RefExporter.h"
+#include "PaperList.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSqlQuery>
@@ -199,9 +200,44 @@ int PagePapers::rowToID(int row) const {
 	return row > -1 ? model.data(model.index(row, PAPER_ID)).toInt() : -1;
 }
 
+void PagePapers::importFromFiles(const QStringList& filePaths)
+{
+    foreach(const QString& filePath, filePaths)
+    {
+        QString extension = QFileInfo(filePath).suffix().toLower();
+        if((extension != "bib" && extension != "enw" && extension != "ris") || extension == "pdf")
+            continue;
+
+        // find spec
+        RefFormatSpec* spec = SpecFactory::getInstance()->getSpec(extension);
+        if(!spec)
+        {
+            QMessageBox::critical(this, tr("Error"),
+                                  tr("Can not find the specification for this reference format!"));
+            return;
+        }
+
+        // open file
+        QFile file(filePath);
+        if(!file.open(QFile::ReadOnly))
+        {
+            QMessageBox::critical(this, tr("Error"),
+                                  tr("Can not open file %1").arg(filePath));
+            return;
+        }
+
+        // parse
+        QList<Reference> references = spec->parse(file.readAll());
+        importReferences(references);  // currentPaperID = -1 if failed
+    }
+
+    foreach(QString filePath, filePaths)
+        if(QFileInfo(filePath).suffix().toLower() == "pdf")
+            importPDF(filePath);
+}
+
 void PagePapers::importReferences(const QList<Reference>& references)
 {
-    currentPaperID = -1;
     if(references.isEmpty())
         return;
 
@@ -211,13 +247,33 @@ void PagePapers::importReferences(const QList<Reference>& references)
         QString title = ref.getValue("title").toString();
         if(title.isEmpty())
             continue;
-        if(paperExists(title))
-            QMessageBox::warning(this, tr("Title exists"),
-                                 tr("\"%1\" already exists in the database, and is skipped").arg(title));
-        else
-            insertReference(ref);   // currentPaperID will be equal to that of the newly added
+
+        // show preview
+        PaperDlg dlg(this);
+        dlg.setWindowTitle(tr("Import reference"));
+        dlg.setReference(ref);
+        if(dlg.exec() == QDialog::Accepted)
+        {
+            if(paperExists(title))
+                QMessageBox::warning(this, tr("Title exists"),
+                                     tr("\"%1\" already exists in the database, and is skipped").arg(title));
+            else
+                insertReference(ref);   // currentPaperID will be equal to that of the newly added
+        }
     }
     QSqlDatabase::database().commit();
+}
+
+void PagePapers::importPDF(const QString& pdfPath)
+{
+    PaperList dlg(this);
+    dlg.setWindowTitle(tr("To which paper %1 will be attached?").arg(QFileInfo(pdfPath).fileName()));
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        jumpToID(getPaperID(dlg.getSelected().front()));   // the selection must be non-empty
+        addAttachment(currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
+        reloadAttachments();
+    }
 }
 
 void PagePapers::onImport()
@@ -243,44 +299,7 @@ void PagePapers::onImport()
         return;
     setting->setLastImportPath(QFileInfo(files.front()).absolutePath());
 
-    foreach(QString filePath, files)
-    {
-        // ignore pdfs
-		QString extension = QFileInfo(filePath).suffix().toLower();
-		if(extension == "pdf")
-			continue;
-
-        // find spec
-        RefFormatSpec* spec = SpecFactory::getInstance()->getSpec(extension);
-        if(!spec)
-        {
-            QMessageBox::critical(this, tr("Error"),
-                                  tr("Can not find the specification for this reference format!"));
-            return;
-        }
-
-        // open file
-        QFile file(filePath);
-        if(!file.open(QFile::ReadOnly))
-        {
-            QMessageBox::critical(this, tr("Error"),
-                                  tr("Can not open file %1").arg(filePath));
-            continue;
-        }
-
-        // parse
-        QList<Reference> references = spec->parse(file.readAll());
-        importReferences(references);  // currentPaperID = -1 if failed
-    }
-
-    // add all pdf files to the last ref
-    if(currentPaperID > -1)
-        foreach(QString filePath, files)
-            if(QFileInfo(filePath).suffix().toLower() == "pdf")
-            {
-                addAttachment(currentPaperID, suggestAttachmentName(filePath), filePath);
-                reloadAttachments();
-            }
+    importFromFiles(files);
 }
 
 // submit the model

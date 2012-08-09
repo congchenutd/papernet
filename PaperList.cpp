@@ -1,8 +1,7 @@
 #include "PaperList.h"
 #include "common.h"
 
-PaperList::PaperList(QWidget *parent)
-	: QDialog(parent)
+PaperList::PaperList(QWidget* parent) : QDialog(parent)
 {
 	ui.setupUi(this);
 
@@ -11,15 +10,18 @@ PaperList::PaperList(QWidget *parent)
 
 	ui.tableView->setModel(&model);
 	ui.tableView->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
-	ui.tableView->hideColumn(PAPER_ID);
-    ui.tableView->hideColumn(PAPER_PUBLICATION);
-	ui.tableView->hideColumn(PAPER_ABSTRACT);
-	ui.tableView->hideColumn(PAPER_NOTE);
-	ui.tableView->hideColumn(PAPER_ATTACHED);
+    for(int col = PAPER_ID; col <= PAPER_NOTE; ++col)
+        ui.tableView->hideColumn(col);
+    ui.tableView->showColumn(PAPER_TITLE);
+    ui.tableView->showColumn(PAPER_AUTHORS);
+    ui.tableView->showColumn(PAPER_YEAR);
 	ui.tableView->resizeColumnToContents(PAPER_TITLE);
+    ui.buttonBox->setEnabled(false);
 
 	connect(ui.leSearch, SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(accept()));
+    connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(onSelectionChanged(QItemSelection)));
 }
 
 QStringList PaperList::getSelected() const
@@ -28,7 +30,11 @@ QStringList PaperList::getSelected() const
 	QModelIndexList idxList = ui.tableView->selectionModel()->selectedRows();
 	foreach(QModelIndex idx, idxList)
 		result << model.data(model.index(idx.row(), PAPER_TITLE)).toString();
-	return result;
+    return result;
+}
+
+void PaperList::onSelectionChanged(const QItemSelection& selected) {
+    ui.buttonBox->setEnabled(!selected.isEmpty());
 }
 
 void PaperList::onSearch(const QString& target)

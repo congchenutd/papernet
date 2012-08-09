@@ -43,7 +43,7 @@ void PaperDlg::setTitle(const QString& title)
 	newPaper = title.isEmpty();
 }
 
-void PaperDlg::setType(const QString &type)
+void PaperDlg::setType(const QString& type)
 {
     int index = ui.comboType->findText(type);
     if(index > -1)
@@ -104,4 +104,7 @@ void PaperDlg::setReference(const Reference& ref)
     ui.leAuthors->setText(ref.getValue("authors").toStringList().join("; "));
     ui.leEditors->setText(ref.getValue("editors").toStringList().join("; "));
     ui.leTags   ->setText(ref.getValue("tags")   .toStringList().join("; "));
+
+    ui.leAuthors->setCursorPosition(0);
+    ui.lePublication->setCursorPosition(0);
 }

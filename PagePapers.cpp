@@ -27,7 +27,14 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.setupUi(this);
 	ui.tvPapers->init("PagePapers");   // set the table name for the view
 
-	onResetPapers();   // init model, table ...
+//	onResetPapers();   // init model, table ...
+	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
+	model.setTable("Papers");
+	model.select();
+	while(model.canFetchMore())
+		model.fetchMore();
+	model.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
+	model.sort(PAPER_TITLE, Qt::AscendingOrder);
 
 	QDataWidgetMapper* mapper = new QDataWidgetMapper(this);
 	mapper->setModel(&model);
@@ -96,6 +103,8 @@ void PagePapers::onClicked() {
 
 void PagePapers::jumpToID(int id)
 {
+	while(model.canFetchMore())
+		model.fetchMore();
 	currentRow = idToRow(&model, PAPER_ID, id);
 	if(currentRow < 0)
 		currentRow = 0;
@@ -383,12 +392,9 @@ void PagePapers:: onResetPapers()
 	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
 	model.setTable("Papers");
 	model.select();
-	while(model.canFetchMore())
-		model.fetchMore();
 	model.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
 
-	model.sort(PAPER_TITLE, Qt::AscendingOrder);
-	// FIXME: sort by view does not work
+	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
 	currentPaperID = backupID;
 	jumpToCurrent();

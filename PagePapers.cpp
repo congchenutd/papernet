@@ -535,6 +535,7 @@ void PagePapers::setPaperRead()
 
 void PagePapers::onRelatedDoubleClicked(int paperID)
 {
+	reset();
 	jumpToID(paperID);
 	Navigator::getInstance()->addFootStep(this, paperID);
 }

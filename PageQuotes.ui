@@ -16,6 +16,9 @@
    </property>
    <item>
     <widget class="AutoSizeTableView" name="tableView">
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -40,8 +43,6 @@
    <header>AutoSizeTableView.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="MainWindow.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

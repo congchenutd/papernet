@@ -74,8 +74,6 @@ void PageQuotes::reset()
 {
 	model.setTable("Quotes");
 	model.select();
-	while(model.canFetchMore())
-		model.fetchMore();
 	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
 }
 
@@ -85,6 +83,8 @@ int PageQuotes::rowToID(int row) const {
 
 void PageQuotes::jumpToID(int id)
 {
+	while(model.canFetchMore())
+		model.fetchMore();
 	int row = idToRow(&model, QUOTE_ID, id);
 	if(row > -1)
 	{

@@ -211,13 +211,14 @@ void PageDictionary::onResetPhrases()
 	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
 	model.setTable("Dictionary");
 	model.select();
-//	while(model.canFetchMore())
-//		model.fetchMore();
 	jumpToID(currentPhraseID);
+	ui.tableView->sortByColumn(DICTIONARY_PHRASE, Qt::AscendingOrder);
 }
 
 void PageDictionary::jumpToID(int id)
 {
+	while(model.canFetchMore())
+		model.fetchMore();
 	int row = idToRow(&model, DICTIONARY_ID, id);
 	if(row > -1)
 	{
@@ -238,6 +239,7 @@ void PageDictionary::onTagDoubleClicked(const QString& label)
 
 void PageDictionary::onRelatedDoubleClicked(int phraseID)
 {
+	reset();
     jumpToID(phraseID);
     Navigator::getInstance()->addFootStep(this, phraseID);
 }

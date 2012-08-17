@@ -27,14 +27,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.setupUi(this);
 	ui.tvPapers->init("PagePapers");   // set the table name for the view
 
-//	onResetPapers();   // init model, table ...
-	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
-	model.setTable("Papers");
-	model.select();
-	while(model.canFetchMore())
-		model.fetchMore();
-	model.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
-	model.sort(PAPER_TITLE, Qt::AscendingOrder);
+	onResetPapers();   // init model, table ...
 
 	QDataWidgetMapper* mapper = new QDataWidgetMapper(this);
 	mapper->setModel(&model);
@@ -47,6 +40,7 @@ PagePapers::PagePapers(QWidget *parent)
 		ui.tvPapers->hideColumn(col);
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
+	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
 	ui.widgetWordCloud->setTableNames("Tags", "PaperTag", "Paper");
 

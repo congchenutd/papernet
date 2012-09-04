@@ -575,8 +575,8 @@ void PagePapers::onExport()
     // get file name
     QString lastPath = setting->getLastImportPath();
     QString filePath = QFileDialog::getSaveFileName(this, tr("Export reference"),
-                                                    lastPath + getPaperTitle(currentPaperID),
-                                                    "Endnote (*.enw);;Reference Manager (*.ris);;Bibtex (*.bib);;All files (*.*)");
+                                                    lastPath + "/" + getPaperTitle(currentPaperID),
+                                                    "Bibtex (*.bib);;Endnote (*.enw);;Reference Manager (*.ris);;All files (*.*)");
     if(filePath.isEmpty())
         return;
     setting->setLastImportPath(QFileInfo(filePath).absolutePath());
@@ -599,6 +599,7 @@ void PagePapers::onExport()
         foreach(QModelIndex idx, idxList)    // save each row
         {
             Reference ref = exportReference(idx.row());
+            ref.generateID();
             os << exporter->toString(ref, *spec) << "\r\n";
         }
     }

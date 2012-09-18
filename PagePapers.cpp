@@ -70,7 +70,6 @@ PagePapers::PagePapers(QWidget *parent)
 
     connect(ui.widgetRelated,    SIGNAL(doubleClicked(int)), this, SLOT(onRelatedDoubleClicked(int)));
     connect(ui.widgetCoauthered, SIGNAL(doubleClicked(int)), this, SLOT(onRelatedDoubleClicked(int)));
-    connect(ui.widgetQuotes,     SIGNAL(doubleClicked(int)), this, SLOT(onQuoteDoubleClicked(int)));
 }
 
 void PagePapers::onSelectionChanged(const QItemSelection& selected)

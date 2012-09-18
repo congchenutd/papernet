@@ -1,4 +1,5 @@
 #include "QuotesWidget.h"
+#include "AddQuoteDlg.h"
 
 QuotesWidget::QuotesWidget(QWidget* parent) : QWidget(parent)
 {
@@ -24,8 +25,12 @@ void QuotesWidget::showEvent(QShowEvent*) {
 	update();
 }
 
-void QuotesWidget::onQuoteDoubleClicked(const QModelIndex& idx) {
-	emit doubleClicked(model.data(model.index(idx.row(), COL_ID)).toInt());
+void QuotesWidget::onQuoteDoubleClicked(const QModelIndex& idx)
+{
+	AddQuoteDlg dlg(this);
+	dlg.setWindowTitle(tr("Edit Quote"));
+	dlg.setQuoteID(model.data(model.index(idx.row(), COL_ID)).toInt());
+	dlg.exec();   // read only
 }
 
 void QuotesWidget::update()

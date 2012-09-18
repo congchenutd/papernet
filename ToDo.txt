@@ -13,7 +13,7 @@ auto-hidding side window
 (done) bug: can not submit the db if the paper is filtered by tags
 (done) + reset model when navigate to a paper
 (done) bug: different, same, related doesn't work
-= double click a quote opens a quote dialog, instead of jumping to the quote page
+(done) = double click a quote opens a quote dialog, instead of jumping to the quote page
 + export context menu item to paper
 + show authors in coauthored widget
 + right click to corresponding paper in the quote page

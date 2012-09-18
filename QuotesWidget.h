@@ -20,9 +20,6 @@ private slots:
 
 private:
     void update();
-
-signals:
-    void doubleClicked(int);
     
 private:
     Ui::QuotesWidget ui;

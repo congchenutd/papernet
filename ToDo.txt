@@ -17,3 +17,7 @@ auto-hidding side window
 + export context menu item to paper
 + show authors in coauthored widget
 + right click to corresponding paper in the quote page
++ right click to open pdf in the quote dialog (or maybe the view pdf button works whenever a paper is selected)
++ navigator also remembers the context (e.g., filter)
++ merge when an existing paper is imported
++ scroll to the jumped quote on quote page

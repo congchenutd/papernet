@@ -66,8 +66,8 @@ Reference PaperDlg::getReference() const
     ref.setValue("address",     ui.leAddress    ->text().simplified());
     ref.setValue("url",         ui.leUrl        ->text().simplified());
 
-    ref.setValue("abstract", ui.teAbstract->toPlainText().simplified());
-    ref.setValue("note",     ui.teNote    ->toPlainText().simplified());
+    ref.setValue("abstract", ui.teAbstract->toPlainText().trimmed());
+    ref.setValue("note",     ui.teNote    ->toPlainText().trimmed());
 
     ref.setValue("editors", ui.leEditors->text().simplified());
 	ref.setValue("authors", splitAuthorsList(ui.leAuthors->text()));

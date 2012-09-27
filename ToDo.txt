@@ -21,3 +21,4 @@ auto-hidding side window
 + navigator also remembers the context (e.g., filter)
 + merge when an existing paper is imported
 + scroll to the jumped quote on quote page
++ guess reference type if it's unknown

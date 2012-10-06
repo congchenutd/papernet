@@ -6,7 +6,8 @@ TEMPLATE = app
 TARGET =
 INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
-				../MySetting
+				../MySetting \
+				../MyComboBox
 
 QT += sql network
 win32 {
@@ -52,7 +53,8 @@ HEADERS += AddPhraseDlg.h \
 	RefFormatSpec.h \
 	RefExporter.h \
 	Reference.h \
-    Convertor.h
+    Convertor.h \
+    ../MyComboBox/SetTextComboBox.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -104,7 +106,8 @@ SOURCES += AddPhraseDlg.cpp \
 	RefFormatSpec.cpp \
 	RefExporter.cpp \
 	Reference.cpp \
-    Convertor.cpp
+    Convertor.cpp \
+    ../MyComboBox/SetTextComboBox.cpp
 RESOURCES += MainWindow.qrc
 
 

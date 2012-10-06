@@ -248,7 +248,12 @@
     <widget class="QLineEdit" name="leUrl"/>
    </item>
    <item row="4" column="1">
-    <widget class="QComboBox" name="comboType">
+    <widget class="SetTextComboBox" name="comboType">
+     <item>
+      <property name="text">
+       <string>unknown</string>
+      </property>
+     </item>
      <item>
       <property name="text">
        <string>journal</string>
@@ -256,7 +261,7 @@
      </item>
      <item>
       <property name="text">
-       <string>proceeding</string>
+       <string>inproceedings</string>
       </property>
      </item>
      <item>
@@ -300,6 +305,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>SetTextComboBox</class>
+   <extends>QComboBox</extends>
+   <header>SetTextComboBox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>leTitle</tabstop>
   <tabstop>leAuthors</tabstop>

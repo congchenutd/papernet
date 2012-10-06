@@ -47,6 +47,19 @@ void PaperDlg::setType(const QString& type)
     int index = ui.comboType->findText(type);
     if(index > -1)
         ui.comboType->setCurrentIndex(index);
+    else    // guess type
+    {
+        QString publication = ui.lePublication->text();
+        if(publication.contains("proceeding", Qt::CaseInsensitive) ||
+           publication.contains("proc.",      Qt::CaseInsensitive))
+            ui.comboType->setCurrentText("inproceedings");
+
+        else if(publication.contains("journal",     Qt::CaseInsensitive) ||
+                publication.contains("j.",          Qt::CaseInsensitive) ||
+                publication.contains("transaction", Qt::CaseInsensitive) ||
+                publication.contains("trans.",      Qt::CaseInsensitive))
+            ui.comboType->setCurrentText("journal");
+    }
 }
 
 void PaperDlg::accept()
@@ -85,7 +98,6 @@ Reference PaperDlg::getReference() const
 
 void PaperDlg::setReference(const Reference& ref)
 {
-	setType(ref.getValue("type").toString());
     ui.sbYear     ->setValue(ref.getValue("year")     .toInt());
     ui.sbVolume   ->setValue(ref.getValue("volume")   .toInt());
     ui.sbIssue    ->setValue(ref.getValue("issue")    .toInt());
@@ -107,4 +119,7 @@ void PaperDlg::setReference(const Reference& ref)
 
     ui.leAuthors->setCursorPosition(0);
     ui.lePublication->setCursorPosition(0);
+
+    // set type after publication, because we may guess type from publication
+    setType(ref.getValue("type").toString());
 }

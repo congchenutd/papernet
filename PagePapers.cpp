@@ -42,6 +42,7 @@ PagePapers::PagePapers(QWidget *parent)
 	ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
+    // tag table, relation table, foreign key in the relation table
 	ui.widgetWordCloud->setTableNames("Tags", "PaperTag", "Paper");
 
 	loadGeometry();
@@ -52,7 +53,7 @@ PagePapers::PagePapers(QWidget *parent)
             this, SLOT(onSelectionChanged(QItemSelection)));
 
 	connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
-			this, SLOT(onSubmitPaper()));
+            this, SLOT(onSubmitPaper()));  // submit before sorting
 	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
 	connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked()));
 	connect(ui.tvPapers, SIGNAL(addQuote()),     this, SLOT(onAddQuote()));
@@ -91,7 +92,6 @@ void PagePapers::onSelectionChanged(const QItemSelection& selected)
 // only triggered by mouse click, not programmatically
 void PagePapers::onClicked() {
 	Navigator::getInstance()->addFootStep(this, currentPaperID);
-	// TODO: move to onCurrentRowChanged?
 }
 
 void PagePapers::jumpToID(int id)
@@ -131,48 +131,83 @@ void PagePapers::onEditPaper()
         QString newTitle = newRef.getValue("title").toString();
         if(oldTitle != newTitle)
         {
-            renameTitle(oldTitle, newTitle);
+            ::renameTitle(oldTitle, newTitle);
             reloadAttachments();           // refresh attached files after renaming
         }
 
-        if(newRef.getValue("note") != oldRef.getValue("note"))   // changing note means reading
-            setPaperRead();
+        if(newRef.getValue("note") != oldRef.getValue("note"))
+            setPaperRead();                // changing note infers being read
 	}
 }
 
 void PagePapers::insertReference(const Reference& ref)
 {
-	int lastRow = model.rowCount();
-	model.insertRow(lastRow);
-    currentPaperID = getNextID("Papers", "ID");
-	model.setData(model.index(lastRow, PAPER_ID), currentPaperID);
-    updateReference(lastRow, ref);
-    onBookmark(true);    // attach the ReadMe tag
+    // search title, if exists, merge, otherwise, insert
+    int row = titleToRow(ref.getValue("title").toString());
+    if(row > -1) {  // merge to existing paper
+        updateReference(row, ref, true);
+    }
+    else            // insert as a new one
+    {
+        int lastRow = model.rowCount();
+        model.insertRow(lastRow);
+        model.setData(model.index(lastRow, PAPER_ID), getNextID("Papers", "ID"));
+        updateReference(lastRow, ref);
+        onBookmark(true);    // attach the ReadMe tag
+    }
 }
 
-void PagePapers::updateReference(int row, const Reference& ref)
+void PagePapers::updateReference(int row, const Reference& ref, bool merge)
 {
-	model.setData(model.index(row, PAPER_TITLE),       ref.getValue("title"));
-	model.setData(model.index(row, PAPER_YEAR),        ref.getValue("year"));
-	model.setData(model.index(row, PAPER_TYPE),        ref.getValue("type"));
-	model.setData(model.index(row, PAPER_PUBLICATION), ref.getValue("publication"));
-	model.setData(model.index(row, PAPER_ABSTRACT),    ref.getValue("abstract"));
-	model.setData(model.index(row, PAPER_VOLUME),      ref.getValue("volume"));
-	model.setData(model.index(row, PAPER_ISSUE),       ref.getValue("issue"));
-	model.setData(model.index(row, PAPER_STARTPAGE),   ref.getValue("startpage"));
-	model.setData(model.index(row, PAPER_ENDPAGE),     ref.getValue("endpage"));
-	model.setData(model.index(row, PAPER_PUBLISHER),   ref.getValue("publisher"));
-	model.setData(model.index(row, PAPER_EDITORS),     ref.getValue("editors"));
-	model.setData(model.index(row, PAPER_ADDRESS),     ref.getValue("address"));
-	model.setData(model.index(row, PAPER_URL),         ref.getValue("url"));
-	model.setData(model.index(row, PAPER_NOTE),        ref.getValue("note"));
-	model.setData(model.index(row, PAPER_AUTHORS),     ref.getValue("authors").toStringList().join("; "));
+    currentPaperID = rowToID(row);
+
+    QMap<int, QString> intFields;
+    intFields.insert(PAPER_YEAR,      "year");
+    intFields.insert(PAPER_VOLUME,    "volume");
+    intFields.insert(PAPER_ISSUE,     "issue");
+    intFields.insert(PAPER_STARTPAGE, "startpage");
+    intFields.insert(PAPER_ENDPAGE,   "endpage");
+
+    QMap<int, QString> stringFields;
+    stringFields.insert(PAPER_TITLE,       "title");
+    stringFields.insert(PAPER_TYPE,        "type");
+    stringFields.insert(PAPER_PUBLICATION, "publication");
+    stringFields.insert(PAPER_ABSTRACT,    "abstract");
+    stringFields.insert(PAPER_PUBLISHER,   "publisher");
+    stringFields.insert(PAPER_EDITORS,     "editors");
+    stringFields.insert(PAPER_ADDRESS,     "address");
+    stringFields.insert(PAPER_URL,         "url");
+    stringFields.insert(PAPER_NOTE,        "note");
+
+    // replace integer fields
+    for(QMap<int, QString>::iterator it = intFields.begin(); it != intFields.end(); ++it)
+        model.setData(model.index(row, it.key()), ref.getValue(it.value()));
+
+    // merge string fields when the old data is empty and the new one valid
+    for(QMap<int, QString>::iterator it = stringFields.begin(); it != stringFields.end(); ++it)
+    {
+        if(!merge || (model.data(model.index(row, it.key())).toString().isEmpty() &&
+                      ref.getValue(it.value()).isValid()))
+            model.setData(model.index(row, it.key()), ref.getValue(it.value()));
+    }
+
+    // merge author list
+    QSet<QString> authors = splitAuthorsList(
+                model.data(model.index(row, PAPER_AUTHORS)).toString()).toSet();
+    authors.unite(ref.getValue("authors").toStringList().toSet());
+    model.setData(model.index(row, PAPER_AUTHORS), static_cast<QStringList>(authors.toList()).join("; "));
+
+    // tags are stored in a relations table
     updateTags(ref.getValue("tags").toStringList());
+
 	onSubmitPaper();
 }
 
 void PagePapers::updateTags(const QStringList& tags)
 {
+    if(tags.isEmpty())
+        return;
+
 	// remove all relations to tags
 	QSqlQuery query;
 	query.exec(tr("delete from PaperTag where Paper = %1").arg(currentPaperID));
@@ -199,8 +234,15 @@ void PagePapers::del()
 }
 
 int PagePapers::rowToID(int row) const {
-	return row > -1 && row < model.rowCount() ? model.data(model.index(row, PAPER_ID)).toInt()
-											  : -1;
+    return row > -1 && row < model.rowCount() ?
+                model.data(model.index(row, PAPER_ID)).toInt() : -1;
+}
+
+int PagePapers::titleToRow(const QString& title) const
+{
+    QModelIndexList indexes = model.match(model.index(0, PAPER_TITLE),
+                                          Qt::DisplayRole, title, 1, Qt::MatchFixedString);
+    return indexes.isEmpty() ? -1 : indexes.front().row();
 }
 
 void PagePapers::importFromFiles(const QStringList& filePaths)
@@ -258,13 +300,7 @@ void PagePapers::importReferences(const QList<Reference>& references)
         dlg.setWindowTitle(tr("Import reference"));
         dlg.setReference(ref);
         if(dlg.exec() == QDialog::Accepted)
-        {
-            if(paperExists(title))
-                QMessageBox::warning(this, tr("Title exists"),
-                                     tr("\"%1\" already exists in the database, and is skipped").arg(title));
-            else
-				insertReference(ref);   // currentPaperID will be equal to the ID of the newly added
-        }
+            insertReference(ref);   // currentPaperID will be equal to the ID of the newly added
     }
     QSqlDatabase::database().commit();
 }
@@ -273,9 +309,9 @@ void PagePapers::importPDF(const QString& pdfPath)
 {
     PaperList dlg(this);
 	dlg.setWindowTitle(tr("To which paper will %1 be attached?").arg(QFileInfo(pdfPath).fileName()));
-    if(dlg.exec() == QDialog::Accepted)
+    if(dlg.exec() == QDialog::Accepted && !dlg.getSelected().isEmpty())
     {
-        jumpToID(getPaperID(dlg.getSelected().front()));   // the selection must be non-empty
+        jumpToID(getPaperID(dlg.getSelected().front()));
         addAttachment(currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
         reloadAttachments();
     }
@@ -379,7 +415,7 @@ void PagePapers::onDelTagFromPaper()
 
 void PagePapers:: onResetPapers()
 {
-	dropTempView();
+//    dropTempView();   // why needed?
 
 	int backupID = currentPaperID;
 	model.setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -551,11 +587,11 @@ Reference PagePapers::exportReference(int row) const
     for(int col = 0; col < record.count(); ++col)
     {
         QString fieldName = record.fieldName(col).toLower();
-		if(fieldName == "id" || fieldName == "attached")
+        if(fieldName == "id" || fieldName == "attached")  // not exported
 			continue;
         QVariant fieldValue = record.value(col);
         if(fieldName == "authors")
-			ref.setValue(fieldName, splitAuthorsList(fieldValue.toString()));
+            ref.setValue(fieldName, splitAuthorsList(fieldValue.toString()));  // to QStringList
 		else
             ref.setValue(fieldName, fieldValue);
     }

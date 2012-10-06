@@ -7,7 +7,7 @@
 #include <QCompleter>
 
 PaperDlg::PaperDlg(QWidget *parent)
-	: QDialog(parent), newPaper(true)
+    : QDialog(parent)
 {
 	ui.setupUi(this);
 	resize(800, 700);
@@ -40,7 +40,6 @@ void PaperDlg::setTitle(const QString& title)
 {
 	ui.leTitle->setText(title);
 	ui.leTitle->setCursorPosition(0);
-	newPaper = title.isEmpty();
 }
 
 void PaperDlg::setType(const QString& type)
@@ -50,10 +49,11 @@ void PaperDlg::setType(const QString& type)
         ui.comboType->setCurrentIndex(index);
 }
 
-void PaperDlg::accept() {
-	if(newPaper && paperExists(getTitle()))
-		setWindowTitle(tr("Error: the title already exists!"));
-	else
+void PaperDlg::accept()
+{
+    if(getTitle().isEmpty())
+        ui.leTitle->setFocus();
+    else
 		QDialog::accept();
 }
 

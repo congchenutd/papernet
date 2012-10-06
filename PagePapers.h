@@ -64,6 +64,7 @@ signals:
 
 private:
 	int  rowToID(int row) const;
+    int  titleToRow(const QString& title)  const;
     void setPaperRead();
 	void updateTags(const QStringList& tags);
 	void highLightTags();
@@ -72,7 +73,7 @@ private:
 	void attachNewTag(const QString& tagName);   // create and add a tag to current paper
 
     void insertReference(const Reference& ref);
-    void updateReference(int row, const Reference& ref);
+    void updateReference(int row, const Reference& ref, bool merge = false);
     void importReferences(const QList<Reference>& references);
     void importPDF(const QString& pdfPath);
 	Reference exportReference(int row) const;   // row -> Reference

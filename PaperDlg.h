@@ -24,7 +24,6 @@ public:
 
 private:
 	Ui::PaperDlgClass ui;
-	bool newPaper;
 };
 
 #endif // PAPERDLG_H

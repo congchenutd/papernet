@@ -11,6 +11,7 @@ AddQuoteDlg::AddQuoteDlg(QWidget *parent)
 	: QDialog(parent), quoteID(-1)
 {
 	ui.setupUi(this);
+    resize(600, 500);
 	ui.listView->setModel(&model);
 
 	connect(ui.listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),

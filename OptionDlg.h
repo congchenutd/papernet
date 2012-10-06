@@ -17,9 +17,9 @@ public:
 
 private slots:
 	void onFont();
-	void onTempLocation();
 	void onRebuildFulltext();
 	void onClearCache();
+    void onSetBibFixerPath();
 
 private:
 	Ui::OptionDlgClass ui;
@@ -36,19 +36,21 @@ public:
 	QFont   getFont()               const;
 	int     getBackupDays()         const;
 	bool    getKeepAttachments()    const;
-	QString getLastImportPath()     const;
+    bool    getExportToBibFixer()   const;
+    QString getLastImportPath()     const;
 	QString getLastAttachmentPath() const;
-	QString getTempLocation()       const;
+    QString getBibFixerPath()       const;
 	QString getCompileDate()        const;
-	QByteArray getSplitterSizes(const QString& splitterName) const;
+    QByteArray getSplitterSizes(const QString& splitterName) const;
 	int     getPapersTabIndex() const;
 
 	void setFont              (const QFont& font);
 	void setBackupDays        (int days);
 	void setKeepAttachments   (bool keep);
+    void setExportToBibFixer  (bool exportToBibFixer);
 	void setLastImportPath    (const QString& path);
 	void setLastAttachmentPath(const QString& path);
-	void setTempLocation      (const QString& temp);
+    void setBibFixerPath  (const QString& path);
 	void setSplitterSizes(const QString& splitterName, const QByteArray& sizes);
 	void setPapersTabIndex(int tab);
 

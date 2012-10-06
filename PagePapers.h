@@ -77,6 +77,7 @@ private:
     void importReferences(const QList<Reference>& references);
     void importPDF(const QString& pdfPath);
 	Reference exportReference(int row) const;   // row -> Reference
+    QString toString(const QModelIndexList& idxList, const QString& extension);
 
 private:
 	Ui::PagePapersClass ui;

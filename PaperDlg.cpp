@@ -117,7 +117,7 @@ void PaperDlg::setReference(const Reference& ref)
     ui.leEditors->setText(ref.getValue("editors").toStringList().join("; "));
     ui.leTags   ->setText(ref.getValue("tags")   .toStringList().join("; "));
 
-    ui.leAuthors->setCursorPosition(0);
+    ui.leAuthors    ->setCursorPosition(0);
     ui.lePublication->setCursorPosition(0);
 
     // set type after publication, because we may guess type from publication

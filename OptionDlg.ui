@@ -6,17 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>321</width>
-    <height>255</height>
+    <width>462</width>
+    <height>265</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Options</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="sizeConstraint">
-    <enum>QLayout::SetFixedSize</enum>
-   </property>
    <item>
     <widget class="QPushButton" name="btFont">
      <property name="toolTip">
@@ -51,19 +48,19 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="labelTempLocation">
-     <property name="text">
-      <string>Temporary file location</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLineEdit" name="leTemp"/>
+      <widget class="QCheckBox" name="checkExportToBibFixer">
+       <property name="text">
+        <string>Export to BibFixer</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btTemp">
+      <widget class="QLineEdit" name="leBibFixerPath"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btBibFixerPath">
        <property name="maximumSize">
         <size>
          <width>40</width>
@@ -83,7 +80,7 @@
       <string>Attachments will not be delete if checked</string>
      </property>
      <property name="text">
-      <string>Keep attached files when the entry is deleted</string>
+      <string>Keep attachments when a paper is deleted</string>
      </property>
     </widget>
    </item>

@@ -11,20 +11,15 @@ OptionDlg::OptionDlg(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-
-	// temp location is currently useless
-	ui.labelTempLocation->hide();
-	ui.leTemp->hide();
-	ui.btTemp->hide();
-
-	setting = MySetting<UserSetting>::getInstance();
+    resize(400, 200);
 
 	connect(ui.btFont,            SIGNAL(clicked()), this, SLOT(onFont()));
-	connect(ui.btTemp,            SIGNAL(clicked()), this, SLOT(onTempLocation()));
 	connect(ui.btRebuiltFulltext, SIGNAL(clicked()), this, SLOT(onRebuildFulltext()));
 	connect(ui.btClearCache,      SIGNAL(clicked()), this, SLOT(onClearCache()));
+    connect(ui.btBibFixerPath,    SIGNAL(clicked()), this, SLOT(onSetBibFixerPath()));
 
 	// load settings
+    setting = MySetting<UserSetting>::getInstance();
 	qApp->setFont(setting->getFont());
 	int backupDays = setting->getBackupDays();
 	if(backupDays == 0)
@@ -33,8 +28,10 @@ OptionDlg::OptionDlg(QWidget *parent)
 		ui.sbBackupDays->setEnabled(false);
 	}
 	ui.sbBackupDays->setValue(backupDays);
-	ui.checkKeepAttachments->setChecked(setting->getKeepAttachments());
-	ui.leTemp->setText(setting->getTempLocation());
+    ui.checkKeepAttachments ->setChecked(setting->getKeepAttachments());
+    ui.checkExportToBibFixer->setChecked(setting->getExportToBibFixer());
+    ui.leBibFixerPath->setText(setting->getBibFixerPath());
+    ui.leBibFixerPath->setCursorPosition(0);
 }
 
 void OptionDlg::onFont()
@@ -50,18 +47,11 @@ void OptionDlg::accept()
 	// apply settings
 	qApp->setFont(setting->getFont());
 	setting->setBackupDays(ui.checkAutoBack->isChecked() ? ui.sbBackupDays->value() : 0);
-	setting->setKeepAttachments(ui.checkKeepAttachments->isChecked());
-	setting->setTempLocation(ui.leTemp->text());
+    setting->setKeepAttachments (ui.checkKeepAttachments->isChecked());
+    setting->setExportToBibFixer(ui.checkExportToBibFixer->isChecked());
+    setting->setBibFixerPath(ui.leBibFixerPath->text());
 
 	QDialog::accept();
-}
-
-void OptionDlg::onTempLocation()
-{
-	QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-		setting->getTempLocation(),	QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-	if(!dir.isEmpty())
-		ui.leTemp->setText(dir);
 }
 
 void OptionDlg::onRebuildFulltext() {
@@ -69,7 +59,14 @@ void OptionDlg::onRebuildFulltext() {
 }
 
 void OptionDlg::onClearCache() {
-	ThesaurusCache::getInstance()->clear();
+    ThesaurusCache::getInstance()->clear();
+}
+
+void OptionDlg::onSetBibFixerPath()
+{
+    QString path = QFileDialog::getOpenFileName(this, tr("Select the BibFixer executable"), ".");
+    if(!path.isEmpty())
+        ui.leBibFixerPath->setText(path);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -88,9 +85,9 @@ void UserSetting::loadDefaults()
 	setKeepAttachments(false);
 	setLastImportPath(".");
 	setLastAttachmentPath(".");
+    setBibFixerPath(".");
 	setValue("SmallIcon", false);
 	setValue("ShowText",  false);
-	setTempLocation(QProcessEnvironment::systemEnvironment().value("TMP", "."));
     setPapersTabIndex(0);
 }
 
@@ -105,16 +102,19 @@ int UserSetting::getBackupDays() const {
 	return value("BackupDays").toInt();
 }
 bool UserSetting::getKeepAttachments() const {
-	return value("KeepAttachments").toBool();
+    return value("KeepAttachments").toBool();
+}
+bool UserSetting::getExportToBibFixer() const {
+    return value("ExportToBibFixer").toBool();
 }
 QString UserSetting::getLastImportPath() const {
 	return value("LastImportPath").toString();
 }
 QString UserSetting::getLastAttachmentPath() const {
-	return value("LastAttachmentPath").toString();
+    return value("LastAttachmentPath").toString();
 }
-QString UserSetting::getTempLocation() const {
-	return value("TempLocation").toString();
+QString UserSetting::getBibFixerPath() const {
+    return value("BibFixerPath").toString();
 }
 
 void UserSetting::setFont(const QFont& font) {
@@ -126,14 +126,17 @@ void UserSetting::setBackupDays(int days) {
 void UserSetting::setKeepAttachments(bool keep) {
     setValue("KeepAttachments", keep);
 }
+void UserSetting::setExportToBibFixer(bool exportToBibFixer) {
+    setValue("ExportToBibFixer", exportToBibFixer);
+}
 void UserSetting::setLastImportPath(const QString& path) {
 	setValue("LastImportPath", path);
 }
 void UserSetting::setLastAttachmentPath(const QString& path) {
     setValue("LastAttachmentPath", path);
 }
-void UserSetting::setTempLocation(const QString& temp) {
-	setValue("TempLocation", temp);
+void UserSetting::setBibFixerPath(const QString &path) {
+    setValue("BibFixerPath", path);
 }
 
 QByteArray UserSetting::getSplitterSizes(const QString& splitterName) const {

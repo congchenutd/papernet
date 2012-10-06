@@ -64,5 +64,5 @@ void Reference::generateID()
 }
 
 Reference::Fields Reference::getAllFields() const {
-	return fields;
+    return fields;
 }

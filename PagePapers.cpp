@@ -16,6 +16,7 @@
 #include <QFileInfo>
 #include <QProgressDialog>
 #include <QClipboard>
+#include <QProcess>
 
 PagePapers::PagePapers(QWidget *parent)
 	: Page(parent)
@@ -600,42 +601,64 @@ Reference PagePapers::exportReference(int row) const
     return ref;
 }
 
+QString PagePapers::toString(const QModelIndexList& idxList, const QString& extension)
+{
+    // find spec
+    RefFormatSpec* spec = SpecFactory::getInstance()->getSpec(extension);
+    if(spec == 0)
+        return tr("Cannot find the specification for this reference format!");
+
+    // get the output
+    IRefExporter* exporter = ExporterFactory::getInstance()->getExporter(extension);
+    QString result;
+    QTextStream os(&result);
+    foreach(QModelIndex idx, idxList)    // save each row
+    {
+        Reference ref = exportReference(idx.row());
+        ref.generateID();
+        os << exporter->toString(ref, *spec) << "\r\n";
+    }
+    return result;
+}
+
 void PagePapers::onExport()
 {
     // get selected rows
     QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
     if(idxList.isEmpty())
-        return;
+        return;    
 
-    // get file name
-    QString lastPath = setting->getLastImportPath();
-    QString filePath = QFileDialog::getSaveFileName(this, tr("Export reference"),
-                                                    lastPath + "/" + getPaperTitle(currentPaperID),
-                                                    "Bibtex (*.bib);;Endnote (*.enw);;Reference Manager (*.ris);;All files (*.*)");
-    if(filePath.isEmpty())
-        return;
-    setting->setLastImportPath(QFileInfo(filePath).absolutePath());
-
-    // find spec
-    QString extension = QFileInfo(filePath).suffix().toLower();
-    RefFormatSpec* spec = SpecFactory::getInstance()->getSpec(extension);
-    if(spec == 0)
+    // save to BibFixer
+    if(setting->getExportToBibFixer())
     {
-        QMessageBox::critical(this, tr("Error"),
-                              tr("Can not find the specification for this reference format!"));
-        return;
-    }
-
-    QFile file(filePath);
-    if(file.open(QFile::WriteOnly | QFile::Truncate))
-    {
-        IRefExporter* exporter = ExporterFactory::getInstance()->getExporter(extension);
-        QTextStream os(&file);
-        foreach(QModelIndex idx, idxList)    // save each row
+        QString bibFixerPath = setting->getBibFixerPath();
+        if(bibFixerPath.isEmpty())
         {
-            Reference ref = exportReference(idx.row());
-            ref.generateID();
-            os << exporter->toString(ref, *spec) << "\r\n";
+            QMessageBox::critical(this, tr("Error"), tr("Cannot find BibFixer!"));
+            return;
+        }
+
+        QProcess* process = new QProcess(this);
+        process->setWorkingDirectory(QFileInfo(bibFixerPath).path());
+        process->start(bibFixerPath, QStringList() << toString(idxList, "bib"));
+    }
+    // save to file
+    else
+    {
+        // get file name
+        QString lastPath = setting->getLastImportPath();
+        QString filePath = QFileDialog::getSaveFileName(this, tr("Export reference"),
+                                                        lastPath + "/" + getPaperTitle(currentPaperID),
+                                                        "Bibtex (*.bib);;Endnote (*.enw);;Reference Manager (*.ris);;All files (*.*)");
+        if(filePath.isEmpty())
+            return;
+        setting->setLastImportPath(QFileInfo(filePath).absolutePath());
+
+        QFile file(filePath);
+        if(file.open(QFile::WriteOnly | QFile::Truncate))
+        {
+            QTextStream os(&file);
+            os << toString(idxList, QFileInfo(filePath).suffix().toLower());
         }
     }
 }

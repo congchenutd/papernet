@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Reference.h"
 #include "EnglishName.h"
+#include "Convertor.h"
 #include <QDate>
 #include <QSqlTableModel>
 #include <QCompleter>
@@ -38,7 +39,7 @@ QString PaperDlg::getTitle() const {
 // setters
 void PaperDlg::setTitle(const QString& title)
 {
-	ui.leTitle->setText(title);
+    ui.leTitle->setText(CaseConvertor().convert(title));
 	ui.leTitle->setCursorPosition(0);
 }
 

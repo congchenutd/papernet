@@ -7,7 +7,8 @@ TARGET =
 INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
 				../MySetting \
-				../MyComboBox
+				../MyComboBox \
+				../BibFixer
 
 QT += sql network
 win32 {
@@ -53,8 +54,8 @@ HEADERS += AddPhraseDlg.h \
 	RefFormatSpec.h \
 	RefExporter.h \
 	Reference.h \
-    Convertor.h \
-    ../MyComboBox/SetTextComboBox.h
+    ../MyComboBox/SetTextComboBox.h \
+    ../BibFixer/Convertor.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -106,8 +107,8 @@ SOURCES += AddPhraseDlg.cpp \
 	RefFormatSpec.cpp \
 	RefExporter.cpp \
 	Reference.cpp \
-    Convertor.cpp \
-    ../MyComboBox/SetTextComboBox.cpp
+    ../MyComboBox/SetTextComboBox.cpp \
+    ../BibFixer/Convertor.cpp
 RESOURCES += MainWindow.qrc
 
 

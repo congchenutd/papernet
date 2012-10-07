@@ -8,17 +8,21 @@
 #include <QSqlQuery>
 
 AddQuoteDlg::AddQuoteDlg(QWidget *parent)
-	: QDialog(parent), quoteID(-1)
+    : QDialog(parent), quoteID(-1), selectedPaperID(-1)
 {
 	ui.setupUi(this);
     resize(600, 500);
 	ui.listView->setModel(&model);
+    ui.btGotoQuotePage->setHidden(
+                MainWindow::getInstance()->getCurrentPageIndex() == MainWindow::PAGE_QUOTES);
 
 	connect(ui.listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
 			this, SLOT(onCurrentRowChanged()));
-	connect(ui.btAdd,    SIGNAL(clicked()), this, SLOT(onAddRef()));
-	connect(ui.btDel,    SIGNAL(clicked()), this, SLOT(onDelRef()));
-	connect(ui.btSelect, SIGNAL(clicked()), this, SLOT(onSelectRef()));
+    connect(ui.btAdd,     SIGNAL(clicked()), this, SLOT(onAddRef()));
+    connect(ui.btDel,     SIGNAL(clicked()), this, SLOT(onDelRef()));
+    connect(ui.btSelect,  SIGNAL(clicked()), this, SLOT(onSelectRef()));
+    connect(ui.btViewPDF, SIGNAL(clicked()), this, SLOT(onViewPDF()));
+    connect(ui.btGotoQuotePage, SIGNAL(clicked()), this, SLOT(onGotoQuotePage()));
 	connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onSwitchToPapers()));
 }
 
@@ -48,6 +52,12 @@ void AddQuoteDlg::onCurrentRowChanged()
 	QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
 	bool valid = !idxList.isEmpty();
 	ui.btDel->setEnabled(valid);
+
+    selectedPaperID = idxList.isEmpty() ? -1
+                    : getPaperID(model.data(idxList.front(), Qt::DisplayRole).toString());
+
+    ui.btViewPDF->setEnabled(selectedPaperID > -1 &&
+                             isAttached(selectedPaperID) >= ATTACH_PAPER);
 }
 
 void AddQuoteDlg::accept()
@@ -130,9 +140,16 @@ void AddQuoteDlg::resizeEvent(QResizeEvent*) {
 
 void AddQuoteDlg::onSwitchToPapers()
 {
-	QModelIndexList idxList = ui.listView->selectionModel()->selectedRows();
-	QString paper = idxList.isEmpty() ? QString()
-									  : model.data(idxList.front(), Qt::DisplayRole).toString();
-	MainWindow::getInstance()->jumpToPaper(paper);   // select the paper
-    reject();
+    MainWindow::getInstance()->jumpToPaper(selectedPaperID);
+    accept();
+}
+
+void AddQuoteDlg::onGotoQuotePage()
+{
+    MainWindow::getInstance()->jumpToQuote(quoteID);
+    accept();
+}
+
+void AddQuoteDlg::onViewPDF() {
+    openAttachment(selectedPaperID, "Paper.pdf");
 }

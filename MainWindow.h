@@ -15,11 +15,15 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
+    typedef enum {PAGE_PAPERS, PAGE_QUOTES, PAGE_DICTIONARY} PageIndex;
+
+public:
 	MainWindow(QWidget *parent = 0, Qt::WFlags flags = 0);
 	static MainWindow* getInstance();
-	void jumpToPaper(const QString& title);
+    void jumpToPaper(int paperID);
 	void jumpToQuote(int quoteID);
     void importRefFromFiles(const QStringList& filePaths);
+    int getCurrentPageIndex() const;
 
 protected:
 	virtual void closeEvent(QCloseEvent*);

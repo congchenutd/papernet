@@ -26,11 +26,14 @@ private slots:
 	void onDelRef();
 	void onSelectRef();            // select existing ref
 	void onSwitchToPapers();
+    void onGotoQuotePage();
+    void onViewPDF();
 
 private:
 	Ui::AddQuoteDlgClass ui;
 	QStringListModel model;        // list the references
 	int quoteID;
+    int selectedPaperID;
 };
 
 #endif // ADDQUOTEDLG_H

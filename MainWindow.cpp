@@ -113,7 +113,7 @@ void MainWindow::backup(const QString& name)
 void MainWindow::onPapers()
 {
 	ui.actionPapers->setChecked(true);
-	ui.stackedWidget->setCurrentIndex(0);
+    ui.stackedWidget->setCurrentIndex(PAGE_PAPERS);
     ui.actionImportRef->setVisible(true);
     ui.actionExportRef->setVisible(true);
     ui.actionReadPDF  ->setVisible(true);
@@ -125,7 +125,7 @@ void MainWindow::onPapers()
 void MainWindow::onQuotes()
 {
 	ui.actionQuotes->setChecked(true);
-	ui.stackedWidget->setCurrentIndex(1);
+    ui.stackedWidget->setCurrentIndex(PAGE_QUOTES);
     ui.actionImportRef->setVisible(false);
     ui.actionExportRef->setVisible(false);
     ui.actionReadPDF  ->setVisible(false);
@@ -138,7 +138,7 @@ void MainWindow::onQuotes()
 void MainWindow::onDictionary()
 {
 	ui.actionDictionary->setChecked(true);
-	ui.stackedWidget->setCurrentIndex(2);
+    ui.stackedWidget->setCurrentIndex(PAGE_DICTIONARY);
     ui.actionImportRef->setVisible(false);
     ui.actionExportRef->setVisible(false);
     ui.actionReadPDF  ->setVisible(false);
@@ -147,11 +147,10 @@ void MainWindow::onDictionary()
     onSelectionValid(false);
 }
 
-void MainWindow::jumpToPaper(const QString& title)
+void MainWindow::jumpToPaper(int paperID)
 {
 	onPapers();
     pagePapers->reset();                 // ensure the row is visible
-    int paperID = ::getPaperID(title);
     pagePapers->jumpToID(paperID);
     navigator->addFootStep(ui.pagePapers, paperID);
 }
@@ -168,6 +167,10 @@ void MainWindow::importRefFromFiles(const QStringList& filePaths)
 {
     onPapers();    // switch to paper page
     static_cast<PagePapers*>(currentPage)->importFromFiles(filePaths);
+}
+
+int MainWindow::getCurrentPageIndex() const {
+    return ui.stackedWidget->currentIndex();
 }
 
 MainWindow* MainWindow::getInstance() {

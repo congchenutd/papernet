@@ -2,7 +2,7 @@
 #include "Common.h"
 #include "Reference.h"
 #include "EnglishName.h"
-#include "Convertor.h"
+#include "../BibFixer/Convertor.h"
 #include <QDate>
 #include <QSqlTableModel>
 #include <QCompleter>

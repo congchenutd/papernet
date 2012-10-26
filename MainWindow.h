@@ -54,8 +54,8 @@ private:
 	PagePapers*     pagePapers;
 	PageQuotes*     pageQuotes;
 	PageDictionary* pageDictionary;
-	Page* currentPage;
-	Navigator* navigator;
+    Page*           currentPage;
+    Navigator*      navigator;
 };
 
 #endif // MAINWINDOW_H

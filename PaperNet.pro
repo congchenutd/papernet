@@ -7,8 +7,7 @@ TARGET =
 INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
 				../MySetting \
-				../MyComboBox \
-				../BibFixer
+                ../MyComboBox
 
 QT += sql network
 win32 {

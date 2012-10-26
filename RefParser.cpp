@@ -1,7 +1,6 @@
 #include "RefParser.h"
 #include "EnglishName.h"
 #include "Common.h"
-#include "Convertor.h"
 #include <QRegExp>
 #include <QSettings>
 #include <QFile>

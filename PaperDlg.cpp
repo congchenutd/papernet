@@ -84,6 +84,8 @@ Reference PaperDlg::getReference() const
     ref.setValue("note",     ui.teNote    ->toPlainText().trimmed());
 
     ref.setValue("editors", ui.leEditors->text().simplified());
+
+    // authors and tags are QStringLists
 	ref.setValue("authors", splitAuthorsList(ui.leAuthors->text()));
 	ref.setValue("tags",    splitLine(ui.leTags->text(), ";"));
 

@@ -97,7 +97,7 @@ void PagePapers::onClicked() {
 
 void PagePapers::jumpToID(int id)
 {
-	while(model.canFetchMore())
+    while(model.canFetchMore())
 		model.fetchMore();
 	currentRow = idToRow(&model, PAPER_ID, id);
 	if(currentRow < 0)
@@ -143,10 +143,13 @@ void PagePapers::onEditPaper()
 
 void PagePapers::insertReference(const Reference& ref)
 {
+    reset();   // do not call reset() in updateReference(),
+               // because model.insertRow() is not submitted yet
+
     // search title, if exists, merge, otherwise, insert
     int row = titleToRow(ref.getValue("title").toString());
     if(row > -1) {  // merge to existing paper
-        updateReference(row, ref, true);
+        updateReference(row, ref);
     }
     else            // insert as a new one
     {
@@ -158,7 +161,7 @@ void PagePapers::insertReference(const Reference& ref)
     }
 }
 
-void PagePapers::updateReference(int row, const Reference& ref, bool merge)
+void PagePapers::updateReference(int row, const Reference& ref)
 {
     currentPaperID = rowToID(row);
 
@@ -184,19 +187,17 @@ void PagePapers::updateReference(int row, const Reference& ref, bool merge)
     for(QMap<int, QString>::iterator it = intFields.begin(); it != intFields.end(); ++it)
         model.setData(model.index(row, it.key()), ref.getValue(it.value()));
 
-    // merge string fields when the old data is empty and the new one valid
+    // replace string fields when the old data is empty and the new one valid
     for(QMap<int, QString>::iterator it = stringFields.begin(); it != stringFields.end(); ++it)
     {
-        if(!merge || (model.data(model.index(row, it.key())).toString().isEmpty() &&
-                      ref.getValue(it.value()).isValid()))
+        if(model.data(model.index(row, it.key())).toString().isEmpty() &&
+           ref.getValue(it.value()).isValid())
             model.setData(model.index(row, it.key()), ref.getValue(it.value()));
     }
 
-    // merge author list
-    QSet<QString> authors = splitAuthorsList(
-                model.data(model.index(row, PAPER_AUTHORS)).toString()).toSet();
-    authors.unite(ref.getValue("authors").toStringList().toSet());
-    model.setData(model.index(row, PAPER_AUTHORS), static_cast<QStringList>(authors.toList()).join("; "));
+    // authors is a QStringList
+    model.setData(model.index(row, PAPER_AUTHORS),
+                  ref.getValue("authors").toStringList().join("; "));
 
     // tags are stored in a relations table
     updateTags(ref.getValue("tags").toStringList());

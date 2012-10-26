@@ -73,9 +73,7 @@ Reference LineRefParser::parseRecord(const QString& record) const
             QString fieldValue = rxField.cap(2).simplified();
 
             // special fields
-            if(fieldName == "title")
-                result.setValue(fieldName, CaseConvertor().convert(fieldValue));
-            else if(fieldName == "authors")
+            if(fieldName == "authors")
                 result.setValue(fieldName, parseAuthors(fieldValue));
 			else if(fieldName == "pages")
                 result.setValue(fieldName, parsePages(fieldValue));

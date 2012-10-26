@@ -8,6 +8,7 @@
 #include "RefFormatSpec.h"
 #include "RefExporter.h"
 #include "PaperList.h"
+#include <QDataWidgetMapper>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSqlQuery>
@@ -146,7 +147,7 @@ void PagePapers::insertReference(const Reference& ref)
     reset();   // do not call reset() in updateReference(),
                // because model.insertRow() is not submitted yet
 
-    // search title, if exists, merge, otherwise, insert
+    // search title, if exists, replace, otherwise, insert
     int row = titleToRow(ref.getValue("title").toString());
     if(row > -1) {  // merge to existing paper
         updateReference(row, ref);
@@ -302,7 +303,7 @@ void PagePapers::importReferences(const QList<Reference>& references)
         dlg.setWindowTitle(tr("Import reference"));
         dlg.setReference(ref);
         if(dlg.exec() == QDialog::Accepted)
-            insertReference(ref);   // currentPaperID will be equal to the ID of the newly added
+            insertReference(dlg.getReference());   // currentPaperID will be equal to the ID of the newly added
     }
     QSqlDatabase::database().commit();
 }

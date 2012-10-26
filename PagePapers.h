@@ -2,15 +2,10 @@
 #define PAGEPAPERS_H
 
 #include <QSqlTableModel>
-#include <QDataWidgetMapper>
 #include "ui_PagePapers.h"
 #include "PaperModel.h"
 #include "Page.h"
 #include "Reference.h"
-
-struct PaperRecord;
-class PaperDlg;
-class Thesaurus;
 
 class PagePapers : public Page
 {
@@ -55,7 +50,7 @@ private slots:
 	void onBookmark (bool readMe);
 
 	void onAddQuote();
-	void onAddPDF();
+    void onAddPDF();         // add pdf to current paper
 	void onReadPDF();
 
 signals:
@@ -72,12 +67,12 @@ private:
 	void reloadAttachments();
 	void attachNewTag(const QString& tagName);   // create and add a tag to current paper
 
-    void insertReference(const Reference& ref);
-    void updateReference(int row, const Reference& ref);
-    void importReferences(const QList<Reference>& references);
-    void importPDF(const QString& pdfPath);
+    void insertReference(const Reference& ref);                // insert or replace
+    void updateReference(int row, const Reference& ref);       // update a row by the ref
+    void importReferences(const QList<Reference>& references); // review and insert
+    void importPDF(const QString& pdfPath);                    // select a paper to be added to
 	Reference exportReference(int row) const;   // row -> Reference
-    QString toString(const QModelIndexList& idxList, const QString& extension);
+    QString toString(const QModelIndexList& idxList, const QString& extension);  // export the selected
 
 private:
 	Ui::PagePapersClass ui;

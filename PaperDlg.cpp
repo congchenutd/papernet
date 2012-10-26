@@ -39,7 +39,9 @@ QString PaperDlg::getTitle() const {
 // setters
 void PaperDlg::setTitle(const QString& title)
 {
-    ui.leTitle->setText(CaseConvertor().convert(title));
+    QString fixedTitle = CaseConvertor().convert(
+                UnprotectionConvertor().convert(title));
+    ui.leTitle->setText(fixedTitle);
 	ui.leTitle->setCursorPosition(0);
 }
 

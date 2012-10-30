@@ -166,35 +166,24 @@ void PagePapers::updateReference(int row, const Reference& ref)
 {
     currentPaperID = rowToID(row);
 
-    QMap<int, QString> intFields;
-    intFields.insert(PAPER_YEAR,      "year");
-    intFields.insert(PAPER_VOLUME,    "volume");
-    intFields.insert(PAPER_ISSUE,     "issue");
-    intFields.insert(PAPER_STARTPAGE, "startpage");
-    intFields.insert(PAPER_ENDPAGE,   "endpage");
+    QMap<int, QString> fields;    // column, name
+    fields.insert(PAPER_YEAR,        "year");
+    fields.insert(PAPER_VOLUME,      "volume");
+    fields.insert(PAPER_ISSUE,       "issue");
+    fields.insert(PAPER_STARTPAGE,   "startpage");
+    fields.insert(PAPER_ENDPAGE,     "endpage");
+    fields.insert(PAPER_TITLE,       "title");
+    fields.insert(PAPER_TYPE,        "type");
+    fields.insert(PAPER_PUBLICATION, "publication");
+    fields.insert(PAPER_ABSTRACT,    "abstract");
+    fields.insert(PAPER_PUBLISHER,   "publisher");
+    fields.insert(PAPER_EDITORS,     "editors");
+    fields.insert(PAPER_ADDRESS,     "address");
+    fields.insert(PAPER_URL,         "url");
+    fields.insert(PAPER_NOTE,        "note");
 
-    QMap<int, QString> stringFields;
-    stringFields.insert(PAPER_TITLE,       "title");
-    stringFields.insert(PAPER_TYPE,        "type");
-    stringFields.insert(PAPER_PUBLICATION, "publication");
-    stringFields.insert(PAPER_ABSTRACT,    "abstract");
-    stringFields.insert(PAPER_PUBLISHER,   "publisher");
-    stringFields.insert(PAPER_EDITORS,     "editors");
-    stringFields.insert(PAPER_ADDRESS,     "address");
-    stringFields.insert(PAPER_URL,         "url");
-    stringFields.insert(PAPER_NOTE,        "note");
-
-    // replace integer fields
-    for(QMap<int, QString>::iterator it = intFields.begin(); it != intFields.end(); ++it)
+    for(QMap<int, QString>::iterator it = fields.begin(); it != fields.end(); ++it)
         model.setData(model.index(row, it.key()), ref.getValue(it.value()));
-
-    // replace string fields when the old data is empty and the new one valid
-    for(QMap<int, QString>::iterator it = stringFields.begin(); it != stringFields.end(); ++it)
-    {
-        if(!model.data(model.index(row, it.key())).toString().isEmpty() &&
-           ref.getValue(it.value()).isValid())
-            model.setData(model.index(row, it.key()), ref.getValue(it.value()));
-    }
 
     // authors is a QStringList
     model.setData(model.index(row, PAPER_AUTHORS),

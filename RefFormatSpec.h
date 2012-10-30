@@ -40,7 +40,8 @@ private:
 
 class IRefParser;
 
-// Definition of a reference file format
+// Specification of a bib format (bib, ris, enw, etc)
+// consists of global properties and reference type specifications
 class RefFormatSpec
 {
 public:

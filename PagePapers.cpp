@@ -191,7 +191,7 @@ void PagePapers::updateReference(int row, const Reference& ref)
     // replace string fields when the old data is empty and the new one valid
     for(QMap<int, QString>::iterator it = stringFields.begin(); it != stringFields.end(); ++it)
     {
-        if(model.data(model.index(row, it.key())).toString().isEmpty() &&
+        if(!model.data(model.index(row, it.key())).toString().isEmpty() &&
            ref.getValue(it.value()).isValid())
             model.setData(model.index(row, it.key()), ref.getValue(it.value()));
     }

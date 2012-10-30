@@ -47,66 +47,66 @@ QString FieldDictionary::getText(const QString& name) const {
 //////////////////////////////////////////////////////////////////////
 bool RefFormatSpec::load(const QString& format)
 {
-    clear();
+    clear();               // reload
     formatName = format;
 
-    QString defFileName = "./Specifications/" + formatName + ".spec";
-    if(!QFile::exists(defFileName))
+    QString specFileName = "./Specifications/" + formatName + ".spec";
+    if(!QFile::exists(specFileName))
         return false;
 
-    QSettings defFile(defFileName, QSettings::IniFormat);
+    QSettings specFile(specFileName, QSettings::IniFormat);
 
     // load patterns and templates
-    patternType = defFile.value("TypePattern").toString();
+    patternType = specFile.value("TypePattern").toString();
     if(patternType.isEmpty())
         return false;
 
-    patternField = defFile.value("FieldPattern").toString();
+    patternField = specFile.value("FieldPattern").toString();
     if(patternField.isEmpty())
         return false;
 
-    templateRecord = defFile.value("RecordExportTemplate").toString();
+    templateRecord = specFile.value("RecordExportTemplate").toString();
     if(templateRecord.isEmpty())
         return false;
 
-    templateField = defFile.value("FieldExportTemplate").toString();
+    templateField = specFile.value("FieldExportTemplate").toString();
     if(templateField.isEmpty())
         return false;
 
 	// separators are optional
-	separatorAuthors = defFile.value("AuthorsSeparator").toString();
-	separatorPages   = defFile.value("PagesSeparator")  .toString();
+    separatorAuthors = specFile.value("AuthorsSeparator").toString();
+    separatorPages   = specFile.value("PagesSeparator")  .toString();
 
     // load type definitions
-    QStringList typeNames = defFile.childGroups();
+    QStringList typeNames = specFile.childGroups();
     foreach(const QString& typeName, typeNames)
     {
-        defFile.beginGroup(typeName);
+        specFile.beginGroup(typeName);
 
         // type text
-        QString typeText = defFile.value("TypeText").toString();
+        QString typeText = specFile.value("TypeText").toString();
         if(typeText.isEmpty())
             return false;
 
         // create field dictionary for this type
         if(fieldDictionaries.contains(typeName))   // this type already defined
         {
-			defFile.endGroup();  // NOTE: don't forget to exit current group
+            specFile.endGroup();  // NOTE: don't forget to exit current group
             continue;
         }
         FieldDictionary* fieldDictionary = new FieldDictionary;
 
 		// add field definitions to the dictionary
-        QStringList fieldTexts = defFile.childKeys();
+        QStringList fieldTexts = specFile.childKeys();
         foreach(const QString& fieldText, fieldTexts)
         {
-            QString fieldName = defFile.value(fieldText).toString();
+            QString fieldName = specFile.value(fieldText).toString();
             if(fieldText != "TypeText")    // ignore TypeKeyword, which is also a key
                 fieldDictionary->insert(fieldText, fieldName);
         }
 
         addType(typeText, typeName, fieldDictionary);
-        defFile.endGroup();
+        specFile.endGroup();
     }
     return true;
 }

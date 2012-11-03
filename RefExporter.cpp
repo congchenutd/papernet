@@ -20,14 +20,14 @@ QString LineRefExporter::toString(const Reference& ref, const RefFormatSpec& spe
     QTextStream os(&result);
 
     // get record type and dictionary
-    QString type = ref.getValue("type").toString();
-    FieldDictionary* fieldDictionary = spec.getFieldDictionary(type);
-    if(fieldDictionary == 0)
-		return QObject::tr("Error: definition for record type \"%1\" not defined!\r\n").arg(type);
+    QString typeName = ref.getValue("type").toString();
+    Type type = spec.getType(typeName);
+    if(!type.isValid())
+        return QObject::tr("Error: definition for record type \"%1\" not defined!\r\n").arg(typeName);
 
 	// start (type) line
     QStringList lines;
-    lineStart.replace("TypeText", spec.getTypeText(type));
+    lineStart.replace("TypeText", spec.getExternalTypeName(typeName));
     lineStart.replace("ID", ref.getValue("id").toString());
     lines << lineStart;
 
@@ -37,7 +37,7 @@ QString LineRefExporter::toString(const Reference& ref, const RefFormatSpec& spe
     for(Reference::Fields::const_iterator it = fields.begin(); it != fields.end(); ++it)
     {
         QString name = it.key();
-        QString text = fieldDictionary->getText(name);
+        QString text = type.getExternalFieldName(name);
         if(name == "authors")                          // authors is a combo line
         {
             QStringList authors = it.value().toStringList();

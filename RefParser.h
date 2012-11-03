@@ -27,7 +27,7 @@ public:
 
 private:
 	Reference   parseRecord (const QString& record)  const;
-	QString     getType     (const QString& record)  const;
+	QString     getTypeName     (const QString& record)  const;
 	QStringList parseAuthors(const QString& authors) const;
 	QString     parsePages  (const QString& pages)   const;
 

@@ -7,76 +7,84 @@
 #include <QMap>
 #include "Reference.h"
 
-// A case-insensitive double map
-class DoubleMap
+struct Field
 {
-public:
-    void clear() { list.clear(); }
-    void insert(const QString& t1, const QString& t2)  { list << Pair(t1, t2); }
+    Field(const QString& externalName = QString(),
+          const QString& internalName = QString(),
+          bool required = false)
+        : _externalName(externalName),
+          _internalName(internalName),
+          _required(required)
+    {}
 
-    bool contains1(const QString& t1) const;
-    bool contains2(const QString& t2) const;
+    bool isValid() const { return !_externalName.isEmpty() && !_internalName.isEmpty(); }
 
-    QString value1(const QString& t2) const;
-    QString value2(const QString& t1) const;
-
-private:
-    typedef QPair<QString, QString> Pair;
-    QList<Pair> list;
+    QString _externalName;
+    QString _internalName;
+    bool    _required;
 };
 
-// field text <-> field name
-// an adapter
-class FieldDictionary
+class Type
 {
 public:
-    void insert(const QString& text, const QString& name);
-    QString getName(const QString& text) const;
-    QString getText(const QString& name) const;
+    Type(const QString& externalName = QString(), const QString& internalName = QString());
+
+    bool isValid() const { return !_externalName.isEmpty() && !_internalName.isEmpty(); }
+    void addField(const QString& externalName, const QString& internalName, bool required = false);
+
+    bool    fieldExistsByExternalName(const QString& externalName) const;
+    bool    fieldExistsByInternalName(const QString& internalName) const;
+    Field   getFieldByExternalName   (const QString& externalName) const;
+    Field   getFieldByInternalName   (const QString& internalName) const;
+    QString getExternalFieldName(const QString& internalFieldName) const;
+    QString getInternalFieldName(const QString& externalFieldName) const;
+    QString getExternalName() const { return _externalName; }
+    QString getInternalName() const { return _internalName; }
 
 private:
-    DoubleMap map;
+    QString _externalName;
+    QString _internalName;
+    QList<Field> _fields;
 };
 
 class IRefParser;
+class QXmlStreamReader;
 
-// Specification of a bib format (bib, ris, enw, etc)
-// consists of global properties and reference type specifications
+// Specification of a bib format (bib, ris, enw, etc.)
+// consists of global properties and types
+// each type consists of an external name, an internal name, and fields
+// each field has an external name, an internal name, and if required
 class RefFormatSpec
 {
 public:
     bool load(const QString& format);
-    QString getTypePattern()      const { return patternType;      }
-    QString getFieldPattern()     const { return patternField;     }
-    QString getRecordTemplate()   const { return templateRecord;   }
-    QString getFieldTemplate()    const { return templateField;    }
-    QString getAuthorsSeparator() const { return separatorAuthors; }
-    QString getPagesSeparator()   const { return separatorPages;   }
-    QString getTypeName(const QString& typeText) const;
-    QString getTypeText(const QString& typeName) const;
-    FieldDictionary* getFieldDictionary(const QString& typeName) const;
-    IRefParser*      getParser() const;
-    QList<Reference> parse(const QString& content);
+    QString getTypePattern()      const { return _patternType;      }
+    QString getFieldPattern()     const { return _patternField;     }
+    QString getRecordTemplate()   const { return _templateRecord;   }
+    QString getFieldTemplate()    const { return _templateField;    }
+    QString getAuthorsSeparator() const { return _separatorAuthors; }
+    QString getPagesSeparator()   const { return _separatorPages;   }
+    QString getInternalTypeName(const QString& externalTypeName) const;
+    QString getExternalTypeName(const QString& internalTypeName) const;
+    IRefParser* getParser() const;   // every spec relates to a parser
+
+    bool typeExists(const QString& internalTypeName) const;
+    Type getType   (const QString& internalTypeName) const;
 
 private:
-    void clear();
-    void addType(const QString& text, const QString& name, FieldDictionary* dictionary);
+    void loadType(QXmlStreamReader& xml);
 
 private:
-    QString       formatName;
-	DoubleMap     typeDictionary;                       // Type text -> type name
-    QMap<QString, FieldDictionary*> fieldDictionaries;  // Type name -> field dictionary
+    QString     _formatName;
+    QList<Type> _types;
 
-    // for import
-    QString patternType;     // also indicates the record start
-    QString patternField;
-
-    // for export
-    QString templateRecord;
-    QString templateField;
-
-	QString separatorAuthors;  // empty means one author one line
-	QString separatorPages;    // empty means startpage and endpage, instead of pages
+    // global properties
+    QString _patternType;       // also indicates the record start
+    QString _patternField;
+    QString _templateRecord;
+    QString _templateField;
+    QString _separatorAuthors;  // empty means one author one line
+    QString _separatorPages;    // empty means startpage and endpage, instead of pages
 };
 
 
@@ -86,7 +94,7 @@ class SpecFactory
 public:
     static SpecFactory* getInstance();
     RefFormatSpec* getSpec(const QString& format);
-    QList<Reference> parseContent(const QString& content);
+    QList<Reference> parseContent(const QString& content);  // parse using any possible specs
 
 private:
     SpecFactory() {}

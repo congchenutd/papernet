@@ -4,152 +4,155 @@
 #include <QSettings>
 #include <QStringList>
 #include <QDir>
+#include <QXmlStreamReader>
 
-bool DoubleMap::contains1(const QString& t1) const {
-    return !value2(t1).isEmpty();
-}
+Type::Type(const QString& externalName, const QString& internalName)
+    : _externalName(externalName), _internalName(internalName)
+{}
 
-bool DoubleMap::contains2(const QString& t2) const {
-    return !value1(t2).isEmpty();
-}
-
-QString DoubleMap::value1(const QString& t2) const
+void Type::addField(const QString& externalName, const QString& internalName, bool required)
 {
-    foreach(const Pair& pair, list)
-        if(pair.second.compare(t2, Qt::CaseInsensitive) == 0)
-            return pair.first;
-    return QString();
+    if(!fieldExistsByExternalName(externalName) && !fieldExistsByInternalName(internalName))
+        _fields << Field(externalName, internalName, required);
 }
 
-QString DoubleMap::value2(const QString& t1) const
+bool Type::fieldExistsByExternalName(const QString& externalName) const {
+    return !getFieldByExternalName(externalName)._externalName.isEmpty();
+}
+
+bool Type::fieldExistsByInternalName(const QString& internalName) const {
+    return !getFieldByInternalName(internalName)._internalName.isEmpty();
+}
+
+Field Type::getFieldByExternalName(const QString& externalName) const
 {
-    foreach(const Pair& pair, list)
-        if(pair.first.compare(t1, Qt::CaseInsensitive) == 0)
-            return pair.second;
-    return QString();
+    foreach(const Field& field, _fields)
+        if(field._externalName.compare(externalName, Qt::CaseInsensitive) == 0)
+            return field;
+    return Field();
+}
+
+Field Type::getFieldByInternalName(const QString& internalName) const
+{
+    foreach(const Field& field, _fields)
+        if(field._internalName.compare(internalName, Qt::CaseInsensitive) == 0)
+            return field;
+    return Field();
+}
+
+QString Type::getExternalFieldName(const QString& internalFieldName) const {
+    return getFieldByInternalName(internalFieldName)._externalName;
+}
+
+QString Type::getInternalFieldName(const QString& externalFieldName) const {
+    return getFieldByExternalName(externalFieldName)._internalName;
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-void FieldDictionary::insert(const QString& text, const QString& name) {
-    map.insert(text, name);
-}
-
-QString FieldDictionary::getName(const QString& text) const {
-	return map.value2(text);
-}
-
-QString FieldDictionary::getText(const QString& name) const {
-	return map.value1(name);
-}
-
-
-//////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 bool RefFormatSpec::load(const QString& format)
 {
-    clear();               // reload
-    formatName = format;
+    // reset
+    _formatName      .clear();
+    _patternType     .clear();
+    _patternField    .clear();
+    _templateRecord  .clear();
+    _templateField   .clear();
+    _separatorAuthors.clear();
+    _separatorPages  .clear();
+    _formatName = format;
 
-    QString specFileName = "./Specifications/" + formatName + ".spec";
-    if(!QFile::exists(specFileName))
+    // open file
+    QFile file("./Specifications/" + _formatName + ".xml");
+    if(!file.open(QFile::ReadOnly))
         return false;
 
-    QSettings specFile(specFileName, QSettings::IniFormat);
-
-    // load patterns and templates
-    patternType = specFile.value("TypePattern").toString();
-    if(patternType.isEmpty())
+    // root node
+    QXmlStreamReader xml(&file);
+    if(!xml.readNextStartElement() || xml.name() != "spec")
         return false;
 
-    patternField = specFile.value("FieldPattern").toString();
-    if(patternField.isEmpty())
-        return false;
-
-    templateRecord = specFile.value("RecordExportTemplate").toString();
-    if(templateRecord.isEmpty())
-        return false;
-
-    templateField = specFile.value("FieldExportTemplate").toString();
-    if(templateField.isEmpty())
-        return false;
-
-	// separators are optional
-    separatorAuthors = specFile.value("AuthorsSeparator").toString();
-    separatorPages   = specFile.value("PagesSeparator")  .toString();
-
-    // load type definitions
-    QStringList typeNames = specFile.childGroups();
-    foreach(const QString& typeName, typeNames)
-    {
-        specFile.beginGroup(typeName);
-
-        // type text
-        QString typeText = specFile.value("TypeText").toString();
-        if(typeText.isEmpty())
-            return false;
-
-        // create field dictionary for this type
-        if(fieldDictionaries.contains(typeName))   // this type already defined
+    // load the rest nodes
+    while(!xml.atEnd())
+        if(xml.readNextStartElement())
         {
-            specFile.endGroup();  // NOTE: don't forget to exit current group
-            continue;
-        }
-        FieldDictionary* fieldDictionary = new FieldDictionary;
+            // global attributes
+            QString name = xml.name().toString();
+            if(name == "TypePattern")
+                _patternType = xml.readElementText();
+            else if(name == "FieldPattern")
+                _patternField = xml.readElementText();
+            else if(name == "RecordExportTemplate")
+                _templateRecord = xml.readElementText();
+            else if(name == "FieldExportTemplate")
+                _templateField = xml.readElementText();
+            else if(name == "AuthorsSeparator")
+                _separatorAuthors = xml.readElementText();
+            else if(name == "PagesSeparator")
+                _separatorPages = xml.readElementText();
 
-		// add field definitions to the dictionary
-        QStringList fieldTexts = specFile.childKeys();
-        foreach(const QString& fieldText, fieldTexts)
-        {
-            QString fieldName = specFile.value(fieldText).toString();
-            if(fieldText != "TypeText")    // ignore TypeKeyword, which is also a key
-                fieldDictionary->insert(fieldText, fieldName);
+            // types
+            else if(name == "type")
+                loadType(xml);
         }
-
-        addType(typeText, typeName, fieldDictionary);
-        specFile.endGroup();
-    }
     return true;
 }
 
-void RefFormatSpec::clear()
+void RefFormatSpec::loadType(QXmlStreamReader& xml)
 {
-    formatName      .clear();
-	patternType     .clear();
-	patternField    .clear();
-	templateRecord  .clear();
-	templateField   .clear();
-	separatorAuthors.clear();
-	separatorPages  .clear();
-	typeDictionary  .clear();
-    foreach(FieldDictionary* dictionary, fieldDictionaries)
-        delete dictionary;
-    fieldDictionaries.clear();
+    if(!xml.isStartElement() || xml.name() != "type")
+        return;
+
+    // type names
+    QString externalTypeName = xml.attributes().value("external").toString();
+    QString internalTypeName = xml.attributes().value("internal").toString();
+    Type type(externalTypeName, internalTypeName);
+
+    // fields
+    while(!(xml.isEndElement() && xml.name() == "type"))  // until </type>
+        if(xml.readNextStartElement() && xml.name() == "field")
+        {
+            QString externalFieldName = xml.attributes().value("external").toString();
+            QString internalFieldName = xml.attributes().value("internal").toString();
+            bool    required = xml.attributes().value("required").toString().toLower() == "yes";
+            type.addField(externalFieldName, internalFieldName, required);
+        }
+
+    // even this type already exists, still need to read (pass) this part of the xml
+    if(!typeExists(internalTypeName))
+        _types << type;
 }
 
-void RefFormatSpec::addType(const QString& text, const QString& name, FieldDictionary* dictionary)
+bool RefFormatSpec::typeExists(const QString& internalTypeName) const {
+    return !getType(internalTypeName).getInternalName().isEmpty();
+}
+
+Type RefFormatSpec::getType(const QString& internalTypeName) const
 {
-    typeDictionary.insert(text, name);
-    fieldDictionaries.insert(name, dictionary);
+    foreach(const Type& type, _types)
+        if(type.getInternalName().compare(internalTypeName, Qt::CaseInsensitive) == 0)
+            return type;
+    return Type();
 }
 
-QString RefFormatSpec::getTypeName(const QString& typeText) const {
-    return typeDictionary.value2(typeText);
+QString RefFormatSpec::getInternalTypeName(const QString& externalTypeName) const
+{
+    foreach(const Type& type, _types)
+        if(type.getExternalName().compare(externalTypeName, Qt::CaseInsensitive) == 0)
+            return type.getInternalName();
+    return QString();
 }
 
-QString RefFormatSpec::getTypeText(const QString& typeName) const {
-    return typeDictionary.value1(typeName);
-}
-
-FieldDictionary* RefFormatSpec::getFieldDictionary(const QString& typeName) const {
-    return fieldDictionaries.contains(typeName) ? fieldDictionaries[typeName] : 0;
+QString RefFormatSpec::getExternalTypeName(const QString& internalTypeName) const
+{
+    foreach(const Type& type, _types)
+        if(type.getInternalName().compare(internalTypeName, Qt::CaseInsensitive) == 0)
+            return type.getExternalName();
+    return QString();
 }
 
 IRefParser* RefFormatSpec::getParser() const {
-    return ParserFactory::getInstance()->getParser(formatName);
-}
-
-QList<Reference> RefFormatSpec::parse(const QString& content) {
-    return getParser()->parse(content, this);
+    return ParserFactory::getInstance()->getParser(_formatName);
 }
 
 
@@ -177,6 +180,7 @@ RefFormatSpec* SpecFactory::getSpec(const QString& format)
         specs.insert(fmt, spec);
         return spec;
     }
+    delete spec;
     return 0;
 }
 
@@ -184,12 +188,12 @@ QList<Reference> SpecFactory::parseContent(const QString& content)
 {
     QFileInfoList infos = QDir("./Specifications").entryInfoList(QStringList() << "*.spec");
     foreach(QFileInfo info, infos)
-    {
-        RefFormatSpec* spec = getSpec(info.baseName());
-        QList<Reference> references = spec->parse(content);
-        if(!references.isEmpty())
-            return references;
-    }
-
+        if(RefFormatSpec* spec = getSpec(info.baseName()))
+        {
+            QList<Reference> references = spec->getParser()->parse(content, spec);
+            if(!references.isEmpty())
+                return references;
+        }
     return QList<Reference>();
 }
+

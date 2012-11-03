@@ -7,6 +7,7 @@
 #include "MainWindow.h"
 #include "RefFormatSpec.h"
 #include "RefExporter.h"
+#include "RefParser.h"
 #include "PaperList.h"
 #include <QDataWidgetMapper>
 #include <QMessageBox>
@@ -265,7 +266,7 @@ void PagePapers::importFromFiles(const QStringList& filePaths)
         }
 
         // parse
-        QList<Reference> references = spec->parse(file.readAll());
+        QList<Reference> references = spec->getParser()->parse(file.readAll(), spec);
         importReferences(references);  // currentPaperID = -1 if failed
     }
 

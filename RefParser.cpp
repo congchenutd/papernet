@@ -26,7 +26,7 @@ QList<Reference> LineRefParser::parse(const QString& content, RefFormatSpec* spe
     return results;
 }
 
-QString LineRefParser::getType(const QString& record) const
+QString LineRefParser::getTypeName(const QString& record) const
 {
 	// check type pattern
     if(formatSpec->getTypePattern().isEmpty())
@@ -38,7 +38,7 @@ QString LineRefParser::getType(const QString& record) const
 	if(idxType > -1)
 	{
         QString typeText = rxType.cap(1).simplified();  // capture type text
-        type = formatSpec->getTypeName(typeText);       // convert to type name
+        type = formatSpec->getInternalTypeName(typeText);       // convert to type name
 	}
 	return type;
 }
@@ -50,15 +50,15 @@ Reference LineRefParser::parseRecord(const QString& record) const
         return result;
 
 	// get record type
-    QString type = getType(record);
-	if(type.isEmpty())
+    QString typeName = getTypeName(record);
+    if(typeName.isEmpty())
         return result;
-	result.setValue("type", type);
+    result.setValue("type", typeName);
 
-    // get dictionary for this type
-    FieldDictionary* dictionary = formatSpec->getFieldDictionary(type);
-	if(dictionary == 0)   // this type not defined in the spec
-		return result;
+    // get the type
+    Type type = formatSpec->getType(typeName);
+    if(!type.isValid())
+        return result;
 
 	// parse each field;
     QRegExp rxField(formatSpec->getFieldPattern());
@@ -66,7 +66,7 @@ Reference LineRefParser::parseRecord(const QString& record) const
 	while(idxField > -1)
 	{
         QString fieldText = rxField.cap(1).simplified();
-        QString fieldName = dictionary->getName(fieldText);  // field text -> field name
+        QString fieldName = type.getInternalFieldName(fieldText);  // field text -> field name
         if(!fieldName.isEmpty())
         {
             QString fieldValue = rxField.cap(2).simplified();

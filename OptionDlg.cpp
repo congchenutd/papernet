@@ -21,14 +21,14 @@ OptionDlg::OptionDlg(QWidget *parent)
 	// load settings
     setting = MySetting<UserSetting>::getInstance();
 	qApp->setFont(setting->getFont());
-	int backupDays = setting->getBackupDays();
-	if(backupDays == 0)
-	{
-		ui.checkAutoBack->setChecked(false);
-		ui.sbBackupDays->setEnabled(false);
-	}
+
+    int backupDays = setting->getBackupDays();
+    ui.checkAutoBack->setChecked(backupDays > 0);
+    ui.sbBackupDays->setEnabled (backupDays > 0);
 	ui.sbBackupDays->setValue(backupDays);
+
     ui.checkKeepAttachments ->setChecked(setting->getKeepAttachments());
+    ui.checkMoveAttachments ->setChecked(setting->getMoveAttachments());
     ui.checkExportToBibFixer->setChecked(setting->getExportToBibFixer());
     ui.leBibFixerPath->setText(setting->getBibFixerPath());
     ui.leBibFixerPath->setCursorPosition(0);
@@ -48,6 +48,7 @@ void OptionDlg::accept()
 	qApp->setFont(setting->getFont());
 	setting->setBackupDays(ui.checkAutoBack->isChecked() ? ui.sbBackupDays->value() : 0);
     setting->setKeepAttachments (ui.checkKeepAttachments->isChecked());
+    setting->setMoveAttachments (ui.checkMoveAttachments->isChecked());
     setting->setExportToBibFixer(ui.checkExportToBibFixer->isChecked());
     setting->setBibFixerPath(ui.leBibFixerPath->text());
 
@@ -83,6 +84,7 @@ void UserSetting::loadDefaults()
 	setFont(qApp->font());
 	setBackupDays(7);
 	setKeepAttachments(false);
+    setMoveAttachments(true);
 	setLastImportPath(".");
 	setLastAttachmentPath(".");
     setBibFixerPath(".");
@@ -103,6 +105,9 @@ int UserSetting::getBackupDays() const {
 }
 bool UserSetting::getKeepAttachments() const {
     return value("KeepAttachments").toBool();
+}
+bool UserSetting::getMoveAttachments() const {
+    return value("KeepPDF").toBool();
 }
 bool UserSetting::getExportToBibFixer() const {
     return value("ExportToBibFixer").toBool();
@@ -125,6 +130,9 @@ void UserSetting::setBackupDays(int days) {
 }
 void UserSetting::setKeepAttachments(bool keep) {
     setValue("KeepAttachments", keep);
+}
+void UserSetting::setMoveAttachments(bool keep) {
+    setValue("KeepPDF", keep);
 }
 void UserSetting::setExportToBibFixer(bool exportToBibFixer) {
     setValue("ExportToBibFixer", exportToBibFixer);

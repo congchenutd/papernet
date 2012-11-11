@@ -36,6 +36,7 @@ public:
 	QFont   getFont()               const;
 	int     getBackupDays()         const;
 	bool    getKeepAttachments()    const;
+    bool    getMoveAttachments()    const;
     bool    getExportToBibFixer()   const;
     QString getLastImportPath()     const;
 	QString getLastAttachmentPath() const;
@@ -47,6 +48,7 @@ public:
 	void setFont              (const QFont& font);
 	void setBackupDays        (int days);
 	void setKeepAttachments   (bool keep);
+    void setMoveAttachments   (bool keep);
     void setExportToBibFixer  (bool exportToBibFixer);
 	void setLastImportPath    (const QString& path);
 	void setLastAttachmentPath(const QString& path);

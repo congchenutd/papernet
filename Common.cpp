@@ -160,7 +160,10 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 	if(attachmentName.toLower().endsWith(".pdf"))   // create full text for pdf
 		makeFullTextFile(filePath, getFullTextFilePath(paperID, targetFilePath));
 
-	return QFile::copy(filePath, targetFilePath);
+    bool result = QFile::copy(filePath, targetFilePath);
+    if(UserSetting::getInstance()->getMoveAttachments())   // remove the original
+        QFile::remove(filePath);
+    return result;
 }
 
 QString autoRename(const QString& original)
@@ -177,8 +180,7 @@ QString autoRename(const QString& original)
             int number = rxNumber.cap(1).toInt();
             baseName.replace(rxNumber, "(" + QString::number(number + 1) + ")");
         }
-        else
-        {
+        else {
             baseName += "(1)";                // add (1)
         }
         result = QFileInfo(original).path() + "/" + baseName + "." + extension;

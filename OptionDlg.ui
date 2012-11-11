@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
-    <height>265</height>
+    <width>456</width>
+    <height>286</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,12 +61,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="btBibFixerPath">
-       <property name="maximumSize">
-        <size>
-         <width>40</width>
-         <height>16777215</height>
-        </size>
-       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -80,7 +74,17 @@
       <string>Attachments will not be delete if checked</string>
      </property>
      <property name="text">
-      <string>Keep attachments when a paper is deleted</string>
+      <string>Keep the attachments when a paper is deleted</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkMoveAttachments">
+     <property name="toolTip">
+      <string>Attachments will not be delete if checked</string>
+     </property>
+     <property name="text">
+      <string>Move a file instead of copying when it is imported</string>
      </property>
     </widget>
    </item>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>624</width>
+    <width>581</width>
     <height>578</height>
    </rect>
   </property>
@@ -57,7 +57,7 @@
       <widget class="QSpinBox" name="sbYear">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -83,7 +83,7 @@
       <widget class="QSpinBox" name="sbVolume">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -106,7 +106,7 @@
       <widget class="QSpinBox" name="sbIssue">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -126,18 +126,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="sbStartPage">
+      <widget class="QLineEdit" name="leStartPage">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="maximum">
-        <number>999999999</number>
-       </property>
-       <property name="value">
-        <number>0</number>
        </property>
       </widget>
      </item>
@@ -149,18 +143,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="sbEndPage">
+      <widget class="QLineEdit" name="leEndPage">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="maximum">
-        <number>999999999</number>
-       </property>
-       <property name="value">
-        <number>0</number>
        </property>
       </widget>
      </item>
@@ -319,8 +307,6 @@
   <tabstop>sbYear</tabstop>
   <tabstop>sbVolume</tabstop>
   <tabstop>sbIssue</tabstop>
-  <tabstop>sbStartPage</tabstop>
-  <tabstop>sbEndPage</tabstop>
   <tabstop>comboType</tabstop>
   <tabstop>leEditors</tabstop>
   <tabstop>leAddress</tabstop>

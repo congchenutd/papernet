@@ -19,7 +19,6 @@ public:
     void      setReference(const Reference& ref);
 
 private:
-    QString getTitle() const;
     void setTitle(const QString& title);
     void setType (const QString& type);
 

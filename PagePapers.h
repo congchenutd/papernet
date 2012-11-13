@@ -61,7 +61,7 @@ private:
 	int  rowToID(int row) const;
     int  titleToRow(const QString& title)  const;
     void setPaperRead();
-	void updateTags(const QStringList& tags);
+	void setTags(const QStringList& tags);
 	void highLightTags();
 	void loadGeometry();
 	void reloadAttachments();

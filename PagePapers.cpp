@@ -176,11 +176,11 @@ void PagePapers::updateReference(int row, const Reference& ref)
     fields.insert(PAPER_TITLE,       "title");
     fields.insert(PAPER_TYPE,        "type");
     fields.insert(PAPER_PUBLICATION, "publication");
-    fields.insert(PAPER_ABSTRACT,    "abstract");
     fields.insert(PAPER_PUBLISHER,   "publisher");
     fields.insert(PAPER_EDITORS,     "editors");
     fields.insert(PAPER_ADDRESS,     "address");
     fields.insert(PAPER_URL,         "url");
+    fields.insert(PAPER_ABSTRACT,    "abstract");
     fields.insert(PAPER_NOTE,        "note");
 
     for(QMap<int, QString>::iterator it = fields.begin(); it != fields.end(); ++it)
@@ -190,13 +190,13 @@ void PagePapers::updateReference(int row, const Reference& ref)
     model.setData(model.index(row, PAPER_AUTHORS),
                   ref.getValue("authors").toStringList().join("; "));
 
-    // tags are stored in a relations table
-    updateTags(ref.getValue("tags").toStringList());
+    // tags are stored separately in a relations table
+    setTags(ref.getValue("tags").toStringList());
 
 	onSubmitPaper();
 }
 
-void PagePapers::updateTags(const QStringList& tags)
+void PagePapers::setTags(const QStringList& tags)
 {
     if(tags.isEmpty())
         return;
@@ -291,7 +291,17 @@ void PagePapers::importReferences(const QList<Reference>& references)
         // show preview
         PaperDlg dlg(this);
         dlg.setWindowTitle(tr("Import reference"));
-        dlg.setReference(ref);
+
+        // load existing ref
+        int row = titleToRow(title);
+        if(row > -1)
+        {
+            Reference oldRef = exportReference(row);
+            dlg.setReference(oldRef);
+        }
+
+        dlg.setReference(ref);   // merge new ref
+
         if(dlg.exec() == QDialog::Accepted)
             insertReference(dlg.getReference());   // currentPaperID will be equal to the ID of the newly added
     }

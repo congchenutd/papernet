@@ -115,12 +115,20 @@ void PaperDlg::setReference(const Reference& ref)
     ui.leAddress    ->setText(ref.getValue("address")    .toString());
     ui.leUrl        ->setText(ref.getValue("url")        .toString());
 
-    ui.teAbstract->setPlainText(ref.getValue("abstract").toString());
-    ui.teNote    ->setPlainText(ref.getValue("note")    .toString());
-
     ui.leAuthors->setText(ref.getValue("authors").toStringList().join("; "));
     ui.leEditors->setText(ref.getValue("editors").toStringList().join("; "));
-    ui.leTags   ->setText(ref.getValue("tags")   .toStringList().join("; "));
+
+    // merge tags
+    QStringList tags = splitLine(ui.leTags->text(), ";");
+    tags << ref.getValue("tags").toStringList();
+    ui.leTags->setText(tags.join("; "));
+
+    // do not overwrite abstract and note
+    if(ui.teAbstract->toPlainText().isEmpty())
+        ui.teAbstract->setPlainText(ref.getValue("abstract").toString());
+
+    if(ui.teNote->toPlainText().isEmpty())
+        ui.teNote->setPlainText(ref.getValue("note").toString());
 
     ui.leAuthors    ->setCursorPosition(0);
     ui.lePublication->setCursorPosition(0);

@@ -33,5 +33,4 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
-// TODO: store spec in XML
 // TODO: show required fields for each ref type

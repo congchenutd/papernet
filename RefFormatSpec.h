@@ -40,6 +40,8 @@ public:
     QString getInternalFieldName(const QString& externalFieldName) const;
     QString getExternalName() const { return _externalName; }
     QString getInternalName() const { return _internalName; }
+    QStringList getRequiredFieldNames() const;
+    bool    isRequiredField(const QString& fieldName) const;
 
 private:
     QString _externalName;

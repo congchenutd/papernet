@@ -626,15 +626,15 @@ QString PagePapers::toString(const QModelIndexList& idxList, const QString& exte
 void PagePapers::onExport()
 {
     // get selected rows
-    QModelIndexList idxList = ui.tvPapers->selectionModel()->selectedRows();
-    if(idxList.isEmpty())
+    QModelIndexList idxSelected = ui.tvPapers->selectionModel()->selectedRows();
+    if(idxSelected.isEmpty())
         return;    
 
     // save to BibFixer
     if(setting->getExportToBibFixer())
     {
         QString bibFixerPath = setting->getBibFixerPath();
-        if(bibFixerPath.isEmpty())
+        if(bibFixerPath.isEmpty() || !QFile::exists(bibFixerPath))
         {
             QMessageBox::critical(this, tr("Error"), tr("Cannot find BibFixer!"));
             return;
@@ -642,7 +642,7 @@ void PagePapers::onExport()
 
         QProcess* process = new QProcess(this);
         process->setWorkingDirectory(QFileInfo(bibFixerPath).path());
-        process->start(bibFixerPath, QStringList() << toString(idxList, "bib"));
+        process->start(bibFixerPath, QStringList() << toString(idxSelected, "bib"));
     }
     // save to file
     else
@@ -660,7 +660,7 @@ void PagePapers::onExport()
         if(file.open(QFile::WriteOnly | QFile::Truncate))
         {
             QTextStream os(&file);
-            os << toString(idxList, QFileInfo(filePath).suffix().toLower());
+            os << toString(idxSelected, QFileInfo(filePath).suffix().toLower());
         }
     }
 }

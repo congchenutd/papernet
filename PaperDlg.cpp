@@ -3,6 +3,7 @@
 #include "Reference.h"
 #include "EnglishName.h"
 #include "../BibFixer/Convertor.h"
+#include "RefFormatSpec.h"
 #include <QDate>
 #include <QSqlTableModel>
 #include <QCompleter>
@@ -29,6 +30,8 @@ PaperDlg::PaperDlg(QWidget *parent)
 	completer->setCompletionColumn(TAG_NAME);
 	completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
 	ui.leTags->setCompleter(completer);
+
+    connect(ui.comboType, SIGNAL(currentIndexChanged(QString)), this, SLOT(onTypeChanged(QString)));
 }
 
 void PaperDlg::setTitle(const QString& title)
@@ -129,4 +132,46 @@ void PaperDlg::setReference(const Reference& ref)
 
     // set type after publication, because we may guess type from publication
     setType(ref.getValue("type").toString());
+}
+
+void PaperDlg::onTypeChanged(const QString& typeName)
+{
+    // get required fields info from bibtex spec
+    // it seems only bibtex contains required info
+    RefFormatSpec* bibSpec = SpecFactory::getInstance()->getSpec("bib");
+    if(bibSpec == 0)
+        return;
+
+    Type type = bibSpec->getType(typeName);
+    typedef QPair<QString, QWidget*> Pair;
+    QList<Pair> fields;
+    fields << Pair("title",       ui.leTitle)
+           << Pair("authors",     ui.leAuthors)
+           << Pair("publication", ui.lePublication)
+           << Pair("year",        ui.sbYear)
+           << Pair("volume",      ui.sbVolume)
+           << Pair("issue",       ui.sbIssue)
+           << Pair("pages",       ui.leStartPage)
+           << Pair("pages",       ui.leEndPage)
+           << Pair("editors",     ui.leEditors)
+           << Pair("address",     ui.leAddress)
+           << Pair("publisher",   ui.lePublisher)
+           << Pair("url",         ui.leUrl)
+           << Pair("abstract",    ui.teAbstract)
+           << Pair("note",        ui.teNote);
+
+    for(QList<Pair>::iterator it = fields.begin(); it != fields.end(); ++ it)
+    {
+        if(type.isRequiredField(it->first))         // invalid type returns false
+            highlightField(it->second, QColor(Qt::yellow).lighter());
+        else
+            highlightField(it->second, palette().base().color());  // reset palette
+    }
+}
+
+void PaperDlg::highlightField(QWidget* field, const QColor& color)
+{
+    QPalette palette = field->palette();
+    palette.setBrush(QPalette::Base, color);
+    field->setPalette(palette);
 }

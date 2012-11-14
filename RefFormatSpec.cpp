@@ -48,6 +48,21 @@ QString Type::getInternalFieldName(const QString& externalFieldName) const {
     return getFieldByExternalName(externalFieldName)._internalName;
 }
 
+QStringList Type::getRequiredFieldNames() const
+{
+    QStringList result;
+    foreach(const Field& field, _fields)
+        if(field._required)
+            result << field._internalName;
+    return result;
+}
+
+bool Type::isRequiredField(const QString& fieldName) const
+{
+    Field field = getFieldByInternalName(fieldName);
+    return field.isValid() ? field._required : false;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 bool RefFormatSpec::load(const QString& format)

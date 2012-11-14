@@ -5,6 +5,7 @@
 #include "ui_PaperDlg.h"
 
 class Reference;
+class Type;
 
 // add/edit paper
 class PaperDlg : public QDialog
@@ -18,9 +19,13 @@ public:
     Reference getReference() const;
     void      setReference(const Reference& ref);
 
+private slots:
+    void onTypeChanged(const QString& typeName);  // highlight required fields of the type
+
 private:
     void setTitle(const QString& title);
     void setType (const QString& type);
+    void highlightField(QWidget* field, const QColor& color);
 
 private:
 	Ui::PaperDlgClass ui;

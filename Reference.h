@@ -5,17 +5,20 @@
 #include <QMap>
 
 // A reference record
+// case sensitive
+// all field names should use lower case
 class Reference
 {
 public:
     typedef QMap<QString, QVariant> Fields;  // field name -> field value
 
 public:
-    bool     containsField(const QString& field) const;
+    bool     fieldExists(const QString& field) const;
     void     setValue(const QString& fieldName, const QVariant& fieldValue);
     QVariant getValue(const QString& fieldName) const;
 	void     generateID();                   // last name + year
-    Fields   getAllFields() const;
+    Fields   getAllFields() const { return fields; }
+    bool     isValid() const { return fields.contains("type"); }
 
 private:
 	Fields fields;

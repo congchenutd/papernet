@@ -138,11 +138,11 @@ void PaperDlg::onTypeChanged(const QString& typeName)
 {
     // get required fields info from bibtex spec
     // it seems only bibtex contains required info
-    RefFormatSpec* bibSpec = SpecFactory::getInstance()->getSpec("bib");
+    RefSpec* bibSpec = RefSpecFactory::getInstance()->getSpec("bib");
     if(bibSpec == 0)
         return;
 
-    Type type = bibSpec->getType(typeName);
+    TypeSpec type = bibSpec->getType(typeName);
     typedef QPair<QString, QWidget*> Pair;
     QList<Pair> fields;
     fields << Pair("title",       ui.leTitle)

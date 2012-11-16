@@ -6,7 +6,7 @@
 #include <QFile>
 #include <QStringList>
 
-QList<Reference> LineRefParser::parse(const QString& content, RefFormatSpec* spec)
+QList<Reference> LineRefParser::parse(const QString& content, RefSpec* spec)
 {
 	QList<Reference> results;
     if(content.isEmpty() || spec == 0)
@@ -56,7 +56,7 @@ Reference LineRefParser::parseRecord(const QString& record) const
     result.setValue("type", typeName);
 
     // get the type
-    Type type = formatSpec->getType(typeName);
+    TypeSpec type = formatSpec->getType(typeName);
     if(!type.isValid())
         return result;
 

@@ -11,19 +11,19 @@ class IRefParser
 {
 public:
 	virtual ~IRefParser() {}
-    virtual QList<Reference> parse(const QString& content, RefFormatSpec* spec) = 0;
+    virtual QList<Reference> parse(const QString& content, RefSpec* spec) = 0;
 };
 
 class NullParser : public IRefParser
 {
 public:
-    QList<Reference> parse(const QString&, RefFormatSpec*) { return QList<Reference>(); }
+    QList<Reference> parse(const QString&, RefSpec*) { return QList<Reference>(); }
 };
 
 class LineRefParser : public IRefParser
 {
 public:
-    QList<Reference> parse(const QString& content, RefFormatSpec* spec);
+    QList<Reference> parse(const QString& content, RefSpec* spec);
 
 private:
 	Reference   parseRecord (const QString& record)  const;
@@ -32,7 +32,7 @@ private:
 	QString     parsePages  (const QString& pages)   const;
 
 protected:
-    RefFormatSpec* formatSpec;
+    RefSpec* formatSpec;
 };
 
 

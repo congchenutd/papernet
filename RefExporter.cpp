@@ -4,7 +4,7 @@
 #include <QStringList>
 #include <QTextStream>
 
-QString LineRefExporter::toString(const Reference& ref, const RefFormatSpec& spec) const
+QString LineRefExporter::toString(const Reference& ref, const RefSpec& spec) const
 {
 	// record template
     QString templateRecord = spec.getRecordTemplate();
@@ -21,7 +21,7 @@ QString LineRefExporter::toString(const Reference& ref, const RefFormatSpec& spe
 
     // get record type and dictionary
     QString typeName = ref.getValue("type").toString();
-    Type type = spec.getType(typeName);
+    TypeSpec type = spec.getType(typeName);
     if(!type.isValid())
         return QObject::tr("Error: definition for record type \"%1\" not defined!\r\n").arg(typeName);
 

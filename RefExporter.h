@@ -6,19 +6,19 @@
 #include <QObject>
 
 class Reference;
-class RefFormatSpec;
+class RefSpec;
 
 class IRefExporter
 {
 public:
 	virtual ~IRefExporter() {}
-	virtual QString toString(const Reference& ref, const RefFormatSpec& spec) const = 0;
+	virtual QString toString(const Reference& ref, const RefSpec& spec) const = 0;
 };
 
 class NullExporter : public IRefExporter
 {
 public:
-	QString toString(const Reference&, const RefFormatSpec&) const {
+	QString toString(const Reference&, const RefSpec&) const {
         return QObject::tr("Error: Null Exporter!");
     }
 };
@@ -26,7 +26,7 @@ public:
 class LineRefExporter : public IRefExporter
 {
 public:
-	QString toString(const Reference& ref, const RefFormatSpec& spec) const;
+	QString toString(const Reference& ref, const RefSpec& spec) const;
 
 private:
     void createLine(QStringList& lines, const QString& lineTemplate,

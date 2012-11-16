@@ -248,7 +248,7 @@ void PagePapers::importFromFiles(const QStringList& filePaths)
             continue;
 
         // find spec
-        RefFormatSpec* spec = SpecFactory::getInstance()->getSpec(extension);
+        RefSpec* spec = RefSpecFactory::getInstance()->getSpec(extension);
         if(!spec)
         {
             QMessageBox::critical(this, tr("Error"),
@@ -327,7 +327,7 @@ void PagePapers::onImport()
     QString content = clipboard->text();
     if(!content.isEmpty())
     {
-        QList<Reference> references = SpecFactory::getInstance()->parseContent(content);
+        QList<Reference> references = RefSpecFactory::getInstance()->parseContent(content);
         if(!references.isEmpty())
         {
             importReferences(references);
@@ -606,7 +606,7 @@ Reference PagePapers::exportReference(int row) const
 QString PagePapers::toString(const QModelIndexList& idxList, const QString& extension)
 {
     // find spec
-    RefFormatSpec* spec = SpecFactory::getInstance()->getSpec(extension);
+    RefSpec* spec = RefSpecFactory::getInstance()->getSpec(extension);
     if(spec == 0)
         return tr("Cannot find the specification for this reference format!");
 

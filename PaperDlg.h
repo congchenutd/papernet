@@ -5,7 +5,7 @@
 #include "ui_PaperDlg.h"
 
 class Reference;
-class Type;
+class TypeSpec;
 
 // add/edit paper
 class PaperDlg : public QDialog

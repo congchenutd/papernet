@@ -7,9 +7,9 @@
 #include <QMap>
 #include "Reference.h"
 
-struct Field
+struct FieldSpec
 {
-    Field(const QString& externalName = QString(),
+    FieldSpec(const QString& externalName = QString(),
           const QString& internalName = QString(),
           bool required = false)
         : _externalName(externalName),
@@ -24,29 +24,29 @@ struct Field
     bool    _required;
 };
 
-class Type
+class TypeSpec
 {
 public:
-    Type(const QString& externalName = QString(), const QString& internalName = QString());
+    TypeSpec(const QString& externalName = QString(), const QString& internalName = QString());
 
     bool isValid() const { return !_externalName.isEmpty() && !_internalName.isEmpty(); }
     void addField(const QString& externalName, const QString& internalName, bool required = false);
 
-    bool    fieldExistsByExternalName(const QString& externalName) const;
-    bool    fieldExistsByInternalName(const QString& internalName) const;
-    Field   getFieldByExternalName   (const QString& externalName) const;
-    Field   getFieldByInternalName   (const QString& internalName) const;
-    QString getExternalFieldName(const QString& internalFieldName) const;
-    QString getInternalFieldName(const QString& externalFieldName) const;
-    QString getExternalName() const { return _externalName; }
-    QString getInternalName() const { return _internalName; }
-    QStringList getRequiredFieldNames() const;
-    bool    isRequiredField(const QString& fieldName) const;
+    bool      fieldExistsByExternalName(const QString& externalName) const;
+    bool      fieldExistsByInternalName(const QString& internalName) const;
+    FieldSpec getFieldByExternalName   (const QString& externalName) const;
+    FieldSpec getFieldByInternalName   (const QString& internalName) const;
+    QString   getExternalFieldName(const QString& internalFieldName) const;
+    QString   getInternalFieldName(const QString& externalFieldName) const;
+    QString   getExternalName() const { return _externalName; }
+    QString   getInternalName() const { return _internalName; }
+    bool      isRequiredField(const QString& fieldName) const;
+    QList<FieldSpec> getAllFields() const { return _fields; }
 
 private:
     QString _externalName;
     QString _internalName;
-    QList<Field> _fields;
+    QList<FieldSpec> _fields;
 };
 
 class IRefParser;
@@ -56,7 +56,7 @@ class QXmlStreamReader;
 // consists of global properties and types
 // each type consists of an external name, an internal name, and fields
 // each field has an external name, an internal name, and if required
-class RefFormatSpec
+class RefSpec
 {
 public:
     bool load(const QString& format);
@@ -70,15 +70,16 @@ public:
     QString getExternalTypeName(const QString& internalTypeName) const;
     IRefParser* getParser() const;   // every spec relates to a parser
 
-    bool typeExists(const QString& internalTypeName) const;
-    Type getType   (const QString& internalTypeName) const;
+    bool     typeExists(const QString& internalTypeName) const;
+    TypeSpec getType   (const QString& internalTypeName) const;
 
 private:
     void loadType(QXmlStreamReader& xml);
+    TypeSpec makeDefaultTypeSpec() const;
 
 private:
     QString     _formatName;
-    QList<Type> _types;
+    QList<TypeSpec> _types;
 
     // global properties
     QString _patternType;       // also indicates the record start
@@ -91,22 +92,22 @@ private:
 
 
 ////////////////////////////////////////////////////////
-class SpecFactory
+class RefSpecFactory
 {
 public:
-    static SpecFactory* getInstance();
-    RefFormatSpec* getSpec(const QString& format);
+    static RefSpecFactory* getInstance();
+    RefSpec* getSpec(const QString& format);
     QList<Reference> parseContent(const QString& content);  // parse using any possible specs
 
 private:
-    SpecFactory() {}
-    SpecFactory(const SpecFactory&) {}
-    SpecFactory& operator=(const SpecFactory&) { return *this; }
-    ~SpecFactory() {}
+    RefSpecFactory() {}
+    RefSpecFactory(const RefSpecFactory&) {}
+    RefSpecFactory& operator=(const RefSpecFactory&) { return *this; }
+    ~RefSpecFactory() {}
 
 private:
-    static SpecFactory* instance;
-    QMap<QString, RefFormatSpec*> specs;     // format -> spec
+    static RefSpecFactory* instance;
+    QMap<QString, RefSpec*> specs;     // format -> spec
 };
 
 

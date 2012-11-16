@@ -54,7 +54,8 @@ HEADERS += AddPhraseDlg.h \
 	RefExporter.h \
 	Reference.h \
     ../MyComboBox/SetTextComboBox.h \
-    ../BibFixer/Convertor.h
+    ../BibFixer/Convertor.h \
+    RefDlg.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -71,7 +72,8 @@ FORMS += AddPhraseDlg.ui \
     RelatedPapersWidget.ui \
     CoauthoredPapersWidgdet.ui \
     QuotesWidget.ui \
-	RelatedPhraseWidget.ui
+	RelatedPhraseWidget.ui \
+    RefDlg.ui
 SOURCES += AddPhraseDlg.cpp \
            AddQuoteDlg.cpp \
            AddTagDlg.cpp \
@@ -107,7 +109,8 @@ SOURCES += AddPhraseDlg.cpp \
 	RefExporter.cpp \
 	Reference.cpp \
     ../MyComboBox/SetTextComboBox.cpp \
-    ../BibFixer/Convertor.cpp
+    ../BibFixer/Convertor.cpp \
+    RefDlg.cpp
 RESOURCES += MainWindow.qrc
 
 

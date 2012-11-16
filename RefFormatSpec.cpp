@@ -129,8 +129,13 @@ void RefSpec::loadType(QXmlStreamReader& xml)
         _types << type;
 }
 
-TypeSpec RefSpec::makeDefaultTypeSpec() const {
-    return TypeSpec("unknown", "unknown");
+TypeSpec RefSpec::makeDefaultTypeSpec() const
+{
+    TypeSpec result("unknown", "unknown");
+    result.addField("title",       "title");
+    result.addField("author",      "author");
+    result.addField("publication", "publication");
+    return result;
 }
 
 bool RefSpec::typeExists(const QString& internalTypeName) const {

@@ -55,7 +55,7 @@ HEADERS += AddPhraseDlg.h \
 	Reference.h \
     ../MyComboBox/SetTextComboBox.h \
     ../BibFixer/Convertor.h \
-    RefDlg.h
+    FieldEdit.h
 FORMS += AddPhraseDlg.ui \
          AddQuoteDlg.ui \
          AddTagDlg.ui \
@@ -110,7 +110,7 @@ SOURCES += AddPhraseDlg.cpp \
 	Reference.cpp \
     ../MyComboBox/SetTextComboBox.cpp \
     ../BibFixer/Convertor.cpp \
-    RefDlg.cpp
+    FieldEdit.cpp
 RESOURCES += MainWindow.qrc
 
 

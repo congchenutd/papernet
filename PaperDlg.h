@@ -6,14 +6,17 @@
 
 class Reference;
 class TypeSpec;
+class RefSpec;
 
 // add/edit paper
 class PaperDlg : public QDialog
 {
 	Q_OBJECT
 
+    typedef QPair<QString, FieldEdit*> Field;
+
 public:
-	PaperDlg(QWidget *parent = 0);
+    PaperDlg(QWidget* parent = 0);
 	virtual void accept();
 
     Reference getReference() const;
@@ -25,10 +28,11 @@ private slots:
 private:
     void setTitle(const QString& title);
     void setType (const QString& type);
-    void highlightField(QWidget* field, const QColor& color);
 
 private:
 	Ui::PaperDlgClass ui;
+    QList<Field> _fields;
+    RefSpec*     _spec;
 };
 
 #endif // PAPERDLG_H

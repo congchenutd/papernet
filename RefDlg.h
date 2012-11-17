@@ -4,37 +4,45 @@
 #include "ui_RefDlg.h"
 #include "Reference.h"
 
-class QGridLayout;
+class RefSpec;
+class SetTextComboBox;
+class QLabel;
+class QPlainTextEdit;
 
 class RefDlg : public QDialog
 {
     Q_OBJECT
 
-    typedef QPair<QLabel*, QLineEdit*> Field;
+    typedef QPair<QLabel*, QWidget*> Field;  // a label and a line edit/text edit
+    typedef QList<Field>             Fields;
     
 public:
     explicit RefDlg(QWidget* parent = 0);
 
     // 2 ways to init
-    void setSource(const QString& bibtexSource);
-    void setReference(const Reference& reference);
+    void setSource(const QString& bibtexSource);    // unparsed source
+    void setReference(const Reference& reference);  // parsed
+
+    Reference getReference() const;
 
 private slots:
-    void onTypeChanged(const QString& typeName);
+    void reloadFields(const QString& typeName);   // reload from spec and _currentRef
 
 private:
-    void addField(const QString& fieldName, const QString& fieldValue);
-    void clearFields();
-    int  findField(const QString& fieldName) const;
-    void loadTypeSpec(const QString& typeName);
-    void restoreReference(const Reference& reference);
+    QWidget* createEdit (const QString& fieldName, const QString& fieldValue);
+    void     createField(const QString& fieldName, const QString& fieldValue);
+    void     clearFields();
+    QString  getFieldText(const Field& field) const;
     
 private:
     Ui::RefDlg ui;
     QGridLayout* _layout;
-    QList<Field> _fields;
+    SetTextComboBox* _comboType;
+    Fields       _fields;
     Reference    _currentRef;
     QSpacerItem* _spacer;
+    RefSpec*     _spec;      // bibtex spec used for _fields
 };
+
 
 #endif // REFDLG_H

@@ -23,7 +23,7 @@ public:
 private:
 	Fields fields;
 	// NOTE: authors is stored as a stringlist
-	// startpage, endpage <-> pages auto convered
+    // startpage, endpage <-> pages auto convered, and may be redundant
 };
 
 #endif // PAPER_H

@@ -72,6 +72,7 @@ public:
 
     bool     typeExists(const QString& internalTypeName) const;
     TypeSpec getType   (const QString& internalTypeName) const;
+    QMap<QString, TypeSpec> getAllTypes() const { return _types; }
 
 private:
     void loadType(QXmlStreamReader& xml);
@@ -79,7 +80,7 @@ private:
 
 private:
     QString     _formatName;
-    QList<TypeSpec> _types;
+    QMap<QString, TypeSpec> _types;
 
     // global properties
     QString _patternType;       // also indicates the record start

@@ -9,6 +9,7 @@
 #include "RefExporter.h"
 #include "RefParser.h"
 #include "PaperList.h"
+#include "RefDlg.h"
 #include <QDataWidgetMapper>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -111,7 +112,7 @@ void PagePapers::jumpToID(int id)
 
 void PagePapers::add()
 {
-	PaperDlg dlg(this);
+    PaperDlg dlg(this);
 	dlg.setWindowTitle(tr("Add Reference"));
 	if(dlg.exec() == QDialog::Accepted)
         insertReference(dlg.getReference());
@@ -119,17 +120,17 @@ void PagePapers::add()
 
 void PagePapers::onEditPaper()
 {
-	PaperDlg dlg(this);
-	dlg.setWindowTitle(tr("Edit Reference"));
-	Reference oldRef = exportReference(currentRow);
+    PaperDlg dlg(this);
+    dlg.setWindowTitle(tr("Edit Reference"));
+    Reference oldRef = exportReference(currentRow);
     dlg.setReference(oldRef);
 
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		Reference newRef = dlg.getReference();
-		updateReference(currentRow, newRef);   // apply the change
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        Reference newRef = dlg.getReference();
+        updateReference(currentRow, newRef);   // apply the change
 
-		// renaming title affects attachments
+        // renaming title affects attachments
         QString oldTitle = oldRef.getValue("title").toString();
         QString newTitle = newRef.getValue("title").toString();
         if(oldTitle != newTitle)
@@ -140,7 +141,7 @@ void PagePapers::onEditPaper()
 
         if(newRef.getValue("note") != oldRef.getValue("note"))
             setPaperRead();                // changing note infers being read
-	}
+    }
 }
 
 void PagePapers::insertReference(const Reference& ref)

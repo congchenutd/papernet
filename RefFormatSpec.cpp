@@ -126,16 +126,11 @@ void RefSpec::loadType(QXmlStreamReader& xml)
 
     // even this type already exists, still need to read (pass) this part of the xml
     if(!typeExists(internalTypeName))
-        _types << type;
+        _types.insert(internalTypeName, type);
 }
 
-TypeSpec RefSpec::makeDefaultTypeSpec() const
-{
-    TypeSpec result("unknown", "unknown");
-    result.addField("title",       "title");
-    result.addField("author",      "author");
-    result.addField("publication", "publication");
-    return result;
+TypeSpec RefSpec::makeDefaultTypeSpec() const {
+    return TypeSpec("unknown", "unknown");
 }
 
 bool RefSpec::typeExists(const QString& internalTypeName) const {
@@ -144,9 +139,8 @@ bool RefSpec::typeExists(const QString& internalTypeName) const {
 
 TypeSpec RefSpec::getType(const QString& internalTypeName) const
 {
-    foreach(const TypeSpec& type, _types)
-        if(type.getInternalName().compare(internalTypeName, Qt::CaseInsensitive) == 0)
-            return type;
+    if(_types.contains(internalTypeName))
+        return _types[internalTypeName];
     return makeDefaultTypeSpec();
 }
 
@@ -155,15 +149,11 @@ QString RefSpec::getInternalTypeName(const QString& externalTypeName) const
     foreach(const TypeSpec& type, _types)
         if(type.getExternalName().compare(externalTypeName, Qt::CaseInsensitive) == 0)
             return type.getInternalName();
-    return QString();
+    return QString("unknown");
 }
 
-QString RefSpec::getExternalTypeName(const QString& internalTypeName) const
-{
-    foreach(const TypeSpec& type, _types)
-        if(type.getInternalName().compare(internalTypeName, Qt::CaseInsensitive) == 0)
-            return type.getExternalName();
-    return QString();
+QString RefSpec::getExternalTypeName(const QString& internalTypeName) const {
+    return getType(internalTypeName).getExternalName();
 }
 
 IRefParser* RefSpec::getParser() const {

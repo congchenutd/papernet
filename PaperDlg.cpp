@@ -94,19 +94,20 @@ Reference PaperDlg::getReference() const
     Reference ref;
 
     foreach(const Field& field, _fields)
-        ref.setValue(field.first, field.second->text().simplified());
+        if(field.first != "authors" && field.first != "editors" && field.first != "tags")
+            ref.setValue(field.first, field.second->text().simplified());
 
     // abstract and note may contain returns
     ref.setValue("abstract", ui.teAbstract->toPlainText().trimmed());
     ref.setValue("note",     ui.teNote    ->toPlainText().trimmed());
 
-    // type is not included in _fields
-    ref.setValue("type",     ui.comboType->currentText());
-
     // authors, editors, and tags are QStringLists
     ref.setValue("editors", splitAuthorsList(ui.leEditors->text()));
     ref.setValue("authors", splitAuthorsList(ui.leAuthors->text()));
     ref.setValue("tags",    splitLine(ui.leTags->text(), ";"));
+
+    // type is not included in _fields
+    ref.setValue("type",     ui.comboType->currentText());
 
     return ref;
 }

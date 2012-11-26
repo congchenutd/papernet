@@ -31,9 +31,12 @@ void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
     // append to existing authors
     else if(fieldName == "authors" && fieldExists(fieldName))
     {
-        QSet<QString> authorList = fields[fieldName].toStringList().toSet();
-        authorList.unite(fieldValue.toStringList().toSet());
-        fields[fieldName] = (QStringList)authorList.toList();
+        QStringList oldList = fields[fieldName].toStringList();
+        QStringList newList = fieldValue.toStringList();
+        foreach(const QString& name, newList)
+            if(!oldList.contains(name, Qt::CaseInsensitive))
+                oldList << name;
+        fields[fieldName] = oldList;
     }
 
     else

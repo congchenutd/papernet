@@ -1,17 +1,11 @@
 #include "NewReferenceDlg.h"
-#include "ui_NewReferenceDlg.h"
 
 NewReferenceDlg::NewReferenceDlg(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::NewReferenceDlg)
+    QDialog(parent)
 {
-    ui->setupUi(this);
-}
-
-NewReferenceDlg::~NewReferenceDlg() {
-	delete ui;
+    ui.setupUi(this);
 }
 
 QString NewReferenceDlg::getTitle() const {
-	return ui->lineEdit->text().simplified();
+    return ui.lineEdit->text().simplified();
 }

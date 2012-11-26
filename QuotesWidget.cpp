@@ -1,5 +1,5 @@
 #include "QuotesWidget.h"
-#include "AddQuoteDlg.h"
+#include "QuoteDlg.h"
 
 QuotesWidget::QuotesWidget(QWidget* parent) : QWidget(parent)
 {
@@ -18,7 +18,7 @@ void QuotesWidget::setCentralPaper(int paperID)
 	centralPaperID = paperID;
 
 	if(isVisible())
-		update();
+        update();    // lazy update, avoiding uncessary computation
 }
 
 void QuotesWidget::showEvent(QShowEvent*) {
@@ -27,10 +27,11 @@ void QuotesWidget::showEvent(QShowEvent*) {
 
 void QuotesWidget::onQuoteDoubleClicked(const QModelIndex& idx)
 {
-	AddQuoteDlg dlg(this);
+	QuoteDlg dlg(this);
 	dlg.setWindowTitle(tr("Edit Quote"));
 	dlg.setQuoteID(model.data(model.index(idx.row(), COL_ID)).toInt());
-	dlg.exec();   // read only
+    if(dlg.exec() == QDialog::Accepted)   // dlg will save the changes
+        emit quotesChanged();
 }
 
 void QuotesWidget::update()

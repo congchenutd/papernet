@@ -10,18 +10,18 @@
 #include <QMessageBox>
 
 extern QString attachmentDir;
-extern QString emptyDir;
+extern QString emptyDir;         // a subdir under attachmentDir
 
 AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-    paperID = -1;
+    _paperID = -1;
 
-	model.setRootPath(attachmentDir);
-	model.setResolveSymlinks(false);
-	ui.listView->setModel(&model);
-	ui.listView->setRootIndex(model.index(emptyDir));
+	_model.setRootPath(attachmentDir);
+	_model.setResolveSymlinks(false);
+	ui.listView->setModel(&_model);
+	ui.listView->setRootIndex(_model.index(emptyDir));
 
 	connect(ui.actionAddFile, SIGNAL(triggered()), this, SLOT(onAddFile()));
 	connect(ui.actionAddLink, SIGNAL(triggered()), this, SLOT(onAddLink()));
@@ -32,11 +32,11 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 
 void AttachmentsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
-	currentIndex = ui.listView->indexAt(event->pos());
-	ui.actionAddFile->setEnabled(paperID > -1);
-	ui.actionAddLink->setEnabled(paperID > -1);
-	ui.actionRename ->setEnabled(currentIndex.isValid());
-	ui.actionDel    ->setEnabled(currentIndex.isValid());
+	_currentIndex = ui.listView->indexAt(event->pos());
+	ui.actionAddFile->setEnabled(_paperID > -1);
+	ui.actionAddLink->setEnabled(_paperID > -1);
+	ui.actionRename ->setEnabled(_currentIndex.isValid());
+	ui.actionDel    ->setEnabled(_currentIndex.isValid());
 
 	QMenu contextMenu(this);
 	contextMenu.addAction(ui.actionAddFile);
@@ -54,7 +54,7 @@ void AttachmentsWidget::setPaper(int id)
 {
 	if(id == -1)
         return;
-	paperID = id;
+	_paperID = id;
 
     if(isVisible())
         update();
@@ -63,8 +63,8 @@ void AttachmentsWidget::setPaper(int id)
 void AttachmentsWidget::onAddFile()
 {
 	// file name
-	UserSetting* setting = MySetting<UserSetting>::getInstance();
-	const QString lastPath = setting->getLastAttachmentPath();
+    UserSetting* setting = UserSetting::getInstance();
+    QString lastPath = setting->getLastAttachmentPath();
 	QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"),
 													lastPath, tr("All files (*.*)"));
 	if(filePath.isEmpty())
@@ -79,7 +79,7 @@ void AttachmentsWidget::onAddFile()
 		return;
 
 	// add
-	if(!addAttachment(paperID, attachmentName, filePath))
+	if(!addAttachment(_paperID, attachmentName, filePath))
 	{
 		QMessageBox::critical(this, tr("Error"), tr("Add attachment error!"));
 		return;
@@ -94,7 +94,7 @@ void AttachmentsWidget::onAddLink()
 	if(dlg.exec() != QDialog::Accepted)
 		return;
 
-	if(!addLink(paperID, dlg.getName(), dlg.getUrl()))
+	if(!addLink(_paperID, dlg.getName(), dlg.getUrl()))
 	{
 		QMessageBox::critical(this, tr("Error"), tr("Add link error!"));
 		return;
@@ -108,33 +108,33 @@ void AttachmentsWidget::onDel()
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 	{
-		delAttachment(paperID, model.fileName(currentIndex));
+		delAttachment(_paperID, _model.fileName(_currentIndex));
 		update();
 	}
 }
 
 void AttachmentsWidget::onOpen(const QModelIndex& idx) {
-	openAttachment(paperID, model.data(idx).toString());
+	openAttachment(_paperID, _model.data(idx).toString());
 }
 
 void AttachmentsWidget::update()   // refresh
 {
-	QString dir = getAttachmentDir(paperID);
+	QString dir = getAttachmentDir(_paperID);
     if(QDir(dir).entryList().isEmpty())
         dir = emptyDir;
-	ui.listView->setRootIndex(model.index(dir));
-	updateAttached(paperID);	   // update the model's attached status
+	ui.listView->setRootIndex(_model.index(dir));
+	updateAttached(_paperID);	   // update the model's attached status
 }
 
 void AttachmentsWidget::onRename()
 {
-	QString oldName = model.data(currentIndex).toString();
+	QString oldName = _model.data(_currentIndex).toString();
 	bool ok;
 	QString newName = QInputDialog::getText(this, tr("Attachment name"),
 		tr("Attachment name"), QLineEdit::Normal, oldName, &ok);
 	if(!ok || newName.isEmpty())
 		return;
 
-	if(!renameAttachment(paperID, oldName, newName))
+	if(!renameAttachment(_paperID, oldName, newName))
 		QMessageBox::critical(this, tr("Error"), tr("Rename failed!"));
 }

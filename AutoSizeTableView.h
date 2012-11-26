@@ -1,8 +1,9 @@
 #ifndef AUTOSIZETABLEVIEW_H
 #define AUTOSIZETABLEVIEW_H
 
-#include "OptionDlg.h"
 #include <QTableView>
+
+class QSettings;
 
 // A TableView that saves the sizes of its columns
 class AutoSizeTableView : public QTableView
@@ -11,9 +12,9 @@ class AutoSizeTableView : public QTableView
 	typedef QMap<int, double> Sizes;             // section, pertentage
 
 public:
-	AutoSizeTableView(QWidget *parent);
-	void saveSectionSizes();                     // must be called before the dtr
-	void init(const QString& parentObjectName);  // must be called right after the ctr
+    AutoSizeTableView(QWidget* parent);
+    void saveSectionSizes();                                         // call before the dtr
+    void init(const QString& parentObjectName, QSettings* setting);  // call right after the ctr
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
@@ -22,10 +23,10 @@ private:
 	void adjustColumns();
 
 private:
-	Sizes sectionSizes;
-	UserSetting* setting;
-	QString groupName;        // name of the parent table
-	int adjustingCount;       // UGLY: how many resizeEvent, used to skip first 2 events
+    Sizes      _sectionSizes;    // sizes (in percentage) of the sections
+    QSettings* _setting;
+    QString    _groupName;       // name of the parent table
+    int        _adjustingCount;  // UGLY: how many resizeEvent, used to skip first 2 events
 };
 
 #endif // AUTOSIZETABLEVIEW_H

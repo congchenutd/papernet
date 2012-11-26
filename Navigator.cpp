@@ -5,18 +5,15 @@ Navigator::Navigator(QObject* parent) : QObject(parent) {}
 void Navigator::addFootStep(Page* page, int id)
 {
 	// avoid duplication
-	if(!history.isEmpty())
+	if(!_history.isEmpty())
 	{
-		FootStep top = history.top();
-		if(top.page == page && top.id == id)
-        {
-            emit historyValid(validateHistory());
+		FootStep top = _history.top();
+		if(top._page == page && top._id == id)
 			return;
-        }
 	}
 
-	history.push(FootStep(page, id));
-	emit historyValid(validateHistory());
+	_history.push(FootStep(page, id));
+    validateHistory();
 }
 
 FootStep Navigator::backward()
@@ -25,13 +22,13 @@ FootStep Navigator::backward()
 		return FootStep();
 
 	// move the top of history to future
-	future.push(history.pop());
+	_future.push(_history.pop());
 
-	emit historyValid(validateHistory());   // history may become valid
-	emit futureValid (validateFuture());    // future  may become invalid
+    validateHistory();   // history may become invalid
+    validateFuture();    // future  may become valid
 
 	// return the new top
-	return history.top();
+	return _history.top();
 }
 
 FootStep Navigator::forward()
@@ -41,22 +38,28 @@ FootStep Navigator::forward()
 		return result;
 
 	// move the top of future to history
-	result = future.pop();
-	history.push(result);
+	result = _future.pop();
+	_history.push(result);
 
-	emit historyValid(validateHistory());   // history may become valid
-	emit futureValid (validateFuture());    // future  may become invalid
+    validateHistory();   // history may become valid
+    validateFuture();    // future  may become invalid
 
 	// return the new top
 	return result;
 }
 
-bool Navigator::validateHistory() {
-    return history.size() > 1;   // at lease one footstep (current)
+bool Navigator::validateHistory()
+{
+    bool valid = _history.size() > 1;  // at least one footstep besides the current one
+    emit historyValid(valid);
+    return valid;
 }
 
-bool Navigator::validateFuture() {
-	return !future.isEmpty();
+bool Navigator::validateFuture()
+{
+    bool valid = !_future.isEmpty();
+    emit futureValid(valid);
+    return valid;
 }
 
 Navigator* Navigator::getInstance()

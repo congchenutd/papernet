@@ -7,30 +7,35 @@
 #include "Page.h"
 #include "Reference.h"
 
+class UserSetting;
+
 class PagePapers : public Page
 {
 	Q_OBJECT
 
 public:
 	PagePapers(QWidget* parent = 0);
-	void saveGeometry();
+    void saveGeometry();    // called by mainwindow, closeEvent() only works for top window
 
-	virtual void add();
-	virtual void del();
+	virtual void addRecord();
+	virtual void delRecord();
 	virtual void search(const QString& target);
 	virtual void jumpToID(int id);
-	virtual void jumpToCurrent() { jumpToID(currentPaperID); }
-	virtual void reset() { onResetPapers(); }
+    virtual void jumpToCurrent() { jumpToID(_currentPaperID); }
+    virtual void reset() { resetModel(); }
 
     void importFromFiles(const QStringList& filePaths);
 
 private slots:
+    void resetModel();              // just reset the model
+    void resetAndJumpToCurrent();   //
+
     void onSelectionChanged(const QItemSelection& selected);
 	void onEditPaper();
 	void onFullTextSearch(const QString& target);
 	void onSubmitPaper();
 	void onClicked();
-	void onResetPapers();
+    void updateQuotes();
 	void onImport();
 	void onExport();
 
@@ -48,9 +53,8 @@ private slots:
     // menu signals
     void onPrintMe  (bool print);   // two built-in tags
 	void onBookmark (bool readMe);
-
 	void onAddQuote();
-    void onAddPDF();         // add pdf to current paper
+    void onAddPDF();                // add pdf to current paper
 	void onReadPDF();
 
 signals:
@@ -61,7 +65,7 @@ private:
 	int  rowToID(int row) const;
     int  titleToRow(const QString& title)  const;
     void setPaperRead();
-	void setTags(const QStringList& tags);
+    void recreateTagsRelations(const QStringList& tags);
 	void highLightTags();
 	void loadGeometry();
 	void reloadAttachments();
@@ -77,10 +81,10 @@ private:
 private:
 	Ui::PagePapersClass ui;
 
-	PaperModel   model;
-	int          currentRow;
-	int          currentPaperID;
-	UserSetting* setting;
+    PaperModel   _model;
+    int          _currentRow;
+    int          _currentPaperID;
+    UserSetting* _setting;
 };
 
 #endif // PAGEPAPERS_H

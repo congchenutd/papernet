@@ -1,10 +1,8 @@
 #include "PaperDlg.h"
 #include "Common.h"
 #include "Reference.h"
-#include "EnglishName.h"
 #include "../BibFixer/Convertor.h"
 #include "RefFormatSpec.h"
-#include <QDate>
 #include <QSqlTableModel>
 #include <QCompleter>
 
@@ -15,7 +13,7 @@ PaperDlg::PaperDlg(QWidget *parent)
 	resize(800, 700);
 	ui.leTitle->setFocus();
 
-    // fields
+    // fields, type and tags not included
     _fields << Field("title",       ui.leTitle)
             << Field("authors",     ui.leAuthors)
             << Field("publication", ui.lePublication)
@@ -56,6 +54,7 @@ PaperDlg::PaperDlg(QWidget *parent)
 
 void PaperDlg::setTitle(const QString& title)
 {
+    // remove protectin and fix case
     QString fixedTitle = BibFixer::CaseConvertor().convert(
                 BibFixer::UnprotectionConvertor().convert(title));
     ui.leTitle->setText(fixedTitle);
@@ -97,7 +96,12 @@ Reference PaperDlg::getReference() const
     foreach(const Field& field, _fields)
         ref.setValue(field.first, field.second->text().simplified());
 
-    ref.setValue("type", ui.comboType->currentText());
+    // abstract and note may contain returns
+    ref.setValue("abstract", ui.teAbstract->toPlainText().trimmed());
+    ref.setValue("note",     ui.teNote    ->toPlainText().trimmed());
+
+    // type is not included in _fields
+    ref.setValue("type",     ui.comboType->currentText());
 
     // authors, editors, and tags are QStringLists
     ref.setValue("editors", splitAuthorsList(ui.leEditors->text()));
@@ -110,10 +114,12 @@ Reference PaperDlg::getReference() const
 void PaperDlg::setReference(const Reference& ref)
 {
     foreach(const Field& field, _fields)
-        if(field.second->text().isEmpty())
+        if(field.second->text().isEmpty())   // do not overwrite
             field.second->setText(ref.getValue(field.first).toString());
 
-    setTitle(ref.getValue("title").toString());
+    setTitle(ref.getValue("title").toString());    // fix the tile
+
+    // names are QStringLists
     ui.leAuthors->setText(ref.getValue("authors").toStringList().join("; "));
     ui.leEditors->setText(ref.getValue("editors").toStringList().join("; "));
 
@@ -122,10 +128,11 @@ void PaperDlg::setReference(const Reference& ref)
     tags << ref.getValue("tags").toStringList();
     ui.leTags->setText(tags.join("; "));
 
+    // move the cursor to the front, otherwise it shows the end of the line
     ui.leAuthors    ->setCursorPosition(0);
     ui.lePublication->setCursorPosition(0);
 
-    // set type after publication, because we may guess type from publication
+    // set type after setting publication, thus we may guess the type from publication
     setType(ref.getValue("type").toString());
 }
 
@@ -136,11 +143,8 @@ void PaperDlg::onTypeChanged(const QString& typeName)
         return;
 
     TypeSpec type = _spec->getType(typeName);
-    for(QList<Field>::iterator it = _fields.begin(); it != _fields.end(); ++ it)
-    {
-        if(type.isRequiredField(it->first))         // invalid type returns false
-            it->second->highlight(QColor(Qt::yellow).lighter());
-        else
-            it->second->highlight(palette().base().color());  // reset palette
-    }
+    for(Fields::iterator it = _fields.begin(); it != _fields.end(); ++ it)
+        it->second->highlight(type.isRequiredField(it->first) // invalid type returns false
+                              ? QColor(Qt::yellow).lighter()
+                              : palette().base().color());    // reset palette
 }

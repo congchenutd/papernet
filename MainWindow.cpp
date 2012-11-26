@@ -6,19 +6,19 @@
 #include <QDate>
 #include <QActionGroup>
 
-MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
-	: QMainWindow(parent, flags)
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent),
+      _currentPage(0),
+      _navigator(Navigator::getInstance())
 {
-	instance = this;
-	currentPage = 0;
-	navigator = Navigator::getInstance();
-
+    _instance = this;
 	ui.setupUi(this);
 
-	pagePapers     = static_cast<PagePapers*>    (ui.stackedWidget->widget(0));
-	pageQuotes     = static_cast<PageQuotes*>    (ui.stackedWidget->widget(1));
-	pageDictionary = static_cast<PageDictionary*>(ui.stackedWidget->widget(2));
+	_pagePapers     = static_cast<PagePapers*>    (ui.stackedWidget->widget(0));
+	_pageQuotes     = static_cast<PageQuotes*>    (ui.stackedWidget->widget(1));
+	_pageDictionary = static_cast<PageDictionary*>(ui.stackedWidget->widget(2));
 
+    // action group makes actions mutual exclusive
 	QActionGroup* actionGroup = new QActionGroup(this);
 	actionGroup->addAction(ui.actionPapers);
 	actionGroup->addAction(ui.actionQuotes);
@@ -36,23 +36,24 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
     connect(ui.actionForward,    SIGNAL(triggered()), this, SLOT(onForward()));
     connect(ui.toolBarSearch,    SIGNAL(search(QString)), this, SLOT(onSearch(QString)));
     connect(ui.toolBarSearch,    SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
-    connect(ui.actionImportRef,  SIGNAL(triggered()),             pagePapers, SLOT(onImport()));
-    connect(ui.actionExportRef,  SIGNAL(triggered()),             pagePapers, SLOT(onExport()));
-    connect(ui.actionReadPDF,    SIGNAL(triggered()),             pagePapers, SLOT(onReadPDF()));
-    connect(ui.toolBarSearch,    SIGNAL(fullTextSearch(QString)), pagePapers, SLOT(onFullTextSearch(QString)));
+    connect(ui.actionImportRef,  SIGNAL(triggered()),             _pagePapers, SLOT(onImport()));
+    connect(ui.actionExportRef,  SIGNAL(triggered()),             _pagePapers, SLOT(onExport()));
+    connect(ui.actionReadPDF,    SIGNAL(triggered()),             _pagePapers, SLOT(onReadPDF()));
+    connect(ui.toolBarSearch,    SIGNAL(fullTextSearch(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
 
-    connect(pagePapers,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
-    connect(pageQuotes,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
-    connect(pageDictionary, SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
-    connect(pagePapers,     SIGNAL(hasPDF(bool)), ui.actionReadPDF, SLOT(setEnabled(bool)));
+    connect(_pagePapers,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
+    connect(_pageQuotes,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
+    connect(_pageDictionary, SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
 
-	connect(navigator, SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
-	connect(navigator, SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
+    connect(_pagePapers, SIGNAL(hasPDF(bool)),       ui.actionReadPDF,  SLOT(setEnabled(bool)));
+    connect(_navigator,  SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
+    connect(_navigator,  SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
 
 	// load settings
 	UserSetting* setting = UserSetting::getInstance();
 	qApp->setFont(setting->getFont());
-    onPapers();
+
+    onPapers();   // go to papers page by default
 }
 
 void MainWindow::onOptions()
@@ -65,43 +66,47 @@ void MainWindow::onAbout()
 {
 	QMessageBox::about(this, "About",
 		tr("<h3><b>PaperNet: A Better Paper Manager</b></h3>"
-		"<p>Built on %1</p>"
-		"<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>")
-		.arg(UserSetting::getInstance()->getCompileDate()));
+           "<p>Built on %1</p>"
+           "<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>")
+                       .arg(UserSetting::getInstance()->getCompileDate()));
 }
 
 void MainWindow::closeEvent(QCloseEvent*)
 {
 	UserSetting* setting = UserSetting::getInstance();
-	if(setting->getBackupDays() > 0)
+    if(setting->getBackupDays() > 0)  // 0 means do not backup
 	{
 		delOldBackup();
 		backup();
 	}
-	pagePapers->saveGeometry();   // save the settings before the dtr
-	pageDictionary->saveGeometry();
+    _pagePapers    ->saveGeometry();   // save the settings before the dtr
+	_pageDictionary->saveGeometry();
 	setting->destroySettingManager();
 }
 
 void MainWindow::delOldBackup()
 {
-	const QDate today = QDate::currentDate();
-	const int   days  = UserSetting::getInstance()->getBackupDays();
-	const QFileInfoList fileInfos =
+    QDate today      = QDate::currentDate();
+    int   daysToKeep = UserSetting::getInstance()->getBackupDays();
+
+    // get all the .db files
+    QFileInfoList fileInfos =
 		QDir("Backup").entryInfoList(QStringList() << "*.db", QDir::Files);
+
+    // for each .db file, remove it if it's older than daysToKeep
 	foreach(QFileInfo fileInfo, fileInfos)
-		if(QDate::fromString(fileInfo.baseName(), Qt::ISODate).daysTo(today) > days)
+        if(QDate::fromString(fileInfo.baseName(), Qt::ISODate).daysTo(today) > daysToKeep)
 			QFile::remove(fileInfo.filePath());
 }
 
 void MainWindow::backup(const QString& name)
 {
 	QDir::current().mkdir("Backup");
-	QString backupFileName = name.isEmpty()
-		? "./Backup/" + QDate::currentDate().toString(Qt::ISODate) + ".db"
-		: name;
+    QString backupFileName = name.isEmpty()
+            ? "./Backup/" + QDate::currentDate().toString(Qt::ISODate) + ".db"
+            : name;
 
-	if(QFile::exists(backupFileName))
+    if(QFile::exists(backupFileName))   // only keep on backup for each day
 		QFile::remove(backupFileName);
 
 	extern QString dbName;
@@ -117,8 +122,8 @@ void MainWindow::onPapers()
     ui.actionImportRef->setVisible(true);
     ui.actionExportRef->setVisible(true);
     ui.actionReadPDF  ->setVisible(true);
-    currentPage = ui.pagePapers;
-    currentPage->jumpToCurrent();
+    _currentPage = ui.pagePapers;
+    _currentPage->jumpToCurrent();
 //    onSelectionValid(false);         // select row 0 by default
 }
 
@@ -129,9 +134,9 @@ void MainWindow::onQuotes()
     ui.actionImportRef->setVisible(false);
     ui.actionExportRef->setVisible(false);
     ui.actionReadPDF  ->setVisible(false);
-    currentPage = ui.pageQuotes;
-    currentPage->reset();          // quotes may be changd by paper page
-    currentPage->jumpToCurrent();
+    _currentPage = ui.pageQuotes;
+    _currentPage->reset();          // quotes may be changd by paper page
+    _currentPage->jumpToCurrent();
     onSelectionValid(false);
 }
 
@@ -142,31 +147,31 @@ void MainWindow::onDictionary()
     ui.actionImportRef->setVisible(false);
     ui.actionExportRef->setVisible(false);
     ui.actionReadPDF  ->setVisible(false);
-    currentPage = ui.pageDictionary;
-	currentPage->jumpToCurrent();
+    _currentPage = ui.pageDictionary;
+	_currentPage->jumpToCurrent();
     onSelectionValid(false);
 }
 
 void MainWindow::jumpToPaper(int paperID)
 {
 	onPapers();
-    pagePapers->reset();                 // ensure the row is visible
-    pagePapers->jumpToID(paperID);
-    navigator->addFootStep(ui.pagePapers, paperID);
+    _pagePapers->reset();                 // ensure the row is visible
+    _pagePapers->jumpToID(paperID);
+    _navigator->addFootStep(ui.pagePapers, paperID);
 }
 
 void MainWindow::jumpToQuote(int quoteID)
 {
 	onQuotes();
-	pageQuotes->reset();                 // ensure the row is visible
-	pageQuotes->jumpToID(quoteID);
-    navigator->addFootStep(ui.pageQuotes, quoteID);
+	_pageQuotes->reset();                 // ensure the row is visible
+	_pageQuotes->jumpToID(quoteID);
+    _navigator->addFootStep(ui.pageQuotes, quoteID);
 }
 
 void MainWindow::importRefFromFiles(const QStringList& filePaths)
 {
     onPapers();    // switch to paper page
-    static_cast<PagePapers*>(currentPage)->importFromFiles(filePaths);
+    static_cast<PagePapers*>(_currentPage)->importFromFiles(filePaths);
 }
 
 int MainWindow::getCurrentPageIndex() const {
@@ -174,26 +179,30 @@ int MainWindow::getCurrentPageIndex() const {
 }
 
 MainWindow* MainWindow::getInstance() {
-	return instance;
+	return _instance;
 }
 
 void MainWindow::onAdd() {
-	currentPage->add();
+    _currentPage->addRecord();
 }
 void MainWindow::onDel() {
-	currentPage->del();
+    _currentPage->delRecord();
 }
 void MainWindow::onSearch(const QString& target) {
-	currentPage->search(target);
+	_currentPage->search(target);
 }
-void MainWindow::onClearSearch() {
-	currentPage->reset();
+
+void MainWindow::onClearSearch()
+{
+	_currentPage->reset();
+    _currentPage->jumpToCurrent();
 }
+
 void MainWindow::onForward() {
-	navigateTo(navigator->forward());
+	navigateTo(_navigator->forward());
 }
 void MainWindow::onBackward() {
-    navigateTo(navigator->backward());
+    navigateTo(_navigator->backward());
 }
 
 void MainWindow::onSelectionValid(bool valid)
@@ -204,21 +213,21 @@ void MainWindow::onSelectionValid(bool valid)
 
 void MainWindow::navigateTo(const FootStep& footStep)
 {
-	if(footStep.page == 0)
+    if(footStep._page == 0)     // invalid
 		return;
 
 	// switch to corresponding page
-	currentPage = footStep.page;
-	if(currentPage == ui.pagePapers)
+	_currentPage = footStep._page;
+	if(_currentPage == ui.pagePapers)
 		onPapers();
-	else if(currentPage == ui.pageQuotes)
+	else if(_currentPage == ui.pageQuotes)
 		onQuotes();
 	else
 		onDictionary();
 
-	currentPage->reset();                 // ensure the row is visible
-	currentPage->jumpToID(footStep.id);   // jump to row
+	_currentPage->reset();                 // ensure the row is visible
+    _currentPage->jumpToID(footStep._id);  // jump to row
 }
 
-MainWindow* MainWindow::instance = 0;
+MainWindow* MainWindow::_instance = 0;
 

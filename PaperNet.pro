@@ -18,9 +18,7 @@ macx {
 }
 
 # Input
-HEADERS += AddPhraseDlg.h \
-           AddQuoteDlg.h \
-           AddTagDlg.h \
+HEADERS += \
            AttachmentsWidget.h \
            AutoSizeTableView.h \
            Common.h \
@@ -55,10 +53,11 @@ HEADERS += AddPhraseDlg.h \
 	Reference.h \
     ../MyComboBox/SetTextComboBox.h \
     ../BibFixer/Convertor.h \
-    FieldEdit.h
-FORMS += AddPhraseDlg.ui \
-         AddQuoteDlg.ui \
-         AddTagDlg.ui \
+    FieldEdit.h \
+    PhraseDlg.h \
+    QuoteDlg.h \
+    TagDlg.h
+FORMS += \
          AttachmentsWidget.ui \
          LinkDlg.ui \
          MainWindow.ui \
@@ -73,10 +72,11 @@ FORMS += AddPhraseDlg.ui \
     CoauthoredPapersWidgdet.ui \
     QuotesWidget.ui \
 	RelatedPhraseWidget.ui \
-    RefDlg.ui
-SOURCES += AddPhraseDlg.cpp \
-           AddQuoteDlg.cpp \
-           AddTagDlg.cpp \
+    RefDlg.ui \
+    PhraseDlg.ui \
+    QuoteDlg.ui \
+    TagDlg.ui
+SOURCES += \
            AttachmentsWidget.cpp \
            AutoSizeTableView.cpp \
            Common.cpp \
@@ -110,7 +110,10 @@ SOURCES += AddPhraseDlg.cpp \
 	Reference.cpp \
     ../MyComboBox/SetTextComboBox.cpp \
     ../BibFixer/Convertor.cpp \
-    FieldEdit.cpp
+    FieldEdit.cpp \
+    PhraseDlg.cpp \
+    QuoteDlg.cpp \
+    TagDlg.cpp
 RESOURCES += MainWindow.qrc
 
 

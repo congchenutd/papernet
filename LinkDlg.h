@@ -4,13 +4,13 @@
 #include <QDialog>
 #include "ui_LinkDlg.h"
 
-// Add hyperlink to a paper
+// dlg for adding/editing hyperlink
 class LinkDlg : public QDialog
 {
 	Q_OBJECT
 
 public:
-	LinkDlg(QWidget *parent = 0);
+    LinkDlg(QWidget* parent = 0);
 	QString getName() const;
 	QString getUrl()  const;
 

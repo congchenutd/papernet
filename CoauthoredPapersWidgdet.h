@@ -4,6 +4,7 @@
 #include "ui_CoauthoredPapersWidgdet.h"
 #include <QStandardItemModel>
 
+// widget for showing coauthored papers
 class CoauthoredPapersWidgdet : public QWidget
 {
 	Q_OBJECT
@@ -16,19 +17,21 @@ protected:
     void showEvent(QShowEvent*);
 
 private:
-    void update();
-    void updateRecord(int id, const QString& title);
+    void update();    // update all the records
+
+    // update the coauthor record for the paper with paperID and paperTitle
+    void updateCoauthorRecord(int paperID, const QString& paperTitle);
 
 private slots:
 	void onPaperDoubleClicked(const QModelIndex& idx);
 
 signals:
-	void doubleClicked(int);
+    void doubleClicked(int paperID);
 	
 private:
 	Ui::CoauthoredPapersWidgdet ui;
-	QStandardItemModel model;
-	int centralPaperID;
+    QStandardItemModel _model;
+    int                _centralPaperID;
 
 	enum {COL_ID, COL_TITLE, COL_COAUTHERED};
 };

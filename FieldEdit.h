@@ -4,15 +4,17 @@
 #include <QLineEdit>
 #include <QPlainTextEdit>
 
+// an interface for field edit, used by PaperDlg
 class FieldEdit
 {
 public:
     virtual ~FieldEdit() {}
     virtual QString text() const = 0;
-    virtual void setText(const QString& text) = 0;
+    virtual void setText  (const QString& text) = 0;
     virtual void highlight(const QColor& color) = 0;
 };
 
+// two edits, all operations delegated to QLineEdit/QPlainTextEdit
 class MyLineEdit : public QLineEdit, public FieldEdit
 {
 public:

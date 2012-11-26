@@ -23,8 +23,7 @@ private slots:
 
 private:
 	Ui::OptionDlgClass ui;
-
-	UserSetting* setting;
+    UserSetting* _setting;
 };
 
 

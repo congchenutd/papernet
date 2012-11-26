@@ -1,7 +1,8 @@
 #include "PageQuotes.h"
-#include "AddQuoteDlg.h"
+#include "QuoteDlg.h"
 #include "Common.h"
 #include "Navigator.h"
+#include "OptionDlg.h"
 #include <QMessageBox>
 
 PageQuotes::PageQuotes(QWidget *parent)
@@ -9,7 +10,7 @@ PageQuotes::PageQuotes(QWidget *parent)
 {
 	currentRow = -1;
 	ui.setupUi(this);
-	ui.tableView->init("PageQuotes");   // set the table name for the view
+    ui.tableView->init("PageQuotes", UserSetting::getInstance());
 
     reset();   // init model
 	ui.tableView->setModel(&model);
@@ -40,9 +41,9 @@ void PageQuotes::onClicked(const QModelIndex& idx) {
 	Navigator::getInstance()->addFootStep(this, rowToID(idx.row()));  // track navigation
 }
 
-void PageQuotes::add()
+void PageQuotes::addRecord()
 {
-    AddQuoteDlg dlg(this);
+    QuoteDlg dlg(this);
     dlg.setWindowTitle(tr("Add Quote"));
     dlg.setQuoteID(getNextID("Quotes", "ID"));
     if(dlg.exec() == QDialog::Accepted)
@@ -51,14 +52,14 @@ void PageQuotes::add()
 
 void PageQuotes::onEdit()
 {
-    AddQuoteDlg dlg(this);
+    QuoteDlg dlg(this);
     dlg.setWindowTitle(tr("Edit Quote"));
 	dlg.setQuoteID(rowToID(currentRow));
     if(dlg.exec() == QDialog::Accepted)
 		reset();   // just refresh, dlg will submit the changes
 }
 
-void PageQuotes::del()
+void PageQuotes::delRecord()
 {
 	if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
 		QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)

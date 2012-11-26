@@ -1,6 +1,6 @@
 #include "TagsWidget.h"
 #include "Common.h"
-#include "AddTagDlg.h"
+#include "TagDlg.h"
 #include "OptionDlg.h"
 #include <QContextMenuEvent>
 #include <QMenu>
@@ -81,7 +81,7 @@ void TagsWidget::onRename()
 
 	WordLabel* word = selected.front();                    // one at a time
 	QString oldName = word->text();
-	AddTagDlg dlg(tagTableName, this);
+	TagDlg dlg(tagTableName, this);
 	dlg.setWindowTitle(tr("Edit Tag"));
 	dlg.setText(oldName);
 	if(dlg.exec() == QDialog::Accepted)

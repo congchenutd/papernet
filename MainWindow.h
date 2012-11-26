@@ -18,12 +18,12 @@ public:
     typedef enum {PAGE_PAPERS, PAGE_QUOTES, PAGE_DICTIONARY} PageIndex;
 
 public:
-	MainWindow(QWidget *parent = 0, Qt::WFlags flags = 0);
-	static MainWindow* getInstance();
+    MainWindow(QWidget* parent = 0);
+    static MainWindow* getInstance();   // access for pages
     void jumpToPaper(int paperID);
 	void jumpToQuote(int quoteID);
-    void importRefFromFiles(const QStringList& filePaths);
-    int getCurrentPageIndex() const;
+    void importRefFromFiles(const QStringList& filePaths);  // for external apps
+    int getCurrentPageIndex() const;    // which page is currently at
 
 protected:
 	virtual void closeEvent(QCloseEvent*);
@@ -50,12 +50,12 @@ private:
 private:
 	Ui::MainWindowClass ui;
 
-	static MainWindow* instance;
-	PagePapers*     pagePapers;
-	PageQuotes*     pageQuotes;
-	PageDictionary* pageDictionary;
-    Page*           currentPage;
-    Navigator*      navigator;
+    static MainWindow* _instance;
+    PagePapers*     _pagePapers;
+    PageQuotes*     _pageQuotes;
+    PageDictionary* _pageDictionary;
+    Page*           _currentPage;
+    Navigator*      _navigator;
 };
 
 #endif // MAINWINDOW_H

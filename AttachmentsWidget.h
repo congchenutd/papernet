@@ -5,6 +5,7 @@
 #include <QFileSystemModel>
 #include "ui_AttachmentsWidget.h"
 
+// widget for attachments
 class AttachmentsWidget : public QWidget
 {
 	Q_OBJECT
@@ -12,8 +13,8 @@ class AttachmentsWidget : public QWidget
 public:
 	AttachmentsWidget(QWidget *parent = 0);
 
-	void setPaper(int id);
-	void update();
+    void setPaper(int id);   // set the id of the paper
+    void update();           // reload
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event);
@@ -21,6 +22,7 @@ protected:
 
 public slots:
 	void onAddFile();
+
 private slots:
 	void onAddLink();
 	void onRename();
@@ -30,9 +32,9 @@ private slots:
 private:
 	Ui::AttachmentsWidgetClass ui;
 
-	int paperID;
-	QFileSystemModel model;
-	QModelIndex currentIndex;
+    int              _paperID;
+    QFileSystemModel _model;
+    QModelIndex      _currentIndex;    // index of the selected item in the model
 };
 
 #endif // ATTACHMENTSWIDGET_H

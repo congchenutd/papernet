@@ -7,7 +7,6 @@ void MyLineEdit::highlight(const QColor& color)
     QLineEdit::setPalette(palette);
 }
 
-
 void MyPlainTextEdit::highlight(const QColor &color)
 {
     QPalette palette = QPlainTextEdit::palette();

@@ -1,6 +1,7 @@
 #include "Reference.h"
 #include "EnglishName.h"
 #include <QStringList>
+#include <QSet>
 
 bool Reference::fieldExists(const QString& field) const {
     return fields.contains(field);
@@ -29,7 +30,11 @@ void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
 
     // append to existing authors
     else if(fieldName == "authors" && fieldExists(fieldName))
-        fields[fieldName] = fields[fieldName].toStringList() << fieldValue.toStringList();
+    {
+        QSet<QString> authorList = fields[fieldName].toStringList().toSet();
+        authorList.unite(fieldValue.toStringList().toSet());
+        fields[fieldName] = (QStringList)authorList.toList();
+    }
 
     else
         fields[fieldName] = fieldValue;

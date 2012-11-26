@@ -7,13 +7,13 @@ CoauthoredPapersWidgdet::CoauthoredPapersWidgdet(QWidget *parent) :
 	QWidget(parent)
 {
 	ui.setupUi(this);
-	centralPaperID = -1;
+	_centralPaperID = -1;
 
-	model.setColumnCount(3);
-	model.setHeaderData(COL_ID,         Qt::Horizontal, tr("ID"));
-	model.setHeaderData(COL_TITLE,      Qt::Horizontal, tr("Title"));
-	model.setHeaderData(COL_COAUTHERED, Qt::Horizontal, tr("Coauthered"));
-	ui.listView->setModel(&model);
+	_model.setColumnCount(3);
+	_model.setHeaderData(COL_ID,         Qt::Horizontal, tr("ID"));
+	_model.setHeaderData(COL_TITLE,      Qt::Horizontal, tr("Title"));
+	_model.setHeaderData(COL_COAUTHERED, Qt::Horizontal, tr("Coauthered"));
+	ui.listView->setModel(&_model);
 	ui.listView->setModelColumn(COL_TITLE);
 
     connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPaperDoubleClicked(QModelIndex)));
@@ -21,12 +21,12 @@ CoauthoredPapersWidgdet::CoauthoredPapersWidgdet(QWidget *parent) :
 
 void CoauthoredPapersWidgdet::setCentralPaper(int paperID)
 {    
-    if(paperID < 0 || paperID == centralPaperID)
+    if(paperID < 0 || paperID == _centralPaperID)
         return;
-    centralPaperID = paperID;
+    _centralPaperID = paperID;
 
     if(isVisible())
-        update();
+        update();   // lazy update, avoiding uncessary computation
 }
 
 void CoauthoredPapersWidgdet::showEvent(QShowEvent*) {
@@ -36,11 +36,11 @@ void CoauthoredPapersWidgdet::showEvent(QShowEvent*) {
 void CoauthoredPapersWidgdet::update()
 {
     QSqlDatabase::database().transaction();
-    model.removeRows(0, model.rowCount());
+    _model.removeRows(0, _model.rowCount());
 
 	// find authors from central paper
     QSqlQuery query;
-    query.exec(tr("select Authors from Papers where ID = %1").arg(centralPaperID));
+    query.exec(tr("select Authors from Papers where ID = %1").arg(_centralPaperID));
     if(query.next())
     {
 		QStringList authors = splitLine(query.value(0).toString(), ";");
@@ -48,45 +48,48 @@ void CoauthoredPapersWidgdet::update()
         {
 			// for each other paper
 			query.exec(tr("select ID, Title, Authors from Papers where ID != %1")
-					   .arg(centralPaperID));
+					   .arg(_centralPaperID));
             while(query.next())
             {
 				// see if it has common names with the central paper
 				QStringList names = splitLine(query.value(2).toString(), ";");
-                foreach(const QString& name, names)
-                    if(EnglishName::compare(name, author))
-                        updateRecord(query.value(0).toInt(), query.value(1).toString());
+                foreach(const QString& name, names)          // for each common author
+                    if(EnglishName::compare(name, author))   // update the coauthor #
+                        updateCoauthorRecord(query.value(0).toInt(),
+                                     query.value(1).toString());
             }
         }
-        model.sort(COL_TITLE);                            // sort by title 2ndly
-        model.sort(COL_COAUTHERED, Qt::DescendingOrder);  // sort by coauthered 1st
+        _model.sort(COL_TITLE);                            // sort by title 2ndly
+        _model.sort(COL_COAUTHERED, Qt::DescendingOrder);  // sort by coauthered 1st
     }
 
     QSqlDatabase::database().commit();
 }
 
-void CoauthoredPapersWidgdet::updateRecord(int id, const QString& title)
+void CoauthoredPapersWidgdet::updateCoauthorRecord(int paperID, const QString& paperTitle)
 {
-	if(id == centralPaperID)
+    if(paperID == _centralPaperID)
 		return;
-	QModelIndexList idxes = model.match(model.index(0, COL_ID),
-										Qt::DisplayRole, id, 1, Qt::MatchExactly);
+
+    // try to find existing paper with the id
+	QModelIndexList idxes = _model.match(_model.index(0, COL_ID),
+                                        Qt::DisplayRole, paperID, 1, Qt::MatchExactly);
 	if(idxes.isEmpty())    // new record
 	{
-		int lastRow = model.rowCount();
-		model.insertRow(lastRow);
-		model.setData(model.index(lastRow, COL_ID),         id);
-		model.setData(model.index(lastRow, COL_TITLE),      title);
-		model.setData(model.index(lastRow, COL_COAUTHERED), 1);
+		int lastRow = _model.rowCount();
+		_model.insertRow(lastRow);
+        _model.setData(_model.index(lastRow, COL_ID),         paperID);
+        _model.setData(_model.index(lastRow, COL_TITLE),      paperTitle);
+		_model.setData(_model.index(lastRow, COL_COAUTHERED), 1);
 	}
-	else                   // update existing record
+    else                   // update existing record's coauthor #
 	{
 		int row = idxes.front().row();
-		int coauthored = model.data(model.index(row, COL_COAUTHERED)).toInt();
-		model.setData(model.index(row, COL_COAUTHERED), coauthored + 1);
+		int coauthored = _model.data(_model.index(row, COL_COAUTHERED)).toInt();
+		_model.setData(_model.index(row, COL_COAUTHERED), coauthored + 1);
 	}
 }
 
 void CoauthoredPapersWidgdet::onPaperDoubleClicked(const QModelIndex& idx) {
-	emit doubleClicked(model.data(model.index(idx.row(), COL_ID)).toInt());
+	emit doubleClicked(_model.data(_model.index(idx.row(), COL_ID)).toInt());
 }

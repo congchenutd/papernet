@@ -3,18 +3,19 @@
 #include <QStack>
 #include <QObject>
 
-// navigation history record
 class Page;
+
+// navigation history record: page + record id
 struct FootStep
 {
 	FootStep(Page* p = 0, int i = -1)
 	{
-		page = p;
-		id   = i;
+        _page = p;
+        _id   = i;
 	}
 
-	Page* page;
-	int   id;
+    Page* _page;
+    int   _id;      // record id on the page
 };
 
 // tracks navigation history
@@ -36,12 +37,12 @@ signals:
 	void futureValid (bool);
 
 private:
-	bool validateHistory();
-	bool validateFuture();
+    bool validateHistory();
+    bool validateFuture();
 
 private:
-	QStack<FootStep> history;    // the top of history is the current position
-	QStack<FootStep> future;
+    QStack<FootStep> _history;    // the top of history is the current position
+    QStack<FootStep> _future;
 
 	static Navigator* instance;
 };

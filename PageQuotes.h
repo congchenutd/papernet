@@ -12,8 +12,8 @@ class PageQuotes : public Page
 public:
 	PageQuotes(QWidget *parent = 0);
 	
-	virtual void add();
-	virtual void del();
+	virtual void addRecord();
+	virtual void delRecord();
 	virtual void search(const QString& target);
 	virtual void jumpToID(int id);
     virtual void jumpToCurrent() {}

@@ -19,38 +19,38 @@ OptionDlg::OptionDlg(QWidget *parent)
     connect(ui.btBibFixerPath,    SIGNAL(clicked()), this, SLOT(onSetBibFixerPath()));
 
 	// load settings
-    setting = MySetting<UserSetting>::getInstance();
-	qApp->setFont(setting->getFont());
+    _setting = MySetting<UserSetting>::getInstance();
+	qApp->setFont(_setting->getFont());
 
-    int backupDays = setting->getBackupDays();
+    int backupDays = _setting->getBackupDays();
     ui.checkAutoBack->setChecked(backupDays > 0);
     ui.sbBackupDays->setEnabled (backupDays > 0);
 	ui.sbBackupDays->setValue(backupDays);
 
-    ui.checkKeepAttachments ->setChecked(setting->getKeepAttachments());
-    ui.checkMoveAttachments ->setChecked(setting->getMoveAttachments());
-    ui.checkExportToBibFixer->setChecked(setting->getExportToBibFixer());
-    ui.leBibFixerPath->setText(setting->getBibFixerPath());
+    ui.checkKeepAttachments ->setChecked(_setting->getKeepAttachments());
+    ui.checkMoveAttachments ->setChecked(_setting->getMoveAttachments());
+    ui.checkExportToBibFixer->setChecked(_setting->getExportToBibFixer());
+    ui.leBibFixerPath->setText(_setting->getBibFixerPath());
     ui.leBibFixerPath->setCursorPosition(0);
 }
 
 void OptionDlg::onFont()
 {
 	bool ok;
-	QFont font = QFontDialog::getFont(&ok, setting->getFont(), this);
+	QFont font = QFontDialog::getFont(&ok, _setting->getFont(), this);
 	if(ok)
-		setting->setFont(font);
+		_setting->setFont(font);
 }
 
 void OptionDlg::accept()
 {
-	// apply settings
-	qApp->setFont(setting->getFont());
-	setting->setBackupDays(ui.checkAutoBack->isChecked() ? ui.sbBackupDays->value() : 0);
-    setting->setKeepAttachments (ui.checkKeepAttachments->isChecked());
-    setting->setMoveAttachments (ui.checkMoveAttachments->isChecked());
-    setting->setExportToBibFixer(ui.checkExportToBibFixer->isChecked());
-    setting->setBibFixerPath(ui.leBibFixerPath->text());
+    // save settings
+	qApp->setFont(_setting->getFont());
+	_setting->setBackupDays(ui.checkAutoBack->isChecked() ? ui.sbBackupDays->value() : 0);
+    _setting->setKeepAttachments (ui.checkKeepAttachments->isChecked());
+    _setting->setMoveAttachments (ui.checkMoveAttachments->isChecked());
+    _setting->setExportToBibFixer(ui.checkExportToBibFixer->isChecked());
+    _setting->setBibFixerPath(ui.leBibFixerPath->text());
 
 	QDialog::accept();
 }
@@ -73,7 +73,7 @@ void OptionDlg::onSetBibFixerPath()
 //////////////////////////////////////////////////////////////////////////
 // Setting
 UserSetting::UserSetting(const QString& fileName) 
-: MySetting<UserSetting>(fileName)
+    : MySetting<UserSetting>(fileName)
 {
 	if(QFile(this->fileName).size() == 0)   // no setting
 		loadDefaults();

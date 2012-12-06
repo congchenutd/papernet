@@ -29,11 +29,11 @@ public:
 private slots:
     void resetModel();              // just reset the model
     void resetAndJumpToCurrent();   //
+    void onSubmitPaper();
 
     void onSelectionChanged(const QItemSelection& selected);
 	void onEditPaper();
 	void onFullTextSearch(const QString& target);
-	void onSubmitPaper();
 	void onClicked();
     void updateQuotes();
 	void onImport();

@@ -39,7 +39,7 @@ PagePapers::PagePapers(QWidget *parent)
 	mapper->addMapping(ui.teNote,     PAPER_NOTE);
 
 	ui.tvPapers->setModel(&_model);
-	ui.tvPapers->hideColumn(PAPER_ID);
+    ui.tvPapers->hideColumn(PAPER_ID);
 	for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
 		ui.tvPapers->hideColumn(col);
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
@@ -148,7 +148,8 @@ void PagePapers::insertReference(const Reference& ref)
     {
         int lastRow = _model.rowCount();
         _model.insertRow(lastRow);
-        _model.setData(_model.index(lastRow, PAPER_ID), getNextID("Papers", "ID"));
+        _currentPaperID = getNextID("Papers", "ID");
+        _model.setData(_model.index(lastRow, PAPER_ID), _currentPaperID);
         updateReference(lastRow, ref);
         onBookmark(true);    // attach the ReadMe tag
     }
@@ -339,15 +340,6 @@ void PagePapers::onImport()
     importFromFiles(files);
 }
 
-// submit the model
-// keep selecting current paper
-void PagePapers::onSubmitPaper()
-{
-	if(!_model.submitAll())
-		QMessageBox::critical(this, tr("Error"), _model.lastError().text());
-    jumpToCurrent();
-}
-
 void PagePapers::search(const QString& target)
 {
 	// filter papers
@@ -407,6 +399,15 @@ void PagePapers::onDelTagFromPaper()
 	highLightTags();
 }
 
+// submit the model
+// keep selecting current paper
+void PagePapers::onSubmitPaper()
+{
+    if(!_model.submitAll())
+        QMessageBox::critical(this, tr("Error"), _model.lastError().text());
+    jumpToCurrent();
+}
+
 void PagePapers::resetAndJumpToCurrent()
 {
     resetModel();
@@ -418,14 +419,16 @@ void PagePapers::resetModel()
     _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
     _model.setTable("Papers");
     _model.select();
-    while(_model.canFetchMore())    // ensure all records visible
-        _model.fetchMore();
     _model.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
     ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 }
 
 void PagePapers::jumpToID(int id)
 {
+    _model.select();
+    while(_model.canFetchMore())    // ensure all records visible
+        _model.fetchMore();
+
     _currentRow = idToRow(&_model, PAPER_ID, id);
     if(_currentRow < 0)
         _currentRow = 0;

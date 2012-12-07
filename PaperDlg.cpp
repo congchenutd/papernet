@@ -5,6 +5,8 @@
 #include "RefFormatSpec.h"
 #include <QSqlTableModel>
 #include <QCompleter>
+#include <QUrl>
+#include <QDesktopServices>
 
 PaperDlg::PaperDlg(QWidget *parent)
     : QDialog(parent)
@@ -12,6 +14,7 @@ PaperDlg::PaperDlg(QWidget *parent)
 	ui.setupUi(this);
 	resize(800, 700);
 	ui.leTitle->setFocus();
+    ui.btGoogle->setEnabled(false);
 
     // fields, type and tags not included
     _fields << Field("title",       ui.leTitle)
@@ -50,6 +53,7 @@ PaperDlg::PaperDlg(QWidget *parent)
         ui.comboType->insertItem(0, "unknown");
 
     connect(ui.comboType, SIGNAL(currentIndexChanged(QString)), this, SLOT(onTypeChanged(QString)));
+    connect(ui.btGoogle,  SIGNAL(clicked()), this, SLOT(onGoogle()));
 }
 
 void PaperDlg::setTitle(const QString& title)
@@ -59,6 +63,7 @@ void PaperDlg::setTitle(const QString& title)
                 BibFixer::UnprotectionConvertor().convert(title));
     ui.leTitle->setText(fixedTitle);
 	ui.leTitle->setCursorPosition(0);
+    ui.btGoogle->setEnabled(!title.isEmpty());
 }
 
 void PaperDlg::setType(const QString& type)
@@ -148,4 +153,8 @@ void PaperDlg::onTypeChanged(const QString& typeName)
         it->second->highlight(type.isRequiredField(it->first) // invalid type returns false
                               ? QColor(Qt::yellow).lighter()
                               : palette().base().color());    // reset palette
+}
+
+void PaperDlg::onGoogle() {
+    QDesktopServices::openUrl(QUrl("http://www.google.com/search?q=" + ui.leTitle->text()));
 }

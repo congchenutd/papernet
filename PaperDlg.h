@@ -35,6 +35,7 @@ public:
 
 private slots:
     void onTypeChanged(const QString& typeName);  // highlight required fields of the type
+    void onGoogle();
 
 private:
     void setTitle(const QString& title);  // will fix errors in the title

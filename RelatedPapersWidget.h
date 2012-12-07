@@ -11,6 +11,7 @@ class RelatedPapersWidget : public QWidget
 public:
 	RelatedPapersWidget(QWidget* parent = 0);
     void setCentralPaper(int paperID);
+    void saveGeometry();
 
 protected:
     void showEvent(QShowEvent*);
@@ -29,7 +30,7 @@ private:
     int centralPaperID;
 	QStandardItemModel model;
 
-	enum {COL_ID, COL_TITLE, COL_PROXIMITY};
+    enum {COL_ID, COL_TITLE, COL_PROXIMITY, COL_AUTHORS, COL_YEAR};
 };
 
 #endif // RELATEDPAPERSWIDGET_H

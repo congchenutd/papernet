@@ -32,6 +32,7 @@ PagePapers::PagePapers(QWidget *parent)
     ui.tvPapers->init("PagePapers", _setting);   // set the table name for the view
 
     resetModel();   // init model, table ...
+//    ui.tvPapers->adjustColumns();
 
 	QDataWidgetMapper* mapper = new QDataWidgetMapper(this);
 	mapper->setModel(&_model);
@@ -526,6 +527,8 @@ void PagePapers::loadGeometry()
 void PagePapers::saveGeometry()
 {
 	ui.tvPapers->saveSectionSizes();  // sections
+    ui.widgetRelated->saveGeometry();
+    ui.widgetCoauthered->saveGeometry();
 
 	// splitters
 	_setting->setSplitterSizes("PapersHorizontal", ui.splitterHorizontal->saveState());

@@ -2,6 +2,16 @@
 #include <QHeaderView>
 #include <QSettings>
 
+
+void AutoSizeLastColumnTableView::resizeEvent(QResizeEvent *)
+{
+    int totalWidth = width();
+    for(int i = 0; i < model()->columnCount(); ++i)
+        totalWidth -= columnWidth(i);
+
+}
+
+
 AutoSizeTableView::AutoSizeTableView(QWidget* parent)
     : QTableView(parent), _setting(0), _adjustingCount(0) {}
 
@@ -19,9 +29,9 @@ void AutoSizeTableView::init(const QString& parentObjectName, QSettings* setting
 
 void AutoSizeTableView::resizeEvent(QResizeEvent* event)
 {
+    QTableView::resizeEvent(event);
     if(_adjustingCount++ >= 2)   // UGLY: skip the first 2 events during initialization
         adjustColumns();         // apply the sizes
-	QTableView::resizeEvent(event);
 }
 
 void AutoSizeTableView::saveSectionSizes()
@@ -42,19 +52,15 @@ void AutoSizeTableView::saveSectionSizes()
 
 void AutoSizeTableView::adjustColumns()
 {
-	int lastNonZero = 0;
-	int usedWidth   = 0;
-    for(int i = 0; i < model()->columnCount(); ++i)
-	{
-        int colWidth = _sectionSizes.value(i) * width();
-		if(colWidth > 0)
-		{
-			setColumnWidth(i, colWidth);
-			lastNonZero = i;
-			usedWidth += colWidth;
-		}
-	}
+    int lastNonZeroCol = model()->columnCount();
+    for(int i = model()->columnCount(); i >= 0; --i)
+        if(_sectionSizes.value(i) > 0)
+        {
+            lastNonZeroCol = i;
+            break;
+        }
 
-	// last non zero column takes unused width
-	setColumnWidth(lastNonZero, width() - usedWidth);
+    for(int i = 0; i < lastNonZeroCol; ++i)
+        if(int colWidth = _sectionSizes.value(i) * width())
+            setColumnWidth(i, colWidth);
 }

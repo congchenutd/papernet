@@ -5,6 +5,12 @@
 
 class QSettings;
 
+class AutoSizeLastColumnTableView : public QTableView
+{
+protected:
+    virtual void resizeEvent(QResizeEvent*);
+};
+
 // A TableView that saves the sizes of its columns
 class AutoSizeTableView : public QTableView
 {
@@ -20,7 +26,7 @@ protected:
 	virtual void resizeEvent(QResizeEvent*);
 
 private:
-	void adjustColumns();
+    void adjustColumns();
 
 private:
     Sizes      _sectionSizes;    // sizes (in percentage) of the sections

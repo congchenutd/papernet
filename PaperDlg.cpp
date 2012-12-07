@@ -14,7 +14,6 @@ PaperDlg::PaperDlg(QWidget *parent)
 	ui.setupUi(this);
 	resize(800, 700);
 	ui.leTitle->setFocus();
-    ui.btGoogle->setEnabled(false);
 
     // fields, type and tags not included
     _fields << Field("title",       ui.leTitle)
@@ -156,5 +155,7 @@ void PaperDlg::onTypeChanged(const QString& typeName)
 }
 
 void PaperDlg::onGoogle() {
-    QDesktopServices::openUrl(QUrl("http://www.google.com/search?q=" + ui.leTitle->text()));
+    if(!ui.leTitle->text().isEmpty())
+        QDesktopServices::openUrl(
+                    QUrl("http://www.google.com/search?q=" + ui.leTitle->text()));
 }

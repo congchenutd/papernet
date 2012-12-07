@@ -33,7 +33,7 @@ void RelatedPapersWidget::setCentralPaper(int paperID)
         update();
 }
 
-void RelatedPapersWidget::saveGeometry() {
+void RelatedPapersWidget::saveSectionSizes() {
     ui.tableView->saveSectionSizes();
 }
 

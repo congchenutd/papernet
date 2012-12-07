@@ -29,10 +29,9 @@ PagePapers::PagePapers(QWidget *parent)
 	_setting = UserSetting::getInstance();
 
 	ui.setupUi(this);
-    ui.tvPapers->init("PagePapers", _setting);   // set the table name for the view
 
+    ui.tvPapers->init("PagePapers", _setting);   // set the table name for the view
     resetModel();   // init model, table ...
-//    ui.tvPapers->adjustColumns();
 
 	QDataWidgetMapper* mapper = new QDataWidgetMapper(this);
 	mapper->setModel(&_model);
@@ -526,13 +525,15 @@ void PagePapers::loadGeometry()
 
 void PagePapers::saveGeometry()
 {
-	ui.tvPapers->saveSectionSizes();  // sections
-    ui.widgetRelated->saveGeometry();
-    ui.widgetCoauthered->saveGeometry();
+    // closeEvent() does not work for child windows
+    ui.tvPapers->saveSectionSizes();
+    ui.widgetRelated->saveSectionSizes();
+    ui.widgetCoauthered->saveSectionSizes();
 
 	// splitters
 	_setting->setSplitterSizes("PapersHorizontal", ui.splitterHorizontal->saveState());
 	_setting->setSplitterSizes("PapersVertical",   ui.splitterPapers    ->saveState());
+
 	_setting->setPapersTabIndex(ui.tabWidget->currentIndex());
 }
 

@@ -11,7 +11,7 @@ class RelatedPapersWidget : public QWidget
 public:
 	RelatedPapersWidget(QWidget* parent = 0);
     void setCentralPaper(int paperID);
-    void saveGeometry();
+    void saveSectionSizes();
 
 protected:
     void showEvent(QShowEvent*);

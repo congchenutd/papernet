@@ -35,7 +35,7 @@ void CoauthoredPapersWidgdet::setCentralPaper(int paperID)
         update();   // lazy update, avoiding uncessary computation
 }
 
-void CoauthoredPapersWidgdet::saveGeometry() {
+void CoauthoredPapersWidgdet::saveSectionSizes() {
     ui.tableView->saveSectionSizes();
 }
 

@@ -17,9 +17,8 @@ int main(int argc, char *argv[])
     if(!singleInstance.run())
     {
         QMessageBox::critical(0, QObject::tr("Error"),
-                              QObject::tr("Another instance is already \
-                                          running on this or a synced computer.\
-                                          Close that one before launching a new instance."));
+            QObject::tr("Another instance is already running on this or a synced computer.\
+                         Close that one before launching a new instance."));
         return 1;
     }
 

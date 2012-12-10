@@ -56,7 +56,8 @@ HEADERS += \
     FieldEdit.h \
     PhraseDlg.h \
     QuoteDlg.h \
-    TagDlg.h
+    TagDlg.h \
+    SingleInstance.h
 FORMS += \
          AttachmentsWidget.ui \
          LinkDlg.ui \
@@ -113,7 +114,8 @@ SOURCES += \
     FieldEdit.cpp \
     PhraseDlg.cpp \
     QuoteDlg.cpp \
-    TagDlg.cpp
+    TagDlg.cpp \
+    SingleInstance.cpp
 RESOURCES += MainWindow.qrc
 
 

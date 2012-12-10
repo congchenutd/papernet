@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "Common.h"
+#include "SingleInstance.h"
 #include <QApplication>
+#include <QMessageBox>
 
 extern QString dbName;
 extern QString attachmentDir;
@@ -9,6 +11,17 @@ extern QString emptyDir;
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    // the database cannot be accessed by multiple instances
+    SingleInstance singleInstance("PaperNet");
+    if(!singleInstance.run())
+    {
+        QMessageBox::critical(0, QObject::tr("Error"),
+                              QObject::tr("Another instance is already \
+                                          running on this or a synced computer.\
+                                          Close that one before launching a new instance."));
+        return 1;
+    }
 
     dbName        = "PaperNet.db";
     attachmentDir = "./Attachments/";

@@ -4,7 +4,7 @@
 SingleInstance::SingleInstance(const QString& appName)
     : _lockName(appName + ".lock") {}
 
-SingleInstance::~SingleInstance() {
+void SingleInstance::close() {
     QFile::remove(_lockName);
 }
 

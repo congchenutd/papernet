@@ -11,9 +11,9 @@ class SingleInstance
 {
 public:
     SingleInstance(const QString& appName);
-    ~SingleInstance();
 
     bool run() const;   // if not locked, return true and create a lock
+    void close();       // release the lock
 
 private:
     QString _lockName;

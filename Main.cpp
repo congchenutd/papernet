@@ -44,5 +44,7 @@ int main(int argc, char *argv[])
         wnd.importRefFromFiles(files);
     }
 
-    return app.exec();
+    int result = app.exec();
+    singleInstance.close();
+    return result;
 }

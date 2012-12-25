@@ -11,7 +11,8 @@ TARGET = PaperNet
 INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
 				../MySetting \
-                ../MyComboBox
+                ../MyComboBox \
+                ../Thesaurus
 
 win32 {
 	RC_FILE = PaperNet.rc
@@ -43,9 +44,7 @@ HEADERS += \
            ../WordCloud/WordCloudWidget.h \
 		   ../WordCloud/FlowLayout.h \
 		   ../EnglishName/EnglishName.h \
-		   Thesaurus.h \
     NewReferenceDlg.h \
-    ThesaurusCache.h \
     RelatedPapersWidget.h \
     CoauthoredPapersWidgdet.h \
     QuotesWidget.h \
@@ -60,7 +59,9 @@ HEADERS += \
     PhraseDlg.h \
     QuoteDlg.h \
     TagDlg.h \
-    SingleInstance.h
+    SingleInstance.h \
+    ../Thesaurus/ThesaurusCache.h \
+    ../Thesaurus/Thesaurus.h
 FORMS += \
          AttachmentsWidget.ui \
          LinkDlg.ui \
@@ -101,9 +102,7 @@ SOURCES += \
            ../WordCloud/WordCloudWidget.cpp \
 		   ../WordCloud/FlowLayout.cpp      \
            ../EnglishName/EnglishName.cpp \
-		   Thesaurus.cpp \
 	NewReferenceDlg.cpp \
-    ThesaurusCache.cpp \
     RelatedPapersWidget.cpp \
     CoauthoredPapersWidgdet.cpp \
     QuotesWidget.cpp \
@@ -118,7 +117,9 @@ SOURCES += \
     PhraseDlg.cpp \
     QuoteDlg.cpp \
     TagDlg.cpp \
-    SingleInstance.cpp
+    SingleInstance.cpp \
+    ../Thesaurus/ThesaurusCache.cpp \
+    ../Thesaurus/Thesaurus.cpp
 RESOURCES += MainWindow.qrc
 
 

@@ -530,7 +530,7 @@ void hideFile(const QString& filePath)
 {
 #ifdef Q_OS_WIN32
 	// This is a windows API, not from Qt
-	SetFileAttributesA(filePath.toAscii(), FILE_ATTRIBUTE_HIDDEN);
+    SetFileAttributesA(filePath.toLatin1(), FILE_ATTRIBUTE_HIDDEN);
 #endif
 
 #ifdef Q_OS_MAC

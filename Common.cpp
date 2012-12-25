@@ -15,7 +15,7 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 #include "windows.h"
 #endif
 
@@ -276,7 +276,7 @@ void openUrl(const QString& url)
 	if(url.isEmpty())
 		return;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	QDesktopServices::openUrl(QUrl::fromLocalFile(url));  // no idea why different
 #else
 	QDesktopServices::openUrl(QUrl(url));
@@ -291,7 +291,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 	QString filePath = getAttachmentPath(paperID, attachmentName);
 	QString url = filePath;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	if(attachmentName.toLower().endsWith(".url"))  // mac opens url differently
 	{
 		QFile file(filePath);
@@ -315,7 +315,7 @@ QString convertSlashes(const QString& link)
 {
 	QString result = link;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 	return result.replace("/", "\\");
 #endif
 
@@ -494,11 +494,11 @@ bool fullTextSearch(int paperID, const QString& target)
 void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath)
 {
     QString convertorPath;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     convertorPath = "./pdftotext.exe";
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	convertorPath = "./pdftotext";
 #endif
 
@@ -528,12 +528,12 @@ void makeFullTextFiles()
 
 void hideFile(const QString& filePath)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 	// This is a windows API, not from Qt
 	SetFileAttributesA(filePath.toAscii(), FILE_ATTRIBUTE_HIDDEN);
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	Q_UNUSED(filePath)
 	// .XX is always hidden on Mac
 #endif

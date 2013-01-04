@@ -53,7 +53,7 @@ bool fullTextSearch(int paperID, const QString& target);
 void makeFullTextFiles();
 void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath);
 void hideFile(const QString& filePath);
-void openUrl(const QString& url);
+void openFile(const QString& filePath);
 QString suggestAttachmentName(const QString& fileName);
 QString autoRename(const QString& original);
 

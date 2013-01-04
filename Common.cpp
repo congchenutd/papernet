@@ -271,16 +271,9 @@ bool addLink(int paperID, const QString& link, const QString& u)
 	return false;
 }
 
-void openUrl(const QString& url)
-{
-	if(url.isEmpty())
-		return;
-
-#ifdef Q_OS_MAC
-	QDesktopServices::openUrl(QUrl::fromLocalFile(url));  // no idea why different
-#else
-	QDesktopServices::openUrl(QUrl(url));
-#endif
+void openFile(const QString& filePath) {
+    if(!filePath.isEmpty())
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(filePath).absoluteFilePath()));
 }
 
 void openAttachment(int paperID, const QString& attachmentName)
@@ -288,8 +281,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 	if(paperID < 0 || attachmentName.isEmpty())
 		return;
 
-	QString filePath = getAttachmentPath(paperID, attachmentName);
-	QString url = filePath;
+    QString url = getAttachmentPath(paperID, attachmentName);
 
 #ifdef Q_OS_MAC
 	if(attachmentName.toLower().endsWith(".url"))  // mac opens url differently
@@ -304,7 +296,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 		}
 	}
 #endif
-	openUrl(url);
+    openFile(url);
 }
 
 QString getAttachmentPath(int paperID, const QString& attachmentName) {

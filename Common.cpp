@@ -271,9 +271,15 @@ bool addLink(int paperID, const QString& link, const QString& u)
 	return false;
 }
 
-void openFile(const QString& filePath) {
-    if(!filePath.isEmpty())
+void openFile(const QString& filePath)
+{
+    if(filePath.isEmpty())
+        return;
+
+    if(QFileInfo(filePath).isFile())  // FIXME: somehow relative path doesn't work :(
         QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(filePath).absoluteFilePath()));
+    else
+        QDesktopServices::openUrl(QUrl(filePath));   // Internet address
 }
 
 void openAttachment(int paperID, const QString& attachmentName)
@@ -281,7 +287,8 @@ void openAttachment(int paperID, const QString& attachmentName)
 	if(paperID < 0 || attachmentName.isEmpty())
 		return;
 
-    QString url = getAttachmentPath(paperID, attachmentName);
+    QString filePath = getAttachmentPath(paperID, attachmentName);
+    QString url = filePath;
 
 #ifdef Q_OS_MAC
 	if(attachmentName.toLower().endsWith(".url"))  // mac opens url differently

@@ -58,8 +58,8 @@ PaperDlg::PaperDlg(QWidget *parent)
 void PaperDlg::setTitle(const QString& title)
 {
     // remove protectin and fix case
-    QString fixedTitle = BibFixer::CaseConvertor().convert(
-                BibFixer::UnprotectionConvertor().convert(title));
+    QString fixedTitle = BibFixer::CaseConvertor().redo(
+                BibFixer::ProtectionConvertor().undo(title));
     ui.leTitle->setText(fixedTitle);
 	ui.leTitle->setCursorPosition(0);
     ui.btGoogle->setEnabled(!title.isEmpty());
@@ -139,6 +139,10 @@ void PaperDlg::setReference(const Reference& ref)
 
     // set type after setting publication, thus we may guess the type from publication
     setType(ref.getValue("type").toString());
+}
+
+void PaperDlg::showMergeMark() {
+    setWindowTitle(windowTitle() + " - Merged!");
 }
 
 void PaperDlg::onTypeChanged(const QString& typeName)

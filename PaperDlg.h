@@ -33,6 +33,8 @@ public:
     Reference getReference() const;
     void      setReference(const Reference& ref);
 
+    void showMergeMark();
+
 private slots:
     void onTypeChanged(const QString& typeName);  // highlight required fields of the type
     void onGoogle();

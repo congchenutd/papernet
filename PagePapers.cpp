@@ -282,7 +282,7 @@ void PagePapers::importReferences(const QList<Reference>& references)
 
         // show preview
         PaperDlg dlg(this);
-        dlg.setWindowTitle(tr("Import reference"));
+        dlg.setWindowTitle(tr("Import Reference"));
 
         // load existing ref
         int row = titleToRow(title);
@@ -293,6 +293,7 @@ void PagePapers::importReferences(const QList<Reference>& references)
         }
 
         dlg.setReference(ref);   // merge new ref
+        dlg.showMergeMark();
 
         if(dlg.exec() == QDialog::Accepted)
             insertReference(dlg.getReference());   // currentPaperID will be equal to the ID of the newly added

@@ -45,6 +45,7 @@ void createTables()
                Title       varchar unique, \
                Authors     varchar, \
                Year        date,    \
+               Modified    date,    \
                Type        varchar, \
                Publication varchar, \
                Abstract    varchar, \

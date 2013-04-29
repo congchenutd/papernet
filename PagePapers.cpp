@@ -20,6 +20,7 @@
 #include <QProgressDialog>
 #include <QClipboard>
 #include <QProcess>
+#include <QDate>
 
 PagePapers::PagePapers(QWidget *parent)
 	: Page(parent)
@@ -40,8 +41,9 @@ PagePapers::PagePapers(QWidget *parent)
 
 	ui.tvPapers->setModel(&_model);
     ui.tvPapers->hideColumn(PAPER_ID);
-	for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
-		ui.tvPapers->hideColumn(col);
+    for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
+        ui.tvPapers->hideColumn(col);
+
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
     ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);    // it's just icon
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
@@ -159,7 +161,7 @@ void PagePapers::updateReference(int row, const Reference& ref)
 {
     _currentPaperID = rowToID(row);
 
-    QMap<int, QString> fields;    // column, name
+    QMap<int, QString> fields;    // column -> name
     fields.insert(PAPER_YEAR,        "year");
     fields.insert(PAPER_VOLUME,      "volume");
     fields.insert(PAPER_ISSUE,       "issue");
@@ -184,6 +186,9 @@ void PagePapers::updateReference(int row, const Reference& ref)
 
     // tags are stored separately in a relations table
     recreateTagsRelations(ref.getValue("tags").toStringList());
+
+    // modified date
+    _model.setData(_model.index(row, PAPER_MODIFIED), QDate::currentDate().toString("yyyy/MM/dd"));
 
 	onSubmitPaper();
 }

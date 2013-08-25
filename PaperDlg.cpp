@@ -7,6 +7,7 @@
 #include <QCompleter>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QDebug>
 
 PaperDlg::PaperDlg(QWidget *parent)
     : QDialog(parent)
@@ -120,7 +121,10 @@ void PaperDlg::setReference(const Reference& ref)
 {
     foreach(const Field& field, _fields)
         if(field.second->text().isEmpty())   // do not overwrite
+        {
             field.second->setText(ref.getValue(field.first).toString());
+            qDebug() << field.second->text();
+        }
 
     setTitle(ref.getValue("title").toString());    // fix the tile
 

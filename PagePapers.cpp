@@ -40,7 +40,7 @@ PagePapers::PagePapers(QWidget *parent)
 	mapper->addMapping(ui.teNote,     PAPER_NOTE);
 
 	ui.tvPapers->setModel(&_model);
-    ui.tvPapers->hideColumn(PAPER_ID);
+//    ui.tvPapers->hideColumn(PAPER_ID);
     for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
         ui.tvPapers->hideColumn(col);
 
@@ -592,9 +592,8 @@ void PagePapers::setPaperRead()
 
 void PagePapers::onRelatedDoubleClicked(int paperID)
 {
-    resetModel();
-	jumpToID(paperID);
-	Navigator::getInstance()->addFootStep(this, paperID);
+    _currentRow = idToRow(&_model, PAPER_ID, paperID);
+    onEditPaper();
 }
 
 void PagePapers::onQuoteDoubleClicked(int quoteID) {

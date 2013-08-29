@@ -5,17 +5,22 @@
 #include <QString>
 
 class QUrl;
+class QNetworkReply;
 
 // import reference from a web page: bibtex and pdf
-class WebImporter
+class WebImporter : public QObject
 {
+    Q_OBJECT
+
 public:
-    bool parse(const QUrl& url);
-    Reference getReference()   const;
-    QString   getTempPDFPath() const;
+    void parse(const QUrl& url);
+    Reference getReference() const;
 
 public:
     static WebImporter* getInstance();
+
+private slots:
+    void onLoaded(QNetworkReply*);
 
 private:
     WebImporter() {}
@@ -25,8 +30,6 @@ private:
 
 private:
     static WebImporter* _instance;
-    Reference           _ref;
-    QString             _pdfPath;
 };
 
 

@@ -1,5 +1,6 @@
 #include "PhraseDlg.h"
 #include "Common.h"
+#include "MultiSectionCompleter.h"
 #include <QCompleter>
 #include <QSqlTableModel>
 
@@ -12,12 +13,11 @@ PhraseDlg::PhraseDlg(QWidget* parent)
 	QSqlTableModel* tagModel = new QSqlTableModel(this);
 	tagModel->setTable("DictionaryTags");
 	tagModel->select();
-	QCompleter* completer = new QCompleter(this);
-	completer->setCaseSensitivity(Qt::CaseInsensitive);
-	completer->setModel(tagModel);
-	completer->setCompletionColumn(TAG_NAME);
-	completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
-	ui.leTags->setCompleter(completer);
+
+    MultiSectionCompleter* completer = new MultiSectionCompleter(this);
+    completer->setModel(tagModel, TAG_NAME);
+    completer->setEdit(ui.leTags);
+    completer->setSeparator("; ");
 }
 
 QString PhraseDlg::getPhrase() const {

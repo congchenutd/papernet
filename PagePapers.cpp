@@ -358,17 +358,17 @@ void PagePapers::onImport()
     QString content = clipboard->text();
     if(!content.isEmpty())
     {
+        // a webpage
         QUrl url(content);
         if(url.isValid())
         {
             WebImporter* webImporter = WebImporter::getInstance();
-            if(webImporter->parse(url))
-            {
-                Reference ref = webImporter->getReference();
-                importReferences(QList<Reference>() << ref);
-            }
+            webImporter->parse(url);
+            importReferences(QList<Reference>() << webImporter->getReference());
+            return;
         }
 
+        // content of the reference
         QList<Reference> references = parseContent(content);
         if(!references.isEmpty())
         {
@@ -377,7 +377,7 @@ void PagePapers::onImport()
         }
     }
 
-    // get input files
+    // import from local files
     QStringList files = QFileDialog::getOpenFileNames(
                             this, "Import references", _setting->getLastImportPath(),
 							"Reference (*.enw *.ris *.bib *.pdf);;All files (*.*)");

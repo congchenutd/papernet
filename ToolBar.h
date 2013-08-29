@@ -3,6 +3,7 @@
 
 #include <QToolBar>
 #include <QLineEdit>
+#include <QAbstractButton>
 
 class QAction;
 class QLineEdit;
@@ -39,9 +40,13 @@ public:
 protected:
 	virtual void focusInEvent (QFocusEvent*);
 	virtual void focusOutEvent(QFocusEvent*);
+
+private:
+    QString _strHint;
 };
 
 // A search tool bar
+class ClearButton;
 class SearchBar : public QToolBar
 {
 	Q_OBJECT
@@ -62,9 +67,32 @@ signals:
 	void clearSearch();
 	void fullTextSearch(const QString& target);
 
+protected:
+    void resizeEvent(QResizeEvent* event);
+
 private:
-	SearchLineEdit* leSearch;
-	QPushButton*    btFullText;
+    SearchLineEdit* _leSearch;
+    ClearButton*    _btClear;
+    QPushButton*    _btFullText;
 };
+
+///////////////////////////////////////////////////////////////////
+/// a small X button embeded in a lineedit
+///
+class ClearButton : public QAbstractButton
+{
+    Q_OBJECT
+
+public:
+    ClearButton(QWidget* parent = 0);
+    void paintEvent(QPaintEvent* event);
+
+    int width()  const { return 16; }   // URGLY: hard coded
+    int height() const { return 16; }
+
+public slots:
+    void onTextChanged(const QString& text);
+};
+
 
 #endif // TOOLBAR_H

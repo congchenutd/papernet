@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QApplication>
+#include <QPainter>
+#include <QDebug>
 
 MainToolBar::MainToolBar(QWidget *parent)
 	: QToolBar(parent)
@@ -48,17 +50,11 @@ void MainToolBar::onShowText(bool show)
 //////////////////////////////////////////////////////////////////////////
 SearchBar::SearchBar(QWidget* parent) : QToolBar(parent)
 {
-	addWidget(leSearch = new SearchLineEdit(this));
-	addWidget(new QLabel(" "));
+    addWidget(_leSearch = new SearchLineEdit(this));
 
-	btFullText = new QPushButton(QIcon(":/Images/FullText.png"), QString());
-	btFullText->setToolTip(tr("Full text search"));
-	addWidget(btFullText);
-
-	QPushButton* btClear = new QPushButton(QIcon(":/Images/Cancel.png"), QString(), this);
-	btClear->setShortcut(QKeySequence(Qt::Key_Escape));
-	btClear->setToolTip(tr("Clear search result"));
-	addWidget(btClear);
+    _btFullText = new QPushButton(QIcon(":/Images/FullText.png"), QString());
+    _btFullText->setToolTip(tr("Full text search"));
+    addWidget(_btFullText);
 
 	// use an invisible button to capture shortcut for the lineedit
 	QPushButton* btFocus = new QPushButton("Focus", this);
@@ -66,30 +62,45 @@ SearchBar::SearchBar(QWidget* parent) : QToolBar(parent)
 	btFocus->setMaximumWidth(0);    // "hide" it
 	addWidget(btFocus);
 
-	connect(leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
-	connect(btFullText, SIGNAL(clicked()),           this, SLOT(onFullTextSearch()));
-	connect(btClear,    SIGNAL(clicked()),           this, SLOT(onClear()));
-	connect(btFocus,    SIGNAL(clicked()),           this, SLOT(onFocus()));
+    _btClear = new ClearButton(this);
+    _btClear->setShortcut(QKeySequence(Qt::Key_Escape));
+
+    connect(_btClear, SIGNAL(clicked()), this, SLOT(onClear()));
+    connect(_leSearch, SIGNAL(textChanged(QString)),
+            _btClear, SLOT(onTextChanged(QString)));
+
+    connect(_leSearch,   SIGNAL(textEdited(QString)), this, SLOT(onSearch(QString)));
+    connect(_btFullText, SIGNAL(clicked()),           this, SLOT(onFullTextSearch()));
+    connect(btFocus,     SIGNAL(clicked()),           this, SLOT(onFocus()));
+}
+
+void SearchBar::resizeEvent(QResizeEvent* event)
+{
+    int margin = (_leSearch->height() - _btClear->height()) / 2;
+    _btClear->move(_leSearch->x() + _leSearch->width() - _btClear->width() - margin,
+                   _leSearch->y() + margin);
+    QToolBar::resizeEvent(event);
 }
 
 void SearchBar::onClear()
 {
-	leSearch->clearFocus();
-	leSearch->clear();
+    _leSearch->clearFocus();
+    _leSearch->clear();
+    _btClear->hide();
 	emit clearSearch();
 }
 
 // Ctrl+F gets or releases focus
 void SearchBar::onFocus()
 {
-	if(leSearch->hasFocus())
+    if(_leSearch->hasFocus())
 		onClear();
 	else
-		leSearch->setFocus();
+        _leSearch->setFocus();
 }
 
 void SearchBar::onFullTextSearch() {
-	emit fullTextSearch(leSearch->text());
+    emit fullTextSearch(_leSearch->text());
 }
 
 void SearchBar::onSearch(const QString &target)
@@ -97,12 +108,15 @@ void SearchBar::onSearch(const QString &target)
 	if(target.isEmpty())
 		onClear();
 	else
-		emit search(target);
+        emit search(target);
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 SearchLineEdit::SearchLineEdit(QWidget* parent) 
-	: QLineEdit(parent) {
+    : QLineEdit(parent)
+{
+    _strHint = tr(" type to filter ...");
 	clear();
 }
 
@@ -111,12 +125,12 @@ void SearchLineEdit::clear()
 	QPalette p = palette();                // show tip in gray font color
 	p.setColor(QPalette::Text, Qt::gray);
 	setPalette(p);
-	setText(tr(" type to filter ..."));
+    setText(_strHint);
 }
 
 void SearchLineEdit::focusInEvent(QFocusEvent* event)
 {
-	if(text() == tr(" type to filter ..."))
+    if(text() == _strHint)            // empty
 	{
 		setPalette(qApp->palette());  // reset palette, use default color
 		QLineEdit::clear();
@@ -129,4 +143,29 @@ void SearchLineEdit::focusOutEvent(QFocusEvent* event)
 	if(text().isEmpty())
 		clear();
 	QLineEdit::focusOutEvent(event);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+ClearButton::ClearButton(QWidget* parent)
+  : QAbstractButton(parent)
+{
+    setCursor(Qt::ArrowCursor);
+    setToolTip(tr("Clear"));
+    setFocusPolicy(Qt::NoFocus);
+    hide();
+}
+
+void ClearButton::paintEvent(QPaintEvent*)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setPen(QPen(QColor(Qt::gray), 2));
+    const int margin = 4;
+    painter.drawLine(margin, margin, width() - margin, height() - margin);
+    painter.drawLine(margin, height() - margin, width() - margin, margin);
+}
+
+void ClearButton::onTextChanged(const QString& text) {
+    setVisible(!text.isEmpty());
 }

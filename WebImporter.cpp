@@ -1,17 +1,27 @@
 #include "WebImporter.h"
 #include <QUrl>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QDebug>
 
-bool WebImporter::parse(const QUrl& url)
+void WebImporter::parse(const QUrl& url)
 {
-    return true;
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    connect(manager, SIGNAL(finished(QNetworkReply*)),
+            this,     SLOT(onLoaded(QNetworkReply*)));
+
+    manager->get(QNetworkRequest(url));
 }
 
-Reference WebImporter::getReference() const {
-    return _ref;
+void WebImporter::onLoaded(QNetworkReply* reply)
+{
+    QString content = reply->readAll();
+    qDebug() << content;
 }
 
-QString WebImporter::getTempPDFPath() const {
-    return _pdfPath;
+Reference WebImporter::getReference() const
+{
+    return Reference();
 }
 
 WebImporter* WebImporter::getInstance()

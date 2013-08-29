@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
-    <height>478</height>
+    <width>472</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,20 +20,6 @@
       <string>Title</string>
      </property>
     </widget>
-   </item>
-   <item row="0" column="1" colspan="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="MyLineEdit" name="leTitle"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btGoogle">
-       <property name="text">
-        <string>Google</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="Authors">
@@ -150,6 +136,9 @@
      </property>
     </widget>
    </item>
+   <item row="6" column="1" colspan="2">
+    <widget class="MyLineEdit" name="leUrl"/>
+   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
@@ -177,24 +166,69 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="3">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
+   <item row="9" column="1" colspan="3">
+    <widget class="MyLineEdit" name="leTags"/>
+   </item>
+   <item row="10" column="0" colspan="4">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btSelectPaper">
+       <property name="text">
+        <string>Select paper</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btCancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btOK">
+       <property name="text">
+        <string>OK</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="MyLineEdit" name="leTitle"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btGoogle">
+       <property name="text">
+        <string>Google</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item row="1" column="1" colspan="3">
     <widget class="MyLineEdit" name="leAuthors"/>
    </item>
    <item row="2" column="1" colspan="3">
     <widget class="MyLineEdit" name="lePublication"/>
-   </item>
-   <item row="6" column="1" colspan="3">
-    <widget class="MyLineEdit" name="leUrl"/>
-   </item>
-   <item row="9" column="1" colspan="3">
-    <widget class="MyLineEdit" name="leTags"/>
    </item>
   </layout>
  </widget>
@@ -234,39 +268,38 @@
   <tabstop>teAbstract</tabstop>
   <tabstop>teNote</tabstop>
   <tabstop>leTags</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
+   <sender>btOK</sender>
+   <signal>clicked()</signal>
    <receiver>PaperDlgClass</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>388</x>
-     <y>454</y>
+     <x>419</x>
+     <y>467</y>
     </hint>
     <hint type="destinationlabel">
-     <x>310</x>
-     <y>-21</y>
+     <x>235</x>
+     <y>247</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
+   <sender>btCancel</sender>
+   <signal>clicked()</signal>
    <receiver>PaperDlgClass</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>428</x>
-     <y>473</y>
+     <x>336</x>
+     <y>467</y>
     </hint>
     <hint type="destinationlabel">
-     <x>486</x>
-     <y>-26</y>
+     <x>235</x>
+     <y>247</y>
     </hint>
    </hints>
   </connection>

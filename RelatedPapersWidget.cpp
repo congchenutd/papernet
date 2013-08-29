@@ -17,7 +17,7 @@ RelatedPapersWidget::RelatedPapersWidget(QWidget* parent) :	QWidget(parent)
     model.setHeaderData(COL_YEAR,      Qt::Horizontal, tr("Year"));
 
     ui.tableView->setModel(&model);
-//    ui.tableView->hideColumn(COL_ID);
+    ui.tableView->hideColumn(COL_ID);
     ui.tableView->hideColumn(COL_PROXIMITY);
 
     connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onRelatedDoubleClicked(QModelIndex)));

@@ -17,11 +17,12 @@ public:
     void     setValue(const QString& fieldName, const QVariant& fieldValue);
     QVariant getValue(const QString& fieldName) const;
 	void     generateID();                   // last name + year
-    Fields   getAllFields() const { return fields; }
-    bool     isValid() const { return fields.contains("type"); }
+    Fields   getAllFields() const { return _fields; }
+    bool     isValid() const { return _fields.contains("type"); }
+    void     clear();
 
 private:
-	Fields fields;
+    Fields _fields;
 	// NOTE: authors is stored as a stringlist
     // startpage, endpage <-> pages auto convered, and may be redundant
 };

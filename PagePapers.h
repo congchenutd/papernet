@@ -50,12 +50,14 @@ private slots:
 	void onFilterPapersByTags(bool AND = false);
 	void onTagDoubleClicked(const QString& label);
 
-    // menu signals
+    // handle menu signals
     void onPrintMe  (bool print);   // two built-in tags
 	void onBookmark (bool readMe);
 	void onAddQuote();
     void onAddPDF();                // add pdf to current paper
 	void onReadPDF();
+
+    void onJumpToCurrent(int id);    // dlg asks to focus on current paper
 
 signals:
     void selectionValid(bool);
@@ -75,6 +77,8 @@ private:
     void updateReference(int row, const Reference& ref);       // update a row by the ref
     void importReferences(const QList<Reference>& references); // review and insert
     void importPDF(const QString& pdfPath);                    // select a paper to be added to
+    QList<Reference> parseContent(const QString& content);     // using all possible specs' parsers
+
 	Reference exportReference(int row) const;   // row -> Reference
     QString toString(const QModelIndexList& idxList, const QString& extension);  // export the selected
 

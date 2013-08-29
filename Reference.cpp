@@ -4,7 +4,7 @@
 #include <QSet>
 
 bool Reference::fieldExists(const QString& field) const {
-    return fields.contains(field);
+    return _fields.contains(field);
 }
 
 void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
@@ -15,58 +15,62 @@ void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
         QStringList pages = fieldValue.toString().split("-");
         if(pages.size() == 2)
         {
-            fields["startpage"] = pages[0];
-            fields["endpage"]   = pages[1];
+            _fields["startpage"] = pages[0];
+            _fields["endpage"]   = pages[1];
         }
     }
 
     // startpage, endpage -> pages
     else if(fieldName == "startpage" || fieldName == "endpage")
     {
-        fields[fieldName] = fieldValue;
+        _fields[fieldName] = fieldValue;
         if(fieldExists("startpage") && fieldExists("endpage"))
-            fields["pages"] = fields["startpage"].toString() + "-" + fields["endpage"].toString();
+            _fields["pages"] = _fields["startpage"].toString() + "-" + _fields["endpage"].toString();
     }
 
     // append to existing authors
     else if(fieldName == "authors" && fieldExists(fieldName))
     {
-        QStringList oldList = fields[fieldName].toStringList();
+        QStringList oldList = _fields[fieldName].toStringList();
         QStringList newList = fieldValue.toStringList();
         foreach(const QString& name, newList)
             if(!oldList.contains(name, Qt::CaseInsensitive))
                 oldList << name;
-        fields[fieldName] = oldList;
+        _fields[fieldName] = oldList;
     }
 
     else
-        fields[fieldName] = fieldValue;
+        _fields[fieldName] = fieldValue;
 }
 
 QVariant Reference::getValue(const QString& fieldName) const
 {
     // startpage, endpage -> pages
     if(fieldName == "pages" && fieldExists("startpage") && fieldExists("endpage"))
-        return fields["startpage"].toString() + "-" + fields["endpage"].toString();
+        return _fields["startpage"].toString() + "-" + _fields["endpage"].toString();
 
     else
-        return fieldExists(fieldName) ? fields[fieldName] : QVariant();
+        return fieldExists(fieldName) ? _fields[fieldName] : QVariant();
 }
 
 void Reference::generateID()
 {
 	// get first author's last name
-    if(!fields.contains("authors"))
+    if(!_fields.contains("authors"))
         return;
-    QStringList authors = fields["authors"].toStringList();
+    QStringList authors = _fields["authors"].toStringList();
     if(authors.isEmpty())
         return;
     QString lastNameOfFirstAuthor = EnglishName(authors.front()).getLastName();
 
 	// year
-    if(!fields.contains("year"))
+    if(!_fields.contains("year"))
         return;
-    QString year = fields["year"].toString();
+    QString year = _fields["year"].toString();
 
-    fields["id"] = lastNameOfFirstAuthor + year;
+    _fields["id"] = lastNameOfFirstAuthor + year;
+}
+
+void Reference::clear() {
+    _fields.clear();
 }

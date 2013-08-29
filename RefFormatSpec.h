@@ -92,13 +92,13 @@ private:
 };
 
 
-////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+/// map format (file extension) to RefSpec
 class RefSpecFactory
 {
 public:
     static RefSpecFactory* getInstance();
-    RefSpec* getSpec(const QString& format);
-    QList<Reference> parseContent(const QString& content);  // parse using any possible specs
+    RefSpec* getSpec(const QString& extension);
 
 private:
     RefSpecFactory() {}

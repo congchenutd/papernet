@@ -61,7 +61,9 @@ HEADERS += \
     TagDlg.h \
     SingleInstance.h \
     ../Thesaurus/ThesaurusCache.h \
-    ../Thesaurus/Thesaurus.h
+    ../Thesaurus/Thesaurus.h \
+    WebImporter.h \
+    MultiSectionCompleter.h
 FORMS += \
          AttachmentsWidget.ui \
          LinkDlg.ui \
@@ -119,7 +121,9 @@ SOURCES += \
     TagDlg.cpp \
     SingleInstance.cpp \
     ../Thesaurus/ThesaurusCache.cpp \
-    ../Thesaurus/Thesaurus.cpp
+    ../Thesaurus/Thesaurus.cpp \
+    WebImporter.cpp \
+    MultiSectionCompleter.cpp
 RESOURCES += MainWindow.qrc
 
 

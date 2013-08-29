@@ -3,14 +3,13 @@
 #include "Reference.h"
 #include "../BibFixer/Convertor.h"
 #include "RefFormatSpec.h"
+#include "MultiSectionCompleter.h"
 #include <QSqlTableModel>
-#include <QCompleter>
 #include <QUrl>
 #include <QDesktopServices>
-#include <QDebug>
 
 PaperDlg::PaperDlg(QWidget *parent)
-    : QDialog(parent)
+    : QDialog(parent), _id(-1)
 {
 	ui.setupUi(this);
 	resize(800, 700);
@@ -36,12 +35,11 @@ PaperDlg::PaperDlg(QWidget *parent)
 	QSqlTableModel* tagModel = new QSqlTableModel(this);
 	tagModel->setTable("Tags");
 	tagModel->select();
-	QCompleter* completer = new QCompleter(this);
-	completer->setCaseSensitivity(Qt::CaseInsensitive);
-	completer->setModel(tagModel);
-	completer->setCompletionColumn(TAG_NAME);
-	completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
-	ui.leTags->setCompleter(completer);
+
+    MultiSectionCompleter* completer = new MultiSectionCompleter(this);
+    completer->setModel(tagModel, TAG_NAME);
+    completer->setEdit(ui.leTags);
+    completer->setSeparator("; ");
 
     _spec = RefSpecFactory::getInstance()->getSpec("bib");
 
@@ -53,12 +51,13 @@ PaperDlg::PaperDlg(QWidget *parent)
         ui.comboType->insertItem(0, "unknown");
 
     connect(ui.comboType, SIGNAL(currentIndexChanged(QString)), this, SLOT(onTypeChanged(QString)));
-    connect(ui.btGoogle,  SIGNAL(clicked()), this, SLOT(onGoogle()));
+    connect(ui.btGoogle,      SIGNAL(clicked()), this, SLOT(onGoogle()));
+    connect(ui.btSelectPaper, SIGNAL(clicked()), this, SLOT(onSelectPaper()));
 }
 
 void PaperDlg::setTitle(const QString& title)
 {
-    // remove protectin and fix case
+    // remove protection and fix case
     QString fixedTitle = BibFixer::CaseConvertor().redo(
                 BibFixer::ProtectionConvertor().undo(title));
     ui.leTitle->setText(fixedTitle);
@@ -119,12 +118,11 @@ Reference PaperDlg::getReference() const
 
 void PaperDlg::setReference(const Reference& ref)
 {
+    _id = ref.getValue("id").toInt();
+
     foreach(const Field& field, _fields)
         if(field.second->text().isEmpty())   // do not overwrite
-        {
             field.second->setText(ref.getValue(field.first).toString());
-            qDebug() << field.second->text();
-        }
 
     setTitle(ref.getValue("title").toString());    // fix the tile
 
@@ -166,4 +164,8 @@ void PaperDlg::onGoogle() {
     if(!ui.leTitle->text().isEmpty())
         QDesktopServices::openUrl(
                     QUrl("http://www.google.com/search?q=" + ui.leTitle->text()));
+}
+
+void PaperDlg::onSelectPaper() {
+    emit selectPaper(_id);
 }

@@ -10,6 +10,7 @@
 #include "RefParser.h"
 #include "PaperList.h"
 #include "OptionDlg.h"
+#include "WebImporter.h"
 #include <QDataWidgetMapper>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -40,7 +41,7 @@ PagePapers::PagePapers(QWidget *parent)
 	mapper->addMapping(ui.teNote,     PAPER_NOTE);
 
 	ui.tvPapers->setModel(&_model);
-//    ui.tvPapers->hideColumn(PAPER_ID);
+    ui.tvPapers->hideColumn(PAPER_ID);
     for(int col = PAPER_TYPE; col <= PAPER_NOTE; ++col)
         ui.tvPapers->hideColumn(col);
 
@@ -116,6 +117,8 @@ void PagePapers::onEditPaper()
     Reference oldRef = exportReference(_currentRow);
     dlg.setReference(oldRef);
 
+    connect(&dlg, SIGNAL(selectPaper(int)), this, SLOT(onJumpToCurrent(int)));
+
     if(dlg.exec() == QDialog::Accepted)
     {
         Reference newRef = dlg.getReference();
@@ -159,7 +162,8 @@ void PagePapers::insertReference(const Reference& ref)
 
 void PagePapers::updateReference(int row, const Reference& ref)
 {
-    _currentPaperID = rowToID(row);
+    if(row < 0 || row > _model.rowCount())
+        return;
 
     QMap<int, QString> fields;    // column -> name
     fields.insert(PAPER_YEAR,        "year");
@@ -320,6 +324,21 @@ void PagePapers::importPDF(const QString& pdfPath)
     }
 }
 
+QList<Reference> PagePapers::parseContent(const QString &content)
+{
+    // try all specs
+    QFileInfoList fileInfos = QDir("./Specifications").entryInfoList(QStringList() << "*.spec");
+    foreach(QFileInfo fileInfo, fileInfos)
+        if(RefSpec* spec = RefSpecFactory::getInstance()->getSpec(fileInfo.baseName()))
+        {
+            // use the parser associated with the spec
+            QList<Reference> references = spec->getParser()->parse(content, spec);
+            if(!references.isEmpty())
+                return references;
+        }
+    return QList<Reference>();   // no parser can parse
+}
+
 void PagePapers::onImport()
 {
     // try clipboard first
@@ -327,7 +346,20 @@ void PagePapers::onImport()
     QString content = clipboard->text();
     if(!content.isEmpty())
     {
-        QList<Reference> references = RefSpecFactory::getInstance()->parseContent(content);
+        QUrl url(content);
+        if(url.isValid())
+        {
+            WebImporter* webImporter = WebImporter::getInstance();
+            if(webImporter->parse(url))
+            {
+                Reference ref = webImporter->getReference();
+                QString   pdfPath = webImporter->getTempPDFPath();
+//                importReferences(QList<Reference>() << ref);
+//                addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
+            }
+        }
+
+        QList<Reference> references = parseContent(content);
         if(!references.isEmpty())
         {
             importReferences(references);
@@ -492,7 +524,11 @@ void PagePapers::onAddPDF()
 }
 
 void PagePapers::onReadPDF() {
-	openAttachment(_currentPaperID, "Paper.pdf");
+    openAttachment(_currentPaperID, "Paper.pdf");
+}
+
+void PagePapers::onJumpToCurrent(int id) {
+    jumpToID(id);
 }
 
 void PagePapers::onFullTextSearch(const QString& target)
@@ -608,7 +644,7 @@ Reference PagePapers::exportReference(int row) const
     for(int col = 0; col < record.count(); ++col)
     {
         QString fieldName = record.fieldName(col).toLower();
-        if(fieldName == "id" || fieldName == "attached")  // not exported
+        if(fieldName == "attached")  // not exported
 			continue;
         QVariant fieldValue = record.value(col);
         if(fieldName == "authors")     // to QStringList

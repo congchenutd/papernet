@@ -171,10 +171,10 @@ RefSpecFactory* RefSpecFactory::getInstance()
     return instance;
 }
 
-RefSpec* RefSpecFactory::getSpec(const QString& format)
+RefSpec* RefSpecFactory::getSpec(const QString& extension)
 {
     // spec exists
-    QString fmt = format.toLower();
+    QString fmt = extension.toLower();
     if(specs.contains(fmt))
         return specs[fmt];
 
@@ -187,18 +187,5 @@ RefSpec* RefSpecFactory::getSpec(const QString& format)
     }
     delete spec;
     return 0;
-}
-
-QList<Reference> RefSpecFactory::parseContent(const QString& content)
-{
-    QFileInfoList infos = QDir("./Specifications").entryInfoList(QStringList() << "*.spec");
-    foreach(QFileInfo info, infos)
-        if(RefSpec* spec = getSpec(info.baseName()))
-        {
-            QList<Reference> references = spec->getParser()->parse(content, spec);
-            if(!references.isEmpty())
-                return references;
-        }
-    return QList<Reference>();
 }
 

@@ -136,9 +136,6 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1" colspan="2">
-    <widget class="MyLineEdit" name="leUrl"/>
-   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
@@ -229,6 +226,9 @@
    </item>
    <item row="2" column="1" colspan="3">
     <widget class="MyLineEdit" name="lePublication"/>
+   </item>
+   <item row="6" column="1" colspan="3">
+    <widget class="MyLineEdit" name="leUrl"/>
    </item>
   </layout>
  </widget>

@@ -166,6 +166,8 @@ void PaperDlg::onGoogle() {
                     QUrl("http://www.google.com/search?q=" + ui.leTitle->text()));
 }
 
-void PaperDlg::onSelectPaper() {
+void PaperDlg::onSelectPaper()
+{
     emit selectPaper(_id);
+    reject();
 }

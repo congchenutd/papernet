@@ -135,6 +135,11 @@ void PagePapers::onEditPaper()
 
         if(newRef.getValue("note") != oldRef.getValue("note"))
             setPaperRead();                // changing note infers being read
+
+        // add pdf
+        QString pdfPath = dlg.getPDFPath();
+        if(!pdfPath.isEmpty())
+            addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
     }
 }
 
@@ -146,7 +151,9 @@ void PagePapers::insertReference(const Reference& ref)
 
     // search title, if exists, replace, otherwise, insert
     int row = titleToRow(ref.getValue("title").toString());
-    if(row > -1) {  // merge to existing paper
+    if(row > -1)    // merge to existing paper
+    {
+        _currentPaperID = rowToID(row);  // updateReference() needs to know the id
         updateReference(row, ref);
     }
     else            // insert as a new one
@@ -193,6 +200,11 @@ void PagePapers::updateReference(int row, const Reference& ref)
 
     // modified date
     _model.setData(_model.index(row, PAPER_MODIFIED), QDate::currentDate().toString("yyyy/MM/dd"));
+
+    // add pdf
+    QString pdfPath = ref.getValue("PDF").toString();
+    if(!pdfPath.isEmpty())
+        addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
 
 	onSubmitPaper();
 }
@@ -299,10 +311,10 @@ void PagePapers::importReferences(const QList<Reference>& references)
         {
             Reference oldRef = exportReference(row);
             dlg.setReference(oldRef);
+            dlg.showMergeMark();
         }
 
         dlg.setReference(ref);   // merge new ref
-        dlg.showMergeMark();
 
         if(dlg.exec() == QDialog::Accepted)
             insertReference(dlg.getReference());   // currentPaperID will be equal to the ID of the newly added
@@ -353,9 +365,7 @@ void PagePapers::onImport()
             if(webImporter->parse(url))
             {
                 Reference ref = webImporter->getReference();
-                QString   pdfPath = webImporter->getTempPDFPath();
-//                importReferences(QList<Reference>() << ref);
-//                addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
+                importReferences(QList<Reference>() << ref);
             }
         }
 
@@ -524,7 +534,7 @@ void PagePapers::onAddPDF()
 }
 
 void PagePapers::onReadPDF() {
-    openAttachment(_currentPaperID, "Paper.pdf");
+    ::openAttachment(_currentPaperID, "Paper.pdf");
 }
 
 void PagePapers::onJumpToCurrent(int id) {

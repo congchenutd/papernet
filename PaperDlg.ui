@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>496</height>
+    <width>505</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,6 +21,20 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="1" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="MyLineEdit" name="leTitle"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btGoogle">
+       <property name="text">
+        <string>Google</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="Authors">
      <property name="text">
@@ -28,12 +42,18 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="1" colspan="3">
+    <widget class="MyLineEdit" name="leAuthors"/>
+   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Publication</string>
      </property>
     </widget>
+   </item>
+   <item row="2" column="1" colspan="3">
+    <widget class="MyLineEdit" name="lePublication"/>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_5">
@@ -136,6 +156,9 @@
      </property>
     </widget>
    </item>
+   <item row="6" column="1" colspan="3">
+    <widget class="MyLineEdit" name="leUrl"/>
+   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
@@ -166,7 +189,28 @@
    <item row="9" column="1" colspan="3">
     <widget class="MyLineEdit" name="leTags"/>
    </item>
-   <item row="10" column="0" colspan="4">
+   <item row="10" column="0">
+    <widget class="QLabel" name="label_16">
+     <property name="text">
+      <string>PDF</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="MyLineEdit" name="lePDF"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btAddPDF">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="11" column="1" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <spacer name="horizontalSpacer">
@@ -206,29 +250,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="1" colspan="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="MyLineEdit" name="leTitle"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btGoogle">
-       <property name="text">
-        <string>Google</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="1" colspan="3">
-    <widget class="MyLineEdit" name="leAuthors"/>
-   </item>
-   <item row="2" column="1" colspan="3">
-    <widget class="MyLineEdit" name="lePublication"/>
-   </item>
-   <item row="6" column="1" colspan="3">
-    <widget class="MyLineEdit" name="leUrl"/>
    </item>
   </layout>
  </widget>

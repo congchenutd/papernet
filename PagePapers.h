@@ -57,7 +57,7 @@ private slots:
     void onAddPDF();                // add pdf to current paper
 	void onReadPDF();
 
-    void onJumpToCurrent(int id);    // dlg asks to focus on current paper
+    void onJumpToCurrent(int id);   // dlg asks to focus on current paper
 
 signals:
     void selectionValid(bool);

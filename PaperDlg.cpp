@@ -4,15 +4,17 @@
 #include "../BibFixer/Convertor.h"
 #include "RefFormatSpec.h"
 #include "MultiSectionCompleter.h"
+#include "OptionDlg.h"
 #include <QSqlTableModel>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QFileDialog>
 
 PaperDlg::PaperDlg(QWidget *parent)
     : QDialog(parent), _id(-1)
 {
 	ui.setupUi(this);
-	resize(800, 700);
+    resize(700, 600);
 	ui.leTitle->setFocus();
 
     // fields, type and tags not included
@@ -29,7 +31,8 @@ PaperDlg::PaperDlg(QWidget *parent)
             << Field("publisher",   ui.lePublisher)
             << Field("url",         ui.leUrl)
             << Field("abstract",    ui.teAbstract)
-            << Field("note",        ui.teNote);
+            << Field("note",        ui.teNote)
+            << Field("PDF",         ui.lePDF);
 
     // auto complete for tags
 	QSqlTableModel* tagModel = new QSqlTableModel(this);
@@ -41,18 +44,19 @@ PaperDlg::PaperDlg(QWidget *parent)
     completer->setEdit(ui.leTags);
     completer->setSeparator("; ");
 
-    _spec = RefSpecFactory::getInstance()->getSpec("bib");
-
     // type combobox
-    if(_spec != 0)
-        foreach(const TypeSpec& type, _spec->getAllTypes())
+    RefSpec* spec = RefSpecFactory::getInstance()->getSpec("bib");
+    if(spec != 0)
+        foreach(const TypeSpec& type, spec->getAllTypes())
             ui.comboType->addItem(type.getInternalName());
     if(ui.comboType->findText("unknown") == -1)
         ui.comboType->insertItem(0, "unknown");
 
-    connect(ui.comboType, SIGNAL(currentIndexChanged(QString)), this, SLOT(onTypeChanged(QString)));
+    connect(ui.comboType, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(onTypeChanged(QString)));
     connect(ui.btGoogle,      SIGNAL(clicked()), this, SLOT(onGoogle()));
     connect(ui.btSelectPaper, SIGNAL(clicked()), this, SLOT(onSelectPaper()));
+    connect(ui.btAddPDF,      SIGNAL(clicked()), this, SLOT(onAddPDF()));
 }
 
 void PaperDlg::setTitle(const QString& title)
@@ -70,7 +74,7 @@ void PaperDlg::setType(const QString& type)
     int index = ui.comboType->findText(type);
     if(index > -1)
         ui.comboType->setCurrentIndex(index);
-    else    // guess type
+    else    // guess type from publication
     {
         QString publication = ui.lePublication->text();
         if(publication.contains("proceeding", Qt::CaseInsensitive) ||
@@ -111,7 +115,7 @@ Reference PaperDlg::getReference() const
     ref.setValue("tags",    splitLine(ui.leTags->text(), ";"));
 
     // type is not included in _fields
-    ref.setValue("type",     ui.comboType->currentText());
+    ref.setValue("type", ui.comboType->currentText());
 
     return ref;
 }
@@ -143,6 +147,14 @@ void PaperDlg::setReference(const Reference& ref)
     setType(ref.getValue("type").toString());
 }
 
+QString PaperDlg::getPDFPath() const {
+    return ui.lePDF->text();
+}
+
+void PaperDlg::setPDFPath(const QString& path) {
+    ui.lePDF->setText(path);
+}
+
 void PaperDlg::showMergeMark() {
     setWindowTitle(windowTitle() + " - Merged!");
 }
@@ -150,10 +162,11 @@ void PaperDlg::showMergeMark() {
 void PaperDlg::onTypeChanged(const QString& typeName)
 {
     // get required fields info from bibtex spec
-    if(_spec == 0)
+    RefSpec* spec = RefSpecFactory::getInstance()->getSpec("bib");
+    if(spec == 0)
         return;
 
-    TypeSpec type = _spec->getType(typeName);
+    TypeSpec type = spec->getType(typeName);
     for(Fields::iterator it = _fields.begin(); it != _fields.end(); ++ it)
         it->second->highlight(type.isRequiredField(it->first) // invalid type returns false
                               ? QColor(Qt::yellow).lighter()
@@ -168,6 +181,19 @@ void PaperDlg::onGoogle() {
 
 void PaperDlg::onSelectPaper()
 {
-    emit selectPaper(_id);
+    emit selectPaper(_id);   // ask paper page to select the paper
     reject();
+}
+
+void PaperDlg::onAddPDF()
+{
+    QString lastPath = UserSetting::getInstance()->getLastAttachmentPath();
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open PDF File"),
+                                                    lastPath,
+                                                    tr("PDF (*.pdf)"));
+    if(!filePath.isEmpty() && QFile::exists(filePath))
+    {
+        setPDFPath(filePath);
+        UserSetting::getInstance()->setLastAttachmentPath(QFileInfo(filePath).path());
+    }
 }

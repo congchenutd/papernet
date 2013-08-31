@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     // search edit
     ButtonLineEdit::SearchLineEdit* searchEdit = new ButtonLineEdit::SearchLineEdit(
-                QPixmap(":/Images/Search.png"), QPixmap(":/Images/Fulltext.png"), this);
+                QPixmap(":/Images/Search.png"), QPixmap(":/Images/FullText.png"), this);
     ui.toolBarMain->addSeparator();
     ui.toolBarMain->addWidget(searchEdit);
     ui.toolBarMain->addWidget(new QLabel("  ", this));

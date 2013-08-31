@@ -278,6 +278,7 @@
   <tabstop>teAbstract</tabstop>
   <tabstop>teNote</tabstop>
   <tabstop>leTags</tabstop>
+  <tabstop>btGotoPaper</tabstop>
   <tabstop>btAddPDF</tabstop>
   <tabstop>lePDF</tabstop>
   <tabstop>btCancel</tabstop>

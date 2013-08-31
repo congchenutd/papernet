@@ -14,8 +14,7 @@ PaperDlg::PaperDlg(QWidget *parent)
     : QDialog(parent), _id(-1)
 {
 	ui.setupUi(this);
-    resize(700, 600);
-	ui.leTitle->setFocus();
+    resize(750, 650);
 
     // fields, type and tags not included
     _fields << Field("title",       ui.leTitle)
@@ -33,6 +32,8 @@ PaperDlg::PaperDlg(QWidget *parent)
             << Field("abstract",    ui.teAbstract)
             << Field("note",        ui.teNote)
             << Field("PDF",         ui.lePDF);
+
+    ui.lePDF->hide();  // only here to hold pdf path
 
     // auto complete for tags
 	QSqlTableModel* tagModel = new QSqlTableModel(this);
@@ -53,10 +54,10 @@ PaperDlg::PaperDlg(QWidget *parent)
         ui.comboType->insertItem(0, "unknown");
 
     connect(ui.comboType, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(onTypeChanged(QString)));
-    connect(ui.btGoogle,      SIGNAL(clicked()), this, SLOT(onGoogle()));
-    connect(ui.btSelectPaper, SIGNAL(clicked()), this, SLOT(onSelectPaper()));
-    connect(ui.btAddPDF,      SIGNAL(clicked()), this, SLOT(onAddPDF()));
+            this,         SLOT(onTypeChanged(QString)));
+    connect(ui.btGoogle,    SIGNAL(clicked()), this, SLOT(onGoogle()));
+    connect(ui.btGotoPaper, SIGNAL(clicked()), this, SLOT(onGotoPaper()));
+    connect(ui.btAddPDF,    SIGNAL(clicked()), this, SLOT(onAddPDF()));
 }
 
 void PaperDlg::setTitle(const QString& title)
@@ -64,8 +65,8 @@ void PaperDlg::setTitle(const QString& title)
     // remove protection and fix case
     QString fixedTitle = BibFixer::CaseConvertor().redo(
                 BibFixer::ProtectionConvertor().undo(title));
-    ui.leTitle->setText(fixedTitle);
-	ui.leTitle->setCursorPosition(0);
+    ui.leTitle->setText(title);
+    ui.leTitle->setCursorPosition(0);
     ui.btGoogle->setEnabled(!title.isEmpty());
 }
 
@@ -179,9 +180,9 @@ void PaperDlg::onGoogle() {
                     QUrl("http://www.google.com/search?q=" + ui.leTitle->text()));
 }
 
-void PaperDlg::onSelectPaper()
+void PaperDlg::onGotoPaper()
 {
-    emit selectPaper(_id);   // ask paper page to select the paper
+    emit gotoPaper(_id);   // ask paper page to select the paper
     reject();
 }
 
@@ -195,5 +196,6 @@ void PaperDlg::onAddPDF()
     {
         setPDFPath(filePath);
         UserSetting::getInstance()->setLastAttachmentPath(QFileInfo(filePath).path());
+        ui.btAddPDF->setText(ui.btAddPDF->text() + "*");   // indicated PDF is added
     }
 }

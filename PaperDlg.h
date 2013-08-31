@@ -42,11 +42,11 @@ public:
 private slots:
     void onTypeChanged(const QString& typeName);  // highlight required fields of the type
     void onGoogle();
-    void onSelectPaper();
+    void onGotoPaper();
     void onAddPDF();
 
 signals:
-    void selectPaper(int id);    // Select paper button clicked: select current paper in the view
+    void gotoPaper(int id);    // Select paper button clicked: select current paper in the view
 
 private:
     void setTitle(const QString& title);  // may fix errors in the title

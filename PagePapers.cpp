@@ -117,7 +117,7 @@ void PagePapers::onEditPaper()
     Reference oldRef = exportReference(_currentRow);
     dlg.setReference(oldRef);
 
-    connect(&dlg, SIGNAL(selectPaper(int)), this, SLOT(onJumpToCurrent(int)));
+    connect(&dlg, SIGNAL(gotoPaper(int)), this, SLOT(onJumpToCurrent(int)));
 
     if(dlg.exec() == QDialog::Accepted)
     {
@@ -135,11 +135,6 @@ void PagePapers::onEditPaper()
 
         if(newRef.getValue("note") != oldRef.getValue("note"))
             setPaperRead();                // changing note infers being read
-
-        // add pdf
-        QString pdfPath = dlg.getPDFPath();
-        if(!pdfPath.isEmpty())
-            addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
     }
 }
 

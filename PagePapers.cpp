@@ -231,7 +231,11 @@ void PagePapers::delRecord()
             delPaper(rowToID(idx.row()));     // delete in the db
         QSqlDatabase::database().commit();
         _model.select();                      // reload db
-	}
+    }
+}
+
+void PagePapers::editRecord() {
+   onEditPaper();
 }
 
 int PagePapers::rowToID(int row) const {

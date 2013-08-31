@@ -40,11 +40,12 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui.actionDictionary, SIGNAL(triggered()), this, SLOT(onDictionary()));
     connect(ui.actionAdd,        SIGNAL(triggered()), this, SLOT(onAdd()));
     connect(ui.actionDel,        SIGNAL(triggered()), this, SLOT(onDel()));
+    connect(ui.actionEdit,       SIGNAL(triggered()), this, SLOT(onEdit()));
     connect(ui.actionBackward,   SIGNAL(triggered()), this, SLOT(onBackward()));
     connect(ui.actionForward,    SIGNAL(triggered()), this, SLOT(onForward()));
+    connect(ui.actionImportRef,  SIGNAL(triggered()), _pagePapers, SLOT(onImport()));
     connect(ui.actionExportRef,  SIGNAL(triggered()), _pagePapers, SLOT(onExport()));
     connect(ui.actionReadPDF,    SIGNAL(triggered()), _pagePapers, SLOT(onReadPDF()));
-    connect(ui.actionImportRef,  SIGNAL(triggered()), _pagePapers, SLOT(onImport()));
 
     connect(_pagePapers,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
     connect(_pageQuotes,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
@@ -67,7 +68,7 @@ MainWindow::MainWindow(QWidget* parent)
 void MainWindow::onOptions()
 {
 	OptionDlg dlg(this);
-	dlg.exec();           // dlg will save the settings by itself
+    dlg.exec();           // dlg will save the settings
 }
 
 void MainWindow::onAbout()
@@ -118,9 +119,7 @@ void MainWindow::backup(const QString& name)
 		QFile::remove(backupFileName);
 
 	extern QString dbName;
-	QFile file(dbName);
-	file.copy(backupFileName);
-	file.close();
+    QFile(dbName).copy(backupFileName);
 }
 
 void MainWindow::onPapers()
@@ -132,8 +131,8 @@ void MainWindow::onPapers()
     ui.actionReadPDF  ->setVisible(true);
     _currentPage = ui.pagePapers;
     _currentPage->jumpToCurrent();
-//    onSelectionValid(false);         // select row 0 by default
     _searchEdit->setShowFullTextSearch(true);
+    onSelectionValid(false);
 }
 
 void MainWindow::onQuotes()
@@ -146,8 +145,8 @@ void MainWindow::onQuotes()
     _currentPage = ui.pageQuotes;
     _currentPage->reset();          // quotes may be changd by paper page
     _currentPage->jumpToCurrent();
-    onSelectionValid(false);
     _searchEdit->setShowFullTextSearch(false);
+    onSelectionValid(false);
 }
 
 void MainWindow::onDictionary()
@@ -159,8 +158,8 @@ void MainWindow::onDictionary()
     ui.actionReadPDF  ->setVisible(false);
     _currentPage = ui.pageDictionary;
 	_currentPage->jumpToCurrent();
-    onSelectionValid(false);
     _searchEdit->setShowFullTextSearch(false);
+    onSelectionValid(false);
 }
 
 void MainWindow::jumpToPaper(int paperID)
@@ -199,6 +198,9 @@ void MainWindow::onAdd() {
 void MainWindow::onDel() {
     _currentPage->delRecord();
 }
+void MainWindow::onEdit() {
+    _currentPage->editRecord();
+}
 
 void MainWindow::onSearch(const QString& target)
 {
@@ -221,6 +223,7 @@ void MainWindow::onBackward() {
 void MainWindow::onSelectionValid(bool valid)
 {
     ui.actionDel      ->setEnabled(valid);
+    ui.actionEdit     ->setEnabled(valid);
     ui.actionExportRef->setEnabled(valid);
 }
 

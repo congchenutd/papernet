@@ -14,12 +14,13 @@ public:
     PageDictionary(QWidget* parent = 0);
     void saveGeometry();    // called by mainwindow, closeEvent() only works for top window
 
-    virtual void addRecord();
-    virtual void delRecord();
-	virtual void search(const QString& target);
-	virtual void jumpToID(int id);
-    virtual void jumpToCurrent() { jumpToID(_currentPhraseID); }
-	virtual void reset() { onResetPhrases(); }
+    void addRecord();
+    void delRecord();
+    void editRecord();
+    void search(const QString& target);
+    void jumpToID(int id);
+    void jumpToCurrent() { jumpToID(_currentPhraseID); }
+    void reset() { onResetPhrases(); }
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);

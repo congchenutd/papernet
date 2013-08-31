@@ -89,6 +89,7 @@
     <addaction name="actionExportRef"/>
     <addaction name="actionAdd"/>
     <addaction name="actionDel"/>
+    <addaction name="actionEdit"/>
     <addaction name="actionReadPDF"/>
    </widget>
    <addaction name="menuFile"/>
@@ -121,6 +122,7 @@
    <addaction name="actionExportRef"/>
    <addaction name="actionAdd"/>
    <addaction name="actionDel"/>
+   <addaction name="actionEdit"/>
    <addaction name="actionReadPDF"/>
   </widget>
   <action name="actionExit">
@@ -308,6 +310,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionEdit">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Images/Edit.png</normaloff>:/Images/Edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>

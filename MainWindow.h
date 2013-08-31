@@ -37,6 +37,7 @@ private slots:
 	void onDictionary();
 	void onAdd();
 	void onDel();
+    void onEdit();
 	void onSearch(const QString& target);
 	void onForward();
 	void onBackward();

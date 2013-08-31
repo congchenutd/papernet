@@ -12,12 +12,13 @@ class PageQuotes : public Page
 public:
 	PageQuotes(QWidget *parent = 0);
 	
-	virtual void addRecord();
-	virtual void delRecord();
-	virtual void search(const QString& target);
-	virtual void jumpToID(int id);
-    virtual void jumpToCurrent() {}
-    virtual void reset();
+    void addRecord();
+    void delRecord();
+    void editRecord();
+    void search(const QString& target);
+    void jumpToID(int id);
+    void jumpToCurrent() {}
+    void reset();
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);

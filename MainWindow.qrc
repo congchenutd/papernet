@@ -27,5 +27,6 @@
         <file>Images/Export.png</file>
         <file>Images/Search.png</file>
         <file>Images/FullText.png</file>
+        <file>Images/Edit.png</file>
     </qresource>
 </RCC>

@@ -68,7 +68,11 @@ void PageQuotes::delRecord()
 		foreach(QModelIndex idx, idxList)
 			delQuote(rowToID(idx.row()));
 		reset();   // just refresh, dlg will submit the changes
-	}
+    }
+}
+
+void PageQuotes::editRecord() {
+    onEdit();
 }
 
 void PageQuotes::reset()

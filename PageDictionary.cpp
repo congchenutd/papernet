@@ -63,7 +63,11 @@ void PageDictionary::delRecord()
 		foreach(QModelIndex idx, idxList)
             delPhrase(rowToID(idx.row()));
         _model.select();
-	}
+    }
+}
+
+void PageDictionary::editRecord() {
+    onEdit();
 }
 
 void PageDictionary::onEdit()

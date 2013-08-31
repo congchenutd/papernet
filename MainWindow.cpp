@@ -26,10 +26,10 @@ MainWindow::MainWindow(QWidget* parent)
 	actionGroup->addAction(ui.actionDictionary);
 
     // search edit
-    ButtonLineEdit::SearchLineEdit* searchEdit = new ButtonLineEdit::SearchLineEdit(
+    _searchEdit = new SearchLineEdit(
                 QPixmap(":/Images/Search.png"), QPixmap(":/Images/FullText.png"), this);
     ui.toolBarMain->addSeparator();
-    ui.toolBarMain->addWidget(searchEdit);
+    ui.toolBarMain->addWidget(_searchEdit);
     ui.toolBarMain->addWidget(new QLabel("  ", this));
 
     connect(ui.actionAboutQt,    SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -54,9 +54,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(_navigator,  SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
     connect(_navigator,  SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
 
-    connect(searchEdit, SIGNAL(filter(QString)), this, SLOT(onSearch(QString)));
-    connect(searchEdit, SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
-    connect(searchEdit, SIGNAL(fullTextSearch(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
+    connect(_searchEdit, SIGNAL(filter(QString)),        this,         SLOT(onSearch(QString)));
+    connect(_searchEdit, SIGNAL(fullTextSearch(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
 
     // load settings
 	UserSetting* setting = UserSetting::getInstance();
@@ -134,6 +133,7 @@ void MainWindow::onPapers()
     _currentPage = ui.pagePapers;
     _currentPage->jumpToCurrent();
 //    onSelectionValid(false);         // select row 0 by default
+    _searchEdit->setShowFullTextSearch(true);
 }
 
 void MainWindow::onQuotes()
@@ -147,6 +147,7 @@ void MainWindow::onQuotes()
     _currentPage->reset();          // quotes may be changd by paper page
     _currentPage->jumpToCurrent();
     onSelectionValid(false);
+    _searchEdit->setShowFullTextSearch(false);
 }
 
 void MainWindow::onDictionary()
@@ -159,6 +160,7 @@ void MainWindow::onDictionary()
     _currentPage = ui.pageDictionary;
 	_currentPage->jumpToCurrent();
     onSelectionValid(false);
+    _searchEdit->setShowFullTextSearch(false);
 }
 
 void MainWindow::jumpToPaper(int paperID)
@@ -197,14 +199,16 @@ void MainWindow::onAdd() {
 void MainWindow::onDel() {
     _currentPage->delRecord();
 }
-void MainWindow::onSearch(const QString& target) {
-	_currentPage->search(target);
-}
 
-void MainWindow::onClearSearch()
+void MainWindow::onSearch(const QString& target)
 {
-	_currentPage->reset();
-    _currentPage->jumpToCurrent();
+    if(target.isEmpty())
+    {
+        _currentPage->reset();
+        _currentPage->jumpToCurrent();
+    }
+    else
+        _currentPage->search(target);
 }
 
 void MainWindow::onForward() {

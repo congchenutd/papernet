@@ -59,8 +59,8 @@ HEADERS += \
     WebImporter.h \
     MultiSectionCompleter.h \
     ToolBar.h \
-    ../ButtonLineEdit/SearchLineEdit.h \
-    ../ButtonLineEdit/ButtonLineEdit.h
+    ../ButtonLineEdit/ButtonLineEdit.h \
+    SearchLineEdit.h
 FORMS += \
          AttachmentsWidget.ui \
          LinkDlg.ui \
@@ -120,9 +120,9 @@ SOURCES += \
     ../Thesaurus/Thesaurus.cpp \
     WebImporter.cpp \
     MultiSectionCompleter.cpp \
-    ../ButtonLineEdit/SearchLineEdit.cpp \
     ../ButtonLineEdit/ButtonLineEdit.cpp \
-    ToolBar.cpp
+    ToolBar.cpp \
+    SearchLineEdit.cpp
 RESOURCES += MainWindow.qrc
 
 

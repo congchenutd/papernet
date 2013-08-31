@@ -10,6 +10,7 @@ class PageDictionary;
 class Navigator;
 struct FootStep;
 
+class SearchLineEdit;
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -37,7 +38,6 @@ private slots:
 	void onAdd();
 	void onDel();
 	void onSearch(const QString& target);
-	void onClearSearch();
 	void onForward();
 	void onBackward();
     void onSelectionValid(bool valid);
@@ -56,6 +56,7 @@ private:
     PageDictionary* _pageDictionary;
     Page*           _currentPage;
     Navigator*      _navigator;
+    SearchLineEdit* _searchEdit;
 };
 
 #endif // MAINWINDOW_H

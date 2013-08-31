@@ -74,8 +74,27 @@
     <addaction name="actionQuotes"/>
     <addaction name="actionDictionary"/>
    </widget>
+   <widget class="QMenu" name="menuNavigation">
+    <property name="title">
+     <string>Navigation</string>
+    </property>
+    <addaction name="actionBackward"/>
+    <addaction name="actionForward"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionImportRef"/>
+    <addaction name="actionExportRef"/>
+    <addaction name="actionAdd"/>
+    <addaction name="actionDel"/>
+    <addaction name="actionReadPDF"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
+   <addaction name="menuNavigation"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="MainToolBar" name="toolBarMain">
@@ -138,6 +157,9 @@
    <property name="text">
     <string>Papers</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
   </action>
   <action name="actionQuotes">
    <property name="checkable">
@@ -153,6 +175,9 @@
    <property name="toolTip">
     <string>Quotes</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
   </action>
   <action name="actionAdd">
    <property name="icon">
@@ -164,6 +189,9 @@
    </property>
    <property name="toolTip">
     <string>Add</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
    </property>
   </action>
   <action name="actionDel">
@@ -177,6 +205,9 @@
    <property name="toolTip">
     <string>Delete</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
   </action>
   <action name="actionImportRef">
    <property name="icon">
@@ -188,6 +219,9 @@
    </property>
    <property name="toolTip">
     <string>Import references</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
   <action name="actionAboutQt">
@@ -206,6 +240,9 @@
    <property name="text">
     <string>Dictionary</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
+   </property>
   </action>
   <action name="actionBackward">
    <property name="enabled">
@@ -220,6 +257,9 @@
    </property>
    <property name="toolTip">
     <string>Go backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Left</string>
    </property>
   </action>
   <action name="actionForward">
@@ -236,6 +276,9 @@
    <property name="toolTip">
     <string>Go forward</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+Right</string>
+   </property>
   </action>
   <action name="actionExportRef">
    <property name="icon">
@@ -248,6 +291,9 @@
    <property name="toolTip">
     <string>Export selected references</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionReadPDF">
    <property name="icon">
@@ -259,6 +305,9 @@
    </property>
    <property name="toolTip">
     <string>Read PDF</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
  </widget>

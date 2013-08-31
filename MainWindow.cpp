@@ -2,6 +2,7 @@
 #include "OptionDlg.h"
 #include "Common.h"
 #include "Navigator.h"
+#include "SearchLineEdit.h"
 #include <QMessageBox>
 #include <QDate>
 #include <QActionGroup>
@@ -24,6 +25,13 @@ MainWindow::MainWindow(QWidget* parent)
 	actionGroup->addAction(ui.actionQuotes);
 	actionGroup->addAction(ui.actionDictionary);
 
+    // search edit
+    ButtonLineEdit::SearchLineEdit* searchEdit = new ButtonLineEdit::SearchLineEdit(
+                QPixmap(":/Images/Search.png"), QPixmap(":/Images/Fulltext.png"), this);
+    ui.toolBarMain->addSeparator();
+    ui.toolBarMain->addWidget(searchEdit);
+    ui.toolBarMain->addWidget(new QLabel("  ", this));
+
     connect(ui.actionAboutQt,    SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui.actionOptions,    SIGNAL(triggered()), this, SLOT(onOptions()));
     connect(ui.actionAbout,      SIGNAL(triggered()), this, SLOT(onAbout()));
@@ -34,12 +42,9 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui.actionDel,        SIGNAL(triggered()), this, SLOT(onDel()));
     connect(ui.actionBackward,   SIGNAL(triggered()), this, SLOT(onBackward()));
     connect(ui.actionForward,    SIGNAL(triggered()), this, SLOT(onForward()));
-    connect(ui.toolBarSearch,    SIGNAL(search(QString)), this, SLOT(onSearch(QString)));
-    connect(ui.toolBarSearch,    SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
-    connect(ui.actionImportRef,  SIGNAL(triggered()),             _pagePapers, SLOT(onImport()));
-    connect(ui.actionExportRef,  SIGNAL(triggered()),             _pagePapers, SLOT(onExport()));
-    connect(ui.actionReadPDF,    SIGNAL(triggered()),             _pagePapers, SLOT(onReadPDF()));
-    connect(ui.toolBarSearch,    SIGNAL(fullTextSearch(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
+    connect(ui.actionExportRef,  SIGNAL(triggered()), _pagePapers, SLOT(onExport()));
+    connect(ui.actionReadPDF,    SIGNAL(triggered()), _pagePapers, SLOT(onReadPDF()));
+    connect(ui.actionImportRef,  SIGNAL(triggered()), _pagePapers, SLOT(onImport()));
 
     connect(_pagePapers,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
     connect(_pageQuotes,     SIGNAL(selectionValid(bool)), this, SLOT(onSelectionValid(bool)));
@@ -49,7 +54,11 @@ MainWindow::MainWindow(QWidget* parent)
     connect(_navigator,  SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
     connect(_navigator,  SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
 
-	// load settings
+    connect(searchEdit, SIGNAL(filter(QString)), this, SLOT(onSearch(QString)));
+    connect(searchEdit, SIGNAL(clearSearch()),   this, SLOT(onClearSearch()));
+    connect(searchEdit, SIGNAL(fullTextSearch(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
+
+    // load settings
 	UserSetting* setting = UserSetting::getInstance();
 	qApp->setFont(setting->getFont());
 

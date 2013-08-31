@@ -20,12 +20,13 @@
         <file>Images/DelTag.png</file>
         <file>Images/EditTag.png</file>
         <file>Images/ShowTagged.png</file>
-        <file>Images/SearchFile.png</file>
         <file>Images/Print.png</file>
         <file>Images/Read.png</file>
         <file>Images/Bookmark.png</file>
         <file>CompileDate.txt</file>
         <file>Images/Quote.png</file>
         <file>Images/Export.png</file>
+        <file>Images/Search.png</file>
+        <file>Images/Fulltext.png</file>
     </qresource>
 </RCC>

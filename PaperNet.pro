@@ -6,7 +6,8 @@ INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
 				../MySetting \
                 ../MyComboBox \
-                ../Thesaurus
+				../Thesaurus \
+				../ButtonLineEdit
 
 win32 {
 	RC_FILE = PaperNet.rc
@@ -33,7 +34,6 @@ HEADERS += \
            PaperModel.h \
            PaperTableView.h \
            TagsWidget.h \
-           ToolBar.h \
            ../MySetting/MySetting.h \
            ../WordCloud/WordCloudWidget.h \
 		   ../WordCloud/FlowLayout.h \
@@ -57,7 +57,10 @@ HEADERS += \
     ../Thesaurus/ThesaurusCache.h \
     ../Thesaurus/Thesaurus.h \
     WebImporter.h \
-    MultiSectionCompleter.h
+    MultiSectionCompleter.h \
+    ToolBar.h \
+    ../ButtonLineEdit/SearchLineEdit.h \
+    ../ButtonLineEdit/ButtonLineEdit.h
 FORMS += \
          AttachmentsWidget.ui \
          LinkDlg.ui \
@@ -94,7 +97,6 @@ SOURCES += \
            PaperModel.cpp \
            PaperTableView.cpp \
            TagsWidget.cpp \
-           ToolBar.cpp \
            ../WordCloud/WordCloudWidget.cpp \
 		   ../WordCloud/FlowLayout.cpp      \
            ../EnglishName/EnglishName.cpp \
@@ -117,7 +119,10 @@ SOURCES += \
     ../Thesaurus/ThesaurusCache.cpp \
     ../Thesaurus/Thesaurus.cpp \
     WebImporter.cpp \
-    MultiSectionCompleter.cpp
+    MultiSectionCompleter.cpp \
+    ../ButtonLineEdit/SearchLineEdit.cpp \
+    ../ButtonLineEdit/ButtonLineEdit.cpp \
+    ToolBar.cpp
 RESOURCES += MainWindow.qrc
 
 

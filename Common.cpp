@@ -11,9 +11,10 @@
 #include <QTextStream>
 #include <QDesktopServices>
 #include <QUrl>
-#include <QDebug>
 #include <QProcess>
 #include <QProcessEnvironment>
+#include <QWidget>
+#include <QDesktopWidget>
 
 #ifdef Q_OS_WIN32
 #include "windows.h"
@@ -420,30 +421,19 @@ bool isTagged(int paperID)
 	return query.next();
 }
 
-AttachmentStatus isAttached(int paperID)
+bool pdfAttached(int paperID)
 {
 	if(paperID < 0)
-		return ATTACH_NONE;
+        return false;
 	QFileInfoList infos = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 	if(infos.isEmpty())
-		return ATTACH_NONE;
+        return false;
 
-	QSet<QString> suffixes;
-	foreach(QFileInfo info, infos)
-		suffixes << info.suffix().toLower();
+    foreach(const QFileInfo& fileInfo, infos)
+        if(fileInfo.suffix().toLower() == "pdf")
+            return true;
 
-	QSet<QString> citations;
-    citations << "enw" << "ris" << "bib";
-
-	QSet<QString> suffixesEndnote = suffixes;
-	if(!suffixesEndnote.intersect(citations).isEmpty()) // has endnote files
-	{
-		QSet<QString> suffixesPdf = suffixes;
-		if(!suffixesPdf.subtract(citations).isEmpty())  // also has other files
-			return ATTACH_ALL;
-		return ATTACH_ENDNOTE;
-	}
-	return ATTACH_PAPER;
+    return false;
 }
 
 bool isPaperRead(int paperID) {
@@ -461,7 +451,7 @@ void updateAttached(int paperID)  // update Attached section of Papers table
 
 	QSqlQuery query;
 	query.exec(QObject::tr("update Papers set Attached = %1 where ID = %2")
-								.arg(isAttached(paperID)).arg(paperID));
+                                .arg(pdfAttached(paperID)).arg(paperID));
 }
 
 int getQuoteID(const QString& title)
@@ -669,4 +659,10 @@ QStringList splitAuthorsList(const QString& authorsLine,
 	foreach(const QString& author, authorList)
 		result << EnglishName(author).toString(format);
 	return result;
+}
+
+void centerWindow(QWidget* widget)
+{
+    QRect screen = QApplication::desktop()->screenGeometry();
+    widget->move(screen.center() - widget->rect().center());
 }

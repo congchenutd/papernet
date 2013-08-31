@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>AddQuoteDlg</string>
   </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
@@ -48,7 +54,16 @@
        <string>References</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
         <number>5</number>
        </property>
        <property name="spacing">
@@ -62,6 +77,9 @@
          <property name="icon">
           <iconset resource="MainWindow.qrc">
            <normaloff>:/Images/Add.png</normaloff>:/Images/Add.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+=</string>
          </property>
         </widget>
        </item>
@@ -99,7 +117,10 @@
          </property>
          <property name="icon">
           <iconset resource="MainWindow.qrc">
-           <normaloff>:/Images/SearchFile.png</normaloff>:/Images/SearchFile.png</iconset>
+           <normaloff>:/Images/FullText.png</normaloff>:/Images/FullText.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+F</string>
          </property>
         </widget>
        </item>
@@ -130,6 +151,9 @@
          <property name="icon">
           <iconset resource="MainWindow.qrc">
            <normaloff>:/Images/PDF.png</normaloff>:/Images/PDF.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+R</string>
          </property>
         </widget>
        </item>

@@ -15,8 +15,10 @@ public:
 	QStringList getSelected() const;
 
 private slots:
-    void onSelectionChanged(const QItemSelection& selected);
 	void onSearch(const QString& target);
+
+private:
+    void resetModel();
 
 private:
 	Ui::PaperListClass ui;

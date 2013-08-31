@@ -6,7 +6,6 @@
 class QAbstractItemModel;
 
 // emun
-typedef enum {ATTACH_NONE, ATTACH_ENDNOTE, ATTACH_PAPER, ATTACH_ALL} AttachmentStatus;
 enum {PAPER_ID, PAPER_ATTACHED, PAPER_TITLE, PAPER_AUTHORS, PAPER_YEAR, PAPER_MODIFIED, PAPER_TYPE,
       PAPER_PUBLICATION, PAPER_ABSTRACT, PAPER_VOLUME, PAPER_ISSUE, PAPER_STARTPAGE,
       PAPER_ENDPAGE, PAPER_PUBLISHER, PAPER_EDITORS, PAPER_ADDRESS, PAPER_URL, PAPER_NOTE};
@@ -19,6 +18,9 @@ bool openDB(const QString& name);
 void createTables();
 int getNextID(const QString& tableName, const QString& sectionName);
 int idToRow(QAbstractItemModel* model, int idSection, int id);
+
+class QWidget;
+void centerWindow(QWidget* widget);
 
 // separated list -> QStringList, unnecessary spaces removed
 QStringList splitLine(const QString& line, const QString& separator);
@@ -39,7 +41,7 @@ bool paperExists(const QString& title);
 void updateAttached(int paperID);
 
 // attachments
-AttachmentStatus isAttached(int paperID);
+bool pdfAttached(int paperID);
 QString getFullTextFilePath(int paperID, const QString& attachmentName);
 bool addAttachment(int paperID, const QString& attachmentName, const QString& fileName);
 void delAttachment(int paperID, const QString& attachmentName);

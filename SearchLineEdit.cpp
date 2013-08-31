@@ -4,49 +4,56 @@
 #include <QPainter>
 #include <QPushButton>
 
-SearchLineEdit::SearchLineEdit(const QPixmap& pxLabel, const QPixmap& pxSearch,
-                               QWidget* parent)
-    : ButtonLineEdit(parent)
+SearchLineEdit::SearchLineEdit(QWidget* parent)
+    : ButtonLineEdit(parent),
+      _label(0),
+      _btClear(0),
+      _btSearch(0)
 {
-    QLabel* searchLabel = new QLabel(this);
-    searchLabel->setPixmap(pxLabel);
-    searchLabel->resize(16, 16);
-    addLeftWidget(searchLabel, 0);
-
-    ClearButton* btClear = new ClearButton(this);
-    btClear->resize(16, 16);
-    btClear->setToolTip(tr("Clear"));
-    btClear->setShortcut(QKeySequence(Qt::Key_Escape));
-    addRightWidget(btClear, 1);
-
-    _btFullText = new PictureButton(this);
-    _btFullText->setPixmap(pxSearch);
-    _btFullText->setToolTip(tr("Full text search"));
-    _btFullText->setShortcut(QKeySequence("Ctrl+Return"));
-    _btFullText->resize(16, 16);
-    addRightWidget(_btFullText, 0);
-
     // use a "invisible" button to grab shortcut for the lineedit
-    QPushButton* btFocus = new QPushButton("Focus", this);
-    btFocus->setShortcut(QKeySequence("Ctrl+F"));
-    btFocus->setMaximumWidth(0);    // "hide" it
-    addRightWidget(btFocus, 1);
+    _btFocus = new QPushButton("Focus", this);
+    _btFocus->setShortcut(QKeySequence("Ctrl+F"));
+    _btFocus->setMaximumWidth(0);    // "hide" it
+    addRightWidget(_btFocus);
 
-    QLineEdit* lineEdit = getLineEdit();
-    connect(btClear,  SIGNAL(clicked()),            lineEdit, SLOT(clear()));
-    connect(lineEdit, SIGNAL(textChanged(QString)), btClear,  SLOT(onTextChanged(QString)));
-
-    connect(lineEdit,    SIGNAL(textChanged(QString)), this, SIGNAL(filter(QString)));
-    connect(_btFullText, SIGNAL(clicked()),            this, SLOT(onFullText()));
-    connect(btFocus,     SIGNAL(clicked()),            this, SLOT(onFocus()));
+    connect(getLineEdit(), SIGNAL(textChanged(QString)), this, SIGNAL(filter(QString)));
+    connect(_btFocus,      SIGNAL(clicked()),            this, SLOT(onFocus()));
 }
 
-void SearchLineEdit::setShowFullTextSearch(bool show) {
-    _btFullText->setVisible(show);
+void SearchLineEdit::setLabel(QLabel* label)
+{
+    _label = label;
+    _label->setParent(this);
+    addLeftWidget(_label);
 }
 
-void SearchLineEdit::onFullText() {
-    emit fullTextSearch(getLineEdit()->text());
+void SearchLineEdit::setClearButton(ClearButton* button)
+{
+    _btClear = button;
+    _btClear->setParent(this);
+    addRightWidget(_btClear);
+
+    connect(_btClear, SIGNAL(clicked()), getLineEdit(),  SLOT(clear()));
+    connect(getLineEdit(), SIGNAL(textChanged(QString)),
+            _btClear, SLOT(onTextChanged(QString)));
+}
+
+void SearchLineEdit::setSearchButton(PictureButton* button)
+{
+    _btSearch = button;
+    _btSearch->setParent(this);
+    addRightWidget(_btSearch);
+    connect(_btSearch, SIGNAL(clicked()), this, SLOT(onSearch()));
+}
+
+void SearchLineEdit::setShowSearchButton(bool show)
+{
+    if(_btSearch != 0)
+        _btSearch->setVisible(show);
+}
+
+void SearchLineEdit::onSearch() {
+    emit search(getLineEdit()->text());
 }
 
 void SearchLineEdit::onFocus()

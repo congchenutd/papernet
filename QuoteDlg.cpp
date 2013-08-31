@@ -6,12 +6,14 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QSqlQuery>
+#include <QDesktopWidget>
 
 QuoteDlg::QuoteDlg(QWidget *parent)
     : QDialog(parent), _quoteID(-1), _selectedPaperID(-1)
 {
 	ui.setupUi(this);
-    resize(600, 500);
+    resize(800, 500);
+
     ui.listView->setModel(&_model);
 
     // hide goto quotes page button on the quotes page
@@ -30,9 +32,13 @@ QuoteDlg::QuoteDlg(QWidget *parent)
 
 void QuoteDlg::onAddRef()
 {
-	NewReferenceDlg dlg(this);
-	if(dlg.exec() == QDialog::Accepted && !dlg.getTitle().isEmpty())
-		addRef(dlg.getTitle());
+    NewReferenceDlg dlg(this);
+
+    centerWindow(&dlg);    // HACK: center a exec()ed dialog
+    dlg.show();            //
+
+    if(dlg.exec() == QDialog::Accepted && !dlg.getTitle().isEmpty())
+        addRef(dlg.getTitle());
 }
 
 void QuoteDlg::onDelRef()
@@ -59,7 +65,7 @@ void QuoteDlg::onCurrentRowChanged()
                     : getPaperID(_model.data(idxList.front(), Qt::DisplayRole).toString());
 
     ui.btViewPDF->setEnabled(_selectedPaperID > -1 &&
-                             isAttached(_selectedPaperID) >= ATTACH_PAPER);
+                             pdfAttached(_selectedPaperID));
 }
 
 void QuoteDlg::accept()
@@ -127,14 +133,17 @@ void QuoteDlg::setQuoteID(int id)
 
 void QuoteDlg::onSelectRef()
 {
-    // show the paper list and add selected papers to the quote
-	PaperList dlg(this);
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		QStringList papers = dlg.getSelected();
-		foreach(QString paper, papers)
-			addRef(paper);
-	}
+    PaperList dlg(this);
+
+    centerWindow(&dlg);    // HACK: center a exec()ed dialog
+    dlg.show();            //
+
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        QStringList papers = dlg.getSelected();
+        foreach(QString paper, papers)
+            addRef(paper);
+    }
 }
 
 void QuoteDlg::onGotoPapersPage()

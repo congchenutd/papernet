@@ -92,7 +92,7 @@ void PagePapers::onSelectionChanged(const QItemSelection& selected)
         ui.widgetRelated   ->setCentralPaper(_currentPaperID);  // related
         ui.widgetCoauthered->setCentralPaper(_currentPaperID);  // coauthored
         updateQuotes();                                         // quotes
-        emit hasPDF(isAttached(_currentPaperID) >= ATTACH_PAPER);
+        emit hasPDF(pdfAttached(_currentPaperID));               // let MainWindow update actionPDF
     }
     emit selectionValid(!selected.isEmpty());
 }

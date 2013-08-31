@@ -26,8 +26,27 @@ MainWindow::MainWindow(QWidget* parent)
 	actionGroup->addAction(ui.actionDictionary);
 
     // search edit
-    _searchEdit = new SearchLineEdit(
-                QPixmap(":/Images/Search.png"), QPixmap(":/Images/FullText.png"), this);
+    _searchEdit = new SearchLineEdit(this);
+
+    QLabel* label = new QLabel;
+    label->setPixmap(QPixmap(":/Images/Search.png"));
+    label->resize(16, 16);
+
+    ClearButton* btClear = new ClearButton;
+    btClear->setToolTip(tr("Clear"));
+    btClear->setShortcut(QKeySequence(Qt::Key_Escape));
+    btClear->resize(16, 16);
+
+    PictureButton* btSearch = new PictureButton;
+    btSearch->setPixmap(QPixmap(":/Images/FullText.png"));
+    btSearch->setToolTip(tr("Full text search"));
+    btSearch->setShortcut(QKeySequence("Ctrl+Return"));
+    btSearch->resize(16, 16);
+
+    _searchEdit->setLabel(label);
+    _searchEdit->setSearchButton(btSearch);
+    _searchEdit->setClearButton (btClear);
+
     ui.toolBarMain->addSeparator();
     ui.toolBarMain->addWidget(_searchEdit);
     ui.toolBarMain->addWidget(new QLabel("  ", this));
@@ -55,8 +74,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(_navigator,  SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
     connect(_navigator,  SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
 
-    connect(_searchEdit, SIGNAL(filter(QString)),        this,         SLOT(onSearch(QString)));
-    connect(_searchEdit, SIGNAL(fullTextSearch(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
+    connect(_searchEdit, SIGNAL(filter(QString)), this,         SLOT(onSearch(QString)));
+    connect(_searchEdit, SIGNAL(search(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
 
     // load settings
 	UserSetting* setting = UserSetting::getInstance();
@@ -131,7 +150,7 @@ void MainWindow::onPapers()
     ui.actionReadPDF  ->setVisible(true);
     _currentPage = ui.pagePapers;
     _currentPage->jumpToCurrent();
-    _searchEdit->setShowFullTextSearch(true);
+    _searchEdit->setShowSearchButton(true);
     onSelectionValid(false);
 }
 
@@ -145,7 +164,7 @@ void MainWindow::onQuotes()
     _currentPage = ui.pageQuotes;
     _currentPage->reset();          // quotes may be changd by paper page
     _currentPage->jumpToCurrent();
-    _searchEdit->setShowFullTextSearch(false);
+    _searchEdit->setShowSearchButton(false);
     onSelectionValid(false);
 }
 
@@ -158,7 +177,7 @@ void MainWindow::onDictionary()
     ui.actionReadPDF  ->setVisible(false);
     _currentPage = ui.pageDictionary;
 	_currentPage->jumpToCurrent();
-    _searchEdit->setShowFullTextSearch(false);
+    _searchEdit->setShowSearchButton(false);
     onSelectionValid(false);
 }
 

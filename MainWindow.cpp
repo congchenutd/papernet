@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget* parent)
     _searchEdit->setLabel(label);
     _searchEdit->setSearchButton(btSearch);
     _searchEdit->setClearButton (btClear);
+    _searchEdit->setFocusShortcut(QKeySequence("Ctrl+F"));
 
     ui.toolBarMain->addSeparator();
     ui.toolBarMain->addWidget(_searchEdit);

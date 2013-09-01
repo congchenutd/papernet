@@ -3,25 +3,21 @@
 #include <QLineEdit>
 #include <QPainter>
 #include <QPushButton>
+#include <QShortcut>
 
 SearchLineEdit::SearchLineEdit(QWidget* parent)
-    : ButtonLineEdit(parent),
+    : EmbeddableLineEdit(parent),
       _label(0),
       _btClear(0),
       _btSearch(0)
 {
-    // use a "invisible" button to grab shortcut for the lineedit
-    _btFocus = new QPushButton("Focus", this);
-    _btFocus->setShortcut(QKeySequence("Ctrl+F"));
-    _btFocus->setMaximumWidth(0);    // "hide" it
-    addRightWidget(_btFocus);
-
     connect(getLineEdit(), SIGNAL(textChanged(QString)), this, SIGNAL(filter(QString)));
-    connect(_btFocus,      SIGNAL(clicked()),            this, SLOT(onFocus()));
 }
 
 void SearchLineEdit::setLabel(QLabel* label)
 {
+    if(label == 0)
+        return;
     _label = label;
     _label->setParent(this);
     addLeftWidget(_label);
@@ -29,21 +25,31 @@ void SearchLineEdit::setLabel(QLabel* label)
 
 void SearchLineEdit::setClearButton(ClearButton* button)
 {
+    if(button == 0)
+        return;
     _btClear = button;
     _btClear->setParent(this);
     addRightWidget(_btClear);
 
-    connect(_btClear, SIGNAL(clicked()), getLineEdit(),  SLOT(clear()));
+    connect(_btClear, SIGNAL(clicked()), this, SLOT(onClear()));
     connect(getLineEdit(), SIGNAL(textChanged(QString)),
-            _btClear, SLOT(onTextChanged(QString)));
+            _btClear,      SLOT(onTextChanged(QString)));
 }
 
 void SearchLineEdit::setSearchButton(PictureButton* button)
 {
+    if(button == 0)
+        return;
     _btSearch = button;
     _btSearch->setParent(this);
     addRightWidget(_btSearch);
     connect(_btSearch, SIGNAL(clicked()), this, SLOT(onSearch()));
+}
+
+void SearchLineEdit::setFocusShortcut(const QKeySequence& keySequence)
+{
+    QShortcut* shortcut = new QShortcut(keySequence, this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(onFocus()));
 }
 
 void SearchLineEdit::setShowSearchButton(bool show)
@@ -65,4 +71,10 @@ void SearchLineEdit::onFocus()
     }
     else
         setFocus();
+}
+
+void SearchLineEdit::onClear()
+{
+    getLineEdit()->clear();
+    emit(filter(QString()));
 }

@@ -1,12 +1,12 @@
 #ifndef SEARCHLINEEDIT_H
 #define SEARCHLINEEDIT_H
 
-#include "ButtonLineEdit.h"
+#include "EmbeddableLineEdit.h"
 
 class QLabel;
 class QPushButton;
 
-class SearchLineEdit : public ButtonLineEdit
+class SearchLineEdit : public EmbeddableLineEdit
 {
     Q_OBJECT
 
@@ -15,11 +15,13 @@ public:
     void setLabel(QLabel* label);
     void setClearButton (ClearButton*   button);
     void setSearchButton(PictureButton* button);
+    void setFocusShortcut(const QKeySequence& keySequence);
     void setShowSearchButton(bool show);
 
 private slots:
     void onSearch();   // search button clicked
     void onFocus();
+    void onClear();
 
 signals:
     void filter(const QString& target);
@@ -29,7 +31,6 @@ private:
     QLabel*        _label;
     ClearButton*   _btClear;
     PictureButton* _btSearch;
-    QPushButton*   _btFocus;   // for grabbing focus for the lineedit
 };
 
 #endif // SEARCHLINEEDIT_H

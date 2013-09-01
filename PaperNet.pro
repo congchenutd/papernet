@@ -7,7 +7,7 @@ INCLUDEPATH +=	../EnglishName \
 				../MySetting \
                 ../MyComboBox \
 				../Thesaurus \
-				../ButtonLineEdit
+				../EmbeddableLineEdit
 
 win32 {
 	RC_FILE = PaperNet.rc
@@ -59,8 +59,8 @@ HEADERS += \
     WebImporter.h \
     MultiSectionCompleter.h \
     ToolBar.h \
-    ../ButtonLineEdit/ButtonLineEdit.h \
-    SearchLineEdit.h
+    SearchLineEdit.h \
+	../EmbeddableLineEdit/EmbeddableLineEdit.h
 FORMS += \
          AttachmentsWidget.ui \
          LinkDlg.ui \
@@ -120,9 +120,9 @@ SOURCES += \
     ../Thesaurus/Thesaurus.cpp \
     WebImporter.cpp \
     MultiSectionCompleter.cpp \
-    ../ButtonLineEdit/ButtonLineEdit.cpp \
     ToolBar.cpp \
-    SearchLineEdit.cpp
+    SearchLineEdit.cpp \
+	../EmbeddableLineEdit/EmbeddableLineEdit.cpp
 RESOURCES += MainWindow.qrc
 
 

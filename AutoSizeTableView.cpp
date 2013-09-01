@@ -10,13 +10,14 @@ void AutoSizeTableView::init(const QString& tableName, QSettings* setting)
 {
     _setting = setting;
     _tableName = tableName;
-
-//    _setting->beginGroup("SectionSizes");
-//    horizontalHeader()->restoreState(_setting->value(_tableName).toByteArray());
-//    _setting->endGroup();
+    loadSectionSizes();
 }
 
-void AutoSizeTableView::showEvent(QShowEvent*)
+void AutoSizeTableView::showEvent(QShowEvent*) {
+    loadSectionSizes();
+}
+
+void AutoSizeTableView::loadSectionSizes()
 {
     if(_setting != 0)
     {

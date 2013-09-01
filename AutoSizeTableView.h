@@ -16,7 +16,10 @@ public:
     void saveSectionSizes();
 
 protected:
-    virtual void showEvent(QShowEvent *);
+    void showEvent(QShowEvent *);
+
+private:
+    void loadSectionSizes();
 
 private:
     QSettings* _setting;

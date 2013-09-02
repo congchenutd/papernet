@@ -3,7 +3,7 @@
 #include <QSettings>
 
 AutoSizeTableView::AutoSizeTableView(QWidget* parent)
-    : QTableView(parent), _setting(0)
+    : QTableView(parent), _setting(0), _loaded(false)
 {}
 
 void AutoSizeTableView::init(const QString& tableName, QSettings* setting)
@@ -14,7 +14,11 @@ void AutoSizeTableView::init(const QString& tableName, QSettings* setting)
 }
 
 void AutoSizeTableView::showEvent(QShowEvent*) {
-    loadSectionSizes();
+    if(!_loaded)
+	{
+		loadSectionSizes();
+		_loaded = true;
+	}
 }
 
 void AutoSizeTableView::loadSectionSizes()

@@ -24,6 +24,7 @@ private:
 private:
     QSettings* _setting;
     QString    _tableName;       // name of the parent table
+	bool       _loaded;
 };
 
 #endif // AUTOSIZETABLEVIEW_H

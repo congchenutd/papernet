@@ -34,8 +34,8 @@ private:
 private:
 	Ui::PageQuotesClass ui;
 
-	QSqlTableModel model;
-	int currentRow;
+	QSqlTableModel _model;
+	int            _currentRow;
 };
 
 #endif // PAGEQUOTES_H

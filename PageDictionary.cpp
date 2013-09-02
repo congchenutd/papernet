@@ -43,6 +43,7 @@ void PageDictionary::addRecord()
 	dlg.setWindowTitle(tr("Add Phrase"));
 	if(dlg.exec() == QDialog::Accepted)
 	{
+		fetchAll(&_model);
         int lastRow = _model.rowCount();
         _currentPhraseID = getNextID("Dictionary", "ID");
         _model.insertRow(lastRow);
@@ -219,14 +220,14 @@ void PageDictionary::onResetPhrases()
     _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
     _model.setTable("Dictionary");
     _model.select();
+	fetchAll(&_model);
     jumpToID(_currentPhraseID);
     ui.tableView->sortByColumn(DICT_PHRASE, Qt::AscendingOrder);
 }
 
 void PageDictionary::jumpToID(int id)
 {
-    while(_model.canFetchMore())
-        _model.fetchMore();
+    fetchAll(&_model);
     int row = idToRow(&_model, DICT_ID, id);
 	if(row > -1)
 	{

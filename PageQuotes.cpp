@@ -8,12 +8,12 @@
 PageQuotes::PageQuotes(QWidget *parent)
 	: Page(parent)
 {
-	currentRow = -1;
+	_currentRow = -1;
 	ui.setupUi(this);
     ui.tableView->init("PageQuotes", UserSetting::getInstance());
 
     reset();   // init model
-	ui.tableView->setModel(&model);
+	ui.tableView->setModel(&_model);
 	ui.tableView->hideColumn(QUOTE_ID);
 	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
 
@@ -26,14 +26,14 @@ PageQuotes::PageQuotes(QWidget *parent)
 void PageQuotes::search(const QString& target)
 {
 	if(!target.isEmpty())
-		model.setFilter(tr("Title like \"%%1%\" or \
+		_model.setFilter(tr("Title like \"%%1%\" or \
 							Quote like \"%%1%\" ").arg(target));
 }
 
 void PageQuotes::onSelectionChanged(const QItemSelection& selected)
 {
     if(!selected.isEmpty())
-        currentRow = selected.indexes().front().row();
+        _currentRow = selected.indexes().front().row();
     emit selectionValid(!selected.isEmpty());
 }
 
@@ -54,7 +54,7 @@ void PageQuotes::onEdit()
 {
     QuoteDlg dlg(this);
     dlg.setWindowTitle(tr("Edit Quote"));
-	dlg.setQuoteID(rowToID(currentRow));
+	dlg.setQuoteID(rowToID(_currentRow));
     if(dlg.exec() == QDialog::Accepted)
 		reset();   // just refresh, dlg will submit the changes
 }
@@ -77,24 +77,24 @@ void PageQuotes::editRecord() {
 
 void PageQuotes::reset()
 {
-	model.setTable("Quotes");
-	model.select();
+	_model.setTable("Quotes");
+	_model.select();
+	fetchAll(&_model);
 	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
 }
 
 int PageQuotes::rowToID(int row) const {
-	return model.data(model.index(row, QUOTE_ID)).toInt();
+	return _model.data(_model.index(row, QUOTE_ID)).toInt();
 }
 
 void PageQuotes::jumpToID(int id)
 {
-	while(model.canFetchMore())
-		model.fetchMore();
-	int row = idToRow(&model, QUOTE_ID, id);
+	fetchAll(&_model);
+	int row = idToRow(&_model, QUOTE_ID, id);
 	if(row > -1)
 	{
-		currentRow = row;
-		ui.tableView->selectRow(currentRow);  // will trigger onSelectionChanged()
+		_currentRow = row;
+		ui.tableView->selectRow(_currentRow);  // will trigger onSelectionChanged()
 		ui.tableView->setFocus();
 	}
 }

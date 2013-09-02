@@ -3,8 +3,8 @@
 #include "EnglishName.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
-#include <QMessageBox>
 #include <QSqlError>
+#include <QMessageBox>
 #include <QVariant>
 #include <QFile>
 #include <QDir>
@@ -15,6 +15,7 @@
 #include <QProcessEnvironment>
 #include <QWidget>
 #include <QDesktopWidget>
+#include <QSqlTableModel>
 
 #ifdef Q_OS_WIN32
 #include "windows.h"
@@ -572,8 +573,7 @@ QStringList getTagsOfPhrase(int phraseID)
 
 int idToRow(QAbstractItemModel* model, int idSection, int id)
 {
-    while(model->canFetchMore(QModelIndex()))
-        model->fetchMore(QModelIndex());
+	fetchAll(model);
     QModelIndexList indexes = model->match(
 		model->index(0, idSection), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
 	return !indexes.isEmpty() ? indexes.at(0).row() : -1;
@@ -665,4 +665,9 @@ void centerWindow(QWidget* widget)
 {
     QRect screen = QApplication::desktop()->screenGeometry();
     widget->move(screen.center() - widget->rect().center());
+}
+
+void fetchAll(QAbstractItemModel* model) {
+	while(model->canFetchMore(QModelIndex()))
+		model->fetchMore(QModelIndex());
 }

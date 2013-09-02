@@ -153,6 +153,7 @@ void PagePapers::insertReference(const Reference& ref)
     }
     else            // insert as a new one
     {
+		fetchAll(&_model);
         int lastRow = _model.rowCount();
         _model.insertRow(lastRow);
         _currentPaperID = getNextID("Papers", "ID");
@@ -196,12 +197,12 @@ void PagePapers::updateReference(int row, const Reference& ref)
     // modified date
     _model.setData(_model.index(row, PAPER_MODIFIED), QDate::currentDate().toString("yyyy/MM/dd"));
 
-    // add pdf
+	onSubmitPaper();
+
+    // add pdf after submitting, because the attachment needs to find the folder of the paper
     QString pdfPath = ref.getValue("PDF").toString();
     if(!pdfPath.isEmpty())
         addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
-
-	onSubmitPaper();
 }
 
 void PagePapers::recreateTagsRelations(const QStringList& tags)
@@ -358,14 +359,14 @@ void PagePapers::onImport()
     if(!content.isEmpty())
     {
         // a webpage
-        QUrl url(content);
-        if(url.isValid())
-        {
-            WebImporter* webImporter = WebImporter::getInstance();
-            webImporter->parse(url);
-            importReferences(QList<Reference>() << webImporter->getReference());
-            return;
-        }
+        //QUrl url(content);
+        //if(url.isValid())
+        //{
+        //    WebImporter* webImporter = WebImporter::getInstance();
+        //    webImporter->parse(url);
+        //    importReferences(QList<Reference>() << webImporter->getReference());
+        //    return;
+        //}
 
         // content of the reference
         QList<Reference> references = parseContent(content);
@@ -466,6 +467,7 @@ void PagePapers::resetModel()
     _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
     _model.setTable("Papers");
     _model.select();
+	fetchAll(&_model);
     _model.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
     ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 }
@@ -473,8 +475,7 @@ void PagePapers::resetModel()
 void PagePapers::jumpToID(int id)
 {
     _model.select();
-    while(_model.canFetchMore())    // ensure all records visible
-        _model.fetchMore();
+	fetchAll(&_model);    // ensure all records visible
 
     _currentRow = idToRow(&_model, PAPER_ID, id);
     if(_currentRow < 0)

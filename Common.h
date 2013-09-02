@@ -4,6 +4,7 @@
 #include <QString>
 
 class QAbstractItemModel;
+class QSqlTableModel;
 
 // emun
 enum {PAPER_ID, PAPER_ATTACHED, PAPER_TITLE, PAPER_AUTHORS, PAPER_YEAR, PAPER_MODIFIED, PAPER_TYPE,
@@ -18,6 +19,7 @@ bool openDB(const QString& name);
 void createTables();
 int getNextID(const QString& tableName, const QString& sectionName);
 int idToRow(QAbstractItemModel* model, int idSection, int id);
+void fetchAll(QAbstractItemModel* model);
 
 class QWidget;
 void centerWindow(QWidget* widget);

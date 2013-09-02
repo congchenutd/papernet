@@ -2,7 +2,6 @@
 #define PAGEDICTIONARY_H
 
 #include <QSqlTableModel>
-#include <QSqlTableModel>
 #include "ui_PageDictionary.h"
 #include "Page.h"
 

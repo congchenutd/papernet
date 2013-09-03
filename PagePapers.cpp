@@ -17,6 +17,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
+#include <QSqlField>
 #include <QFileInfo>
 #include <QProgressDialog>
 #include <QClipboard>
@@ -92,7 +93,7 @@ void PagePapers::onSelectionChanged(const QItemSelection& selected)
         ui.widgetRelated   ->setCentralPaper(_currentPaperID);  // related
         ui.widgetCoauthered->setCentralPaper(_currentPaperID);  // coauthored
         updateQuotes();                                         // quotes
-        emit hasPDF(pdfAttached(_currentPaperID));               // let MainWindow update actionPDF
+        emit hasPDF(pdfAttached(_currentPaperID));              // let MainWindow update actionPDF
     }
     emit selectionValid(!selected.isEmpty());
 }
@@ -114,7 +115,7 @@ void PagePapers::onEditPaper()
 {
     PaperDlg dlg(this);
     dlg.setWindowTitle(tr("Edit Reference"));
-    Reference oldRef = exportReference(_currentRow);
+    Reference oldRef = exportRef(_currentPaperID);
     dlg.setReference(oldRef);
 
     connect(&dlg, SIGNAL(gotoPaper(int)), this, SLOT(onJumpToCurrent(int)));
@@ -122,7 +123,8 @@ void PagePapers::onEditPaper()
     if(dlg.exec() == QDialog::Accepted)
     {
         Reference newRef = dlg.getReference();
-        updateReference(_currentRow, newRef);   // apply the change
+//        updateReference(_currentRow, newRef);   // apply the change
+        updateRef(_currentPaperID, newRef);
 
         // renaming title affects attachments
         QString oldTitle = oldRef.getValue("title").toString();
@@ -203,6 +205,35 @@ void PagePapers::updateReference(int row, const Reference& ref)
     QString pdfPath = ref.getValue("PDF").toString();
     if(!pdfPath.isEmpty())
         addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
+}
+
+void PagePapers::updateRef(int id, const Reference& ref)
+{
+    QStringList clauses;
+//    Reference::Fields fields = ref.getAllFields();
+//    for(Reference::Fields::iterator it = fields.begin(); it != fields.end(); ++it)
+//        clauses << it.key() + "=" + "\'" + it.value().toString() + "\'";
+
+    QSqlQuery query;
+    query.exec(tr("select * from Papers where ID = %1").arg(id));
+    if(query.next())
+    {
+        QSqlRecord record = query.record();
+        for(int col = 0; col < record.count(); ++col)
+        {
+            QSqlField field = record.field(col);
+            QString name = field.name().toLower();
+            QString value = ref.getValue(name).toString();
+            clauses << name + "=" + "\'" + value + "\'";
+        }
+    }
+
+    QString queryString(tr("update Papers set %1 where ID = %2")
+                        .arg(clauses.join(", "))
+                        .arg(id));
+    qDebug() << queryString;
+    if(!query.exec(queryString))
+        qDebug() << query.lastError().text();
 }
 
 void PagePapers::recreateTagsRelations(const QStringList& tags)
@@ -306,10 +337,10 @@ void PagePapers::importReferences(const QList<Reference>& references)
         dlg.setWindowTitle(tr("Import Reference"));
 
         // load existing ref
-        int row = titleToRow(title);
-        if(row > -1)
+        int id = getPaperID(title);
+        if(id > -1)
         {
-            Reference oldRef = exportReference(row);
+            Reference oldRef = exportRef(id);
             dlg.setReference(oldRef);
             dlg.showMergeMark();
         }
@@ -638,7 +669,7 @@ void PagePapers::setPaperRead()
 
 void PagePapers::onRelatedDoubleClicked(int paperID)
 {
-    _currentRow = idToRow(&_model, PAPER_ID, paperID);
+    _currentPaperID = paperID;
     onEditPaper();
 }
 
@@ -646,24 +677,27 @@ void PagePapers::onQuoteDoubleClicked(int quoteID) {
 	MainWindow::getInstance()->jumpToQuote(quoteID);
 }
 
-// row -> Reference
-Reference PagePapers::exportReference(int row) const
+Reference PagePapers::exportRef(int id) const
 {
     Reference ref;
-	QSqlRecord record = _model.record(row);
+    QSqlQuery query;
+    query.exec(tr("select * from Papers where ID = %1").arg(id));
+    if(!query.next())
+        return ref;
+    QSqlRecord record = query.record();
     for(int col = 0; col < record.count(); ++col)
     {
         QString fieldName = record.fieldName(col).toLower();
-        if(fieldName == "attached")  // not exported
-			continue;
+        if(fieldName == "attached")    // not exported
+            continue;
         QVariant fieldValue = record.value(col);
         if(fieldName == "authors")     // to QStringList
             ref.setValue(fieldName, splitAuthorsList(fieldValue.toString()));
-		else
+        else
             ref.setValue(fieldName, fieldValue);
     }
 
-    ref.setValue("tags", getTagsOfPaper(rowToID(row)));  // tags are not in the paper table
+    ref.setValue("tags", getTagsOfPaper(id));  // tags are not in the paper table
     return ref;
 }
 
@@ -680,7 +714,7 @@ QString PagePapers::toString(const QModelIndexList& idxList, const QString& exte
     QTextStream os(&result);
     foreach(QModelIndex idx, idxList)    // save each row
     {
-        Reference ref = exportReference(idx.row());
+        Reference ref = exportRef(rowToID(idx.row()));
         ref.generateID();
         os << exporter->toString(ref, *spec) << "\r\n";
     }

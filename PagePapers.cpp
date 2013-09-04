@@ -153,7 +153,7 @@ void PagePapers::insertReference(const Reference& ref)
     }
     else            // insert as a new one
     {
-//		fetchAll(&_model);
+//		fetchAll(&_model);   // FIXME: without it, rowCount() returns 256, but inserting as 256 is OK
         int lastRow = _model.rowCount();
         _model.insertRow(lastRow);
         _currentPaperID = getNextID("Papers", "ID");

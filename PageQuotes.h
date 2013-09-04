@@ -17,7 +17,7 @@ public:
     void editRecord();
     void search(const QString& target);
     void jumpToID(int id);
-    void jumpToCurrent() {}
+    void jumpToCurrent() { reset(); }   // currentID not supported yet
     void reset();
 
 private slots:

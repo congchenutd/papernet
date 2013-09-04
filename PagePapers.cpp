@@ -17,7 +17,6 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
-#include <QSqlField>
 #include <QFileInfo>
 #include <QProgressDialog>
 #include <QClipboard>
@@ -27,8 +26,8 @@
 PagePapers::PagePapers(QWidget *parent)
 	: Page(parent)
 {
-    _currentRow     = -1;
-	_currentPaperID = -1;
+    _currentRow = -1;
+	_currentID  = -1;
 	_setting = UserSetting::getInstance();
 
 	ui.setupUi(this);
@@ -71,7 +70,7 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers, SIGNAL(readPDF()),      this, SLOT(onReadPDF()));
 
 	connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterPapersByTags(bool)));
-    connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(resetAndJumpToCurrent()));
+	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(jumpToCurrent()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onNewTag()));
 	connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagToPaper()));
 	connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onDelTagFromPaper()));
@@ -87,20 +86,20 @@ void PagePapers::onSelectionChanged(const QItemSelection& selected)
     if(!selected.isEmpty())
     {
         _currentRow = selected.indexes().front().row();
-        _currentPaperID = rowToID(_currentRow);
+        _currentID = rowToID(_currentRow);
         highLightTags();                                        // update tags
         reloadAttachments();                                    // attachments
-        ui.widgetRelated   ->setCentralPaper(_currentPaperID);  // related
-        ui.widgetCoauthered->setCentralPaper(_currentPaperID);  // coauthored
+        ui.widgetRelated   ->setCentralPaper(_currentID);  // related
+        ui.widgetCoauthered->setCentralPaper(_currentID);  // coauthored
         updateQuotes();                                         // quotes
-        emit hasPDF(pdfAttached(_currentPaperID));              // let MainWindow update actionPDF
+        emit hasPDF(pdfAttached(_currentID));               // let MainWindow update actionPDF
     }
     emit selectionValid(!selected.isEmpty());
 }
 
 // only triggered by mouse click, not programmatically
 void PagePapers::onClicked() {
-	Navigator::getInstance()->addFootStep(this, _currentPaperID);
+	Navigator::getInstance()->addFootStep(this, _currentID);
 }
 
 void PagePapers::addRecord()
@@ -115,7 +114,7 @@ void PagePapers::onEditPaper()
 {
     PaperDlg dlg(this);
     dlg.setWindowTitle(tr("Edit Reference"));
-    Reference oldRef = exportRef(_currentPaperID);
+    Reference oldRef = exportReference(_currentRow);
     dlg.setReference(oldRef);
 
     connect(&dlg, SIGNAL(gotoPaper(int)), this, SLOT(onJumpToCurrent(int)));
@@ -123,8 +122,7 @@ void PagePapers::onEditPaper()
     if(dlg.exec() == QDialog::Accepted)
     {
         Reference newRef = dlg.getReference();
-//        updateReference(_currentRow, newRef);   // apply the change
-        updateRef(_currentPaperID, newRef);
+        updateReference(_currentRow, newRef);   // apply the change
 
         // renaming title affects attachments
         QString oldTitle = oldRef.getValue("title").toString();
@@ -150,7 +148,7 @@ void PagePapers::insertReference(const Reference& ref)
     int row = titleToRow(ref.getValue("title").toString());
     if(row > -1)    // merge to existing paper
     {
-        _currentPaperID = rowToID(row);  // updateReference() needs to know the id
+        _currentID = rowToID(row);  // updateReference() needs to know the id
         updateReference(row, ref);
     }
     else            // insert as a new one
@@ -158,8 +156,8 @@ void PagePapers::insertReference(const Reference& ref)
 		fetchAll(&_model);
         int lastRow = _model.rowCount();
         _model.insertRow(lastRow);
-        _currentPaperID = getNextID("Papers", "ID");
-        _model.setData(_model.index(lastRow, PAPER_ID), _currentPaperID);
+        _currentID = getNextID("Papers", "ID");
+        _model.setData(_model.index(lastRow, PAPER_ID), _currentID);
         updateReference(lastRow, ref);
         onBookmark(true);    // attach the ReadMe tag
     }
@@ -204,36 +202,7 @@ void PagePapers::updateReference(int row, const Reference& ref)
     // add pdf after submitting, because the attachment needs to find the folder of the paper
     QString pdfPath = ref.getValue("PDF").toString();
     if(!pdfPath.isEmpty())
-        addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
-}
-
-void PagePapers::updateRef(int id, const Reference& ref)
-{
-    QStringList clauses;
-//    Reference::Fields fields = ref.getAllFields();
-//    for(Reference::Fields::iterator it = fields.begin(); it != fields.end(); ++it)
-//        clauses << it.key() + "=" + "\'" + it.value().toString() + "\'";
-
-    QSqlQuery query;
-    query.exec(tr("select * from Papers where ID = %1").arg(id));
-    if(query.next())
-    {
-        QSqlRecord record = query.record();
-        for(int col = 0; col < record.count(); ++col)
-        {
-            QSqlField field = record.field(col);
-            QString name = field.name().toLower();
-            QString value = ref.getValue(name).toString();
-            clauses << name + "=" + "\'" + value + "\'";
-        }
-    }
-
-    QString queryString(tr("update Papers set %1 where ID = %2")
-                        .arg(clauses.join(", "))
-                        .arg(id));
-    qDebug() << queryString;
-    if(!query.exec(queryString))
-        qDebug() << query.lastError().text();
+        addAttachment(_currentID, suggestAttachmentName(pdfPath), pdfPath);
 }
 
 void PagePapers::recreateTagsRelations(const QStringList& tags)
@@ -243,7 +212,7 @@ void PagePapers::recreateTagsRelations(const QStringList& tags)
 
 	// remove all relations to tags
 	QSqlQuery query;
-	query.exec(tr("delete from PaperTag where Paper = %1").arg(_currentPaperID));
+	query.exec(tr("delete from PaperTag where Paper = %1").arg(_currentID));
 
 	// add relations back
 	foreach(QString tagName, tags)
@@ -337,10 +306,10 @@ void PagePapers::importReferences(const QList<Reference>& references)
         dlg.setWindowTitle(tr("Import Reference"));
 
         // load existing ref
-        int id = getPaperID(title);
-        if(id > -1)
+        int row = titleToRow(title);
+        if(row > -1)
         {
-            Reference oldRef = exportRef(id);
+            Reference oldRef = exportReference(row);
             dlg.setReference(oldRef);
             dlg.showMergeMark();
         }
@@ -360,9 +329,8 @@ void PagePapers::importPDF(const QString& pdfPath)
     if(dlg.exec() == QDialog::Accepted && !dlg.getSelected().isEmpty())
     {
         ui.tabWidget->setCurrentWidget(ui.tabAttachments);  // show attachment tab
-        resetModel();                                       // ensure the paper is visible
         jumpToID(getPaperID(dlg.getSelected().front()));    // jump to the paper, and update _currentPaperID
-        addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
+        addAttachment(_currentID, suggestAttachmentName(pdfPath), pdfPath);
         reloadAttachments();
     }
 }
@@ -440,8 +408,8 @@ void PagePapers::onNewTag()
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		int tagID = getNextID("Tags", "ID");
-		ui.widgetWordCloud->addTag(tagID, dlg.getText());         // create tag
-		ui.widgetWordCloud->addTagToItem(tagID, _currentPaperID);  // add to paper
+		ui.widgetWordCloud->addTag(tagID, dlg.getText());     // create tag
+		ui.widgetWordCloud->addTagToItem(tagID, _currentID);  // add to paper
 		highLightTags();
 	}
 }
@@ -461,7 +429,7 @@ void PagePapers::onAddTagToPaper()
 
 // highlight the tags of current paper
 void PagePapers::highLightTags() {
-	ui.widgetWordCloud->highLight(getTagsOfPaper(_currentPaperID));
+	ui.widgetWordCloud->highLight(getTagsOfPaper(_currentID));
 }
 
 // same structure as onAddTagToPaper()
@@ -487,12 +455,6 @@ void PagePapers::onSubmitPaper()
     jumpToCurrent();
 }
 
-void PagePapers::resetAndJumpToCurrent()
-{
-    resetModel();
-    jumpToCurrent();
-}
-
 void PagePapers::resetModel()
 {
     _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -505,8 +467,7 @@ void PagePapers::resetModel()
 
 void PagePapers::jumpToID(int id)
 {
-    _model.select();
-	fetchAll(&_model);    // ensure all records visible
+	resetModel();     // ensure all records visible
 
     _currentRow = idToRow(&_model, PAPER_ID, id);
     if(_currentRow < 0)
@@ -545,15 +506,15 @@ void PagePapers::onFilterPapersByTags(bool AND)
 }
 
 void PagePapers::updateQuotes() {
-    ui.widgetQuotes->setCentralPaper(_currentPaperID);
+    ui.widgetQuotes->setCentralPaper(_currentID);
 }
 
 void PagePapers::onAddQuote()
 {
     QuoteDlg dlg(this);
     dlg.setWindowTitle(tr("Add Quote"));
-    dlg.setQuoteID(getNextID("Quotes", "ID"));    // create new quote id
-    dlg.addRef(getPaperTitle(_currentPaperID));   // add current paper
+    dlg.setQuoteID(getNextID("Quotes", "ID"));   // create new quote id
+    dlg.addRef(getPaperTitle(_currentID));       // add current paper
     if(dlg.exec() == QDialog::Accepted)
         updateQuotes();
 }
@@ -565,7 +526,7 @@ void PagePapers::onAddPDF()
 }
 
 void PagePapers::onReadPDF() {
-    ::openAttachment(_currentPaperID, "Paper.pdf");
+    ::openAttachment(_currentID, "Paper.pdf");
 }
 
 void PagePapers::onJumpToCurrent(int id) {
@@ -623,13 +584,13 @@ void PagePapers::saveGeometry()
 void PagePapers::onTagDoubleClicked(const QString& label)
 {
 	if(label.isEmpty())
-        resetAndJumpToCurrent();
+        jumpToCurrent();
 	else
 		onFilterPapersByTags();
 }
 
 void PagePapers::reloadAttachments() {
-	ui.widgetAttachments->setPaper(_currentPaperID);
+	ui.widgetAttachments->setPaper(_currentID);
 }
 
 void PagePapers::onPrintMe(bool print)
@@ -637,7 +598,7 @@ void PagePapers::onPrintMe(bool print)
 	if(print)
 		attachNewTag("PrintMe");
 	else
-		ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "PrintMe"), _currentPaperID);
+		ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "PrintMe"), _currentID);
 	highLightTags();
 }
 
@@ -658,46 +619,43 @@ void PagePapers::attachNewTag(const QString& tagName)
 		tagID = getNextID("Tags", "ID");
 		ui.widgetWordCloud->addTag(tagID, tagName);
 	}
-    ui.widgetWordCloud->addTagToItem(tagID, _currentPaperID);
+    ui.widgetWordCloud->addTagToItem(tagID, _currentID);
 }
 
 void PagePapers::setPaperRead()
 {
-	ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "ReadMe"), _currentPaperID);
+	ui.widgetWordCloud->removeTagFromItem(getTagID("Tags", "ReadMe"), _currentID);
 	highLightTags();
 }
 
 void PagePapers::onRelatedDoubleClicked(int paperID)
 {
-    _currentPaperID = paperID;
-    onEditPaper();
+	jumpToID(paperID);
+	Navigator::getInstance()->addFootStep(this, paperID);
 }
 
 void PagePapers::onQuoteDoubleClicked(int quoteID) {
 	MainWindow::getInstance()->jumpToQuote(quoteID);
 }
 
-Reference PagePapers::exportRef(int id) const
+// row -> Reference
+Reference PagePapers::exportReference(int row) const
 {
     Reference ref;
-    QSqlQuery query;
-    query.exec(tr("select * from Papers where ID = %1").arg(id));
-    if(!query.next())
-        return ref;
-    QSqlRecord record = query.record();
+	QSqlRecord record = _model.record(row);
     for(int col = 0; col < record.count(); ++col)
     {
         QString fieldName = record.fieldName(col).toLower();
-        if(fieldName == "attached")    // not exported
-            continue;
+        if(fieldName == "attached")  // not exported
+			continue;
         QVariant fieldValue = record.value(col);
         if(fieldName == "authors")     // to QStringList
             ref.setValue(fieldName, splitAuthorsList(fieldValue.toString()));
-        else
+		else
             ref.setValue(fieldName, fieldValue);
     }
 
-    ref.setValue("tags", getTagsOfPaper(id));  // tags are not in the paper table
+    ref.setValue("tags", getTagsOfPaper(rowToID(row)));  // tags are not in the paper table
     return ref;
 }
 
@@ -714,7 +672,7 @@ QString PagePapers::toString(const QModelIndexList& idxList, const QString& exte
     QTextStream os(&result);
     foreach(QModelIndex idx, idxList)    // save each row
     {
-        Reference ref = exportRef(rowToID(idx.row()));
+        Reference ref = exportReference(idx.row());
         ref.generateID();
         os << exporter->toString(ref, *spec) << "\r\n";
     }
@@ -748,7 +706,7 @@ void PagePapers::onExport()
         // get file name
         QString lastPath = _setting->getLastImportPath();
         QString filePath = QFileDialog::getSaveFileName(this, tr("Export reference"),
-                                                        lastPath + "/" + getPaperTitle(_currentPaperID),
+                                                        lastPath + "/" + getPaperTitle(_currentID),
                                                         "Bibtex (*.bib);;Endnote (*.enw);;Reference Manager (*.ris);;All files (*.*)");
         if(filePath.isEmpty())
             return;

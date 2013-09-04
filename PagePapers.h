@@ -22,14 +22,15 @@ public:
     void editRecord();
     void search(const QString& target);
     void jumpToID(int id);
-    void jumpToCurrent() { jumpToID(_currentPaperID); }
     void reset() { resetModel(); }
 
     void importFromFiles(const QStringList& filePaths);
 
+public slots:
+    void jumpToCurrent() { jumpToID(_currentID); }
+
 private slots:
     void resetModel();              // just reset the model
-    void resetAndJumpToCurrent();   //
     void onSubmitPaper();
 
     void onSelectionChanged(const QItemSelection& selected);
@@ -76,12 +77,11 @@ private:
 
     void insertReference(const Reference& ref);                // insert or replace
     void updateReference(int row, const Reference& ref);       // update a row by the ref
-    void updateRef(int id, const Reference& ref);
     void importReferences(const QList<Reference>& references); // review and insert
     void importPDF(const QString& pdfPath);                    // select a paper to be added to
     QList<Reference> parseContent(const QString& content);     // using all possible specs' parsers
 
-    Reference exportRef(int id) const;  // id->ref
+	Reference exportReference(int row) const;   // row -> Reference
     QString toString(const QModelIndexList& idxList, const QString& extension);  // export the selected
 
 private:
@@ -89,7 +89,7 @@ private:
 
     PaperModel   _model;
     int          _currentRow;
-    int          _currentPaperID;
+    int          _currentID;
     UserSetting* _setting;
 };
 

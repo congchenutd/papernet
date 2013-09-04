@@ -15,8 +15,8 @@ public:
     virtual void editRecord() = 0;
 	virtual void search(const QString&) = 0;
     virtual void reset() = 0;           // reset the model
-    virtual void jumpToID(int id) = 0;  // call reset() first to ensure all records are visible
-    virtual void jumpToCurrent() = 0;   // call reset() first to ensure visibility
+    virtual void jumpToID(int id) = 0;
+    virtual void jumpToCurrent() = 0;
 };
 
 #endif // Page_h__

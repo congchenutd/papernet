@@ -89,7 +89,7 @@ int PageQuotes::rowToID(int row) const {
 
 void PageQuotes::jumpToID(int id)
 {
-	reset();
+	fetchAll(&_model);
 	int row = idToRow(&_model, QUOTE_ID, id);
 	if(row > -1)
 	{

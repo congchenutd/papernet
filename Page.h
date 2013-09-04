@@ -15,8 +15,8 @@ public:
     virtual void editRecord() = 0;
 	virtual void search(const QString&) = 0;
     virtual void reset() = 0;           // reset the model
-    virtual void jumpToID(int id) = 0;
-    virtual void jumpToCurrent() = 0;
+    virtual void jumpToID(int id) = 0;  // pages are responsible for visibility
+    virtual void jumpToCurrent()  = 0;  // pages are responsible for visibility
 };
 
 #endif // Page_h__

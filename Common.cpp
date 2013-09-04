@@ -571,9 +571,9 @@ QStringList getTagsOfPhrase(int phraseID)
 	return tags;
 }
 
+// may need to reset the model or call fetchAll first
 int idToRow(QAbstractItemModel* model, int idSection, int id)
 {
-    fetchAll(model);
     QModelIndexList indexes = model->match(
 		model->index(0, idSection), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
 	return !indexes.isEmpty() ? indexes.at(0).row() : -1;

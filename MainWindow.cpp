@@ -75,7 +75,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(_navigator,  SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
     connect(_navigator,  SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
 
-    connect(_searchEdit, SIGNAL(filter(QString)), this,        SLOT(onSearch(QString)));
+    connect(_searchEdit, SIGNAL(filter(QString)), this,         SLOT(onSearch(QString)));
     connect(_searchEdit, SIGNAL(search(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
 
     // load settings
@@ -185,6 +185,7 @@ void MainWindow::onDictionary()
 void MainWindow::jumpToPaper(int paperID)
 {
 	onPapers();
+    _pagePapers->reset();                 // ensure the row is visible
     _pagePapers->jumpToID(paperID);
     _navigator->addFootStep(ui.pagePapers, paperID);
 }
@@ -192,6 +193,7 @@ void MainWindow::jumpToPaper(int paperID)
 void MainWindow::jumpToQuote(int quoteID)
 {
 	onQuotes();
+	_pageQuotes->reset();                 // ensure the row is visible
 	_pageQuotes->jumpToID(quoteID);
     _navigator->addFootStep(ui.pageQuotes, quoteID);
 }
@@ -223,7 +225,7 @@ void MainWindow::onEdit() {
 void MainWindow::onSearch(const QString& target)
 {
     if(target.isEmpty())
-        _currentPage->jumpToCurrent();
+        _currentPage->jumpToCurrent();  // it's the page's responsiblity to ensure visibility
     else
         _currentPage->search(target);
 }

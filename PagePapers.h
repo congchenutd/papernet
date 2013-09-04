@@ -27,7 +27,7 @@ public:
     void importFromFiles(const QStringList& filePaths);
 
 public slots:
-    void jumpToCurrent() { jumpToID(_currentID); }
+    void jumpToCurrent() { jumpToID(_currentPaperID); }
 
 private slots:
     void resetModel();              // just reset the model
@@ -89,7 +89,7 @@ private:
 
     PaperModel   _model;
     int          _currentRow;
-    int          _currentID;
+    int          _currentPaperID;
     UserSetting* _setting;
 };
 

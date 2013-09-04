@@ -18,10 +18,8 @@ public:
     void editRecord();
     void search(const QString& target);
     void jumpToID(int id);
+    void jumpToCurrent() { jumpToID(_currentPhraseID); }
     void reset() { onResetPhrases(); }
-
-public slots:
-    void jumpToCurrent() { jumpToID(_currentID); }
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);
@@ -50,7 +48,7 @@ private:
 	Ui::PageDictionary ui;
     QSqlTableModel _model;
     int            _currentRow;
-    int            _currentID;
+    int            _currentPhraseID;
 };
 
 #endif // PAGEDICTIONARY_H

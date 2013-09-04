@@ -11,8 +11,8 @@ PageDictionary::PageDictionary(QWidget *parent)
 	: Page(parent)
 {
 	ui.setupUi(this);
-    _currentRow = -1;
-    _currentID  = -1;
+    _currentRow      = -1;
+    _currentPhraseID = -1;
 
 	onResetPhrases();   // init model
     ui.tableView->setModel(&_model);
@@ -29,7 +29,7 @@ PageDictionary::PageDictionary(QWidget *parent)
 	connect(ui.tableView, SIGNAL(clicked      (QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 
     connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterByTags(bool)));
-	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(jumpToCurrent()));
+	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
     connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagsToPhrases()));
     connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onRemoveTagsFromPhrases()));
@@ -45,13 +45,13 @@ void PageDictionary::addRecord()
 	{
 		fetchAll(&_model);
         int lastRow = _model.rowCount();
-        _currentID = getNextID("Dictionary", "ID");
+        _currentPhraseID = getNextID("Dictionary", "ID");
         _model.insertRow(lastRow);
-        _model.setData(_model.index(lastRow, DICT_ID),          _currentID);
+        _model.setData(_model.index(lastRow, DICT_ID),          _currentPhraseID);
         _model.setData(_model.index(lastRow, DICT_PHRASE),      dlg.getPhrase());
         _model.setData(_model.index(lastRow, DICT_EXPLANATION), dlg.getExplanation());
         _model.submitAll();
-        updateTags(_currentID, dlg.getTags());
+        updateTags(_currentPhraseID, dlg.getTags());
 	}
 }
 
@@ -77,13 +77,13 @@ void PageDictionary::onEdit()
 	dlg.setWindowTitle(tr("Edit Phrase"));
     dlg.setPhrase     (_model.data(_model.index(_currentRow, DICT_PHRASE))     .toString());
     dlg.setExplanation(_model.data(_model.index(_currentRow, DICT_EXPLANATION)).toString());
-    dlg.setTags       (getTagsOfPhrase(_currentID));
+    dlg.setTags       (getTagsOfPhrase(_currentPhraseID));
 	if(dlg.exec() == QDialog::Accepted)
 	{
         _model.setData(_model.index(_currentRow, DICT_PHRASE),      dlg.getPhrase());
         _model.setData(_model.index(_currentRow, DICT_EXPLANATION), dlg.getExplanation());
         _model.submitAll();
-        updateTags(_currentID, dlg.getTags());
+        updateTags(_currentPhraseID, dlg.getTags());
 	}
 }
 
@@ -114,10 +114,10 @@ void PageDictionary::onSelectionChanged(const QItemSelection& selected)
 {
     if(!selected.isEmpty())
     {
-        _currentRow = selected.indexes().front().row();
-        _currentID  = rowToID(_currentRow);
+        _currentRow      = selected.indexes().front().row();
+        _currentPhraseID = rowToID(_currentRow);
         highLightTags();
-        ui.widgetRelated->setCentralPhraseID(_currentID);
+        ui.widgetRelated->setCentralPhraseID(_currentPhraseID);
     }
     emit selectionValid(!selected.isEmpty());
 }
@@ -134,7 +134,7 @@ void PageDictionary::onAddTag()
 	{
 		int tagID = getNextID("DictionaryTags", "ID");
 		ui.widgetWordCloud->addTag(tagID, dlg.getText());
-        ui.widgetWordCloud->addTagToItem(tagID, _currentID);
+        ui.widgetWordCloud->addTagToItem(tagID, _currentPhraseID);
 		highLightTags();
 	}
 }
@@ -198,7 +198,7 @@ void PageDictionary::onFilterByTags(bool AND)
 }
 
 void PageDictionary::highLightTags() {
-    ui.widgetWordCloud->highLight(getTagsOfPhrase(_currentID));
+    ui.widgetWordCloud->highLight(getTagsOfPhrase(_currentPhraseID));
 }
 
 void PageDictionary::loadGeometry()
@@ -221,12 +221,13 @@ void PageDictionary::onResetPhrases()
     _model.setTable("Dictionary");
     _model.select();
 	fetchAll(&_model);
+    jumpToID(_currentPhraseID);
     ui.tableView->sortByColumn(DICT_PHRASE, Qt::AscendingOrder);
 }
 
 void PageDictionary::jumpToID(int id)
 {
-	reset();
+    fetchAll(&_model);
     int row = idToRow(&_model, DICT_ID, id);
 	if(row > -1)
 	{
@@ -240,7 +241,7 @@ void PageDictionary::jumpToID(int id)
 void PageDictionary::onTagDoubleClicked(const QString& label)
 {
 	if(label.isEmpty())
-		jumpToCurrent();
+		onResetPhrases();
 	else
         onFilterByTags();
 }

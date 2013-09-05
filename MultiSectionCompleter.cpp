@@ -8,9 +8,7 @@
 
 MultiSectionCompleter::MultiSectionCompleter(QObject* parent)
     : QObject(parent),
-      _edit(0),
-      _model(0),
-      _modelColumn(-1)
+      _edit(0)
 {
     _popup = new MyListView;
     _popup->setWindowFlags(Qt::Popup);
@@ -40,15 +38,12 @@ void MultiSectionCompleter::setModel(QAbstractItemModel* model, int column)
     if(model == 0)
         return;
 
-    _model = model;
-    _modelColumn = column;
-
     _proxy->setSourceModel(model);
-    _proxy->sort(_modelColumn);
-    _proxy->setFilterKeyColumn(_modelColumn);
+    _proxy->sort(column);
+    _proxy->setFilterKeyColumn(column);
 
     _popup->setModel(_proxy);
-    _popup->setModelColumn(_modelColumn);
+    _popup->setModelColumn(column);
 }
 
 void MultiSectionCompleter::showPopup()
@@ -57,7 +52,16 @@ void MultiSectionCompleter::showPopup()
     _popup->setGeometry(topLeft.x(), topLeft.y(), _edit->width(), 100);
     // TODO: how to determine height dynamically?
 
+    _popup->setCurrentIndex(model()->index(0, modelColumn()));  // highlight row 0
     _popup->show();
+}
+
+QAbstractItemModel *MultiSectionCompleter::model() {
+    return _popup->model();
+}
+
+int MultiSectionCompleter::modelColumn() const {
+    return _popup->modelColumn();
 }
 
 bool MultiSectionCompleter::eventFilter(QObject* o, QEvent* e)
@@ -78,6 +82,50 @@ bool MultiSectionCompleter::eventFilter(QObject* o, QEvent* e)
 
     else if(o == _popup)
     {
+        // key events
+        if(e->type() == QEvent::KeyPress)
+        {
+            QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+            switch(ke->key())
+            {
+            // escape hides the popup
+            case Qt::Key_Escape:
+                _popup->hide();
+                break;
+
+            // enter completes the selection
+            case Qt::Key_Return:
+            case Qt::Key_Enter:
+                complete();
+                _popup->hide();
+                break;
+
+            // navitate (wrap) with up and down
+            case Qt::Key_Up:
+                if(model() && _popup->currentIndex().row() == 0)
+                {
+                    QModelIndex lastIndex = model()->index(model()->rowCount()-1,
+                                                           modelColumn());
+                    _popup->setCurrentIndex(lastIndex);
+                    return true;
+                }
+                break;
+            case Qt::Key_Down:
+                if (_popup->model() && _popup->currentIndex().row() == model()->rowCount() - 1)
+                {
+                    QModelIndex firstIndex = model()->index(0, modelColumn());
+                    _popup->setCurrentIndex(firstIndex);
+                    return true;
+                }
+                break;
+
+            // redirect other key events to edit
+            default:
+                _edit->event(ke);
+                return true;
+            }
+        }
+
 		// mouse events
 		if(e->type() == QEvent::MouseButtonPress)
 		{
@@ -94,12 +142,12 @@ bool MultiSectionCompleter::eventFilter(QObject* o, QEvent* e)
 
 void MultiSectionCompleter::filter(const QString& text)
 {
-    if(_edit == 0 || _model == 0 ||
-       _modelColumn < 0 || _modelColumn > _model->columnCount())
+    if(_edit == 0 || model() == 0 ||
+       modelColumn() < 0 || modelColumn() > model()->columnCount())
         return;
 
     QString section = _separator.isEmpty() ?
-                text        // entire line is one section
+                text        // no separator, the entire line is one section
               : text.split(_separator.trimmed()).last().trimmed();  // no extra space for filter
 
     // match from beginning
@@ -117,7 +165,7 @@ void MultiSectionCompleter::complete()
         return;
 
     QString section = _proxy->data(_popup->currentIndex()).toString();  // selected text
-    if(_separator.isEmpty())      // just one section
+    if(_separator.isEmpty())      // no separator defined, just one section
     {
         _edit->setText(section);
         return;
@@ -130,7 +178,7 @@ void MultiSectionCompleter::complete()
 
     // add separator before this section
     if(indexOfSeparator != -1)
-        oldText = oldText + _separator;
+        oldText += _separator;
 
     // append this section
     _edit->setText(oldText + section + _separator);
@@ -140,54 +188,10 @@ void MultiSectionCompleter::complete()
 //////////////////////////////////////////////////////////////////////////
 MyListView::MyListView(QWidget* parent) : QListView(parent) {}
 
-void MyListView::keyPressEvent(QKeyEvent* event)
-{
-	setFocus();  // highlight selected item
-
-	switch(event->key())
-	{
-		// escape hides the popup
-	case Qt::Key_Escape:
-		hide();
-		break;
-
-		// enter completes the selection
-	case Qt::Key_Return:
-	case Qt::Key_Enter:
-		emit completed();
-		hide();
-		break;
-
-		// navigate (wrap) with up and down
-	case Qt::Key_Up:
-		if(model() != 0 && currentIndex().row() == 0)
-		{
-			QModelIndex lastIndex = model()->index(model()->rowCount()-1, modelColumn());
-			setCurrentIndex(lastIndex);
-			event->accept();
-			return;   // swallow this event to avoid 2 moves
-		}
-		break;
-
-	case Qt::Key_Down:
-		if (model() != 0 && currentIndex().row() == model()->rowCount() - 1)
-		{
-			QModelIndex firstIndex = model()->index(0, modelColumn());
-			setCurrentIndex(firstIndex);
-			event->accept();
-			return;   // swallow this event to avoid 2 moves
-		}
-		break;
-
-	default:
-		break;
-	}
-
-	QListView::keyPressEvent(event);
-}
-
 void MyListView::mouseDoubleClickEvent(QMouseEvent* event)
 {
+    // mouse event cannot be intercepted by eventFilter when clicked/double clicked
+    // on the list view
 	if(underMouse())
 	{
 		emit completed();

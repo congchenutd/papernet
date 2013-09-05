@@ -41,12 +41,12 @@ private slots:
 
 private:
     void showPopup();
+    QAbstractItemModel* model();               // for convenience
+    int                 modelColumn() const;   // for convenience
 
 private:
     QLineEdit*             _edit;         // only works with QLineEdit
-    QAbstractItemModel*    _model;
-    int                    _modelColumn;
-    MyListView*             _popup;
+    MyListView*            _popup;
     QSortFilterProxyModel* _proxy;        // for filering
     QString                _separator;    // separating sections
 };
@@ -60,7 +60,6 @@ public:
 	MyListView(QWidget* parent = 0);
 
 protected:
-	void keyPressEvent        (QKeyEvent* event);
 	void mouseDoubleClickEvent(QMouseEvent* event);
 
 signals:

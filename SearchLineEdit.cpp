@@ -70,7 +70,10 @@ void SearchLineEdit::onFocus()
         clearFocus();
     }
     else
+	{
         setFocus();
+		getLineEdit()->selectAll();
+	}
 }
 
 void SearchLineEdit::onClear()

@@ -12,7 +12,7 @@ MultiSectionCompleter::MultiSectionCompleter(QObject* parent)
       _model(0),
       _modelColumn(-1)
 {
-    _popup = new QListView;
+    _popup = new MyListView;
     _popup->setWindowFlags(Qt::Popup);
     _popup->setEditTriggers(QAbstractItemView::NoEditTriggers);
     _popup->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -20,6 +20,7 @@ MultiSectionCompleter::MultiSectionCompleter(QObject* parent)
     _popup->setSelectionMode(QAbstractItemView::SingleSelection);
     _popup->installEventFilter(this);  // take over popup's events
     _popup->hide();
+	connect(_popup, SIGNAL(completed()), this, SLOT(complete()));
 
     _proxy = new QSortFilterProxyModel(this);
 }
@@ -61,75 +62,34 @@ void MultiSectionCompleter::showPopup()
 
 bool MultiSectionCompleter::eventFilter(QObject* o, QEvent* e)
 {
-    // don't let popup takes focus away from edit
-    if(o == _edit && e->type() == QEvent::FocusOut && _popup->isVisible())
-        return true;
+    if(o == _edit)
+	{
+		// don't let popup takes focus away from edit
+		if(e->type() == QEvent::FocusOut && _popup->isVisible())
+			return true;   // true means the event is swallowed
 
-    if (o != _popup)
-        return QObject::eventFilter(o, e);
+		if(e->type() == QEvent::KeyPress)
+		{
+			QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+			if(ke->key() == Qt::Key_Down)   // Down key shows the popup
+				showPopup();
+		}
+	}
 
-    if(o == _popup)
+    else if(o == _popup)
     {
-        // key events
-        if(e->type() == QEvent::KeyPress)
-        {
-            QKeyEvent* ke = static_cast<QKeyEvent*>(e);
-            switch(ke->key())
-            {
-            // escape hides the popup
-            case Qt::Key_Escape:
-                _popup->hide();
-                break;
-
-            // enter completes the selection
-            case Qt::Key_Return:
-            case Qt::Key_Enter:
-                complete();
-                _popup->hide();
-                break;
-
-            // navitate (wrap) with up and down
-            case Qt::Key_Up:
-                if(_popup->currentIndex().row() == 0)
-                {
-                    QModelIndex lastIndex = _model->index(_popup->model()->rowCount()-1, _modelColumn);
-                    _popup->setCurrentIndex(lastIndex);
-                    return true;
-                }
-                return false;
-            case Qt::Key_Down:
-                if (_popup->currentIndex().row() == _model->rowCount() - 1)
-                {
-                    QModelIndex firstIndex = _model->index(0, _modelColumn);
-                    _popup->setCurrentIndex(firstIndex);
-                    return true;
-                }
-                return false;
-
-            default:
-                break;
-            }
-
-            // redirect other key events to edit
-            _edit->event(ke);
-
-            return true;  // default is to ignore (eat) the event
-        }
-
-        // mouse events
-        else if(e->type() == QEvent::MouseButtonPress)
-        {
-            if(!_popup->underMouse())  // clicking outside of popup closes the popup
-            {
-                _popup->hide();
-                return true;
-            }
-        }
-
-        // TODO: double click to select an item
+		// mouse events
+		if(e->type() == QEvent::MouseButtonPress)
+		{
+			if(!_popup->underMouse())  // clicking outside of popup closes the popup
+			{
+				_popup->hide();
+				return true;
+			}
+		}
     }
 
-    return false;  // other events go through
+    return QObject::eventFilter(o, e);  // other events go through
 }
 
 void MultiSectionCompleter::filter(const QString& text)
@@ -163,7 +123,7 @@ void MultiSectionCompleter::complete()
         return;
     }
 
-    // remove the last (uncomplete) section
+    // remove the last (incomplete) section
     QString oldText = _edit->text();
     int indexOfSeparator = oldText.lastIndexOf(_separator.trimmed());
     oldText.truncate(indexOfSeparator);
@@ -174,4 +134,64 @@ void MultiSectionCompleter::complete()
 
     // append this section
     _edit->setText(oldText + section + _separator);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+MyListView::MyListView(QWidget* parent) : QListView(parent) {}
+
+void MyListView::keyPressEvent(QKeyEvent* event)
+{
+	setFocus();  // highlight selected item
+
+	switch(event->key())
+	{
+		// escape hides the popup
+	case Qt::Key_Escape:
+		hide();
+		break;
+
+		// enter completes the selection
+	case Qt::Key_Return:
+	case Qt::Key_Enter:
+		emit completed();
+		hide();
+		break;
+
+		// navigate (wrap) with up and down
+	case Qt::Key_Up:
+		if(model() != 0 && currentIndex().row() == 0)
+		{
+			QModelIndex lastIndex = model()->index(model()->rowCount()-1, modelColumn());
+			setCurrentIndex(lastIndex);
+			event->accept();
+			return;   // swallow this event to avoid 2 moves
+		}
+		break;
+
+	case Qt::Key_Down:
+		if (model() != 0 && currentIndex().row() == model()->rowCount() - 1)
+		{
+			QModelIndex firstIndex = model()->index(0, modelColumn());
+			setCurrentIndex(firstIndex);
+			event->accept();
+			return;   // swallow this event to avoid 2 moves
+		}
+		break;
+
+	default:
+		break;
+	}
+
+	QListView::keyPressEvent(event);
+}
+
+void MyListView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+	if(underMouse())
+	{
+		emit completed();
+		hide();
+	}
+	QListView::mousePressEvent(event);
 }

@@ -2,11 +2,13 @@
 #define COMPLETER_H
 
 #include <QObject>
+#include <QListView>
 
 class QLineEdit;
 class QAbstractItemModel;
 class QListView;
 class QSortFilterProxyModel;
+class MyListView;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// MultiSectionCompleter works like QCompleter
@@ -35,18 +37,34 @@ protected:
 
 private slots:
     void filter(const QString& text);
+    void complete();      // append selected item to edit
 
 private:
     void showPopup();
-    void complete();      // append selected item to edit
 
 private:
     QLineEdit*             _edit;         // only works with QLineEdit
     QAbstractItemModel*    _model;
     int                    _modelColumn;
-    QListView*             _popup;
+    MyListView*             _popup;
     QSortFilterProxyModel* _proxy;        // for filering
     QString                _separator;    // separating sections
+};
+
+
+class MyListView : public QListView
+{
+	Q_OBJECT
+
+public:
+	MyListView(QWidget* parent = 0);
+
+protected:
+	void keyPressEvent        (QKeyEvent* event);
+	void mouseDoubleClickEvent(QMouseEvent* event);
+
+signals:
+	void completed();
 };
 
 #endif // COMPLETER_H

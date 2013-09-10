@@ -65,9 +65,9 @@ void PaperDlg::setTitle(const QString& title)
     // remove protection and fix case
     QString fixedTitle = BibFixer::CaseConvertor().redo(
                 BibFixer::ProtectionConvertor().undo(title));
-    ui.leTitle->setText(title);
+    ui.leTitle->setText(fixedTitle);
     ui.leTitle->setCursorPosition(0);
-    ui.btGoogle->setEnabled(!title.isEmpty());
+    ui.btGoogle->setEnabled(!fixedTitle.isEmpty());
 }
 
 void PaperDlg::setType(const QString& type)

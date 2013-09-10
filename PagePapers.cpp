@@ -194,11 +194,11 @@ void PagePapers::updateReference(int row, const Reference& ref)
     // modified date
     _model.setData(_model.index(row, PAPER_MODIFIED), QDate::currentDate().toString("yyyy/MM/dd"));
 
-	onSubmitPaper();
-    jumpToCurrent();
-
     // tags are stored in a relations table separately
     recreateTagsRelations(ref.getValue("tags").toStringList());
+
+    onSubmitPaper();
+    jumpToCurrent();
 
     // add pdf after submitting, because the attachment needs to find the folder of the paper
     QString pdfPath = ref.getValue("PDF").toString();
@@ -208,9 +208,6 @@ void PagePapers::updateReference(int row, const Reference& ref)
 
 void PagePapers::recreateTagsRelations(const QStringList& tags)
 {
-    if(tags.isEmpty())
-        return;
-
 	// remove all relations to tags
 	QSqlQuery query;
 	query.exec(tr("delete from PaperTag where Paper = %1").arg(_currentPaperID));

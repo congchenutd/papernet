@@ -7,6 +7,7 @@
 #include <QMap>
 #include "Reference.h"
 
+// defines a field
 struct FieldSpec
 {
     FieldSpec(const QString& externalName = QString(),
@@ -24,6 +25,8 @@ struct FieldSpec
     bool    _required;
 };
 
+// defines a ref type
+// consisting of an external type name, an internal type name, and several fields
 class TypeSpec
 {
 public:
@@ -79,11 +82,11 @@ private:
     TypeSpec makeDefaultTypeSpec() const;
 
 private:
-    QString     _formatName;
+    QString                 _formatName;
     QMap<QString, TypeSpec> _types;
 
     // global properties
-    QString _patternType;       // also indicates the record start
+    QString _patternType;       // also indicates start of the record
     QString _patternField;
     QString _templateRecord;
     QString _templateField;

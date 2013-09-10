@@ -458,9 +458,9 @@ void PagePapers::resetModel()
     _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
     _model.setTable("Papers");
     _model.select();
-	fetchAll(&_model);
     _model.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
     ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
+	fetchAll(&_model);
 }
 
 void PagePapers::jumpToID(int id)

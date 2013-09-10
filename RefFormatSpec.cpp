@@ -59,7 +59,6 @@ bool TypeSpec::isRequiredField(const QString& fieldName) const
 bool RefSpec::load(const QString& format)
 {
     // reset
-    _formatName      .clear();
     _patternType     .clear();
     _patternField    .clear();
     _templateRecord  .clear();

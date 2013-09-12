@@ -6,69 +6,64 @@
 #include <QDir>
 #include <QXmlStreamReader>
 
-TypeSpec::TypeSpec(const QString& externalName, const QString& internalName)
-    : _externalName(externalName), _internalName(internalName)
+TypeSpec::TypeSpec(const QString& exName, const QString& inName)
+    : _externalName(exName), _internalName(inName)
 {}
 
-void TypeSpec::addField(const QString& externalName, const QString& internalName, bool required)
+void TypeSpec::addField(const QString& exName, const QString& inName, bool required)
 {
-    if(!fieldExistsByExternalName(externalName) && !fieldExistsByInternalName(internalName))
-        _fields << FieldSpec(externalName, internalName, required);
+    if(!fieldExistsByExternalName(exName) && !fieldExistsByInternalName(inName))
+        _fields << FieldSpec(exName, inName, required);
 }
 
-bool TypeSpec::fieldExistsByExternalName(const QString& externalName) const {
-    return !getFieldByExternalName(externalName)._externalName.isEmpty();
+bool TypeSpec::fieldExistsByExternalName(const QString& exName) const {
+    return !getFieldByExternalName(exName)._externalName.isEmpty();
+}
+bool TypeSpec::fieldExistsByInternalName(const QString& inName) const {
+    return !getFieldByInternalName(inName)._internalName.isEmpty();
 }
 
-bool TypeSpec::fieldExistsByInternalName(const QString& internalName) const {
-    return !getFieldByInternalName(internalName)._internalName.isEmpty();
-}
-
-FieldSpec TypeSpec::getFieldByExternalName(const QString& externalName) const
+FieldSpec TypeSpec::getFieldByExternalName(const QString& exName) const
 {
     foreach(const FieldSpec& field, _fields)
-        if(field._externalName.compare(externalName, Qt::CaseInsensitive) == 0)
+        if(field._externalName.compare(exName, Qt::CaseInsensitive) == 0)
+            return field;
+    return FieldSpec();
+}
+FieldSpec TypeSpec::getFieldByInternalName(const QString& inName) const
+{
+    foreach(const FieldSpec& field, _fields)
+        if(field._internalName.compare(inName, Qt::CaseInsensitive) == 0)
             return field;
     return FieldSpec();
 }
 
-FieldSpec TypeSpec::getFieldByInternalName(const QString& internalName) const
+QString TypeSpec::getExternalFieldName(const QString& inFieldName) const {
+    return getFieldByInternalName(inFieldName)._externalName;
+}
+QString TypeSpec::getInternalFieldName(const QString& exFieldName) const {
+    return getFieldByExternalName(exFieldName)._internalName;
+}
+
+bool TypeSpec::isRequiredField(const QString& inFieldName) const
 {
-    foreach(const FieldSpec& field, _fields)
-        if(field._internalName.compare(internalName, Qt::CaseInsensitive) == 0)
-            return field;
-    return FieldSpec();
-}
-
-QString TypeSpec::getExternalFieldName(const QString& internalFieldName) const {
-    return getFieldByInternalName(internalFieldName)._externalName;
-}
-
-QString TypeSpec::getInternalFieldName(const QString& externalFieldName) const {
-    return getFieldByExternalName(externalFieldName)._internalName;
-}
-
-bool TypeSpec::isRequiredField(const QString& fieldName) const
-{
-    FieldSpec field = getFieldByInternalName(fieldName);
+    FieldSpec field = getFieldByInternalName(inFieldName);
     return field.isValid() ? field._required : false;
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
-bool RefSpec::load(const QString& format)
+bool RefSpec::load(const QString& specName)
 {
     // reset
     _patternType     .clear();
     _patternField    .clear();
     _templateRecord  .clear();
     _templateField   .clear();
-    _separatorAuthors.clear();
-    _separatorPages  .clear();
-    _formatName = format;
+    _specName = specName;
 
     // open file
-    QFile file("./Specifications/" + _formatName + ".xml");
+    QFile file("./Specifications/" + _specName + ".xml");
     if(!file.open(QFile::ReadOnly))
         return false;
 
@@ -91,16 +86,28 @@ bool RefSpec::load(const QString& format)
                 _templateRecord = xml.readElementText();
             else if(name == "FieldExportTemplate")
                 _templateField = xml.readElementText();
-            else if(name == "AuthorsSeparator")
-                _separatorAuthors = xml.readElementText();
-            else if(name == "PagesSeparator")
-                _separatorPages = xml.readElementText();
+			else if(name == "separator")
+				loadSeparator(xml);
 
             // types
             else if(name == "type")
                 loadType(xml);
         }
+
+	// unknown is a null object
+	_types.insert("unknown", TypeSpec("unknown", "unknown"));
+
     return true;
+}
+
+void RefSpec::loadSeparator(QXmlStreamReader& xml)
+{
+	if(!xml.isStartElement() || xml.name() != "separator")
+		return;
+
+	QString inName    = xml.attributes().value("internal").toString();
+	QString separator = xml.readElementText();
+	_separators.insert(inName, separator);
 }
 
 void RefSpec::loadType(QXmlStreamReader& xml)
@@ -109,56 +116,59 @@ void RefSpec::loadType(QXmlStreamReader& xml)
         return;
 
     // type names
-    QString externalTypeName = xml.attributes().value("external").toString();
-    QString internalTypeName = xml.attributes().value("internal").toString();
-    TypeSpec type(externalTypeName, internalTypeName);
+    QString exTypeName = xml.attributes().value("external").toString();
+    QString inTypeName = xml.attributes().value("internal").toString();
+    TypeSpec type(exTypeName, inTypeName);
 
     // fields
     while(!(xml.isEndElement() && xml.name() == "type"))  // until </type>
         if(xml.readNextStartElement() && xml.name() == "field")
         {
-            QString externalFieldName = xml.attributes().value("external").toString();
-            QString internalFieldName = xml.attributes().value("internal").toString();
+            QString exFieldName = xml.attributes().value("external").toString();
+            QString inFieldName = xml.attributes().value("internal").toString();
             bool    required = xml.attributes().value("required").toString().toLower() == "yes";
-            type.addField(externalFieldName, internalFieldName, required);
+            type.addField(exFieldName, inFieldName, required);
         }
 
     // even this type already exists, still need to read (pass) this part of the xml
-    if(!typeExists(internalTypeName))
-        _types.insert(internalTypeName, type);
+    if(!typeExists(inTypeName))
+        _types.insert(inTypeName, type);
 }
 
 TypeSpec RefSpec::makeDefaultTypeSpec() const {
     return TypeSpec("unknown", "unknown");
 }
 
-bool RefSpec::typeExists(const QString& internalTypeName) const {
-    return getType(internalTypeName).getInternalName() != "unknown";
+bool RefSpec::typeExists(const QString& inTypeName) const {
+    return getType(inTypeName).getInternalName() != "unknown";
 }
 
-TypeSpec RefSpec::getType(const QString& internalTypeName) const
+TypeSpec RefSpec::getType(const QString& inTypeName) const
 {
-    if(_types.contains(internalTypeName))
-        return _types[internalTypeName];
+    if(_types.contains(inTypeName))
+        return _types[inTypeName];
     return makeDefaultTypeSpec();
 }
 
-QString RefSpec::getInternalTypeName(const QString& externalTypeName) const
+QString RefSpec::getInternalTypeName(const QString& exTypeName) const
 {
     foreach(const TypeSpec& type, _types)
-        if(type.getExternalName().compare(externalTypeName, Qt::CaseInsensitive) == 0)
+        if(type.getExternalName().compare(exTypeName, Qt::CaseInsensitive) == 0)
             return type.getInternalName();
     return QString("unknown");
 }
 
-QString RefSpec::getExternalTypeName(const QString& internalTypeName) const {
-    return getType(internalTypeName).getExternalName();
+QString RefSpec::getExternalTypeName(const QString& inTypeName) const {
+    return getType(inTypeName).getExternalName();
 }
 
 IRefParser* RefSpec::getParser() const {
-    return ParserFactory::getInstance()->getParser(_formatName);
+    return ParserFactory::getInstance()->getParser(_specName);
 }
 
+QString RefSpec::getSeparator(const QString& inName) const {
+	return _separators.contains(inName) ? _separators[inName] : QString();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 RefSpecFactory* RefSpecFactory::instance = 0;

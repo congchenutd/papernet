@@ -41,14 +41,13 @@ QString LineRefExporter::toString(const Reference& ref, const RefSpec& spec) con
         if(name == "authors")                          // authors is a combo line
         {
             QStringList authors = it.value().toStringList();
-            if(spec.getAuthorsSeparator().isEmpty())   // one author one line
-            {
+			QString separator = spec.getSeparator("authors");
+			if(separator.isEmpty()) {   // no separator means one author one line
                 foreach(const QString& author, authors)
 					createLine(lines, templateField, text, author);
             }
-            else {                                     // all authors on one line
-				createLine(lines, templateField, text,
-                           authors.join(spec.getAuthorsSeparator()));
+            else {                                      // all authors in one line
+				createLine(lines, templateField, text, authors.join(separator));
             }
         }
         else {

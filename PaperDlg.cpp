@@ -16,7 +16,7 @@ PaperDlg::PaperDlg(QWidget *parent)
 	ui.setupUi(this);
     resize(750, 650);
 
-    // fields, type and tags not included
+    // tags not included
     _fields << Field("title",       ui.leTitle)
             << Field("authors",     ui.leAuthors)
             << Field("publication", ui.lePublication)
@@ -25,6 +25,7 @@ PaperDlg::PaperDlg(QWidget *parent)
             << Field("issue",       ui.leIssue)
             << Field("startpage",   ui.leStartPage)
             << Field("endpage",     ui.leEndPage)
+			<< Field("type",        ui.comboType)
             << Field("editors",     ui.leEditors)
             << Field("address",     ui.leAddress)
             << Field("publisher",   ui.lePublisher)
@@ -33,7 +34,7 @@ PaperDlg::PaperDlg(QWidget *parent)
             << Field("note",        ui.teNote)
             << Field("PDF",         ui.lePDF);
 
-    ui.lePDF->hide();  // only here to hold pdf path
+    ui.lePDF->hide();  // a special field for pdf path
 
     // auto complete for tags
 	QSqlTableModel* tagModel = new QSqlTableModel(this);
@@ -50,8 +51,7 @@ PaperDlg::PaperDlg(QWidget *parent)
     if(spec != 0)
         foreach(const TypeSpec& type, spec->getAllTypes())
             ui.comboType->addItem(type.getInternalName());
-    if(ui.comboType->findText("unknown") == -1)
-        ui.comboType->insertItem(0, "unknown");
+    ui.comboType->setCurrentText("unknown");
 
     connect(ui.comboType, SIGNAL(currentIndexChanged(QString)),
             this,         SLOT(onTypeChanged(QString)));
@@ -77,15 +77,17 @@ void PaperDlg::setType(const QString& type)
         ui.comboType->setCurrentIndex(index);
     else    // guess type from publication
     {
-        QString publication = ui.lePublication->text();
-        if(publication.contains("proceeding", Qt::CaseInsensitive) ||
-           publication.contains("proc.",      Qt::CaseInsensitive))
+        QString publication = ui.lePublication->text().toLower();
+        if(publication.contains("proceeding") ||
+           publication.contains("proc.")      ||
+		   publication.contains("conference") ||
+		   publication.contains("conf."))
             ui.comboType->setCurrentText("inproceedings");
 
-        else if(publication.contains("journal",     Qt::CaseInsensitive) ||
-                publication.contains("j.",          Qt::CaseInsensitive) ||
-                publication.contains("transaction", Qt::CaseInsensitive) ||
-                publication.contains("trans.",      Qt::CaseInsensitive))
+        else if(publication.contains("journal") ||
+                publication.contains("j.") ||
+                publication.contains("transaction") ||
+                publication.contains("trans."))
             ui.comboType->setCurrentText("journal");
     }
 }
@@ -103,20 +105,16 @@ Reference PaperDlg::getReference() const
     Reference ref;
 
     foreach(const Field& field, _fields)
-        if(field.first != "authors" && field.first != "editors" && field.first != "tags")
-            ref.setValue(field.first, field.second->text().simplified());
+		ref.setValue(field.first, field.second->text().simplified());
 
     // abstract and note may contain returns
-    ref.setValue("abstract", ui.teAbstract->toPlainText().trimmed());
-    ref.setValue("note",     ui.teNote    ->toPlainText().trimmed());
+    //ref.setValue("abstract", ui.teAbstract->toPlainText().trimmed());
+    //ref.setValue("note",     ui.teNote    ->toPlainText().trimmed());
 
     // authors, editors, and tags are QStringLists
     ref.setValue("editors", splitAuthorsList(ui.leEditors->text()));
     ref.setValue("authors", splitAuthorsList(ui.leAuthors->text()));
     ref.setValue("tags",    splitLine(ui.leTags->text(), ";"));
-
-    // type is not included in _fields
-    ref.setValue("type", ui.comboType->currentText());
 
     return ref;
 }

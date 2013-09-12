@@ -20,6 +20,7 @@ public:
     QList<Reference> parse(const QString&, RefSpec*) { return QList<Reference>(); }
 };
 
+// each line is a field, unlike XML
 class LineRefParser : public IRefParser
 {
 public:
@@ -27,7 +28,7 @@ public:
 
 private:
 	Reference   parseRecord (const QString& record)  const;
-	QString     getTypeName     (const QString& record)  const;
+	QString     getTypeName (const QString& record)  const;
 	QStringList parseAuthors(const QString& authors) const;
 	QString     parsePages  (const QString& pages)   const;
 

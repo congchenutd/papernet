@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>549</width>
+    <width>586</width>
     <height>539</height>
    </rect>
   </property>
@@ -36,13 +36,13 @@
     </widget>
    </item>
    <item row="5" column="3">
-    <widget class="MyLineEdit" name="lePublisher"/>
+    <widget class="FieldLineEdit" name="lePublisher"/>
    </item>
    <item row="2" column="1" colspan="3">
-    <widget class="MyLineEdit" name="lePublication"/>
+    <widget class="FieldLineEdit" name="lePublication"/>
    </item>
    <item row="4" column="1">
-    <widget class="SetTextComboBox" name="comboType"/>
+    <widget class="FieldComboBox" name="comboType"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
@@ -87,21 +87,21 @@
     </widget>
    </item>
    <item row="7" column="1" colspan="3">
-    <widget class="MyPlainTextEdit" name="teAbstract"/>
+    <widget class="FieldPlainTextEdit" name="teAbstract"/>
    </item>
    <item row="1" column="1" colspan="3">
-    <widget class="MyLineEdit" name="leAuthors"/>
+    <widget class="FieldLineEdit" name="leAuthors"/>
    </item>
    <item row="5" column="1">
-    <widget class="MyLineEdit" name="leAddress"/>
+    <widget class="FieldLineEdit" name="leAddress"/>
    </item>
    <item row="4" column="3">
-    <widget class="MyLineEdit" name="leEditors"/>
+    <widget class="FieldLineEdit" name="leEditors"/>
    </item>
    <item row="0" column="1" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="MyLineEdit" name="leTitle"/>
+      <widget class="FieldLineEdit" name="leTitle"/>
      </item>
      <item>
       <widget class="QPushButton" name="btGoogle">
@@ -129,7 +129,7 @@
    <item row="3" column="1" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="MyLineEdit" name="leYear"/>
+      <widget class="FieldLineEdit" name="leYear"/>
      </item>
      <item>
       <widget class="QLabel" name="label_8">
@@ -139,7 +139,7 @@
       </widget>
      </item>
      <item>
-      <widget class="MyLineEdit" name="leVolume"/>
+      <widget class="FieldLineEdit" name="leVolume"/>
      </item>
      <item>
       <widget class="QLabel" name="label_9">
@@ -149,7 +149,7 @@
       </widget>
      </item>
      <item>
-      <widget class="MyLineEdit" name="leIssue"/>
+      <widget class="FieldLineEdit" name="leIssue"/>
      </item>
      <item>
       <widget class="QLabel" name="label_10">
@@ -159,7 +159,7 @@
       </widget>
      </item>
      <item>
-      <widget class="MyLineEdit" name="leStartPage"/>
+      <widget class="FieldLineEdit" name="leStartPage"/>
      </item>
      <item>
       <widget class="QLabel" name="label_11">
@@ -169,7 +169,7 @@
       </widget>
      </item>
      <item>
-      <widget class="MyLineEdit" name="leEndPage"/>
+      <widget class="FieldLineEdit" name="leEndPage"/>
      </item>
     </layout>
    </item>
@@ -181,13 +181,13 @@
     </widget>
    </item>
    <item row="8" column="1" colspan="3">
-    <widget class="MyPlainTextEdit" name="teNote"/>
+    <widget class="FieldPlainTextEdit" name="teNote"/>
    </item>
    <item row="6" column="1" colspan="3">
-    <widget class="MyLineEdit" name="leUrl"/>
+    <widget class="FieldLineEdit" name="leUrl"/>
    </item>
    <item row="9" column="1" colspan="3">
-    <widget class="MyLineEdit" name="leTags"/>
+    <widget class="FieldLineEdit" name="leTags"/>
    </item>
    <item row="11" column="0" colspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -219,7 +219,7 @@
       </widget>
      </item>
      <item>
-      <widget class="MyLineEdit" name="lePDF"/>
+      <widget class="FieldLineEdit" name="lePDF"/>
      </item>
      <item>
       <widget class="QPushButton" name="btCancel">
@@ -245,18 +245,18 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>SetTextComboBox</class>
-   <extends>QComboBox</extends>
-   <header>SetTextComboBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MyLineEdit</class>
+   <class>FieldLineEdit</class>
    <extends>QLineEdit</extends>
    <header>FieldEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>MyPlainTextEdit</class>
+   <class>FieldPlainTextEdit</class>
    <extends>QPlainTextEdit</extends>
+   <header>FieldEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FieldComboBox</class>
+   <extends>QComboBox</extends>
    <header>FieldEdit.h</header>
   </customwidget>
  </customwidgets>

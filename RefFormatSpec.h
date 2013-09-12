@@ -11,8 +11,8 @@
 struct FieldSpec
 {
     FieldSpec(const QString& externalName = QString(),
-          const QString& internalName = QString(),
-          bool required = false)
+			  const QString& internalName = QString(),
+			  bool required = false)
         : _externalName(externalName),
           _internalName(internalName),
           _required(required)
@@ -35,15 +35,19 @@ public:
     bool isValid() const { return !_externalName.isEmpty() && !_internalName.isEmpty(); }
     void addField(const QString& externalName, const QString& internalName, bool required = false);
 
-    bool      fieldExistsByExternalName(const QString& externalName) const;
-    bool      fieldExistsByInternalName(const QString& internalName) const;
-    FieldSpec getFieldByExternalName   (const QString& externalName) const;
-    FieldSpec getFieldByInternalName   (const QString& internalName) const;
-    QString   getExternalFieldName(const QString& internalFieldName) const;
-    QString   getInternalFieldName(const QString& externalFieldName) const;
+    bool      fieldExistsByExternalName(const QString& exName) const;
+    bool      fieldExistsByInternalName(const QString& inName) const;
+
+    FieldSpec getFieldByExternalName   (const QString& exName) const;
+    FieldSpec getFieldByInternalName   (const QString& inName) const;
+
+    QString   getExternalFieldName(const QString& inFieldName) const;  // convenience
+    QString   getInternalFieldName(const QString& exFieldName) const;
+
     QString   getExternalName() const { return _externalName; }
     QString   getInternalName() const { return _internalName; }
-    bool      isRequiredField(const QString& fieldName) const;
+
+    bool      isRequiredField(const QString& inFieldName) const;
     QList<FieldSpec> getAllFields() const { return _fields; }
 
 private:
@@ -62,36 +66,38 @@ class QXmlStreamReader;
 class RefSpec
 {
 public:
-    bool load(const QString& format);
+    bool load(const QString& specName);
     QString getTypePattern()      const { return _patternType;      }
     QString getFieldPattern()     const { return _patternField;     }
+
     QString getRecordTemplate()   const { return _templateRecord;   }
     QString getFieldTemplate()    const { return _templateField;    }
-    QString getAuthorsSeparator() const { return _separatorAuthors; }
-    QString getPagesSeparator()   const { return _separatorPages;   }
-    QString getInternalTypeName(const QString& externalTypeName) const;
-    QString getExternalTypeName(const QString& internalTypeName) const;
+
+	QString getSeparator(const QString& inName) const;
+
+    QString getInternalTypeName(const QString& exTypeName) const;
+    QString getExternalTypeName(const QString& inTypeName) const;
     IRefParser* getParser() const;   // every spec relates to a parser
 
-    bool     typeExists(const QString& internalTypeName) const;
-    TypeSpec getType   (const QString& internalTypeName) const;
+    bool     typeExists(const QString& inTypeName) const;
+    TypeSpec getType   (const QString& inTypeName) const;
     QMap<QString, TypeSpec> getAllTypes() const { return _types; }
 
 private:
-    void loadType(QXmlStreamReader& xml);
+    void loadType     (QXmlStreamReader& xml);
+	void loadSeparator(QXmlStreamReader& xml);
     TypeSpec makeDefaultTypeSpec() const;
 
 private:
-    QString                 _formatName;
-    QMap<QString, TypeSpec> _types;
+    QString                 _specName;
+    QMap<QString, TypeSpec> _types;   // internalName->TypeSpec
 
     // global properties
     QString _patternType;       // also indicates start of the record
     QString _patternField;
     QString _templateRecord;
     QString _templateField;
-    QString _separatorAuthors;  // empty means one author one line
-    QString _separatorPages;    // empty means startpage and endpage, instead of pages
+	QMap<QString, QString> _separators;  // inName->separator
 };
 
 

@@ -334,10 +334,10 @@ void PagePapers::importPDF(const QString& pdfPath)
     }
 }
 
-QList<Reference> PagePapers::parseContent(const QString &content)
+QList<Reference> PagePapers::parseContent(const QString& content)
 {
     // try all specs
-    QFileInfoList fileInfos = QDir("./Specifications").entryInfoList(QStringList() << "*.spec");
+    QFileInfoList fileInfos = QDir("./Specifications").entryInfoList(QStringList() << "*.xml");
     foreach(QFileInfo fileInfo, fileInfos)
         if(RefSpec* spec = RefSpecFactory::getInstance()->getSpec(fileInfo.baseName()))
         {

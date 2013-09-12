@@ -17,10 +17,12 @@ QList<Reference> LineRefParser::parse(const QString& content, RefSpec* spec)
 	int idxRecordStart = rxRecordStart.indexIn(content);
 	while(idxRecordStart > -1)                            // parse each record
 	{
+		// find the text for a record
 		int idxLastStart = idxRecordStart;
 		idxRecordStart = rxRecordStart.indexIn(content, idxLastStart + rxRecordStart.matchedLength());
         QString record = content.mid(idxLastStart, idxRecordStart - idxLastStart).trimmed();
-        results << parseRecord(record);
+        
+		results << parseRecord(record);
 	}
 
     return results;
@@ -29,16 +31,17 @@ QList<Reference> LineRefParser::parse(const QString& content, RefSpec* spec)
 QString LineRefParser::getTypeName(const QString& record) const
 {
 	// check type pattern
-    if(formatSpec->getTypePattern().isEmpty())
+	QString typePattern = formatSpec->getTypePattern();
+    if(typePattern.isEmpty())
         return QString();
 
     QString type;
-    QRegExp rxType(formatSpec->getTypePattern());
+    QRegExp rxType(typePattern);
 	int idxType = rxType.indexIn(record);
 	if(idxType > -1)
 	{
-        QString typeText = rxType.cap(1).simplified();  // capture type text
-        type = formatSpec->getInternalTypeName(typeText);       // convert to type name
+        QString typeText = rxType.cap(1).simplified();     // capture type text
+        type = formatSpec->getInternalTypeName(typeText);  // convert to type name
 	}
 	return type;
 }
@@ -55,7 +58,7 @@ Reference LineRefParser::parseRecord(const QString& record) const
         return result;
     result.setValue("type", typeName);
 
-    // get the type
+    // get type spec
     TypeSpec type = formatSpec->getType(typeName);
     if(!type.isValid())
         return result;
@@ -66,7 +69,7 @@ Reference LineRefParser::parseRecord(const QString& record) const
 	while(idxField > -1)
 	{
         QString fieldText = rxField.cap(1).simplified();
-        QString fieldName = type.getInternalFieldName(fieldText);  // field text -> field name
+        QString fieldName = type.getInternalFieldName(fieldText);
         if(!fieldName.isEmpty())
         {
             QString fieldValue = rxField.cap(2).simplified();
@@ -76,10 +79,11 @@ Reference LineRefParser::parseRecord(const QString& record) const
                 result.setValue(fieldName, parseAuthors(fieldValue));
 			else if(fieldName == "pages")
                 result.setValue(fieldName, parsePages(fieldValue));
+
             else
                 result.setValue(fieldName, fieldValue);
         }
-		idxField = rxField.indexIn(record, idxField + rxField.matchedLength());
+		idxField = rxField.indexIn(record, idxField + rxField.matchedLength());  // next
 	}
 
     // generate id
@@ -91,13 +95,10 @@ Reference LineRefParser::parseRecord(const QString& record) const
 
 QStringList LineRefParser::parseAuthors(const QString& authors) const
 {
-    QStringList result;
-    QString separator = formatSpec->getAuthorsSeparator();
-	if(separator.isEmpty())   // one line is one author
-        result << authors;
-	else                      // all authors in one line
-		result << splitAuthorsList(authors, separator);
-    return result;
+    QString separator = formatSpec->getSeparator("authors");
+	return separator.isEmpty() 
+		? QStringList() << authors               // one line is one author
+		: splitAuthorsList(authors, separator);  // all authors in one line
 }
 
 QString LineRefParser::parsePages(const QString& pages) const
@@ -109,7 +110,7 @@ QString LineRefParser::parsePages(const QString& pages) const
     {
         startPage = endPage = rx.cap(1);
         if(rx.indexIn(pages, idx + rx.matchedLength()) > -1)
-            endPage = rx.cap(1);
+            endPage = rx.cap(1);  // endpage may not exist
     }
     return startPage + "-" + endPage;
 }

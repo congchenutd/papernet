@@ -9,8 +9,8 @@ class TypeSpec;
 
 /////////////////////////////////////////////////////////////////////
 /// A dlg for adding/editing a paper
-/// All fields except type and tags are stored in _fields,
-/// because they are all FieldEdit, and are manupulated in the same way
+/// All fields except tags are stored in _fields,
+/// because they are all FieldEdit, and are manipulated in the same way
 ///
 /// Note: abstract and note use MyPlainTextEdit, which may differ a little from the others
 /// authors and editors are QStringList, and need special treatment
@@ -24,8 +24,8 @@ class PaperDlg : public QDialog
 {
 	Q_OBJECT
 
-    typedef QPair<QString, FieldEdit*> Field;    // fieldName and edit
-    typedef QList<Field>               Fields;
+    typedef QPair<QString, IFieldEdit*> Field;    // fieldName -> edit
+    typedef QList<Field>                Fields;
 
 public:
     PaperDlg(QWidget* parent = 0);

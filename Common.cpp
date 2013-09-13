@@ -441,7 +441,7 @@ bool isPaperRead(int paperID) {
 	return !getTagsOfPaper(paperID).contains("ReadMe");
 }
 
-bool isPaperToBePrinted(int paperID) {
+bool isPaperForPrint(int paperID) {
 	return getTagsOfPaper(paperID).contains("PrintMe");
 }
 

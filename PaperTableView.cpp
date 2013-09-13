@@ -27,7 +27,7 @@ void PaperTableView::contextMenuEvent(QContextMenuEvent* event)
 		return;
 
 	int paperID = model()->data(model()->index(rowAt(event->pos().y()), PAPER_ID)).toInt();
-	actionPrintMe ->setChecked(isPaperToBePrinted(paperID));
+	actionPrintMe ->setChecked(isPaperForPrint(paperID));
 	actionBookmark->setChecked(!isPaperRead(paperID));
     actionReadPDF ->setEnabled(pdfAttached(paperID));
 

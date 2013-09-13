@@ -7,7 +7,7 @@ class QAbstractItemModel;
 class QSqlTableModel;
 
 // emun
-enum {PAPER_ID, PAPER_ATTACHED, PAPER_TITLE, PAPER_AUTHORS, PAPER_YEAR, PAPER_MODIFIED, PAPER_TYPE,
+enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_YEAR, PAPER_MODIFIED, PAPER_TYPE,
       PAPER_PUBLICATION, PAPER_ABSTRACT, PAPER_VOLUME, PAPER_ISSUE, PAPER_STARTPAGE,
       PAPER_ENDPAGE, PAPER_PUBLISHER, PAPER_EDITORS, PAPER_ADDRESS, PAPER_URL, PAPER_NOTE};
 enum {TAG_ID, TAG_NAME, TAG_SIZE};
@@ -36,7 +36,7 @@ QStringList splitAuthorsList(const QString& authorsLine,
 void delPaper(int paperID);
 bool isTagged(int paperID);
 bool isPaperRead(int paperID);
-bool isPaperToBePrinted(int paperID);
+bool isPaperForPrint(int paperID);
 int getMaxCoauthor();
 int getPaperID(const QString& title);
 bool paperExists(const QString& title);

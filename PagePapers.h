@@ -31,7 +31,6 @@ public slots:
 
 private slots:
     void resetModel();              // just reset the model
-    void onSubmitPaper();
 
     void onSelectionChanged(const QItemSelection& selected);
 	void onEditPaper();
@@ -75,10 +74,11 @@ private:
 	void reloadAttachments();
 	void attachNewTag(const QString& tagName);   // create and add a tag to current paper
 
+    void submit();
     void insertReference(const Reference& ref);                // insert or replace
     void updateReference(int row, const Reference& ref);       // update a row by the ref
+    void updateRef(int id, const Reference& ref);
     void importReferences(const QList<Reference>& references); // review and insert
-    void importPDF(const QString& pdfPath);                    // select a paper to be added to
     QList<Reference> parseContent(const QString& content);     // using all possible specs' parsers
 
 	Reference exportReference(int row) const;   // row -> Reference

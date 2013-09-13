@@ -75,7 +75,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(_navigator,  SIGNAL(historyValid(bool)), ui.actionBackward, SLOT(setEnabled(bool)));
     connect(_navigator,  SIGNAL(futureValid (bool)), ui.actionForward,  SLOT(setEnabled(bool)));
 
-    connect(_searchEdit, SIGNAL(filter(QString)), this,         SLOT(onSearch(QString)));
+    connect(_searchEdit, SIGNAL(filter(QString)), this,        SLOT(onSearch(QString)));
     connect(_searchEdit, SIGNAL(search(QString)), _pagePapers, SLOT(onFullTextSearch(QString)));
 
     // load settings

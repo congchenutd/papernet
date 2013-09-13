@@ -11,7 +11,7 @@ OptionDlg::OptionDlg(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-    resize(400, 200);
+    resize(500, 200);
 
 	connect(ui.btFont,            SIGNAL(clicked()), this, SLOT(onFont()));
 	connect(ui.btRebuiltFulltext, SIGNAL(clicked()), this, SLOT(onRebuildFulltext()));
@@ -67,7 +67,10 @@ void OptionDlg::onSetBibFixerPath()
 {
     QString path = QFileDialog::getOpenFileName(this, tr("Select the BibFixer executable"), ".");
     if(!path.isEmpty())
+    {
         ui.leBibFixerPath->setText(path);
+        ui.checkExportToBibFixer->setChecked(true);
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////

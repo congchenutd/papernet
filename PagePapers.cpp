@@ -46,7 +46,6 @@ PagePapers::PagePapers(QWidget *parent)
         ui.tvPapers->hideColumn(col);
 
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
-    ui.tvPapers->setColumnWidth(PAPER_ATTACHED, 32);    // it's just icon
 	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
     // tag table, relation table, foreign key in the relation table
@@ -59,8 +58,8 @@ PagePapers::PagePapers(QWidget *parent)
     connect(ui.tvPapers->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(onSelectionChanged(QItemSelection)));
 
-    connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
-            this, SLOT(onSubmitPaper()));  // submit before sorting
+//    connect(ui.tvPapers->horizontalHeader(), SIGNAL(sectionPressed(int)),
+//            this, SLOT(onSubmitPaper()));  // submit before sorting
 	connect(ui.tvPapers, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditPaper()));
     connect(ui.tvPapers, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked()));
 	connect(ui.tvPapers, SIGNAL(addQuote()),     this, SLOT(onAddQuote()));
@@ -92,7 +91,7 @@ void PagePapers::onSelectionChanged(const QItemSelection& selected)
         ui.widgetRelated   ->setCentralPaper(_currentPaperID);  // related
         ui.widgetCoauthered->setCentralPaper(_currentPaperID);  // coauthored
         updateQuotes();                                         // quotes
-        emit hasPDF(pdfAttached(_currentPaperID));               // let MainWindow update actionPDF
+        emit hasPDF(pdfAttached(_currentPaperID));              // let MainWindow update actionPDF
     }
     emit selectionValid(!selected.isEmpty());
 }
@@ -117,7 +116,7 @@ void PagePapers::onEditPaper()
     Reference oldRef = exportReference(_currentRow);
     dlg.setReference(oldRef);
 
-    connect(&dlg, SIGNAL(gotoPaper(int)), this, SLOT(onJumpToCurrent(int)));
+//    connect(&dlg, SIGNAL(gotoPaper(int)), this, SLOT(onJumpToCurrent(int)));
 
     if(dlg.exec() == QDialog::Accepted)
     {
@@ -197,13 +196,36 @@ void PagePapers::updateReference(int row, const Reference& ref)
     // tags are stored in a relations table separately
     recreateTagsRelations(ref.getValue("tags").toStringList());
 
-    onSubmitPaper();
-    jumpToCurrent();
+    submit();
+//    jumpToCurrent();
 
     // add pdf after submitting, because the attachment needs to find the folder of the paper
     QString pdfPath = ref.getValue("PDF").toString();
     if(!pdfPath.isEmpty())
         addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
+}
+
+void PagePapers::updateRef(int id, const Reference& ref)
+{
+//    ID          int primary key, \
+//    Attached    bool,    \
+//    Title       varchar unique, \
+//    Authors     varchar, \
+//    Year        date,    \
+//    Modified    date,    \
+//    Type        varchar, \
+//    Publication varchar, \
+//    Abstract    varchar, \
+//    Volume      int, \
+//    Issue       int, \
+//    Startpage   int, \
+//    Endpage     int, \
+//    Publisher   varchar, \
+//    Editors     varchar, \
+//    Address     varchar, \
+//    Url         varchar, \
+//    Note        varchar  \
+//    )");
 }
 
 void PagePapers::recreateTagsRelations(const QStringList& tags)
@@ -280,11 +302,6 @@ void PagePapers::importFromFiles(const QStringList& filePaths)
         QList<Reference> references = spec->getParser()->parse(file.readAll(), spec);
         importReferences(references);  // currentPaperID = -1 if failed
     }
-
-	// pdfs
-    foreach(QString filePath, filePaths)
-        if(QFileInfo(filePath).suffix().toLower() == "pdf")
-            importPDF(filePath);
 }
 
 void PagePapers::importReferences(const QList<Reference>& references)
@@ -318,20 +335,6 @@ void PagePapers::importReferences(const QList<Reference>& references)
             insertReference(dlg.getReference());   // currentPaperID will be equal to the ID of the newly added
     }
     QSqlDatabase::database().commit();
-}
-
-void PagePapers::importPDF(const QString& pdfPath)
-{
-    PaperList dlg(this);
-	dlg.setWindowTitle(tr("To which paper will %1 be attached?").arg(QFileInfo(pdfPath).fileName()));
-    if(dlg.exec() == QDialog::Accepted && !dlg.getSelected().isEmpty())
-    {
-        ui.tabWidget->setCurrentWidget(ui.tabAttachments);  // show attachment tab
-        resetModel();                                       // ensure the paper is visible
-        jumpToID(getPaperID(dlg.getSelected().front()));    // jump to the paper, and update _currentPaperID
-        addAttachment(_currentPaperID, suggestAttachmentName(pdfPath), pdfPath);
-        reloadAttachments();
-    }
 }
 
 QList<Reference> PagePapers::parseContent(const QString& content)
@@ -378,7 +381,7 @@ void PagePapers::onImport()
     // import from local files
     QStringList files = QFileDialog::getOpenFileNames(
                             this, "Import references", _setting->getLastImportPath(),
-							"Reference (*.enw *.ris *.bib *.pdf);;All files (*.*)");
+                            "Reference (*.enw *.ris *.bib);;All files (*.*)");
     if(files.isEmpty())
         return;
     _setting->setLastImportPath(QFileInfo(files.front()).absolutePath());
@@ -447,18 +450,17 @@ void PagePapers::onDelTagFromPaper()
 
 // submit the model
 // keep selecting current paper
-void PagePapers::onSubmitPaper()
+void PagePapers::submit()
 {
-    if(!_model.submitAll())
+    if(!_model.submit())
         QMessageBox::critical(this, tr("Error"), _model.lastError().text());
 }
 
 void PagePapers::resetModel()
 {
-    _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
+//    _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
     _model.setTable("Papers");
     _model.select();
-    _model.setHeaderData(PAPER_ATTACHED, Qt::Horizontal, "@");
     ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	fetchAll(&_model);
 }

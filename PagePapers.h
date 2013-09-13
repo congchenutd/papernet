@@ -52,8 +52,8 @@ private slots:
 	void onTagDoubleClicked(const QString& label);
 
     // handle menu signals
-    void onPrintMe  (bool print);   // two built-in tags
-	void onBookmark (bool readMe);
+    void onPrintMe (bool print);   // two built-in tags
+	void onBookmark(bool readMe);
 	void onAddQuote();
     void onAddPDF();                // add pdf to current paper
 	void onReadPDF();

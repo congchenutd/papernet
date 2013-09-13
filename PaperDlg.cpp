@@ -107,10 +107,6 @@ Reference PaperDlg::getReference() const
     foreach(const Field& field, _fields)
 		ref.setValue(field.first, field.second->text().simplified());
 
-    // abstract and note may contain returns
-    //ref.setValue("abstract", ui.teAbstract->toPlainText().trimmed());
-    //ref.setValue("note",     ui.teNote    ->toPlainText().trimmed());
-
     // authors, editors, and tags are QStringLists
     ref.setValue("editors", splitAuthorsList(ui.leEditors->text()));
     ref.setValue("authors", splitAuthorsList(ui.leAuthors->text()));

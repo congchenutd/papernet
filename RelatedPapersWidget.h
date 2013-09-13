@@ -27,8 +27,8 @@ signals:
 
 private:
 	Ui::RelatedPapersWidget ui;
-    int centralPaperID;
-	QStandardItemModel model;
+    int                _centralPaperID;
+	QStandardItemModel _model;
 
     enum {COL_ID, COL_TITLE, COL_PROXIMITY, COL_AUTHORS, COL_YEAR};
 };

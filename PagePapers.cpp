@@ -167,24 +167,15 @@ void PagePapers::updateReference(int row, const Reference& ref)
     if(row < 0 || row > _model.rowCount())
         return;
 
-    QMap<int, QString> fields;    // column -> name
-    fields.insert(PAPER_YEAR,        "year");
-    fields.insert(PAPER_VOLUME,      "volume");
-    fields.insert(PAPER_ISSUE,       "issue");
-    fields.insert(PAPER_STARTPAGE,   "startpage");
-    fields.insert(PAPER_ENDPAGE,     "endpage");
-    fields.insert(PAPER_TITLE,       "title");
-    fields.insert(PAPER_TYPE,        "type");
-    fields.insert(PAPER_PUBLICATION, "publication");
-    fields.insert(PAPER_PUBLISHER,   "publisher");
-    fields.insert(PAPER_EDITORS,     "editors");
-    fields.insert(PAPER_ADDRESS,     "address");
-    fields.insert(PAPER_URL,         "url");
-    fields.insert(PAPER_ABSTRACT,    "abstract");
-    fields.insert(PAPER_NOTE,        "note");
-
-    for(QMap<int, QString>::iterator it = fields.begin(); it != fields.end(); ++it)
-        _model.setData(_model.index(row, it.key()), ref.getValue(it.value()));
+	// copy data from ref based on the fields in table, 
+	// because ref may contain extra fields not in table, such as "pdf" and "tags"
+	QSqlRecord record = _model.record(row);
+	for(int col = 0; col < record.count(); ++col)
+	{
+		QString colName = record.fieldName(col).toLower();
+		if(colName != "id" && colName != "authors" && colName != "modified")
+			_model.setData(_model.index(row, col), ref.getValue(colName));
+	}
 
     // authors is a QStringList
     _model.setData(_model.index(row, PAPER_AUTHORS),
@@ -197,7 +188,6 @@ void PagePapers::updateReference(int row, const Reference& ref)
     recreateTagsRelations(ref.getValue("tags").toStringList());
 
     submit();
-//    jumpToCurrent();
 
     // add pdf after submitting, because the attachment needs to find the folder of the paper
     QString pdfPath = ref.getValue("PDF").toString();
@@ -208,7 +198,6 @@ void PagePapers::updateReference(int row, const Reference& ref)
 void PagePapers::updateRef(int id, const Reference& ref)
 {
 //    ID          int primary key, \
-//    Attached    bool,    \
 //    Title       varchar unique, \
 //    Authors     varchar, \
 //    Year        date,    \
@@ -224,8 +213,7 @@ void PagePapers::updateRef(int id, const Reference& ref)
 //    Editors     varchar, \
 //    Address     varchar, \
 //    Url         varchar, \
-//    Note        varchar  \
-//    )");
+//    Note        varchar 
 }
 
 void PagePapers::recreateTagsRelations(const QStringList& tags)
@@ -448,8 +436,6 @@ void PagePapers::onDelTagFromPaper()
 	highLightTags();
 }
 
-// submit the model
-// keep selecting current paper
 void PagePapers::submit()
 {
     if(!_model.submit())
@@ -458,7 +444,6 @@ void PagePapers::submit()
 
 void PagePapers::resetModel()
 {
-//    _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
     _model.setTable("Papers");
     _model.select();
     ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
@@ -645,8 +630,6 @@ Reference PagePapers::exportReference(int row) const
     for(int col = 0; col < record.count(); ++col)
     {
         QString fieldName = record.fieldName(col).toLower();
-        if(fieldName == "attached")  // not exported
-			continue;
         QVariant fieldValue = record.value(col);
         if(fieldName == "authors")     // to QStringList
             ref.setValue(fieldName, splitAuthorsList(fieldValue.toString()));

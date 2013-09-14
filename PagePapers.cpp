@@ -122,6 +122,7 @@ void PagePapers::onEditPaper()
     {
         Reference newRef = dlg.getReference();
         updateReference(_currentRow, newRef);   // apply the change
+//        updateRef(_currentPaperID, newRef);
 
         // renaming title affects attachments
         QString oldTitle = oldRef.getValue("title").toString();
@@ -149,6 +150,7 @@ void PagePapers::insertReference(const Reference& ref)
     {
         _currentPaperID = rowToID(row);  // updateReference() needs to know the id
         updateReference(row, ref);
+//        updateRef(_currentPaperID, ref);
     }
     else            // insert as a new one
     {
@@ -158,6 +160,7 @@ void PagePapers::insertReference(const Reference& ref)
         _currentPaperID = getNextID("Papers", "ID");
         _model.setData(_model.index(lastRow, PAPER_ID), _currentPaperID);
         updateReference(lastRow, ref);
+//        updateRef(_currentPaperID, ref);
         onBookmark(true);    // attach the ReadMe tag
     }
 }
@@ -193,23 +196,21 @@ void PagePapers::updateReference(int row, const Reference& r)
 
 void PagePapers::updateRef(int id, const Reference& ref)
 {
-//    ID          int primary key, \
-//    Title       varchar unique, \
-//    Authors     varchar, \
-//    Year        date,    \
-//    Modified    date,    \
-//    Type        varchar, \
-//    Publication varchar, \
-//    Abstract    varchar, \
-//    Volume      int, \
-//    Issue       int, \
-//    Startpage   int, \
-//    Endpage     int, \
-//    Publisher   varchar, \
-//    Editors     varchar, \
-//    Address     varchar, \
-//    Url         varchar, \
-//    Note        varchar 
+    QSqlQuery query;
+    query.exec(tr("select * from Papers where ID = %1").arg(id));
+    if(query.next())
+    {
+        QStringList clause;
+        QSqlRecord record = _model.record(-1);
+        for(int col = 0; col < record.count(); ++col)
+        {
+            QString colName = record.fieldName(col).toLower();
+            if(colName != "id")
+                clause << colName + "=\'" + ref.getValue(colName).toString() + "\'";
+        }
+        query.exec(tr("update Papers set %1 where ID = %2").arg(clause.join(","))
+                                                           .arg(id));
+    }
 }
 
 void PagePapers::recreateTagsRelations(const QStringList& tags)
@@ -613,6 +614,9 @@ void PagePapers::onRelatedDoubleClicked(int paperID)
 {
     jumpToID(paperID);
     Navigator::getInstance()->addFootStep(this, paperID);
+//    _currentPaperID = paperID;
+//    _currentRow = idToRow(&_model, PAPER_ID, paperID);
+//    onEditPaper();
 }
 
 void PagePapers::onQuoteDoubleClicked(int quoteID) {

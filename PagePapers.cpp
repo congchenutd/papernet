@@ -440,6 +440,7 @@ void PagePapers::submit()
 
 void PagePapers::resetModel()
 {
+    _model.setEditStrategy(QSqlTableModel::OnFieldChange);
     _model.setTable("Papers");
     _model.select();
     ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);

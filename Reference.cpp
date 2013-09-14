@@ -1,7 +1,7 @@
 #include "Reference.h"
 #include "EnglishName.h"
 #include <QStringList>
-#include <QSet>
+#include <QDate>
 
 bool Reference::fieldExists(const QString& field) const {
     return _fields.contains(field);
@@ -26,17 +26,6 @@ void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
         _fields[fieldName] = fieldValue;
         if(fieldExists("startpage") && fieldExists("endpage"))
             _fields["pages"] = _fields["startpage"].toString() + "-" + _fields["endpage"].toString();
-    }
-
-    // append to existing authors
-    else if(fieldName == "authors" && fieldExists(fieldName))
-    {
-        QStringList oldList = _fields[fieldName].toStringList();
-        QStringList newList = fieldValue.toStringList();
-        foreach(const QString& name, newList)
-            if(!oldList.contains(name, Qt::CaseInsensitive))
-                oldList << name;
-        _fields[fieldName] = oldList;
     }
 
     else
@@ -69,6 +58,10 @@ void Reference::generateID()
     QString year = _fields["year"].toString();
 
     _fields["id"] = lastNameOfFirstAuthor + year;
+}
+
+void Reference::touch() {
+    _fields["modified"] = QDate::currentDate().toString("yyyy/MM/dd");
 }
 
 void Reference::clear() {

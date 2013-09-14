@@ -1,7 +1,7 @@
 #include "PaperDlg.h"
 #include "Common.h"
 #include "Reference.h"
-#include "../BibFixer/Convertor.h"
+#include "Convertor.h"
 #include "RefFormatSpec.h"
 #include "MultiSectionCompleter.h"
 #include "OptionDlg.h"
@@ -16,7 +16,6 @@ PaperDlg::PaperDlg(QWidget *parent)
 	ui.setupUi(this);
     resize(750, 650);
 
-    // tags not included
     _fields << Field("title",       ui.leTitle)
             << Field("authors",     ui.leAuthors)
             << Field("publication", ui.lePublication)
@@ -32,8 +31,12 @@ PaperDlg::PaperDlg(QWidget *parent)
             << Field("url",         ui.leUrl)
             << Field("abstract",    ui.teAbstract)
             << Field("note",        ui.teNote)
-            << Field("PDF",         ui.lePDF);
+            << Field("PDF",         ui.lePDF)
+            << Field("tags",        ui.leTags);
 
+    ui.leAuthors->setSeparator("; ");
+    ui.leEditors->setSeparator("; ");
+    ui.leTags   ->setSeparator("; ");
     ui.lePDF->hide();  // a special field for pdf path
 
     // auto complete for tags
@@ -66,7 +69,6 @@ void PaperDlg::setTitle(const QString& title)
     QString fixedTitle = BibFixer::CaseConvertor().redo(
                 BibFixer::ProtectionConvertor().undo(title));
     ui.leTitle->setText(fixedTitle);
-    ui.leTitle->setCursorPosition(0);
     ui.btGoogle->setEnabled(!fixedTitle.isEmpty());
 }
 
@@ -103,21 +105,14 @@ void PaperDlg::accept()
 Reference PaperDlg::getReference() const
 {
     Reference ref;
-
     foreach(const Field& field, _fields)
 		ref.setValue(field.first, field.second->text().simplified());
-
-    // authors, editors, and tags are QStringLists
-    ref.setValue("editors", splitAuthorsList(ui.leEditors->text()));
-    ref.setValue("authors", splitAuthorsList(ui.leAuthors->text()));
-    ref.setValue("tags",    splitLine(ui.leTags->text(), ";"));
-
     return ref;
 }
 
 void PaperDlg::setReference(const Reference& ref)
 {
-    _id = ref.getValue("id").toInt();
+    _id = ref.fieldExists("id") ? ref.getValue("id").toInt() : -1;
 
     foreach(const Field& field, _fields)
         if(field.second->text().isEmpty())   // do not overwrite
@@ -125,20 +120,7 @@ void PaperDlg::setReference(const Reference& ref)
 
     setTitle(ref.getValue("title").toString());    // fix the tile
 
-    // names are QStringLists
-    ui.leAuthors->setText(ref.getValue("authors").toStringList().join("; "));
-    ui.leEditors->setText(ref.getValue("editors").toStringList().join("; "));
-
-    // merge tags
-    QStringList tags = splitLine(ui.leTags->text(), ";");
-    tags << ref.getValue("tags").toStringList();
-    ui.leTags->setText(tags.join("; "));
-
-    // move the cursor to the front, otherwise it shows the end of the line
-    ui.leAuthors    ->setCursorPosition(0);
-    ui.lePublication->setCursorPosition(0);
-
-    // set type after setting publication, thus we may guess the type from publication
+    // call it after setting publication, so we may guess the type from publication
     setType(ref.getValue("type").toString());
 }
 

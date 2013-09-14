@@ -12,8 +12,6 @@ class TypeSpec;
 /// All fields except tags are stored in _fields,
 /// because they are all FieldEdit, and are manipulated in the same way
 ///
-/// Note: abstract and note use MyPlainTextEdit, which may differ a little from the others
-/// authors and editors are QStringList, and need special treatment
 /// tags are stored in a separate table, not in the reference
 
 /// setTitle() fixes title automatically (for protection and case errors)

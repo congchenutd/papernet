@@ -640,7 +640,7 @@ Phrase findPhrase(const QString& phraseName)
 QStringList splitLine(const QString& line, const QString& separator)
 {
 	QStringList result;
-	QStringList sections = line.split(separator);
+    QStringList sections = line.split(separator.trimmed());
 	foreach(const QString& section, sections)
 	{
 		QString simplified = section.simplified();
@@ -650,12 +650,12 @@ QStringList splitLine(const QString& line, const QString& separator)
 	return result;
 }
 
-QStringList splitAuthorsList(const QString& authorsLine,
-							 const QString& separator,
-							 const QString& format)
+QStringList splitNamesLine(const QString& namesLine,
+                           const QString& separator,
+                           const QString& format)
 {
 	QStringList result;
-	QStringList authorList = splitLine(authorsLine, separator);
+    QStringList authorList = splitLine(namesLine, separator);
 	foreach(const QString& author, authorList)
 		result << EnglishName(author).toString(format);
 	return result;

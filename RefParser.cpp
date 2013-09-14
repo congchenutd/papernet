@@ -98,7 +98,7 @@ QStringList LineRefParser::parseAuthors(const QString& authors) const
     QString separator = formatSpec->getSeparator("authors");
 	return separator.isEmpty() 
 		? QStringList() << authors               // one line is one author
-		: splitAuthorsList(authors, separator);  // all authors in one line
+		: splitNamesLine(authors, separator);  // all authors in one line
 }
 
 QString LineRefParser::parsePages(const QString& pages) const

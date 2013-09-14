@@ -162,30 +162,26 @@ void PagePapers::insertReference(const Reference& ref)
     }
 }
 
-void PagePapers::updateReference(int row, const Reference& ref)
+void PagePapers::updateReference(int row, const Reference& r)
 {
     if(row < 0 || row > _model.rowCount())
         return;
 
-	// copy data from ref based on the fields in table, 
-	// because ref may contain extra fields not in table, such as "pdf" and "tags"
+    Reference ref = r;
+    ref.touch();   // add modified date
+
+    // pull data from ref based on the fields in table,
+    // because ref may contain extra fields not in table, such as "pdf" and "tags"
 	QSqlRecord record = _model.record(row);
 	for(int col = 0; col < record.count(); ++col)
 	{
 		QString colName = record.fieldName(col).toLower();
-		if(colName != "id" && colName != "authors" && colName != "modified")
+        if(colName != "id")
 			_model.setData(_model.index(row, col), ref.getValue(colName));
 	}
 
-    // authors is a QStringList
-    _model.setData(_model.index(row, PAPER_AUTHORS),
-                   ref.getValue("authors").toStringList().join("; "));
-
-    // modified date
-    _model.setData(_model.index(row, PAPER_MODIFIED), QDate::currentDate().toString("yyyy/MM/dd"));
-
     // tags are stored in a relations table separately
-    recreateTagsRelations(ref.getValue("tags").toStringList());
+    recreateTagsRelations(splitLine(ref.getValue("tags").toString(), ";"));
 
     submit();
 
@@ -629,15 +625,13 @@ Reference PagePapers::exportReference(int row) const
 	QSqlRecord record = _model.record(row);
     for(int col = 0; col < record.count(); ++col)
     {
-        QString fieldName = record.fieldName(col).toLower();
+        QString  fieldName  = record.fieldName(col).toLower();
         QVariant fieldValue = record.value(col);
-        if(fieldName == "authors")     // to QStringList
-            ref.setValue(fieldName, splitAuthorsList(fieldValue.toString()));
-		else
-            ref.setValue(fieldName, fieldValue);
+        ref.setValue(fieldName, fieldValue);
     }
 
-    ref.setValue("tags", getTagsOfPaper(rowToID(row)));  // tags are not in the paper table
+    // tags are not in the paper table
+    ref.setValue("tags", getTagsOfPaper(rowToID(row)).join(";"));
     return ref;
 }
 

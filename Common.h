@@ -27,10 +27,10 @@ void centerWindow(QWidget* widget);
 // separated list -> QStringList, unnecessary spaces removed
 QStringList splitLine(const QString& line, const QString& separator);
 
-// same as above, name formatted
-QStringList splitAuthorsList(const QString& authorsLine,
-							 const QString& separator = ";",
-							 const QString& format = "L,;m;F");
+// same as above, but namea formatted
+QStringList splitNamesLine(const QString& namesLine,
+                           const QString& separator = ";",
+                           const QString& format = "L,;m;F");
 
 // papers
 void delPaper(int paperID);

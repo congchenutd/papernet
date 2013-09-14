@@ -15,35 +15,43 @@ public:
     virtual void highlight(const QColor& color) = 0;
 };
 
-// two edits, all operations delegated to QLineEdit/QPlainTextEdit
-class FieldLineEdit : public QLineEdit, public IFieldEdit
+// adapters
+class LineEditAdapter : public QLineEdit, public IFieldEdit
 {
 public:
-    FieldLineEdit(QWidget* parent) : QLineEdit(parent) {}
+    LineEditAdapter(QWidget* parent) : QLineEdit(parent) {}
 
-    virtual QString text() const { return QLineEdit::text(); }
-    virtual void setText(const QString& text) { QLineEdit::setText(text); }
-    virtual void highlight(const QColor& color);
+    QString text() const;
+    void setText(const QString& text);
+    void highlight(const QColor& color);
+
+    void setSeparator(const QString& separator);
+
+private:
+    QString formatSeparation(const QString& text) const;
+
+private:
+    QString _separator;
 };
 
-class FieldPlainTextEdit : public QPlainTextEdit, public IFieldEdit
+class PlainTextEditAdapter : public QPlainTextEdit, public IFieldEdit
 {
 public:
-    FieldPlainTextEdit(QWidget* parent) : QPlainTextEdit(parent) {}
+    PlainTextEditAdapter(QWidget* parent) : QPlainTextEdit(parent) {}
 
-    virtual QString text() const { return toPlainText(); }
-    virtual void setText(const QString& text) { setPlainText(text); }
-    virtual void highlight(const QColor& color);
+    QString text() const { return toPlainText(); }
+    void setText(const QString& text) { setPlainText(text); }
+    void highlight(const QColor& color);
 };
 
-class FieldComboBox : public QComboBox, public IFieldEdit
+class ComboBoxAdapter : public QComboBox, public IFieldEdit
 {
 public:
-	FieldComboBox(QWidget* parent = 0) : QComboBox(parent) {}
+    ComboBoxAdapter(QWidget* parent = 0) : QComboBox(parent) {}
 
-	virtual QString text() const { return currentText(); }
-	virtual void setText(const QString& text) { setCurrentText(text); }
-	virtual void highlight(const QColor&) {}
+    QString text() const { return currentText(); }
+    void setText(const QString& text) { setCurrentText(text); }
+    void highlight(const QColor&) {}
 };
 
 #endif // FIELDEDIT_H

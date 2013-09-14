@@ -131,23 +131,12 @@ void RefSpec::loadType(QXmlStreamReader& xml)
         }
 
     // even this type already exists, still need to read (pass) this part of the xml
-    if(!typeExists(inTypeName))
+    if(!_types.contains(inTypeName))
         _types.insert(inTypeName, type);
 }
 
-TypeSpec RefSpec::makeDefaultTypeSpec() const {
-    return TypeSpec("unknown", "unknown");
-}
-
-bool RefSpec::typeExists(const QString& inTypeName) const {
-    return getType(inTypeName).getInternalName() != "unknown";
-}
-
-TypeSpec RefSpec::getType(const QString& inTypeName) const
-{
-    if(_types.contains(inTypeName))
-        return _types[inTypeName];
-    return makeDefaultTypeSpec();
+TypeSpec RefSpec::getType(const QString& inTypeName) const {
+    return _types.contains(inTypeName) ? _types[inTypeName] : _types["unknown"];
 }
 
 QString RefSpec::getInternalTypeName(const QString& exTypeName) const

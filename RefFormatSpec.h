@@ -79,14 +79,12 @@ public:
     QString getExternalTypeName(const QString& inTypeName) const;
     IRefParser* getParser() const;   // every spec relates to a parser
 
-    bool     typeExists(const QString& inTypeName) const;
-    TypeSpec getType   (const QString& inTypeName) const;
+    TypeSpec getType(const QString& inTypeName) const;
     QMap<QString, TypeSpec> getAllTypes() const { return _types; }
 
 private:
     void loadType     (QXmlStreamReader& xml);
 	void loadSeparator(QXmlStreamReader& xml);
-    TypeSpec makeDefaultTypeSpec() const;
 
 private:
     QString                 _specName;

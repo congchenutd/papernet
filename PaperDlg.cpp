@@ -58,9 +58,8 @@ PaperDlg::PaperDlg(QWidget *parent)
 
     connect(ui.comboType, SIGNAL(currentIndexChanged(QString)),
             this,         SLOT(onTypeChanged(QString)));
-    connect(ui.btGoogle,    SIGNAL(clicked()), this, SLOT(onGoogle()));
-    connect(ui.btGotoPaper, SIGNAL(clicked()), this, SLOT(onGotoPaper()));
-    connect(ui.btAddPDF,    SIGNAL(clicked()), this, SLOT(onAddPDF()));
+    connect(ui.btGoogle,  SIGNAL(clicked()), this, SLOT(onGoogle()));
+    connect(ui.btAddPDF,  SIGNAL(clicked()), this, SLOT(onAddPDF()));
 }
 
 void PaperDlg::setTitle(const QString& title)
@@ -154,12 +153,6 @@ void PaperDlg::onGoogle() {
     if(!ui.leTitle->text().isEmpty())
         QDesktopServices::openUrl(
                     QUrl("http://www.google.com/search?q=" + ui.leTitle->text()));
-}
-
-void PaperDlg::onGotoPaper()
-{
-    emit gotoPaper(_id);   // ask paper page to select the paper
-    reject();
 }
 
 void PaperDlg::onAddPDF()

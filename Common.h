@@ -34,13 +34,17 @@ QStringList splitNamesLine(const QString& namesLine,
 
 // papers
 void delPaper(int paperID);
-bool isTagged(int paperID);
 bool isPaperRead(int paperID);
 bool isPaperForPrint(int paperID);
 int getMaxCoauthor();
-int getPaperID(const QString& title);
-bool paperExists(const QString& title);
-void updateAttached(int paperID);
+
+int     titleToID(const QString& title);
+QString idToTitle(int paperID);
+
+QString makeValidTitle(const QString& title);
+QString getValidTitle(int paperID);
+void renameTitle(const QString& oldName, const QString& newName);
+QString convertSlashes(const QString& link);
 
 // attachments
 bool pdfAttached(int paperID);
@@ -69,13 +73,6 @@ void renameTag(const QString& tableName, const QString& oldName, const QString& 
 QStringList getTagsOfPaper (int paperID);
 QStringList getTagsOfPhrase(int phraseID);
 void dropTempView();
-
-// paper title
-QString getPaperTitle(int paperID);
-QString makeValidTitle(const QString& title);
-QString getValidTitle(int paperID);
-void renameTitle(const QString& oldName, const QString& newName);
-QString convertSlashes(const QString& link);
 
 // quotes
 void updateQuote(int id, const QString& title, const QString& content);

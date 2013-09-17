@@ -225,7 +225,10 @@ void MainWindow::onEdit() {
 void MainWindow::onSearch(const QString& target)
 {
     if(target.isEmpty())
-        _currentPage->jumpToCurrent();  // it's the page's responsiblity to ensure visibility
+    {
+        _currentPage->reset();           // ensure visibility
+        _currentPage->jumpToCurrent();
+    }
     else
         _currentPage->search(target);
 }

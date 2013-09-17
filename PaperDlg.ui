@@ -205,13 +205,6 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="btGotoPaper">
-       <property name="text">
-        <string>Goto paper</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="btAddPDF">
        <property name="text">
         <string>Add PDF</string>
@@ -278,7 +271,6 @@
   <tabstop>teAbstract</tabstop>
   <tabstop>teNote</tabstop>
   <tabstop>leTags</tabstop>
-  <tabstop>btGotoPaper</tabstop>
   <tabstop>btAddPDF</tabstop>
   <tabstop>lePDF</tabstop>
   <tabstop>btCancel</tabstop>

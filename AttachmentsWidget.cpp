@@ -123,7 +123,6 @@ void AttachmentsWidget::update()   // refresh
     if(QDir(dir).entryList().isEmpty())
         dir = emptyDir;
 	ui.listView->setRootIndex(_model.index(dir));
-	updateAttached(_paperID);	   // update the model's attached status
 }
 
 void AttachmentsWidget::onRename()

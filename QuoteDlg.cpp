@@ -62,7 +62,7 @@ void QuoteDlg::onCurrentRowChanged()
 	ui.btDel->setEnabled(valid);
 
     _selectedPaperID = idxList.isEmpty() ? -1
-                    : getPaperID(_model.data(idxList.front(), Qt::DisplayRole).toString());
+                    : titleToID(_model.data(idxList.front(), Qt::DisplayRole).toString());
 
     ui.btViewPDF->setEnabled(_selectedPaperID > -1 &&
                              pdfAttached(_selectedPaperID));
@@ -88,7 +88,7 @@ void QuoteDlg::accept()
     QStringList list = _model.stringList();
 	foreach(QString title, list)
 	{
-		int paperID = getPaperID(title);
+		int paperID = titleToID(title);
 		if(paperID == -1)  // the paper not exist, create one
 		{
 			paperID = getNextID("Papers", "ID");
@@ -128,7 +128,7 @@ void QuoteDlg::setQuoteID(int id)
 	// load refs
 	query.exec(tr("select Paper from PaperQuote where Quote = %1").arg(id));
 	while(query.next())
-		addRef(getPaperTitle(query.value(0).toInt()));
+		addRef(idToTitle(query.value(0).toInt()));
 }
 
 void QuoteDlg::onSelectRef()

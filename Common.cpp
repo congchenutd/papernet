@@ -216,14 +216,14 @@ void delAttachments(int paperID)
 	QDir(attachmentDir).rmdir(getValidTitle(paperID));   // del attachment dir
 }
 
-QString getPaperTitle(int paperID)
+QString idToTitle(int paperID)
 {
 	if(paperID < 0)
-		return QString("Error");
+        return QString("Invalid PaperID");
 
 	QSqlQuery query;
 	query.exec(QObject::tr("select Title from Papers where ID = %1").arg(paperID));
-	return query.next() ? query.value(0).toString() : QString("Error");
+    return query.next() ? query.value(0).toString() : QString("Invalid PaperID");
 }
 
 // remove illegal chars
@@ -244,7 +244,7 @@ QString getAttachmentDir(int paperID) {
 }
 
 QString getValidTitle(int paperID) {
-	return makeValidTitle(getPaperTitle(paperID));
+    return makeValidTitle(idToTitle(paperID));
 }
 
 bool addLink(int paperID, const QString& link, const QString& u)
@@ -370,7 +370,7 @@ void updateQuote(int id, const QString& title, const QString& content)
 	query.exec();
 }
 
-int getPaperID(const QString& title)
+int titleToID(const QString& title)
 {
 	QSqlQuery query;
 	query.prepare("select ID from Papers where Title = :title");
@@ -412,16 +412,6 @@ void delQuote(int id)
 	query.exec(QObject::tr("delete from PaperQuote where Quote = %1").arg(id));
 }
 
-bool isTagged(int paperID)
-{
-	if(paperID < 0)
-		return false;
-
-	QSqlQuery query;
-	query.exec(QObject::tr("select * from PaperTag where Paper = %1").arg(paperID));
-	return query.next();
-}
-
 bool pdfAttached(int paperID)
 {
 	if(paperID < 0)
@@ -443,16 +433,6 @@ bool isPaperRead(int paperID) {
 
 bool isPaperForPrint(int paperID) {
 	return getTagsOfPaper(paperID).contains("PrintMe");
-}
-
-void updateAttached(int paperID)  // update Attached section of Papers table
-{
-	if(paperID < 0)
-		return;
-
-	QSqlQuery query;
-	query.exec(QObject::tr("update Papers set Attached = %1 where ID = %2")
-                                .arg(pdfAttached(paperID)).arg(paperID));
 }
 
 int getQuoteID(const QString& title)
@@ -577,10 +557,6 @@ int idToRow(QAbstractItemModel* model, int idSection, int id)
     QModelIndexList indexes = model->match(
 		model->index(0, idSection), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
 	return !indexes.isEmpty() ? indexes.at(0).row() : -1;
-}
-
-bool paperExists(const QString &title) {
-	return getPaperID(title) > -1;
 }
 
 bool phraseExists(const QString& phrase)

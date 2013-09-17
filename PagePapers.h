@@ -58,8 +58,6 @@ private slots:
     void onAddPDF();                // add pdf to current paper
 	void onReadPDF();
 
-    void onJumpToCurrent(int id);   // dlg asks to focus on current paper
-
 signals:
     void selectionValid(bool);
     void hasPDF(bool);
@@ -76,12 +74,13 @@ private:
 
     void submit();
     void insertReference(const Reference& ref);                // insert or replace
-    void updateReference(int row, const Reference& ref);       // update a row by the ref
-    void updateRef(int id, const Reference& ref);
+    void updateRefByRow(int row, const Reference& ref);        // update a row by the ref
+    void updateRefByID (int id,  const Reference& ref);
     void importReferences(const QList<Reference>& references); // review and insert
     QList<Reference> parseContent(const QString& content);     // using all possible specs' parsers
 
-	Reference exportReference(int row) const;   // row -> Reference
+    Reference exportRef(int id) const;
+    Reference recordToRef(const QSqlRecord& record) const;
     QString toString(const QModelIndexList& idxList, const QString& extension);  // export the selected
 
 private:

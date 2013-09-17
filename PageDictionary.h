@@ -19,7 +19,7 @@ public:
     void search(const QString& target);
     void jumpToID(int id);
     void jumpToCurrent() { jumpToID(_currentPhraseID); }
-    void reset() { onResetPhrases(); }
+    void reset() { resetPhrases(); }
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);
@@ -32,13 +32,13 @@ private slots:
     void onFilterByTags(bool AND = false);
 	void onTagDoubleClicked(const QString& label);
 
-    void onResetPhrases();
     void onRelatedDoubleClicked(int phraseID);
 
 signals:
     void selectionValid(bool);
 
 private:
+    void resetPhrases();
     int  rowToID(int row) const;
     void updateTags(int phraseID, const QStringList& tags); // reset phraseID's tags
     void highLightTags();                                   // highlight tags of current phrase

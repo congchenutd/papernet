@@ -1,7 +1,7 @@
 #include "PaperDlg.h"
 #include "Common.h"
 #include "Reference.h"
-#include "Convertor.h"
+#include "../BibFixer/Convertor.h"
 #include "RefFormatSpec.h"
 #include "MultiSectionCompleter.h"
 #include "OptionDlg.h"

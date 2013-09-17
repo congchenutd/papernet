@@ -68,8 +68,6 @@ PagePapers::PagePapers(QWidget *parent)
 	connect(ui.tvPapers, SIGNAL(addPDF()),       this, SLOT(onAddPDF()));
 	connect(ui.tvPapers, SIGNAL(readPDF()),      this, SLOT(onReadPDF()));
 
-    // not to be supported
-    //    connect(ui.widgetTags, SIGNAL(unfilter()),   this, SLOT(jumpToCurrent()));
     connect(ui.widgetTags, SIGNAL(filter(bool)), this, SLOT(onFilterPapersByTags(bool)));
     connect(ui.widgetTags, SIGNAL(newTag()),     this, SLOT(onNewTag()));
     connect(ui.widgetTags, SIGNAL(addTag()),     this, SLOT(onAddTagToPaper()));
@@ -112,9 +110,6 @@ void PagePapers::addRecord()
 
 void PagePapers::onEditPaper()
 {
-    // add a footstep because the row may not have been clicked
-    Navigator::getInstance()->addFootStep(this, _currentPaperID);
-
     PaperDlg dlg(this);
     dlg.setWindowTitle(tr("Edit Reference"));
     Reference oldRef = exportRef(_currentPaperID);
@@ -621,6 +616,7 @@ void PagePapers::setPaperRead()
 void PagePapers::onRelatedDoubleClicked(int paperID)
 {
     _currentPaperID = paperID;
+	Navigator::getInstance()->addFootStep(this, _currentPaperID);
     onEditPaper();
 }
 

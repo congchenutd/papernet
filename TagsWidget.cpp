@@ -13,14 +13,12 @@ TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
 
 	actionNewTag   = new QAction(QIcon(":/Images/AddTag.png"),     tr("New tag"), this);
 	actionFilter   = new QAction(QIcon(":/Images/ShowTagged.png"), tr("Show tagged (OR)"), this);
-	actionUnFilter = new QAction(QIcon(":/Images/Cancel.png"),     tr("Show all"), this);
 	actionAdd      = new QAction(QIcon(":/Images/Backward.png"),   tr("Add"),      this);
 	actionRemove   = new QAction(QIcon(":/Images/Forward.png"),    tr("Remove"), this);
 	actionRename   = new QAction(QIcon(":/Images/EditTag.png"),    tr("Rename"), this);
 	actionDel      = new QAction(QIcon(":/Images/DelTag.png"),     tr("Delete tag"), this);
 
 	connect(actionNewTag,   SIGNAL(triggered()), this, SIGNAL(newTag()));
-	connect(actionUnFilter, SIGNAL(triggered()), this, SIGNAL(unfilter()));
 	connect(actionAdd,      SIGNAL(triggered()), this, SIGNAL(addTag()));
 	connect(actionRemove,   SIGNAL(triggered()), this, SIGNAL(removeTag()));
 	connect(actionFilter,   SIGNAL(triggered()), this, SLOT(onFilter()));
@@ -32,7 +30,6 @@ void TagsWidget::contextMenuEvent(QContextMenuEvent* event)
 {
 	TagsWidgetMenu menu(actionFilter, this);
 	menu.addAction(actionNewTag);
-	menu.addAction(actionUnFilter);
 	if(childAt(event->pos()) != 0)         // click on a tag
 	{
         menu.addSeparator();

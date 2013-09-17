@@ -42,7 +42,6 @@ private:
 
 	QAction* actionNewTag;    // for the menu
 	QAction* actionFilter;
-	QAction* actionUnFilter;
 	QAction* actionAdd;
 	QAction* actionRemove;
 	QAction* actionRename;

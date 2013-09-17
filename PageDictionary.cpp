@@ -14,7 +14,7 @@ PageDictionary::PageDictionary(QWidget *parent)
     _currentRow      = -1;
     _currentPhraseID = -1;
 
-	onResetPhrases();   // init model
+	resetPhrases();   // init model
     ui.tableView->setModel(&_model);
     ui.tableView->hideColumn(DICT_ID);
     ui.tableView->resizeColumnToContents(DICT_PHRASE);
@@ -29,7 +29,6 @@ PageDictionary::PageDictionary(QWidget *parent)
 	connect(ui.tableView, SIGNAL(clicked      (QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 
     connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterByTags(bool)));
-	connect(ui.widgetWordCloud, SIGNAL(unfilter()),   this, SLOT(onResetPhrases()));
 	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
     connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagsToPhrases()));
     connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onRemoveTagsFromPhrases()));
@@ -215,7 +214,7 @@ void PageDictionary::saveGeometry()
     setting->setSplitterSizes("DictionaryHorizontal", ui.splitterHorizontal->saveState());
 }
 
-void PageDictionary::onResetPhrases()
+void PageDictionary::resetPhrases()
 {
     _model.setEditStrategy(QSqlTableModel::OnManualSubmit);
     _model.setTable("Dictionary");
@@ -241,7 +240,7 @@ void PageDictionary::jumpToID(int id)
 void PageDictionary::onTagDoubleClicked(const QString& label)
 {
 	if(label.isEmpty())
-		onResetPhrases();
+		resetPhrases();
 	else
         onFilterByTags();
 }

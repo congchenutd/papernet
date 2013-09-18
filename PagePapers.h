@@ -8,6 +8,7 @@
 #include "Reference.h"
 
 class UserSetting;
+class PaperWidgetMapper;
 
 class PagePapers : public Page
 {
@@ -27,16 +28,13 @@ public:
     void importFromFiles(const QStringList& filePaths);
 
 public slots:
-    void jumpToCurrent() { jumpToID(_currentPaperID); }
+    void jumpToCurrent() { jumpToID(_currentID); }
 
 private slots:
-    void resetModel();              // just reset the model
-
     void onSelectionChanged(const QItemSelection& selected);
 	void onEditPaper();
 	void onFullTextSearch(const QString& target);
 	void onClicked();
-    void updateQuotes();
 	void onImport();
 	void onExport();
 
@@ -52,7 +50,7 @@ private slots:
 	void onTagDoubleClicked(const QString& label);
 
     // handle menu signals
-    void onPrintMe (bool print);   // two built-in tags
+    void onPrintMe (bool print);    // two built-in tags
 	void onBookmark(bool readMe);
 	void onAddQuote();
     void onAddPDF();                // add pdf to current paper
@@ -63,14 +61,14 @@ signals:
     void hasPDF(bool);
 
 private:
+    void resetModel();              // just reset the model
 	int  rowToID(int row) const;
-    int  titleToRow(const QString& title)  const;
+    void updateQuotes();
     void setPaperRead();
     void recreateTagsRelations(const QStringList& tags);
 	void highLightTags();
 	void loadGeometry();
-	void reloadAttachments();
-	void attachNewTag(const QString& tagName);   // create and add a tag to current paper
+    void attachNewTag(const QString& tagName);   // create a tag and add it to current paper
 
     void submit();
     void insertReference(const Reference& ref);                // insert or replace
@@ -87,8 +85,9 @@ private:
 	Ui::PagePapersClass ui;
 
     PaperModel   _model;
+    PaperWidgetMapper* _mapper;
     int          _currentRow;
-    int          _currentPaperID;
+    int          _currentID;
     UserSetting* _setting;
 };
 

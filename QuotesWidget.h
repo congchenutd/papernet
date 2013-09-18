@@ -26,8 +26,8 @@ signals:
     
 private:
     Ui::QuotesWidget ui;
-    int centralPaperID;
-	QSqlQueryModel model;
+    int            _paperID;
+    QSqlQueryModel _model;
 
 	enum {COL_ID, COL_TITLE, COL_QUOTE};
 };

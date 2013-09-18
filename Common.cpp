@@ -450,7 +450,7 @@ bool fullTextSearch(int paperID, const QString& target)
 		return false;
 
 	// for all fulltext files in the attachment dir
-	QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::Hidden);
+    QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files);
 	foreach(QFileInfo info, files)
 		if(info.suffix().toLower() == "fulltext")
 		{

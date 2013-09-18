@@ -7,8 +7,7 @@ INCLUDEPATH +=	../EnglishName \
 				../MySetting \
                 ../MyComboBox \
 				../Thesaurus \
-				../EmbeddableLineEdit \
-				../BibFixer
+				../EmbeddableLineEdit
 
 win32 {
 	RC_FILE = PaperNet.rc
@@ -41,7 +40,7 @@ HEADERS += \
 		   ../EnglishName/EnglishName.h \
     NewReferenceDlg.h \
     RelatedPapersWidget.h \
-    CoauthoredPapersWidgdet.h \
+	CoauthoredPapersWidget.h \
     QuotesWidget.h \
     RelatedPhraseWidget.h \
 	RefParser.h \
@@ -61,7 +60,8 @@ HEADERS += \
     MultiSectionCompleter.h \
     ToolBar.h \
     SearchLineEdit.h \
-	../EmbeddableLineEdit/EmbeddableLineEdit.h
+	../EmbeddableLineEdit/EmbeddableLineEdit.h \
+    PaperWidgetMapper.h
 FORMS += \
          AttachmentsWidget.ui \
          LinkDlg.ui \
@@ -74,7 +74,7 @@ FORMS += \
          PaperList.ui \
     NewReferenceDlg.ui \
     RelatedPapersWidget.ui \
-    CoauthoredPapersWidgdet.ui \
+	CoauthoredPapersWidget.ui \
     QuotesWidget.ui \
 	RelatedPhraseWidget.ui \
     RefDlg.ui \
@@ -103,7 +103,7 @@ SOURCES += \
            ../EnglishName/EnglishName.cpp \
 	NewReferenceDlg.cpp \
     RelatedPapersWidget.cpp \
-    CoauthoredPapersWidgdet.cpp \
+	CoauthoredPapersWidget.cpp \
     QuotesWidget.cpp \
     RelatedPhraseWidget.cpp \
 	RefParser.cpp \
@@ -123,7 +123,8 @@ SOURCES += \
     MultiSectionCompleter.cpp \
     ToolBar.cpp \
     SearchLineEdit.cpp \
-	../EmbeddableLineEdit/EmbeddableLineEdit.cpp
+	../EmbeddableLineEdit/EmbeddableLineEdit.cpp \
+    PaperWidgetMapper.cpp
 RESOURCES += MainWindow.qrc
 
 

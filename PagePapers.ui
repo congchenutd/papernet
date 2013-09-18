@@ -57,7 +57,7 @@
       </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="tabAbstract">
         <attribute name="title">
@@ -194,7 +194,7 @@
           <number>5</number>
          </property>
          <item>
-          <widget class="CoauthoredPapersWidgdet" name="widgetCoauthered" native="true"/>
+          <widget class="CoauthoredPapersWidget" name="widgetCoauthered" native="true"/>
          </item>
         </layout>
        </widget>
@@ -333,9 +333,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>CoauthoredPapersWidgdet</class>
+   <class>CoauthoredPapersWidget</class>
    <extends>QWidget</extends>
-   <header>CoauthoredPapersWidgdet.h</header>
+   <header>CoauthoredPapersWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

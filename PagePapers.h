@@ -61,13 +61,12 @@ signals:
     void hasPDF(bool);
 
 private:
+    void loadGeometry();
     void resetModel();              // just reset the model
 	int  rowToID(int row) const;
-    void updateQuotes();
+
     void setPaperRead();
     void recreateTagsRelations(const QStringList& tags);
-	void highLightTags();
-	void loadGeometry();
     void attachNewTag(const QString& tagName);   // create a tag and add it to current paper
 
     void submit();

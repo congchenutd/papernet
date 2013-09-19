@@ -111,7 +111,8 @@ void TagsWidget::addTagToItem(int tagID, int itemID)
 	QSqlQuery query;
 	query.exec(tr("insert into %1 values(%2, %3)")
 			   .arg(relationTableName).arg(itemID).arg(tagID));
-	updateTagSize(tagID);   // recalculate tag size
+    updateTagSize(tagID);                // recalculate tag size
+    highLight(getTagsOfPaper(itemID));   // highlight the affected paper
 }
 
 
@@ -127,7 +128,8 @@ void TagsWidget::removeTagFromItem(int tagID, int itemID)
 			   .arg(relationSectionName)
 			   .arg(itemID)
 			   .arg(tagID));
-	updateTagSize(tagID);   // recalculate tag size
+    updateTagSize(tagID);                 // recalculate tag size
+    highLight(getTagsOfPaper(itemID));    // highlight the affected paper
 }
 
 // init

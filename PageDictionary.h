@@ -40,8 +40,7 @@ signals:
 private:
     void resetPhrases();
     int  rowToID(int row) const;
-    void updateTags(int phraseID, const QStringList& tags); // reset phraseID's tags
-    void highLightTags();                                   // highlight tags of current phrase
+    void updateTags(int phraseID, const QStringList &tags);
 	void loadGeometry();
 
 private:

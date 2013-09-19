@@ -112,16 +112,25 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>85</width>
-         <height>251</height>
+         <width>77</width>
+         <height>249</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
-         <widget class="TagsWidget" name="widgetWordCloud" native="true"/>
+         <widget class="TagsWidget" name="widgetTags" native="true"/>
         </item>
        </layout>
       </widget>

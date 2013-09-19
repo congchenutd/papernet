@@ -43,6 +43,8 @@ PagePapers::PagePapers(QWidget *parent)
     _mapper->setAttachmentWidget(ui.widgetAttachments);
     _mapper->setRelatedWidget   (ui.widgetRelated);
     _mapper->setCoauthoredWidget(ui.widgetCoauthered);
+    _mapper->setQuotesWidget    (ui.widgetQuotes);
+    _mapper->setTagsWidget      (ui.widgetTags);
 
 	ui.tvPapers->setModel(&_model);
     ui.tvPapers->hideColumn(PAPER_ID);
@@ -86,8 +88,6 @@ void PagePapers::onSelectionChanged(const QItemSelection& selected)
     {
         _currentRow = selected.indexes().front().row();
         _currentID  = rowToID(_currentRow);
-        highLightTags();                         // update tags
-        updateQuotes();                          // quotes
         emit hasPDF(pdfAttached(_currentID));    // let MainWindow update actionPDF
     }
     emit selectionValid(!selected.isEmpty());
@@ -227,8 +227,6 @@ void PagePapers::recreateTagsRelations(const QStringList& tags)
 	// add relations back
 	foreach(QString tagName, tags)
 		attachNewTag(tagName);
-
-	highLightTags();
 }
 
 void PagePapers::delRecord()
@@ -394,9 +392,8 @@ void PagePapers::onNewTag()
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		int tagID = getNextID("Tags", "ID");
-        ui.widgetTags->addTag(tagID, dlg.getText());         // create tag
+        ui.widgetTags->addTag(tagID, dlg.getText());     // create tag
         ui.widgetTags->addTagToItem(tagID, _currentID);  // add to paper
-		highLightTags();
 	}
 }
 
@@ -410,12 +407,6 @@ void PagePapers::onAddTagToPaper()
 		foreach(WordLabel* tag, tags)   // add all selected tags to selected papers
             ui.widgetTags->addTagToItem(getTagID("Tags", tag->text()), paperID);
 	}
-	highLightTags();
-}
-
-// highlight the tags of current paper
-void PagePapers::highLightTags() {
-    ui.widgetTags->highLight(getTagsOfPaper(_currentID));
 }
 
 // same structure as onAddTagToPaper()
@@ -429,7 +420,6 @@ void PagePapers::onDelTagFromPaper()
 		foreach(WordLabel* tag, tags)
             ui.widgetTags->removeTagFromItem(getTagID("Tags", tag->text()), paperID);
 	}
-	highLightTags();
 }
 
 void PagePapers::submit()
@@ -457,7 +447,6 @@ void PagePapers::jumpToID(int id)
     ui.tvPapers->setFocus();
 }
 
-// filter papers with tags
 void PagePapers::onFilterPapersByTags(bool AND)
 {
 	// get selected tags
@@ -485,10 +474,6 @@ void PagePapers::onFilterPapersByTags(bool AND)
 	}
 }
 
-void PagePapers::updateQuotes() {
-    ui.widgetQuotes->setCentralPaper(_currentID);
-}
-
 void PagePapers::onAddQuote()
 {
     QuoteDlg dlg(this);
@@ -496,7 +481,7 @@ void PagePapers::onAddQuote()
     dlg.setQuoteID(getNextID("Quotes", "ID"));  // create new quote id
     dlg.addRef(idToTitle(_currentID));          // add current paper
     if(dlg.exec() == QDialog::Accepted)
-        updateQuotes();
+        _mapper->refresh();                     // show the newly added
 }
 
 void PagePapers::onAddPDF()
@@ -575,7 +560,6 @@ void PagePapers::onPrintMe(bool print)
 		attachNewTag("PrintMe");
 	else
         ui.widgetTags->removeTagFromItem(getTagID("Tags", "PrintMe"), _currentID);
-	highLightTags();
 }
 
 void PagePapers::onBookmark(bool readMe)
@@ -584,7 +568,6 @@ void PagePapers::onBookmark(bool readMe)
 		attachNewTag("ReadMe");
 	else
 		setPaperRead();
-	highLightTags();
 }
 
 void PagePapers::attachNewTag(const QString& tagName)
@@ -598,10 +581,8 @@ void PagePapers::attachNewTag(const QString& tagName)
     ui.widgetTags->addTagToItem(tagID, _currentID);
 }
 
-void PagePapers::setPaperRead()
-{
+void PagePapers::setPaperRead() {
     ui.widgetTags->removeTagFromItem(getTagID("Tags", "ReadMe"), _currentID);
-	highLightTags();
 }
 
 void PagePapers::onRelatedDoubleClicked(int paperID)

@@ -20,7 +20,7 @@ PageDictionary::PageDictionary(QWidget *parent)
     ui.tableView->resizeColumnToContents(DICT_PHRASE);
     ui.tableView->sortByColumn(DICT_PHRASE, Qt::AscendingOrder);
 
-	ui.widgetWordCloud->setTableNames("DictionaryTags", "PhraseTag", "Phrase");
+    ui.widgetTags->setTableNames("DictionaryTags", "PhraseTag", "Phrase");
 	loadGeometry();
 
     connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -28,12 +28,12 @@ PageDictionary::PageDictionary(QWidget *parent)
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.tableView, SIGNAL(clicked      (QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 
-    connect(ui.widgetWordCloud, SIGNAL(filter(bool)), this, SLOT(onFilterByTags(bool)));
-	connect(ui.widgetWordCloud, SIGNAL(newTag()),     this, SLOT(onAddTag()));
-    connect(ui.widgetWordCloud, SIGNAL(addTag()),     this, SLOT(onAddTagsToPhrases()));
-    connect(ui.widgetWordCloud, SIGNAL(removeTag()),  this, SLOT(onRemoveTagsFromPhrases()));
-	connect(ui.widgetWordCloud, SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
-    connect(ui.widgetRelated,   SIGNAL(doubleClicked(int)),     this, SLOT(onRelatedDoubleClicked(int)));
+    connect(ui.widgetTags,    SIGNAL(filter(bool)), this, SLOT(onFilterByTags(bool)));
+    connect(ui.widgetTags,    SIGNAL(newTag()),     this, SLOT(onAddTag()));
+    connect(ui.widgetTags,    SIGNAL(addTag()),     this, SLOT(onAddTagsToPhrases()));
+    connect(ui.widgetTags,    SIGNAL(removeTag()),  this, SLOT(onRemoveTagsFromPhrases()));
+    connect(ui.widgetTags,    SIGNAL(doubleClicked(QString)), this, SLOT(onTagDoubleClicked(QString)));
+    connect(ui.widgetRelated, SIGNAL(doubleClicked(int)),     this, SLOT(onRelatedDoubleClicked(int)));
 }
 
 void PageDictionary::addRecord()
@@ -102,11 +102,10 @@ void PageDictionary::updateTags(int phraseID, const QStringList& tags)
         if(tagID < 0)     // a new tag
 		{
 			tagID = getNextID("DictionaryTags", "ID");
-			ui.widgetWordCloud->addTag(tagID, tag);
+            ui.widgetTags->addTag(tagID, tag);
 		}
-        ui.widgetWordCloud->addTagToItem(tagID, phraseID);
+        ui.widgetTags->addTagToItem(tagID, phraseID);
 	}
-	highLightTags();
 }
 
 void PageDictionary::onSelectionChanged(const QItemSelection& selected)
@@ -115,7 +114,7 @@ void PageDictionary::onSelectionChanged(const QItemSelection& selected)
     {
         _currentRow      = selected.indexes().front().row();
         _currentPhraseID = rowToID(_currentRow);
-        highLightTags();
+        ui.widgetTags->highLight(getTagsOfPhrase(_currentPhraseID));
         ui.widgetRelated->setCentralPhraseID(_currentPhraseID);
     }
     emit selectionValid(!selected.isEmpty());
@@ -132,9 +131,8 @@ void PageDictionary::onAddTag()
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		int tagID = getNextID("DictionaryTags", "ID");
-		ui.widgetWordCloud->addTag(tagID, dlg.getText());
-        ui.widgetWordCloud->addTagToItem(tagID, _currentPhraseID);
-		highLightTags();
+        ui.widgetTags->addTag(tagID, dlg.getText());
+        ui.widgetTags->addTagToItem(tagID, _currentPhraseID);
 	}
 }
 
@@ -145,12 +143,11 @@ void PageDictionary::onAddTagsToPhrases()
     foreach(const QModelIndex& idx, rows)
 	{
         int phraseID = _model.data(idx).toInt();
-		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+        QList<WordLabel*> tags = ui.widgetTags->getSelected();
 		foreach(WordLabel* tag, tags)
-			ui.widgetWordCloud->addTagToItem(getTagID("DictionaryTags", tag->text()),
+            ui.widgetTags->addTagToItem(getTagID("DictionaryTags", tag->text()),
 											 phraseID);
 	}
-	highLightTags();
 }
 
 // del selected tags from selected phrases
@@ -160,19 +157,18 @@ void PageDictionary::onRemoveTagsFromPhrases()
 	foreach(QModelIndex idx, rows)
 	{
         int phraseID = _model.data(idx).toInt();
-		QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+        QList<WordLabel*> tags = ui.widgetTags->getSelected();
 		foreach(WordLabel* tag, tags)
-			ui.widgetWordCloud->removeTagFromItem(getTagID("DictionaryTags", tag->text()),
+            ui.widgetTags->removeTagFromItem(getTagID("DictionaryTags", tag->text()),
 												  phraseID);
 	}
-	highLightTags();
 }
 
 void PageDictionary::onFilterByTags(bool AND)
 {
 	// get selected tags
 	QStringList tagIDs;
-	QList<WordLabel*> tags = ui.widgetWordCloud->getSelected();
+    QList<WordLabel*> tags = ui.widgetTags->getSelected();
 	foreach(WordLabel* tag, tags)
 		tagIDs << tr("%1").arg(getTagID("DictionaryTags", tag->text()));
 
@@ -194,10 +190,6 @@ void PageDictionary::onFilterByTags(bool AND)
 							 (select * from PhraseTag where \
 							 phrase=Dictionary.ID and Tag=SelectedTags.ID))");
 	}
-}
-
-void PageDictionary::highLightTags() {
-    ui.widgetWordCloud->highLight(getTagsOfPhrase(_currentPhraseID));
 }
 
 void PageDictionary::loadGeometry()
@@ -259,7 +251,7 @@ void PageDictionary::search(const QString& target)
                          Explanation like \"%%1%\" ").arg(target));
 
 	// highlight tags
-	ui.widgetWordCloud->search(target);
+    ui.widgetTags->search(target);
 }
 
 int PageDictionary::rowToID(int row) const {

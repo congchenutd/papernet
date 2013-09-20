@@ -1,16 +1,16 @@
 #ifndef COAUTHOREDPAPERSWIDGDET_H
 #define COAUTHOREDPAPERSWIDGDET_H
 
-#include "ui_CoauthoredPapersWidgdet.h"
+#include "ui_CoauthoredPapersWidget.h"
 #include <QStandardItemModel>
 
 // widget for showing coauthored papers
-class CoauthoredPapersWidgdet : public QWidget
+class CoauthoredPapersWidget : public QWidget
 {
 	Q_OBJECT
 	
 public:
-	CoauthoredPapersWidgdet(QWidget *parent = 0);
+	CoauthoredPapersWidget(QWidget *parent = 0);
 	void setCentralPaper(int paperID);
     void saveSectionSizes();
 
@@ -31,7 +31,7 @@ signals:
     void doubleClicked(int paperID);
 	
 private:
-	Ui::CoauthoredPapersWidgdet ui;
+	Ui::CoauthoredPapersWidget ui;
     QStandardItemModel _model;
     int                _centralPaperID;
 

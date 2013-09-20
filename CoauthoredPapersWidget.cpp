@@ -1,10 +1,10 @@
-#include "CoauthoredPapersWidgdet.h"
+#include "CoauthoredPapersWidget.h"
 #include "Common.h"
 #include "EnglishName.h"
 #include "OptionDlg.h"
 #include <QSqlQuery>
 
-CoauthoredPapersWidgdet::CoauthoredPapersWidgdet(QWidget *parent) :
+CoauthoredPapersWidget::CoauthoredPapersWidget(QWidget *parent) :
 	QWidget(parent)
 {
 	ui.setupUi(this);
@@ -25,7 +25,7 @@ CoauthoredPapersWidgdet::CoauthoredPapersWidgdet(QWidget *parent) :
     connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPaperDoubleClicked(QModelIndex)));
 }
 
-void CoauthoredPapersWidgdet::setCentralPaper(int paperID)
+void CoauthoredPapersWidget::setCentralPaper(int paperID)
 {    
     if(paperID < 0 || paperID == _centralPaperID)
         return;
@@ -35,15 +35,15 @@ void CoauthoredPapersWidgdet::setCentralPaper(int paperID)
         update();   // lazy update, avoiding uncessary computation
 }
 
-void CoauthoredPapersWidgdet::saveSectionSizes() {
+void CoauthoredPapersWidget::saveSectionSizes() {
     ui.tableView->saveSectionSizes();
 }
 
-void CoauthoredPapersWidgdet::showEvent(QShowEvent*) {
+void CoauthoredPapersWidget::showEvent(QShowEvent*) {
     update();
 }
 
-void CoauthoredPapersWidgdet::update()
+void CoauthoredPapersWidget::update()
 {
     QSqlDatabase::database().transaction();
     _model.removeRows(0, _model.rowCount());
@@ -78,7 +78,7 @@ void CoauthoredPapersWidgdet::update()
     QSqlDatabase::database().commit();
 }
 
-void CoauthoredPapersWidgdet::updateCoauthorRecord(int paperID, const QString& paperTitle,
+void CoauthoredPapersWidget::updateCoauthorRecord(int paperID, const QString& paperTitle,
                                                    const QString& authors, int year)
 {
     if(paperID == _centralPaperID)
@@ -105,6 +105,6 @@ void CoauthoredPapersWidgdet::updateCoauthorRecord(int paperID, const QString& p
 	}
 }
 
-void CoauthoredPapersWidgdet::onPaperDoubleClicked(const QModelIndex& idx) {
+void CoauthoredPapersWidget::onPaperDoubleClicked(const QModelIndex& idx) {
 	emit doubleClicked(_model.data(_model.index(idx.row(), COL_ID)).toInt());
 }

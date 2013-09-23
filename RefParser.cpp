@@ -93,12 +93,12 @@ Reference LineRefParser::parseRecord(const QString& record) const
     return result;
 }
 
-QStringList LineRefParser::parseAuthors(const QString& authors) const
+QString LineRefParser::parseAuthors(const QString& authors) const
 {
     QString separator = formatSpec->getSeparator("authors");
 	return separator.isEmpty() 
-		? QStringList() << authors               // one line is one author
-		: splitNamesLine(authors, separator);  // all authors in one line
+        ? authors                                         // one line is one author
+        : splitNamesLine(authors, separator).join("; ");  // all authors in one line
 }
 
 QString LineRefParser::parsePages(const QString& pages) const
@@ -137,7 +137,7 @@ ParserFactory::ParserFactory()
     parsers.insert("null", new NullParser);
 
     LineRefParser* lineRefParser = new LineRefParser;
-    parsers.insert("bib",  lineRefParser);
-    parsers.insert("ris",  lineRefParser);
-    parsers.insert("enw",  lineRefParser);
+    parsers.insert("bib", lineRefParser);
+    parsers.insert("ris", lineRefParser);
+    parsers.insert("enw", lineRefParser);
 }

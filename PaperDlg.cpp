@@ -11,7 +11,7 @@
 #include <QFileDialog>
 
 PaperDlg::PaperDlg(QWidget *parent)
-    : QDialog(parent), _id(-1)
+    : QDialog(parent), _id(-1), _dirty(false)
 {
 	ui.setupUi(this);
     resize(750, 650);
@@ -121,6 +121,25 @@ void PaperDlg::setReference(const Reference& ref)
 
     // call it after setting publication, so we may guess the type from publication
     setType(ref.getValue("type").toString());
+
+    // connect after the fields are modified by program
+    connect(ui.leTitle,       SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leAuthors,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.lePublication, SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leYear,        SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leVolume,      SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leIssue,       SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leStartPage,   SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leEndPage,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leEditors,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leAddress,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.lePublisher,   SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leUrl,         SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.lePDF,         SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leTags,        SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.comboType,  SIGNAL(currentTextChanged(QString)), this, SLOT(onDirty()));
+    connect(ui.teAbstract, SIGNAL(textChanged()), this, SLOT(onDirty()));
+    connect(ui.teNote,     SIGNAL(textChanged()), this, SLOT(onDirty()));
 }
 
 QString PaperDlg::getPDFPath() const {
@@ -167,4 +186,10 @@ void PaperDlg::onAddPDF()
         UserSetting::getInstance()->setLastAttachmentPath(QFileInfo(filePath).path());
         ui.btAddPDF->setText(ui.btAddPDF->text() + "*");   // indicated PDF is added
     }
+}
+
+void PaperDlg::onDirty()
+{
+    _dirty = true;
+    ui.btOK->setEnabled(true);
 }

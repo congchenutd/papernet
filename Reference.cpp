@@ -4,13 +4,15 @@
 #include <QDate>
 
 bool Reference::fieldExists(const QString& field) const {
-    return _fields.contains(field);
+    return _fields.contains(field.toLower());
 }
 
 void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
 {
+    QString name = fieldName.toLower();
+
     // pages -> startpage, endpage
-    if(fieldName == "pages")
+    if(name == "pages")
     {
         QStringList pages = fieldValue.toString().split("-");
         if(pages.size() == 2)
@@ -21,25 +23,27 @@ void Reference::setValue(const QString& fieldName, const QVariant& fieldValue)
     }
 
     // startpage, endpage -> pages
-    else if(fieldName == "startpage" || fieldName == "endpage")
+    else if(name == "startpage" || name == "endpage")
     {
-        _fields[fieldName] = fieldValue;
+        _fields[name] = fieldValue;
         if(fieldExists("startpage") && fieldExists("endpage"))
             _fields["pages"] = _fields["startpage"].toString() + "-" + _fields["endpage"].toString();
     }
 
     else
-        _fields[fieldName] = fieldValue;
+        _fields[name] = fieldValue;
 }
 
 QVariant Reference::getValue(const QString& fieldName) const
 {
+    QString name = fieldName.toLower();
+
     // startpage, endpage -> pages
-    if(fieldName == "pages" && fieldExists("startpage") && fieldExists("endpage"))
+    if(name == "pages" && fieldExists("startpage") && fieldExists("endpage"))
         return _fields["startpage"].toString() + "-" + _fields["endpage"].toString();
 
     else
-        return fieldExists(fieldName) ? _fields[fieldName] : QVariant();
+        return fieldExists(name) ? _fields[name] : QVariant();
 }
 
 void Reference::generateID()

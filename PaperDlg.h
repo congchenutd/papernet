@@ -41,6 +41,7 @@ private slots:
     void onTypeChanged(const QString& typeName);  // highlight required fields of the type
     void onGoogle();
     void onAddPDF();
+    void onDirty();
 
 private:
     void setTitle(const QString& title);  // may fix errors in the title
@@ -50,6 +51,7 @@ private:
 	Ui::PaperDlgClass ui;
     int      _id;      // paper id
     Fields   _fields;  // stores all the fields except type and tags
+    bool     _dirty;
 };
 
 #endif // PAPERDLG_H

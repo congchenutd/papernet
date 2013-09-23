@@ -4,9 +4,11 @@
 #include <QVariant>
 #include <QMap>
 
-// A reference record
-// case sensitive
-// all field names should use lower case
+// A reference (paper) record
+// case insensitive
+// all field names are converted to lower case
+// NOTE: startpage, endpage <-> pages auto convered, and may be redundant
+// because some references use pages (e.g., 1-2), while some use startpage and endpage
 class Reference
 {
 public:
@@ -20,11 +22,10 @@ public:
     bool     isValid() const { return _fields.contains("type"); }
     void     clear();
     void     generateID();    // last name + year
-    void     touch();         // set modified date
+    void     touch();         // set modified date to today
 
 private:
     Fields _fields;
-    // NOTE: startpage, endpage <-> pages auto convered, and may be redundant
 };
 
 #endif // PAPER_H

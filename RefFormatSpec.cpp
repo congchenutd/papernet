@@ -86,7 +86,7 @@ bool RefSpec::load(const QString& specName)
                 _templateRecord = xml.readElementText();
             else if(name == "FieldExportTemplate")
                 _templateField = xml.readElementText();
-			else if(name == "separator")
+            else if(name == "Separator")
 				loadSeparator(xml);
 
             // types
@@ -102,7 +102,7 @@ bool RefSpec::load(const QString& specName)
 
 void RefSpec::loadSeparator(QXmlStreamReader& xml)
 {
-	if(!xml.isStartElement() || xml.name() != "separator")
+    if(!xml.isStartElement() || xml.name() != "Separator")
 		return;
 
 	QString inName    = xml.attributes().value("internal").toString();

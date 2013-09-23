@@ -27,7 +27,7 @@ void centerWindow(QWidget* widget);
 // separated list -> QStringList, unnecessary spaces removed
 QStringList splitLine(const QString& line, const QString& separator);
 
-// same as above, but namea formatted
+// same as above, but names formatted
 QStringList splitNamesLine(const QString& namesLine,
                            const QString& separator = ";",
                            const QString& format = "L,;m;F");

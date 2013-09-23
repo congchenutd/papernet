@@ -20,17 +20,17 @@ public:
     QList<Reference> parse(const QString&, RefSpec*) { return QList<Reference>(); }
 };
 
-// each line is a field, unlike XML
+// LineRefParser deals with references where each line is a field
 class LineRefParser : public IRefParser
 {
 public:
     QList<Reference> parse(const QString& content, RefSpec* spec);
 
 private:
-	Reference   parseRecord (const QString& record)  const;
-	QString     getTypeName (const QString& record)  const;
-	QStringList parseAuthors(const QString& authors) const;
-	QString     parsePages  (const QString& pages)   const;
+    Reference parseRecord (const QString& record)  const;
+    QString   getTypeName (const QString& record)  const;
+    QString   parseAuthors(const QString& authors) const;
+    QString   parsePages  (const QString& pages)   const;
 
 protected:
     RefSpec* formatSpec;

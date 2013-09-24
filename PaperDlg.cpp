@@ -60,6 +60,22 @@ PaperDlg::PaperDlg(QWidget *parent)
             this,         SLOT(onTypeChanged(QString)));
     connect(ui.btGoogle,  SIGNAL(clicked()), this, SLOT(onGoogle()));
     connect(ui.btAddPDF,  SIGNAL(clicked()), this, SLOT(onAddPDF()));
+
+    // these signals won't be triggered by program
+    connect(ui.leTitle,       SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leAuthors,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.lePublication, SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leYear,        SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leVolume,      SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leIssue,       SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leStartPage,   SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leEndPage,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leEditors,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leAddress,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.lePublisher,   SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leUrl,         SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.lePDF,         SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    connect(ui.leTags,        SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
 }
 
 void PaperDlg::setTitle(const QString& title)
@@ -111,6 +127,9 @@ Reference PaperDlg::getReference() const
 
 void PaperDlg::setReference(const Reference& ref)
 {
+    // avoid triggering dirty signals by the following code
+    disableDirtyConnections();
+
     _id = ref.fieldExists("id") ? ref.getValue("id").toInt() : -1;
 
     foreach(const Field& field, _fields)
@@ -123,23 +142,21 @@ void PaperDlg::setReference(const Reference& ref)
     setType(ref.getValue("type").toString());
 
     // connect after the fields are modified by program
-    connect(ui.leTitle,       SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leAuthors,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.lePublication, SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leYear,        SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leVolume,      SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leIssue,       SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leStartPage,   SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leEndPage,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leEditors,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leAddress,     SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.lePublisher,   SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leUrl,         SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.lePDF,         SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
-    connect(ui.leTags,        SIGNAL(textEdited(QString)), this, SLOT(onDirty()));
+    enableDirtyConnections();
+}
+
+void PaperDlg::enableDirtyConnections()
+{
     connect(ui.comboType,  SIGNAL(currentTextChanged(QString)), this, SLOT(onDirty()));
     connect(ui.teAbstract, SIGNAL(textChanged()), this, SLOT(onDirty()));
     connect(ui.teNote,     SIGNAL(textChanged()), this, SLOT(onDirty()));
+}
+
+void PaperDlg::disableDirtyConnections()
+{
+    disconnect(ui.comboType,  SIGNAL(currentTextChanged(QString)), this, SLOT(onDirty()));
+    disconnect(ui.teAbstract, SIGNAL(textChanged()), this, SLOT(onDirty()));
+    disconnect(ui.teNote,     SIGNAL(textChanged()), this, SLOT(onDirty()));
 }
 
 QString PaperDlg::getPDFPath() const {

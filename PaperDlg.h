@@ -47,6 +47,9 @@ private:
     void setTitle(const QString& title);  // may fix errors in the title
     void setType (const QString& type);   // if type invalide, guess it from the publication
 
+    void enableDirtyConnections();
+    void disableDirtyConnections();
+
 private:
 	Ui::PaperDlgClass ui;
     int      _id;      // paper id

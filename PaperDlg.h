@@ -22,39 +22,41 @@ class PaperDlg : public QDialog
 {
 	Q_OBJECT
 
-    typedef QPair<QString, IFieldEdit*> Field;    // fieldName -> edit
-    typedef QList<Field>                Fields;
+	typedef QPair<QString, IFieldEdit*> Field;    // fieldName -> edit
+	typedef QList<Field>                Fields;
 
 public:
-    PaperDlg(QWidget* parent = 0);
+	PaperDlg(QWidget* parent = 0);
 	virtual void accept();
 
-    Reference getReference() const;
-    void      setReference(const Reference& ref);
+	Reference getReference() const;
+	void      setReference(const Reference& ref);
 
-    QString getPDFPath() const;
-    void    setPDFPath(const QString& path);
+	QString getPDFPath() const;
+	void    setPDFPath(const QString& path);
 
-    void showMergeMark();
+	void showMergeMark();
+
+public slots:
+	void onDirty();
 
 private slots:
-    void onTypeChanged(const QString& typeName);  // highlight required fields of the type
-    void onGoogle();
-    void onAddPDF();
-    void onDirty();
+	void onTypeChanged(const QString& typeName);  // highlight required fields of the type
+	void onGoogle();
+	void onAddPDF();
 
 private:
-    void setTitle(const QString& title);  // may fix errors in the title
-    void setType (const QString& type);   // if type invalide, guess it from the publication
+	void setTitle(const QString& title);  // may fix errors in the title
+	void setType (const QString& type);   // if type invalide, guess it from the publication
 
-    void enableDirtyConnections();
-    void disableDirtyConnections();
+	void enableDirtyConnections();
+	void disableDirtyConnections();
 
 private:
 	Ui::PaperDlgClass ui;
-    int      _id;      // paper id
-    Fields   _fields;  // stores all the fields except type and tags
-    bool     _dirty;
+	int      _id;      // paper id
+	Fields   _fields;  // stores all the fields except type and tags
+	bool     _dirty;
 };
 
 #endif // PAPERDLG_H

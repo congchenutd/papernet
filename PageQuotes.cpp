@@ -10,15 +10,15 @@ PageQuotes::PageQuotes(QWidget *parent)
 {
 	_currentRow = -1;
 	ui.setupUi(this);
-    ui.tableView->init("PageQuotes", UserSetting::getInstance());
+	ui.tableView->init("PageQuotes", UserSetting::getInstance());
 
-    reset();   // init model
+	reset();   // init model
 	ui.tableView->setModel(&_model);
 	ui.tableView->hideColumn(QUOTE_ID);
 	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
 
-    connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(onSelectionChanged(QItemSelection)));
+	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+			this, SLOT(onSelectionChanged(QItemSelection)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
 	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
 }
@@ -32,9 +32,9 @@ void PageQuotes::search(const QString& target)
 
 void PageQuotes::onSelectionChanged(const QItemSelection& selected)
 {
-    if(!selected.isEmpty())
-        _currentRow = selected.indexes().front().row();
-    emit selectionValid(!selected.isEmpty());
+	if(!selected.isEmpty())
+		_currentRow = selected.indexes().front().row();
+	emit selectionValid(!selected.isEmpty());
 }
 
 void PageQuotes::onClicked(const QModelIndex& idx) {
@@ -43,19 +43,19 @@ void PageQuotes::onClicked(const QModelIndex& idx) {
 
 void PageQuotes::addRecord()
 {
-    QuoteDlg dlg(this);
-    dlg.setWindowTitle(tr("Add Quote"));
-    dlg.setQuoteID(getNextID("Quotes", "ID"));
-    if(dlg.exec() == QDialog::Accepted)
+	QuoteDlg dlg(this);
+	dlg.setWindowTitle(tr("Add Quote"));
+	dlg.setQuoteID(getNextID("Quotes", "ID"));
+	if(dlg.exec() == QDialog::Accepted)
 		reset();   // just refresh, dlg will submit the changes
 }
 
 void PageQuotes::onEdit()
 {
-    QuoteDlg dlg(this);
-    dlg.setWindowTitle(tr("Edit Quote"));
+	QuoteDlg dlg(this);
+	dlg.setWindowTitle(tr("Edit Quote"));
 	dlg.setQuoteID(rowToID(_currentRow));
-    if(dlg.exec() == QDialog::Accepted)
+	if(dlg.exec() == QDialog::Accepted)
 		reset();   // just refresh, dlg will submit the changes
 }
 
@@ -68,11 +68,11 @@ void PageQuotes::delRecord()
 		foreach(QModelIndex idx, idxList)
 			delQuote(rowToID(idx.row()));
 		reset();   // just refresh, dlg will submit the changes
-    }
+	}
 }
 
 void PageQuotes::editRecord() {
-    onEdit();
+	onEdit();
 }
 
 void PageQuotes::reset()

@@ -10,12 +10,12 @@ struct FootStep
 {
 	FootStep(Page* p = 0, int i = -1)
 	{
-        _page = p;
-        _id   = i;
+		_page = p;
+		_id   = i;
 	}
 
-    Page* _page;
-    int   _id;      // record id on the page
+	Page* _page;
+	int   _id;      // record id on the page
 };
 
 // tracks navigation history
@@ -37,12 +37,12 @@ signals:
 	void futureValid (bool);
 
 private:
-    bool validateHistory();
-    bool validateFuture();
+	bool validateHistory();
+	bool validateFuture();
 
 private:
-    QStack<FootStep> _history;    // the top of history is the current position
-    QStack<FootStep> _future;
+	QStack<FootStep> _history;    // the top of history is the current position
+	QStack<FootStep> _future;
 
 	static Navigator* instance;
 };

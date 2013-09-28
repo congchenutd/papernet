@@ -32,9 +32,6 @@ public:
 	Reference getReference() const;
 	void      setReference(const Reference& ref);
 
-	QString getPDFPath() const;
-	void    setPDFPath(const QString& path);
-
 	void showMergeMark();
 
 public slots:

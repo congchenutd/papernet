@@ -71,8 +71,8 @@ private:
 
 	void submit();
 	void insertReference(const Reference& ref);                // insert or replace
-	void updateRefByRow(int row, const Reference& ref);        // update a row by the ref
-	void updateRefByID (int id,  const Reference& ref);
+    void updateRefByRow(int row, const Reference& r);          // update a row by the ref
+    void updateRefByID (int id,  const Reference& r);
 	void importReferences(const QList<Reference>& references); // review and insert
 	QList<Reference> parseContent(const QString& content);     // using all possible specs' parsers
 

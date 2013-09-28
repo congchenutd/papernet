@@ -31,7 +31,7 @@ PaperDlg::PaperDlg(QWidget *parent)
             << Field("url",         ui.leUrl)
             << Field("abstract",    ui.teAbstract)
             << Field("note",        ui.teNote)
-            << Field("PDF",         ui.lePDF)
+            << Field("PDF",         ui.lePDF)        // saving PDF path
             << Field("tags",        ui.leTags);
 
     ui.leAuthors->setSeparator("; ");
@@ -159,14 +159,6 @@ void PaperDlg::disableDirtyConnections()
     disconnect(ui.teNote,     SIGNAL(textChanged()), this, SLOT(onDirty()));
 }
 
-QString PaperDlg::getPDFPath() const {
-    return ui.lePDF->text();
-}
-
-void PaperDlg::setPDFPath(const QString& path) {
-    ui.lePDF->setText(path);
-}
-
 void PaperDlg::showMergeMark() {
     setWindowTitle(windowTitle() + " - Merged!");
 }
@@ -199,9 +191,10 @@ void PaperDlg::onAddPDF()
                                                     tr("PDF (*.pdf)"));
     if(!filePath.isEmpty() && QFile::exists(filePath))
     {
-        setPDFPath(filePath);
-        UserSetting::getInstance()->setLastAttachmentPath(QFileInfo(filePath).path());
+        ui.lePDF->setText(filePath);
         ui.btAddPDF->setText(ui.btAddPDF->text() + "*");   // indicated PDF is added
+        UserSetting::getInstance()->setLastAttachmentPath(QFileInfo(filePath).path());
+        onDirty();
     }
 }
 

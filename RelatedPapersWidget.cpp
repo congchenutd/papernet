@@ -46,13 +46,17 @@ void RelatedPapersWidget::update()
     // 2. count the # of all other papers that have these tags
     // 3. associate the # with the papers
     QSqlQuery query;    // query direct tags' names
+    query.exec(tr("select ID from Tags where Name=\'%1\'").arg("ReadMe"));
+    int readMe = query.next() ? query.value(0).toInt() : -1;  // ignore ReadMe
     query.exec(tr("select Papers.ID, Papers.Title, count(Paper) Proximity, Papers.Authors, Papers.Year \
                    from Papers, PaperTag \
                    where Tag in (select Tag from PaperTag where Paper = %1) \
                          and PaperTag.Paper != %1 and Papers.ID = PaperTag.Paper \
+                         and Tag != %2\
                    group by PaperTag.Paper \
                    order by Proximity desc")
-            .arg(_centralPaperID));
+            .arg(_centralPaperID)
+            .arg(readMe));
 
     QSqlDatabase::database().commit();
 

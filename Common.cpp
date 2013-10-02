@@ -41,26 +41,26 @@ void createTables()
 {
 	QSqlQuery query;
 	query.exec("PRAGMA foreign_keys = ON");
-    query.exec("create table Papers( \
-               ID          int primary key, \
-               Attached    bool,    \
-               Title       varchar unique, \
-               Authors     varchar, \
-               Year        date,    \
-               Modified    date,    \
-               Type        varchar, \
-               Publication varchar, \
-               Abstract    varchar, \
-               Volume      int, \
-               Issue       int, \
-               Startpage   int, \
-               Endpage     int, \
-               Publisher   varchar, \
-               Editors     varchar, \
-               Address     varchar, \
-               Url         varchar, \
-               Note        varchar  \
-               )");
+	query.exec("create table Papers( \
+			   ID          int primary key, \
+			   Attached    bool,    \
+			   Title       varchar unique, \
+			   Authors     varchar, \
+			   Year        date,    \
+			   Modified    date,    \
+			   Type        varchar, \
+			   Publication varchar, \
+			   Abstract    varchar, \
+			   Volume      int, \
+			   Issue       int, \
+			   Startpage   int, \
+			   Endpage     int, \
+			   Publisher   varchar, \
+			   Editors     varchar, \
+			   Address     varchar, \
+			   Url         varchar, \
+			   Note        varchar  \
+			   )");
 	query.exec("create table Tags( \
 					ID int primary key, \
 					Name varchar unique, \
@@ -163,10 +163,10 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 	if(attachmentName.toLower().endsWith(".pdf"))   // create full text for pdf
 		makeFullTextFile(filePath, getFullTextFilePath(paperID, targetFilePath));
 
-    bool result = QFile::copy(filePath, targetFilePath);
-    if(UserSetting::getInstance()->getMoveAttachments())   // remove the original
-        QFile::remove(filePath);
-    return result;
+	bool result = QFile::copy(filePath, targetFilePath);
+	if(UserSetting::getInstance()->getMoveAttachments())   // remove the original
+		QFile::remove(filePath);
+	return result;
 }
 
 QString autoRename(const QString& original)
@@ -174,22 +174,22 @@ QString autoRename(const QString& original)
 	QString extension = QFileInfo(original).suffix().toLower();
 	QString baseName  = QFileInfo(original).baseName();
 
-    QString result = original;
-    while(QFile::exists(result))
-    {
-        QRegExp rxNumber("\\((\\d+)\\)");
-        if(rxNumber.indexIn(baseName) > -1)   // find (number) and increase number
-        {
-            int number = rxNumber.cap(1).toInt();
-            baseName.replace(rxNumber, "(" + QString::number(number + 1) + ")");
-        }
-        else {
-            baseName += "(1)";                // add (1)
-        }
-        result = QFileInfo(original).path() + "/" + baseName + "." + extension;
-    }
+	QString result = original;
+	while(QFile::exists(result))
+	{
+		QRegExp rxNumber("\\((\\d+)\\)");
+		if(rxNumber.indexIn(baseName) > -1)   // find (number) and increase number
+		{
+			int number = rxNumber.cap(1).toInt();
+			baseName.replace(rxNumber, "(" + QString::number(number + 1) + ")");
+		}
+		else {
+			baseName += "(1)";                // add (1)
+		}
+		result = QFileInfo(original).path() + "/" + baseName + "." + extension;
+	}
 
-    return result;
+	return result;
 }
 
 // del one attachment of the paper
@@ -219,11 +219,11 @@ void delAttachments(int paperID)
 QString idToTitle(int paperID)
 {
 	if(paperID < 0)
-        return QString("Invalid PaperID");
+		return QString("Invalid PaperID");
 
 	QSqlQuery query;
 	query.exec(QObject::tr("select Title from Papers where ID = %1").arg(paperID));
-    return query.next() ? query.value(0).toString() : QString("Invalid PaperID");
+	return query.next() ? query.value(0).toString() : QString("Invalid PaperID");
 }
 
 // remove illegal chars
@@ -244,7 +244,7 @@ QString getAttachmentDir(int paperID) {
 }
 
 QString getValidTitle(int paperID) {
-    return makeValidTitle(idToTitle(paperID));
+	return makeValidTitle(idToTitle(paperID));
 }
 
 bool addLink(int paperID, const QString& link, const QString& u)
@@ -276,13 +276,13 @@ bool addLink(int paperID, const QString& link, const QString& u)
 
 void openFile(const QString& filePath)
 {
-    if(filePath.isEmpty())
-        return;
+	if(filePath.isEmpty())
+		return;
 
-    if(QFileInfo(filePath).isFile())  // FIXME: somehow relative path doesn't work :(
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(filePath).absoluteFilePath()));
-    else
-        QDesktopServices::openUrl(QUrl(filePath));   // Internet address
+	if(QFileInfo(filePath).isFile())  // FIXME: somehow relative path doesn't work :(
+		QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(filePath).absoluteFilePath()));
+	else
+		QDesktopServices::openUrl(QUrl(filePath));   // Internet address
 }
 
 void openAttachment(int paperID, const QString& attachmentName)
@@ -290,8 +290,8 @@ void openAttachment(int paperID, const QString& attachmentName)
 	if(paperID < 0 || attachmentName.isEmpty())
 		return;
 
-    QString filePath = getAttachmentPath(paperID, attachmentName);
-    QString url = filePath;
+	QString filePath = getAttachmentPath(paperID, attachmentName);
+	QString url = filePath;
 
 #ifdef Q_OS_MAC
 	if(attachmentName.toLower().endsWith(".url"))  // mac opens url differently
@@ -306,7 +306,7 @@ void openAttachment(int paperID, const QString& attachmentName)
 		}
 	}
 #endif
-    openFile(url);
+	openFile(url);
 }
 
 QString getAttachmentPath(int paperID, const QString& attachmentName) {
@@ -415,16 +415,16 @@ void delQuote(int id)
 bool pdfAttached(int paperID)
 {
 	if(paperID < 0)
-        return false;
+		return false;
 	QFileInfoList infos = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 	if(infos.isEmpty())
-        return false;
+		return false;
 
-    foreach(const QFileInfo& fileInfo, infos)
-        if(fileInfo.suffix().toLower() == "pdf")
-            return true;
+	foreach(const QFileInfo& fileInfo, infos)
+		if(fileInfo.suffix().toLower() == "pdf")
+			return true;
 
-    return false;
+	return false;
 }
 
 bool isPaperRead(int paperID) {
@@ -450,7 +450,7 @@ bool fullTextSearch(int paperID, const QString& target)
 		return false;
 
 	// for all fulltext files in the attachment dir
-    QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files);
+	QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files);
 	foreach(QFileInfo info, files)
 		if(info.suffix().toLower() == "fulltext")
 		{
@@ -464,21 +464,21 @@ bool fullTextSearch(int paperID, const QString& target)
 
 void makeFullTextFile(const QString& pdfPath, const QString& fulltextPath)
 {
-    QString convertorPath;
+	QString convertorPath;
 #ifdef Q_OS_WIN32
-    convertorPath = "./pdftotext.exe";
+	convertorPath = "./pdftotext.exe";
 #endif
 
 #ifdef Q_OS_MAC
 	convertorPath = "./pdftotext";
 #endif
 
-    if(!convertorPath.isEmpty() && QFile::exists(pdfPath))
+	if(!convertorPath.isEmpty() && QFile::exists(pdfPath))
 	{
 		QFile::remove(fulltextPath);
 		QProcess::execute(convertorPath, QStringList() << pdfPath << fulltextPath);
 		hideFile(fulltextPath);
-    }
+	}
 }
 
 void makeFullTextFiles()
@@ -501,7 +501,7 @@ void hideFile(const QString& filePath)
 {
 #ifdef Q_OS_WIN32
 	// This is a windows API, not from Qt
-    SetFileAttributesA(filePath.toLatin1(), FILE_ATTRIBUTE_HIDDEN);
+	SetFileAttributesA(filePath.toLatin1(), FILE_ATTRIBUTE_HIDDEN);
 #endif
 
 #ifdef Q_OS_MAC
@@ -554,7 +554,7 @@ QStringList getTagsOfPhrase(int phraseID)
 // may need to reset the model or call fetchAll first
 int idToRow(QAbstractItemModel* model, int idSection, int id)
 {
-    QModelIndexList indexes = model->match(
+	QModelIndexList indexes = model->match(
 		model->index(0, idSection), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchWrap);
 	return !indexes.isEmpty() ? indexes.at(0).row() : -1;
 }
@@ -587,36 +587,38 @@ void dropTempView()
 
 Phrase findPhrase(int id)
 {
-    Phrase result;
-    QSqlQuery query;
-    query.exec(QObject::tr("select Phrase, Explanation from Dictionary where ID = %1").arg(id));
-    if(query.next())
-    {
-        result.id          = id;
-        result.name        = query.value(0).toString();
-        result.explanation = query.value(1).toString();
-    }
-    return result;
+	Phrase result;
+	QSqlQuery query;
+	query.exec(QObject::tr("select Phrase, Explanation from Dictionary where ID = %1").arg(id));
+	if(query.next())
+	{
+		result.id          = id;
+		result.name        = query.value(0).toString();
+		result.explanation = query.value(1).toString();
+	}
+	return result;
 }
 
 Phrase findPhrase(const QString& phraseName)
 {
-    Phrase result;
-    QSqlQuery query;
-    query.exec(QObject::tr("select ID, Explanation from Dictionary where Phrase = %1").arg(phraseName));
-    if(query.next())
-    {
-        result.name        = phraseName;
-        result.id          = query.value(0).toInt();
-        result.explanation = query.value(1).toString();
-    }
-    return result;
+	Phrase result;
+	QSqlQuery query;
+	query.exec(QObject::tr("select ID, Explanation from Dictionary where Phrase = %1").arg(phraseName));
+	if(query.next())
+	{
+		result.name        = phraseName;
+		result.id          = query.value(0).toInt();
+		result.explanation = query.value(1).toString();
+	}
+	return result;
 }
 
-QStringList splitLine(const QString& line, const QString& separator)
+QStringList splitLine(const QString& line, const QString& sep, 
+					  bool removeSpaceInSeparator)
 {
 	QStringList result;
-    QStringList sections = line.split(separator.trimmed());
+	QString separator = removeSpaceInSeparator ? sep.trimmed() : sep;
+	QStringList sections = line.split(separator);
 	foreach(const QString& section, sections)
 	{
 		QString simplified = section.simplified();
@@ -627,11 +629,11 @@ QStringList splitLine(const QString& line, const QString& separator)
 }
 
 QStringList splitNamesLine(const QString& namesLine,
-                           const QString& separator,
-                           const QString& format)
+						   const QString& separator,
+						   const QString& format)
 {
 	QStringList result;
-    QStringList authorList = splitLine(namesLine, separator);
+	QStringList authorList = splitLine(namesLine, separator, false);
 	foreach(const QString& author, authorList)
 		result << EnglishName(author).toString(format);
 	return result;
@@ -639,8 +641,8 @@ QStringList splitNamesLine(const QString& namesLine,
 
 void centerWindow(QWidget* widget)
 {
-    QRect screen = QApplication::desktop()->screenGeometry();
-    widget->move(screen.center() - widget->rect().center());
+	QRect screen = QApplication::desktop()->screenGeometry();
+	widget->move(screen.center() - widget->rect().center());
 }
 
 void fetchAll(QAbstractItemModel* model) {

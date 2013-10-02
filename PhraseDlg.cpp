@@ -5,19 +5,19 @@
 #include <QSqlTableModel>
 
 PhraseDlg::PhraseDlg(QWidget* parent)
-    : QDialog(parent), _newPhrase(true)
+	: QDialog(parent), _newPhrase(true)
 {
 	ui.setupUi(this);
 
-    // auto completion for tags
+	// auto completion for tags
 	QSqlTableModel* tagModel = new QSqlTableModel(this);
 	tagModel->setTable("DictionaryTags");
 	tagModel->select();
 
-    MultiSectionCompleter* completer = new MultiSectionCompleter(this);
-    completer->setModel(tagModel, TAG_NAME);
-    completer->setEdit(ui.leTags);
-    completer->setSeparator("; ");
+	MultiSectionCompleter* completer = new MultiSectionCompleter(this);
+	completer->setModel(tagModel, TAG_NAME);
+	completer->setEdit(ui.leTags);
+	completer->setSeparator("; ");
 }
 
 QString PhraseDlg::getPhrase() const {
@@ -29,7 +29,7 @@ QString PhraseDlg::getExplanation() const {
 void PhraseDlg::setPhrase(const QString& phrase)
 {
 	ui.tePhrase->setPlainText(phrase);
-    _newPhrase = phrase.isEmpty();
+	_newPhrase = phrase.isEmpty();
 }
 void PhraseDlg::setExplanation(const QString& explanation) {
 	ui.teExplanation->setPlainText(explanation);
@@ -43,8 +43,8 @@ void PhraseDlg::setTags(const QStringList &tags) {
 
 void PhraseDlg::accept()
 {
-    // TODO: merge to existing phrase
-    if(_newPhrase && phraseExists(getPhrase()))
+	// TODO: merge to existing phrase
+	if(_newPhrase && phraseExists(getPhrase()))
 		setWindowTitle(tr("Error: the phrase already exists!"));
 	else
 		QDialog::accept();

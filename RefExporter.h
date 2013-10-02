@@ -19,8 +19,8 @@ class NullExporter : public IRefExporter
 {
 public:
 	QString toString(const Reference&, const RefSpec&) const {
-        return QObject::tr("Error: Null Exporter!");
-    }
+		return QObject::tr("Error: Null Exporter!");
+	}
 };
 
 class LineRefExporter : public IRefExporter
@@ -34,17 +34,17 @@ public:
 class ExporterFactory
 {
 public:
-    static ExporterFactory* getInstance();
-    IRefExporter* getExporter(const QString& ext) const;
+	static ExporterFactory* getInstance();
+	IRefExporter* getExporter(const QString& ext) const;
 
 private:
-    ExporterFactory();
-    ExporterFactory(const ExporterFactory&) {}
-    ExporterFactory& operator=(const ExporterFactory&) { return *this; }
-    ~ExporterFactory() {}
+	ExporterFactory();
+	ExporterFactory(const ExporterFactory&) {}
+	ExporterFactory& operator=(const ExporterFactory&) { return *this; }
+	~ExporterFactory() {}
 
 private:
-    static ExporterFactory* instance;
+	static ExporterFactory* instance;
 	QMap<QString, IRefExporter*> exporters;   // extension -> parser
 };
 

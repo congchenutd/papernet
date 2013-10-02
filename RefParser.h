@@ -11,29 +11,29 @@ class IRefParser
 {
 public:
 	virtual ~IRefParser() {}
-    virtual QList<Reference> parse(const QString& content, RefSpec* spec) = 0;
+	virtual QList<Reference> parse(const QString& content, RefSpec* spec) = 0;
 };
 
 class NullParser : public IRefParser
 {
 public:
-    QList<Reference> parse(const QString&, RefSpec*) { return QList<Reference>(); }
+	QList<Reference> parse(const QString&, RefSpec*) { return QList<Reference>(); }
 };
 
 // LineRefParser deals with references where each line is a field
 class LineRefParser : public IRefParser
 {
 public:
-    QList<Reference> parse(const QString& content, RefSpec* spec);
+	QList<Reference> parse(const QString& content, RefSpec* spec);
 
 private:
-    Reference parseRecord    (const QString& record)  const;
-    QString   getTypeName    (const QString& record)  const;
-    QString   reformatAuthors(const QString& authors) const;
-    QString   reformatPages  (const QString& pages)   const;
+	Reference parseRecord    (const QString& record)  const;
+	QString   getTypeName    (const QString& record)  const;
+	QString   reformatAuthors(const QString& authors) const;
+	QString   reformatPages  (const QString& pages)   const;
 
 protected:
-    RefSpec* formatSpec;
+	RefSpec* formatSpec;
 };
 
 
@@ -41,18 +41,18 @@ protected:
 class ParserFactory
 {
 public:
-    static ParserFactory* getInstance();
-    IRefParser* getParser(const QString& formatName) const;
+	static ParserFactory* getInstance();
+	IRefParser* getParser(const QString& formatName) const;
 
 private:
-    ParserFactory();
-    ParserFactory(const ParserFactory&) {}
-    ParserFactory& operator=(const ParserFactory&) { return *this; }
-    ~ParserFactory() {}
+	ParserFactory();
+	ParserFactory(const ParserFactory&) {}
+	ParserFactory& operator=(const ParserFactory&) { return *this; }
+	~ParserFactory() {}
 
 private:
-    static ParserFactory* instance;
-    QMap<QString, IRefParser*> parsers;   // format -> parser
+	static ParserFactory* instance;
+	QMap<QString, IRefParser*> parsers;   // format -> parser
 };
 
 

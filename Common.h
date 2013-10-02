@@ -8,8 +8,8 @@ class QSqlTableModel;
 
 // emun
 enum {PAPER_ID, PAPER_TITLE, PAPER_AUTHORS, PAPER_YEAR, PAPER_MODIFIED, PAPER_TYPE,
-      PAPER_PUBLICATION, PAPER_ABSTRACT, PAPER_VOLUME, PAPER_ISSUE, PAPER_STARTPAGE,
-      PAPER_ENDPAGE, PAPER_PUBLISHER, PAPER_EDITORS, PAPER_ADDRESS, PAPER_URL, PAPER_NOTE};
+	  PAPER_PUBLICATION, PAPER_ABSTRACT, PAPER_VOLUME, PAPER_ISSUE, PAPER_STARTPAGE,
+	  PAPER_ENDPAGE, PAPER_PUBLISHER, PAPER_EDITORS, PAPER_ADDRESS, PAPER_URL, PAPER_NOTE};
 enum {TAG_ID, TAG_NAME, TAG_SIZE};
 enum {QUOTE_ID, QUOTE_TITLE, QUOTE_QUOTE};
 enum {DICT_ID, DICT_PHRASE, DICT_EXPLANATION};
@@ -25,12 +25,13 @@ class QWidget;
 void centerWindow(QWidget* widget);
 
 // separated list -> QStringList, unnecessary spaces removed
-QStringList splitLine(const QString& line, const QString& separator);
+QStringList splitLine(const QString& line, const QString& separator, 
+					  bool removeSpaceInSeparator = true);
 
 // same as above, but names formatted
 QStringList splitNamesLine(const QString& namesLine,
-                           const QString& separator = ";",
-                           const QString& format = "L,;m;F");
+						   const QString& separator = " and ",
+						   const QString& format = "L,;m;F");
 
 // papers
 void delPaper(int paperID);
@@ -87,11 +88,11 @@ bool phraseExists(const QString& phrase);
 
 struct Phrase
 {
-    Phrase(int i = -1, const QString& n = QString(), const QString& e = QString())
-        : id(i), name(n), explanation(e) {}
-    int id;
-    QString name;
-    QString explanation;
+	Phrase(int i = -1, const QString& n = QString(), const QString& e = QString())
+		: id(i), name(n), explanation(e) {}
+	int id;
+	QString name;
+	QString explanation;
 };
 
 Phrase findPhrase(int id);

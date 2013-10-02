@@ -84,12 +84,12 @@ PagePapers::PagePapers(QWidget *parent)
 //    fetchAll(&_model);
 //    for(int row = 0; row < _model.rowCount(); ++row)
 //    {
-//        QString authors = _model.data(_model.index(row, PAPER_AUTHORS)).toString();
-//        if(!authors.contains(" and "))
-//        {
-//            QStringList authorList = splitNamesLine(authors, ";");
-//            _model.setData(_model.index(row, PAPER_AUTHORS), authorList.join(" and "));
-//        }
+// 	   QString authors = _model.data(_model.index(row, PAPER_AUTHORS)).toString();
+// 	   if(!authors.contains(" and "))
+// 	   {
+// 		   QStringList authorList = splitNamesLine(authors, ";");
+// 		   _model.setData(_model.index(row, PAPER_AUTHORS), authorList.join(" and "));
+// 	   }
 //    }
 //    submit();
 }
@@ -139,8 +139,8 @@ void PagePapers::onEditPaper()
 		if(newRef.getValue("note") != oldRef.getValue("note"))
 			setPaperRead();                // changing note infers being read
 
-        reset();            // show the newly inserted
-        jumpToCurrent();
+		reset();            // show the newly inserted
+		jumpToCurrent();
 	}
 }
 
@@ -158,15 +158,15 @@ void PagePapers::insertReference(const Reference& ref)
 		int lastRow = _model.rowCount();
 		_model.insertRow(lastRow);
 
-        // create a new ID and a new row
+		// create a new ID and a new row
 		_currentID = getNextID("Papers", "ID");
 		_model.setData(_model.index(lastRow, PAPER_ID), _currentID);
-        submit();    // submit s.t. later code can find the row and ID
+		submit();    // submit s.t. later code can find the row and ID
 
 		updateRefByRow(lastRow, ref);
 		onBookmark(true);    // attach the ReadMe tag
 	}
-    reset();             // show the newly inserted
+	reset();             // show the newly inserted
 	jumpToCurrent();
 }
 
@@ -179,7 +179,7 @@ void PagePapers::updateRefByRow(int row, const Reference& r)
 		return;
 
 	Reference ref = r;
-    ref.touch();   // add modified date
+	ref.touch();   // add modified date
 
 	// pull data from ref based on the fields in table,
 	// because ref may contain extra fields not in table, such as "pdf" and "tags"
@@ -187,14 +187,14 @@ void PagePapers::updateRefByRow(int row, const Reference& r)
 	for(int col = 0; col < record.count(); ++col)
 	{
 		QString colName = record.fieldName(col).toLower();
-        if(colName != "id")    // id is not changable
+		if(colName != "id")    // id is not changable
 			_model.setData(_model.index(row, col), ref.getValue(colName));
 	}
 
 	// tags are stored in a relations table separately
 	recreateTagsRelations(splitLine(ref.getValue("tags").toString(), ";"));
 
-    // add pdf
+	// add pdf
 	QString pdfPath = ref.getValue("PDF").toString();
 	if(!pdfPath.isEmpty())
 		addAttachment(_currentID, suggestAttachmentName(pdfPath), pdfPath);
@@ -210,15 +210,15 @@ void PagePapers::updateRefByID(int id, const Reference& r)
 
 	int row = idToRow(&_model, PAPER_ID, id);
 
-    // row is visible
-    if(row > -1)
+	// row is visible
+	if(row > -1)
 	{
-        updateRefByRow(row, r);
+		updateRefByRow(row, r);
 		return;
 	}
 
-    Reference ref = r;
-    ref.touch();   // add modified date
+	Reference ref = r;
+	ref.touch();   // add modified date
 
 	// the row being updated is not visible
 	QStringList clause;
@@ -226,19 +226,19 @@ void PagePapers::updateRefByID(int id, const Reference& r)
 	for(int col = 0; col < record.count(); ++col)
 	{
 		QString colName = record.fieldName(col).toLower();
-        if(colName != "id")   // don't change ID
+		if(colName != "id")   // don't change ID
 			clause << colName + "=\'" + ref.getValue(colName).toString() + "\'";
 	}
 	query.exec(tr("update Papers set %1 where ID = %2").arg(clause.join(","))
-                                                       .arg(id));
+													   .arg(id));
 
 	// tags are stored in a relations table separately
 	recreateTagsRelations(splitLine(ref.getValue("tags").toString(), ";"));
 
-    // add pdf
-    QString pdfPath = ref.getValue("PDF").toString();
-    if(!pdfPath.isEmpty())
-        addAttachment(_currentID, suggestAttachmentName(pdfPath), pdfPath);
+	// add pdf
+	QString pdfPath = ref.getValue("PDF").toString();
+	if(!pdfPath.isEmpty())
+		addAttachment(_currentID, suggestAttachmentName(pdfPath), pdfPath);
 }
 
 void PagePapers::recreateTagsRelations(const QStringList& tags)

@@ -80,6 +80,18 @@ PagePapers::PagePapers(QWidget *parent)
 
 	connect(ui.widgetRelated,    SIGNAL(doubleClicked(int)), this, SLOT(onRelatedDoubleClicked(int)));
 	connect(ui.widgetCoauthered, SIGNAL(doubleClicked(int)), this, SLOT(onRelatedDoubleClicked(int)));
+
+//    fetchAll(&_model);
+//    for(int row = 0; row < _model.rowCount(); ++row)
+//    {
+//        QString authors = _model.data(_model.index(row, PAPER_AUTHORS)).toString();
+//        if(!authors.contains(" and "))
+//        {
+//            QStringList authorList = splitNamesLine(authors, ";");
+//            _model.setData(_model.index(row, PAPER_AUTHORS), authorList.join(" and "));
+//        }
+//    }
+//    submit();
 }
 
 void PagePapers::onSelectionChanged(const QItemSelection& selected)

@@ -76,12 +76,11 @@ Reference LineRefParser::parseRecord(const QString& record) const
 
             // special fields
             if(fieldName == "authors")
-                result.setValue(fieldName, parseAuthors(fieldValue));
-			else if(fieldName == "pages")
-                result.setValue(fieldName, parsePages(fieldValue));
+                fieldValue = reformatAuthors(fieldValue);
+            else if(fieldName == "pages")
+                fieldValue = reformatPages(fieldValue);
 
-            else
-                result.setValue(fieldName, fieldValue);
+            result.setValue(fieldName, fieldValue);
         }
 		idxField = rxField.indexIn(record, idxField + rxField.matchedLength());  // next
 	}
@@ -93,15 +92,13 @@ Reference LineRefParser::parseRecord(const QString& record) const
     return result;
 }
 
-QString LineRefParser::parseAuthors(const QString& authors) const
+QString LineRefParser::reformatAuthors(const QString& authors) const
 {
     QString separator = formatSpec->getSeparator("authors");
-	return separator.isEmpty() 
-        ? authors                                         // one line is one author
-        : splitNamesLine(authors, separator).join("; ");  // all authors in one line
+    return splitNamesLine(authors, separator).join(separator);
 }
 
-QString LineRefParser::parsePages(const QString& pages) const
+QString LineRefParser::reformatPages(const QString& pages) const
 {
     QString startPage("0"), endPage("0");
     QRegExp rx("(\\d+)");

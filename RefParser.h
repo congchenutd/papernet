@@ -27,10 +27,10 @@ public:
     QList<Reference> parse(const QString& content, RefSpec* spec);
 
 private:
-    Reference parseRecord (const QString& record)  const;
-    QString   getTypeName (const QString& record)  const;
-    QString   parseAuthors(const QString& authors) const;
-    QString   parsePages  (const QString& pages)   const;
+    Reference parseRecord    (const QString& record)  const;
+    QString   getTypeName    (const QString& record)  const;
+    QString   reformatAuthors(const QString& authors) const;
+    QString   reformatPages  (const QString& pages)   const;
 
 protected:
     RefSpec* formatSpec;

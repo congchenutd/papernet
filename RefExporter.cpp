@@ -1,6 +1,7 @@
 #include "RefExporter.h"
 #include "Reference.h"
 #include "RefFormatSpec.h"
+#include "Common.h"
 #include <QStringList>
 #include <QTextStream>
 
@@ -19,7 +20,7 @@ QString LineRefExporter::toString(const Reference& ref, const RefSpec& spec) con
     QString result;
     QTextStream os(&result);
 
-    // get record type and dictionary
+    // get record type and spec
     QString typeName = ref.getValue("type").toString();
     TypeSpec type = spec.getType(typeName);
     if(!type.isValid())
@@ -28,7 +29,7 @@ QString LineRefExporter::toString(const Reference& ref, const RefSpec& spec) con
 	// start (type) line
     QStringList lines;
     lineStart.replace("TypeText", spec.getExternalTypeName(typeName));
-    lineStart.replace("ID", ref.getValue("id").toString());
+    lineStart.replace("ID",       ref.getValue("id").toString());
     lines << lineStart;
 
 	// field lines
@@ -38,20 +39,13 @@ QString LineRefExporter::toString(const Reference& ref, const RefSpec& spec) con
     {
         QString name = it.key();
         QString text = type.getExternalFieldName(name);
-        if(name == "authors")                          // authors is a combo line
+        QString value = it.value().toString();
+        if(!text.isEmpty() && !value.isEmpty())
         {
-            QStringList authors = it.value().toStringList();
-			QString separator = spec.getSeparator("authors");
-			if(separator.isEmpty()) {   // no separator means one author one line
-                foreach(const QString& author, authors)
-					createLine(lines, templateField, text, author);
-            }
-            else {                                      // all authors in one line
-				createLine(lines, templateField, text, authors.join(separator));
-            }
-        }
-        else {
-			createLine(lines, templateField, text, it.value().toString());
+            QString line = templateField;
+            line.replace("FieldName",  text);
+            line.replace("FieldValue", value);
+            lines << line;
         }
     }
     os << lines.join(lineSeparator + "\r\n");
@@ -61,17 +55,6 @@ QString LineRefExporter::toString(const Reference& ref, const RefSpec& spec) con
     return result;
 }
 
-void LineRefExporter::createLine(QStringList& lines, const QString& lineTemplate,
-								 const QString& text, const QString& value) const
-{
-    if(text.isEmpty() || value.isEmpty())
-        return;
-
-    QString line = lineTemplate;
-    line.replace("FieldName",  text);
-    line.replace("FieldValue", value);
-    lines << line;
-}
 
 ////////////////////////////////////////////////////////////////
 ExporterFactory* ExporterFactory::instance = 0;

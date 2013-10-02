@@ -27,10 +27,6 @@ class LineRefExporter : public IRefExporter
 {
 public:
 	QString toString(const Reference& ref, const RefSpec& spec) const;
-
-private:
-    void createLine(QStringList& lines, const QString& lineTemplate,
-					const QString& text, const QString& value) const;
 };
 
 

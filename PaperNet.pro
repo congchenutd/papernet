@@ -1,5 +1,5 @@
 cache()
-QT += core sql network widgets webkitwidgets
+QT += core sql network widgets
 
 TEMPLATE = app
 TARGET = PaperNet

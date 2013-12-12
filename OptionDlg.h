@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "ui_OptionDlg.h"
-#include "../MySetting/MySetting.h"
+#include "MySetting.h"
 
 class UserSetting;
 

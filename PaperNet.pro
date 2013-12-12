@@ -1,11 +1,11 @@
+cache()
 QT += core sql network widgets webkitwidgets
 
 TEMPLATE = app
 TARGET = PaperNet
 INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
-				../MySetting \
-                ../MyComboBox \
+				../MySettings \
 				../Thesaurus \
 				../EmbeddableLineEdit
 
@@ -34,7 +34,7 @@ HEADERS += \
            PaperModel.h \
            PaperTableView.h \
            TagsWidget.h \
-           ../MySetting/MySetting.h \
+		   ../MySettings/MySetting.h \
            ../WordCloud/WordCloudWidget.h \
 		   ../WordCloud/FlowLayout.h \
 		   ../EnglishName/EnglishName.h \
@@ -47,7 +47,6 @@ HEADERS += \
 	RefFormatSpec.h \
 	RefExporter.h \
 	Reference.h \
-    ../MyComboBox/SetTextComboBox.h \
     ../BibFixer/Convertor.h \
     FieldEdit.h \
     PhraseDlg.h \
@@ -110,7 +109,6 @@ SOURCES += \
 	RefFormatSpec.cpp \
 	RefExporter.cpp \
 	Reference.cpp \
-    ../MyComboBox/SetTextComboBox.cpp \
     ../BibFixer/Convertor.cpp \
     FieldEdit.cpp \
     PhraseDlg.cpp \

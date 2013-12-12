@@ -130,9 +130,9 @@ void MainWindow::delOldBackup()
 
 void MainWindow::backup(const QString& name)
 {
-	QDir::current().mkdir("Backup");
+    extern QString backupDir;
     QString backupFileName = name.isEmpty()
-            ? "./Backup/" + QDate::currentDate().toString(Qt::ISODate) + ".db"
+            ? backupDir + "/" + QDate::currentDate().toString(Qt::ISODate) + ".db"
             : name;
 
     if(QFile::exists(backupFileName))   // only keep on backup for each day

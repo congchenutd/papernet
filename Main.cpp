@@ -7,26 +7,46 @@
 extern QString dbName;
 extern QString attachmentDir;
 extern QString emptyDir;
+extern QString backupDir;
+
+// workaround for a bug on Mavericks
+// Finder returns / as the working path of an app bundle
+// but if the app is run from terminal, the path is correct
+// This method calcluates the path of the bundle from the application's path
+QString getCurrentPath()
+{
+    QDir dir(QApplication::applicationDirPath());
+    dir.cdUp();
+    dir.cdUp();
+    dir.cdUp();
+    return dir.absolutePath();
+}
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+#ifdef Q_OS_OSX
+    QDir::setCurrent(getCurrentPath());
+#endif
 
     // the database cannot be accessed by multiple instances
     SingleInstance singleInstance("PaperNet");
     if(!singleInstance.run())
     {
         QMessageBox::critical(0, QObject::tr("Error"),
-            QObject::tr("Another instance is already running on this or a synchronized computer."
+            QObject::tr("Another instance is already running on this or a synchronized computer. "
                         "Close the existing instance before launching a new instance."));
         return 1;
     }
 
     dbName        = "PaperNet.db";
-    attachmentDir = "./Attachments/";
-    emptyDir      = attachmentDir + "Empty";
+    attachmentDir = "Attachments";
+    emptyDir      = attachmentDir + "/Empty";
+    backupDir     = "Backup";
     QDir::current().mkdir(attachmentDir);
     QDir::current().mkdir(emptyDir);
+    QDir::current().mkdir(backupDir);
 
     if(!openDB(dbName))
         return 1;

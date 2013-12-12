@@ -24,6 +24,7 @@
 QString dbName;
 QString attachmentDir;
 QString emptyDir;
+QString backupDir;
 
 bool openDB(const QString& name)
 {
@@ -43,7 +44,6 @@ void createTables()
 	query.exec("PRAGMA foreign_keys = ON");
 	query.exec("create table Papers( \
 			   ID          int primary key, \
-			   Attached    bool,    \
 			   Title       varchar unique, \
 			   Authors     varchar, \
 			   Year        date,    \
@@ -240,7 +240,8 @@ QString makeValidTitle(const QString& title)
 }
 
 QString getAttachmentDir(int paperID) {
-	return paperID > -1 ? attachmentDir + getValidTitle(paperID) : QString();
+    return paperID > -1 ? attachmentDir + "/" + getValidTitle(paperID)
+                        : QString();
 }
 
 QString getValidTitle(int paperID) {
@@ -333,8 +334,10 @@ void renameTitle(const QString& oldName, const QString& newName)
 {
 	if(oldName == newName || oldName.isEmpty() || newName.isEmpty())
 		return;
-	QDir::current().rename(attachmentDir + makeValidTitle(oldName),
-						   attachmentDir + makeValidTitle(newName));  // rename attachment dir
+
+    // rename attachment dir
+    QDir::current().rename(attachmentDir + "/" + makeValidTitle(oldName),
+                           attachmentDir + "/" + makeValidTitle(newName));
 }
 
 int getMaxProximity(const QString& tableName)

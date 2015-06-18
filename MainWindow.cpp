@@ -96,7 +96,7 @@ void MainWindow::onAbout()
 	QMessageBox::about(this, "About",
 		tr("<h3><b>PaperNet: A Better Paper Manager</b></h3>"
            "<p>Built on %1</p>"
-           "<p><a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a></p>")
+           "<p>Cong Chen &lt;<a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a>&gt;</p>")
                        .arg(UserSetting::getInstance()->getCompileDate()));
 }
 

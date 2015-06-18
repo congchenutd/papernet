@@ -263,8 +263,8 @@ bool addLink(int paperID, const QString& link, const QString& u)
 	if(file.open(QFile::WriteOnly | QFile::Truncate))
 	{
 		QString url(u);
-		if(!url.startsWith("http://", Qt::CaseInsensitive))
-			url.prepend("http://");
+//		if(!url.startsWith("http://", Qt::CaseInsensitive))
+//			url.prepend("http://");
 		QTextStream out(&file);
 		out << "[DEFAULT]" << "\r\n"
 			<< "BASEURL="  << url << "\r\n"

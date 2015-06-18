@@ -7,7 +7,8 @@ INCLUDEPATH +=	../EnglishName \
 				../WordCloud \
 				../MySettings \
 				../Thesaurus \
-				../EmbeddableLineEdit
+				../EmbeddableLineEdit \
+				../BibFixer
 
 win32 {
 	RC_FILE = PaperNet.rc

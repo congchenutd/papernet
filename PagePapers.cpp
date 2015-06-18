@@ -11,6 +11,7 @@
 #include "PaperList.h"
 #include "OptionDlg.h"
 #include "WebImporter.h"
+#include "Reference.h"
 #include "PaperWidgetMapper.h"
 #include <QDataWidgetMapper>
 #include <QMessageBox>
@@ -136,10 +137,13 @@ void PagePapers::onEditPaper()
 		if(oldTitle != newTitle)
 			::renameTitle(oldTitle, newTitle);
 
-		if(newRef.getValue("note") != oldRef.getValue("note"))
-			setPaperRead();                // changing note infers being read
+        // make it read if note was changed and pdf attached
+        int id = titleToID(newRef.getValue("title").toString());
+        if(newRef.getValue("note") != oldRef.getValue("note") && pdfAttached(id))
+            setPaperRead();
 
-		reset();            // show the newly inserted
+        // show the newly inserted
+        reset();
 		jumpToCurrent();
 	}
 }

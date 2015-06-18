@@ -5,8 +5,8 @@
 #include "ui_PagePapers.h"
 #include "PaperModel.h"
 #include "Page.h"
-#include "Reference.h"
 
+class Reference;
 class UserSetting;
 class PaperWidgetMapper;
 

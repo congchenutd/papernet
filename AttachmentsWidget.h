@@ -27,7 +27,8 @@ private slots:
 	void onAddLink();
 	void onRename();
 	void onDel();
-	void onOpen(const QModelIndex& idx);
+    void onExport();
+    void onOpen(const QModelIndex& idx);
 
 private:
 	Ui::AttachmentsWidgetClass ui;

@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QFile>
 
 extern QString attachmentDir;
 extern QString emptyDir;         // a subdir under attachmentDir
@@ -27,6 +28,7 @@ AttachmentsWidget::AttachmentsWidget(QWidget *parent)
 	connect(ui.actionAddLink, SIGNAL(triggered()), this, SLOT(onAddLink()));
 	connect(ui.actionRename,  SIGNAL(triggered()), this, SLOT(onRename()));
 	connect(ui.actionDel,     SIGNAL(triggered()), this, SLOT(onDel()));
+    connect(ui.actionExport,  SIGNAL(triggered()), this, SLOT(onExport()));
 	connect(ui.listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onOpen(QModelIndex)));
 }
 
@@ -37,12 +39,14 @@ void AttachmentsWidget::contextMenuEvent(QContextMenuEvent* event)
 	ui.actionAddLink->setEnabled(_paperID > -1);
 	ui.actionRename ->setEnabled(_currentIndex.isValid());
 	ui.actionDel    ->setEnabled(_currentIndex.isValid());
+    ui.actionExport ->setEnabled(_currentIndex.isValid());
 
 	QMenu contextMenu(this);
 	contextMenu.addAction(ui.actionAddFile);
 	contextMenu.addAction(ui.actionAddLink);
 	contextMenu.addAction(ui.actionRename);
 	contextMenu.addAction(ui.actionDel);
+    contextMenu.addAction(ui.actionExport);
     contextMenu.exec(event->globalPos());
 }
 
@@ -114,7 +118,32 @@ void AttachmentsWidget::onDel()
 }
 
 void AttachmentsWidget::onOpen(const QModelIndex& idx) {
-	openAttachment(_paperID, _model.data(idx).toString());
+    openAttachment(_paperID, _model.data(idx).toString());
+}
+
+void AttachmentsWidget::onExport()
+{
+    // last path
+    UserSetting* setting = UserSetting::getInstance();
+    QString lastPath = setting->getLastAttachmentPath();
+
+    // generate file name
+    QFileInfo fileInfo = _model.fileInfo(_currentIndex);
+    QString srcFileName = fileInfo.fileName();
+    QString destFileName = fileInfo.fileName();
+    if(srcFileName.toLower() == "paper.pdf")   // Paper.pdf -> [title].pdf
+        destFileName = ::idToTitle(_paperID) + ".pdf";
+
+    QString destFilePath = QFileDialog::getSaveFileName(this, tr("Export File"),
+                               lastPath + "/" + destFileName,
+                               tr("All files (*.*)"));
+
+    // copy
+    if(!destFilePath.isEmpty())
+    {
+        QFile(fileInfo.absoluteFilePath()).copy(destFilePath);
+        setting->setLastAttachmentPath(QFileInfo(destFilePath).absolutePath());
+    }
 }
 
 void AttachmentsWidget::update()   // refresh

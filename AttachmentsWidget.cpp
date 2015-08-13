@@ -132,7 +132,7 @@ void AttachmentsWidget::onExport()
     QString srcFileName = fileInfo.fileName();
     QString destFileName = fileInfo.fileName();
     if(srcFileName.toLower() == "paper.pdf")   // Paper.pdf -> [title].pdf
-        destFileName = ::idToTitle(_paperID) + ".pdf";
+        destFileName = ::getValidTitle(_paperID) + ".pdf";
 
     QString destFilePath = QFileDialog::getSaveFileName(this, tr("Export File"),
                                lastPath + "/" + destFileName,

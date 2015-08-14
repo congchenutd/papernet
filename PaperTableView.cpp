@@ -2,6 +2,7 @@
 #include "Common.h"
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QHeaderView>
 
 PaperTableView::PaperTableView(QWidget *parent)
 	: AutoSizeTableView(parent)
@@ -18,7 +19,21 @@ PaperTableView::PaperTableView(QWidget *parent)
 	connect(actionPrintMe,  SIGNAL(triggered(bool)), this, SIGNAL(printMe(bool)));
 	connect(actionBookmark, SIGNAL(triggered(bool)), this, SIGNAL(bookmark(bool)));
 	connect(actionAddPDF,   SIGNAL(triggered()),     this, SIGNAL(addPDF()));
-	connect(actionReadPDF,  SIGNAL(triggered()),     this, SIGNAL(readPDF()));
+    connect(actionReadPDF,  SIGNAL(triggered()),     this, SIGNAL(readPDF()));
+
+    connect(horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)),
+            this, SLOT(onSectionClicked(int,Qt::SortOrder)));
+}
+
+void PaperTableView::sortByColumn(int column, Qt::SortOrder order)
+{
+    _sortedColumn = column;
+    _sortedOrder = order;
+    AutoSizeTableView::sortByColumn(column, order);
+}
+
+void PaperTableView::reSort() {
+    AutoSizeTableView::sortByColumn(_sortedColumn, _sortedOrder);
 }
 
 void PaperTableView::contextMenuEvent(QContextMenuEvent* event)
@@ -37,5 +52,11 @@ void PaperTableView::contextMenuEvent(QContextMenuEvent* event)
 	menu.addAction(actionAddQuote);
 	menu.addAction(actionAddPDF);
 	menu.addAction(actionReadPDF);
-	menu.exec(event->globalPos());
+    menu.exec(event->globalPos());
+}
+
+void PaperTableView::onSectionClicked(int logicalIndex, Qt::SortOrder order)
+{
+    _sortedColumn = logicalIndex;
+    _sortedOrder  = order;
 }

@@ -53,7 +53,6 @@ PagePapers::PagePapers(QWidget *parent)
 		ui.tvPapers->hideColumn(col);
 
 	ui.tvPapers->resizeColumnToContents(PAPER_TITLE);
-	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 
 	// tag table, relation table, foreign key in the relation table
 	ui.widgetTags->setTableNames("Tags", "PaperTag", "Paper");
@@ -81,18 +80,6 @@ PagePapers::PagePapers(QWidget *parent)
 
 	connect(ui.widgetRelated,    SIGNAL(doubleClicked(int)), this, SLOT(onRelatedDoubleClicked(int)));
 	connect(ui.widgetCoauthered, SIGNAL(doubleClicked(int)), this, SLOT(onRelatedDoubleClicked(int)));
-
-//    fetchAll(&_model);
-//    for(int row = 0; row < _model.rowCount(); ++row)
-//    {
-// 	   QString authors = _model.data(_model.index(row, PAPER_AUTHORS)).toString();
-// 	   if(!authors.contains(" and "))
-// 	   {
-// 		   QStringList authorList = splitNamesLine(authors, ";");
-// 		   _model.setData(_model.index(row, PAPER_AUTHORS), authorList.join(" and "));
-// 	   }
-//    }
-//    submit();
 }
 
 void PagePapers::onSelectionChanged(const QItemSelection& selected)
@@ -461,8 +448,8 @@ void PagePapers::resetModel()
 	_model.setEditStrategy(QSqlTableModel::OnFieldChange);
 	_model.setTable("Papers");
 	_model.select();
-	ui.tvPapers->sortByColumn(PAPER_TITLE, Qt::AscendingOrder);
 	fetchAll(&_model);
+    ui.tvPapers->reSort();
 }
 
 void PagePapers::jumpToID(int id)

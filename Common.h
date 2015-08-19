@@ -41,10 +41,11 @@ int getMaxCoauthor();
 
 int     titleToID(const QString& title);
 QString idToTitle(int paperID);
-
-QString makeValidTitle(const QString& title);
-QString getValidTitle(int paperID);
+QString makeFileSystemCompatibleTitle(const QString& title);
+QString getFileSystemCompatibleTitle(int paperID);
+QString correctCaseInTitle(const QString& title);
 void renameTitle(const QString& oldName, const QString& newName);
+
 QString convertSlashes(const QString& link);
 
 // attachments

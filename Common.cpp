@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "OptionDlg.h"
 #include "EnglishName.h"
+#include "Convertor.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -201,7 +202,7 @@ void delAttachment(int paperID, const QString& attachmentName)
 	QFile::remove(getAttachmentPath(paperID, attachmentName));         // attachment itself
 	if(attachmentName.toLower().endsWith(".pdf"))                      // for pdf
 		QFile::remove(getFullTextFilePath(paperID, attachmentName));   // remove full text file
-	QDir(attachmentDir).rmdir(getValidTitle(paperID));    // del attachment dir, invalid if not empty
+    QDir(attachmentDir).rmdir(getFileSystemCompatibleTitle(paperID));    // del attachment dir, invalid if not empty
 }
 
 // delete the attachment dir and its contents
@@ -213,7 +214,7 @@ void delAttachments(int paperID)
 	QFileInfoList files = QDir(getAttachmentDir(paperID)).entryInfoList(QDir::Files | QDir::Hidden);
 	foreach(QFileInfo info, files)                       // del all files in the attachment dir
 		QFile::remove(info.filePath());
-	QDir(attachmentDir).rmdir(getValidTitle(paperID));   // del attachment dir
+    QDir(attachmentDir).rmdir(getFileSystemCompatibleTitle(paperID));   // del attachment dir
 }
 
 QString idToTitle(int paperID)
@@ -226,8 +227,8 @@ QString idToTitle(int paperID)
 	return query.next() ? query.value(0).toString() : QString("Invalid PaperID");
 }
 
-// remove illegal chars
-QString makeValidTitle(const QString& title)
+// Convert a title to a file system compatible file name
+QString makeFileSystemCompatibleTitle(const QString& title)
 {
 	if(title.isEmpty())
 		return title;
@@ -239,13 +240,18 @@ QString makeValidTitle(const QString& title)
 	return result;
 }
 
-QString getAttachmentDir(int paperID) {
-    return paperID > -1 ? attachmentDir + "/" + getValidTitle(paperID)
-                        : QString();
+QString getFileSystemCompatibleTitle(int paperID) {
+    return makeFileSystemCompatibleTitle(idToTitle(paperID));
 }
 
-QString getValidTitle(int paperID) {
-	return makeValidTitle(idToTitle(paperID));
+QString correctCaseInTitle(const QString& title) {
+    return BibFixer::CaseConvertor().redo(
+                    BibFixer::ProtectionConvertor().undo(title));
+}
+
+QString getAttachmentDir(int paperID) {
+    return paperID > -1 ? attachmentDir + "/" + getFileSystemCompatibleTitle(paperID)
+                        : QString();
 }
 
 bool addLink(int paperID, const QString& link, const QString& u)
@@ -336,8 +342,8 @@ void renameTitle(const QString& oldName, const QString& newName)
 		return;
 
     // rename attachment dir
-    QDir::current().rename(attachmentDir + "/" + makeValidTitle(oldName),
-                           attachmentDir + "/" + makeValidTitle(newName));
+    QDir::current().rename(attachmentDir + "/" + makeFileSystemCompatibleTitle(oldName),
+                           attachmentDir + "/" + makeFileSystemCompatibleTitle(newName));
 }
 
 int getMaxProximity(const QString& tableName)

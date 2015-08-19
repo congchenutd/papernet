@@ -81,8 +81,7 @@ PaperDlg::PaperDlg(QWidget *parent)
 void PaperDlg::setTitle(const QString& title)
 {
 	// remove protection and fix case
-	QString fixedTitle = BibFixer::CaseConvertor().redo(
-				BibFixer::ProtectionConvertor().undo(title));
+    QString fixedTitle = ::correctCaseInTitle(title);
 	ui.leTitle->setText(fixedTitle);
 	ui.btGoogle->setEnabled(!fixedTitle.isEmpty());
 }

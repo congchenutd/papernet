@@ -38,7 +38,7 @@ void QuoteDlg::onAddRef()
     dlg.show();            //
 
     if(dlg.exec() == QDialog::Accepted && !dlg.getTitle().isEmpty())
-        addRef(dlg.getTitle());
+        addRef(::correctCaseInTitle(dlg.getTitle()));
 }
 
 void QuoteDlg::onDelRef()

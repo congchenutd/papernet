@@ -34,10 +34,15 @@ int main(int argc, char *argv[])
     SingleInstance singleInstance("PaperNet");
     if(!singleInstance.run())
     {
-        QMessageBox::critical(0, QObject::tr("Error"),
+        QMessageBox::StandardButton response =
+        QMessageBox::critical(0, QObject::tr("Multiple instances"),
             QObject::tr("Another instance is already running on this or a synchronized computer. "
-                        "Close the existing instance before launching a new instance."));
-        return 1;
+                        "Close the existing instance before launching a new instance. "
+                        "Continue launching this instance may cause synchronization errors. "
+                        "Continue anyway?"),
+            QMessageBox::Yes | QMessageBox::No);
+        if (response == QMessageBox::No)
+            return 1;
     }
 
     dbName        = "PaperNet.db";

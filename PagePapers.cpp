@@ -157,8 +157,12 @@ void PagePapers::insertReference(const Reference& ref)
 		updateRefByRow(lastRow, ref);
 		onBookmark(true);    // attach the ReadMe tag
 	}
-	reset();             // show the newly inserted
-	jumpToCurrent();
+
+    // show the newly inserted
+    _model.select();
+    fetchAll(&_model);
+    ui.tvPapers->reSort();
+    jumpToCurrent();
 }
 
 // works when the row exists and is visible
@@ -445,10 +449,10 @@ void PagePapers::submit()
 
 void PagePapers::resetModel()
 {
-	_model.setEditStrategy(QSqlTableModel::OnFieldChange);
-	_model.setTable("Papers");
+    _model.setEditStrategy(QSqlTableModel::OnFieldChange);
+    _model.setTable("Papers");
 	_model.select();
-	fetchAll(&_model);
+    fetchAll(&_model);
     ui.tvPapers->reSort();
 }
 
@@ -548,8 +552,8 @@ void PagePapers::saveGeometry()
 {
 	// closeEvent() does not work for child windows
 	ui.tvPapers->saveSectionSizes();
-	ui.widgetRelated->saveSectionSizes();
-	ui.widgetCoauthered->saveSectionSizes();
+//	ui.widgetRelated->saveSectionSizes();
+//	ui.widgetCoauthered->saveSectionSizes();
 
 	// splitters
 	_setting->setSplitterSizes("PapersHorizontal", ui.splitterHorizontal->saveState());
@@ -673,9 +677,15 @@ void PagePapers::onExport()
 			return;
 		}
 
-		QProcess* process = new QProcess;
-		process->setWorkingDirectory(QFileInfo(bibFixerPath).path());
-		process->start(bibFixerPath, QStringList() << toString(idxSelected, "bib"));
+        QProcess* process = new QProcess;
+        process->setProgram(bibFixerPath);
+        process->setArguments(QStringList() << toString(idxSelected, "bib"));
+        if(process->state() == QProcess::Running)
+            process->terminate();
+        else
+            process->start();
+//        process->start(bibFixerPath, QStringList() << toString(idxSelected, "bib"));
+//        process->start("/Applications/Calculator.app");
 	}
 	// save to file
 	else

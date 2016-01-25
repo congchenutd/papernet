@@ -10,13 +10,13 @@ void AutoSizeTableView::init(const QString& tableName, QSettings* setting)
 {
     _setting = setting;
     _tableName = tableName;
-    loadSectionSizes();
+//    loadSectionSizes();
 }
 
 void AutoSizeTableView::showEvent(QShowEvent*) {
     if(!_loaded)
 	{
-		loadSectionSizes();
+        loadSectionSizes();
 		_loaded = true;
 	}
 }

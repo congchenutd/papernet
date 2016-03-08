@@ -14,12 +14,12 @@ public:
     AutoSizeTableView(QWidget* parent);
     void init(const QString& tableName, QSettings* setting);  // call right after the ctr
     void saveSectionSizes();
+    void loadSectionSizes();
 
 protected:
     void showEvent(QShowEvent *);
 
 private:
-    void loadSectionSizes();
 
 private:
     QSettings* _setting;

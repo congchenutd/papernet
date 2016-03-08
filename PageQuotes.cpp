@@ -14,20 +14,22 @@ PageQuotes::PageQuotes(QWidget *parent)
 
 	reset();   // init model
 	ui.tableView->setModel(&_model);
-	ui.tableView->hideColumn(QUOTE_ID);
-	ui.tableView->resizeColumnToContents(QUOTE_TITLE);
 
 	connect(ui.tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
 			this, SLOT(onSelectionChanged(QItemSelection)));
 	connect(ui.tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEdit()));
-	connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
+    connect(ui.tableView, SIGNAL(clicked(QModelIndex)),       this, SLOT(onClicked(QModelIndex)));
+}
+
+void PageQuotes::saveGeometry() {
+    ui.tableView->saveSectionSizes();
 }
 
 void PageQuotes::search(const QString& target)
 {
 	if(!target.isEmpty())
 		_model.setFilter(tr("Title like \"%%1%\" or \
-							Quote like \"%%1%\" ").arg(target));
+                             Quote like \"%%1%\" ").arg(target));
 }
 
 void PageQuotes::onSelectionChanged(const QItemSelection& selected)
@@ -77,10 +79,12 @@ void PageQuotes::editRecord() {
 
 void PageQuotes::reset()
 {
-	_model.setTable("Quotes");
-	_model.select();
-	fetchAll(&_model);
-	ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
+    _model.setTable("Quotes");
+    _model.select();
+    fetchAll(&_model);
+    ui.tableView->hideColumn(QUOTE_ID);
+    ui.tableView->sortByColumn(QUOTE_TITLE, Qt::AscendingOrder);
+    ui.tableView->loadSectionSizes();
 }
 
 int PageQuotes::rowToID(int row) const {

@@ -454,6 +454,7 @@ void PagePapers::resetModel()
 	_model.select();
     fetchAll(&_model);
     ui.tvPapers->reSort();
+    ui.tvPapers->loadSectionSizes();
 }
 
 void PagePapers::jumpToID(int id)
@@ -552,14 +553,14 @@ void PagePapers::saveGeometry()
 {
 	// closeEvent() does not work for child windows
 	ui.tvPapers->saveSectionSizes();
-//	ui.widgetRelated->saveSectionSizes();
-//	ui.widgetCoauthered->saveSectionSizes();
 
 	// splitters
 	_setting->setSplitterSizes("PapersHorizontal", ui.splitterHorizontal->saveState());
 	_setting->setSplitterSizes("PapersVertical",   ui.splitterPapers    ->saveState());
-
 	_setting->setPapersTabIndex(ui.tabWidget->currentIndex());
+
+    ui.widgetCoauthered ->saveSectionSizes();
+    ui.widgetRelated    ->saveSectionSizes();
 }
 
 void PagePapers::onTagDoubleClicked(const QString& label)

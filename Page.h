@@ -17,6 +17,8 @@ public:
     virtual void reset() = 0;           // reset the model
     virtual void jumpToID(int id) = 0;  // pages are responsible for visibility
     virtual void jumpToCurrent()  = 0;  // pages are responsible for visibility
+
+    virtual void saveGeometry() = 0;
 };
 
 #endif // Page_h__

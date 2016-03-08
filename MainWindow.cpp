@@ -109,6 +109,7 @@ void MainWindow::closeEvent(QCloseEvent*)
 		backup();
 	}
     _pagePapers    ->saveGeometry();   // save the settings before the dtr
+    _pageQuotes    ->saveGeometry();
 	_pageDictionary->saveGeometry();
 	setting->destroySettingManager();
 }
@@ -144,6 +145,9 @@ void MainWindow::backup(const QString& name)
 
 void MainWindow::onPapers()
 {
+    if (_currentPage != 0)
+        _currentPage->saveGeometry();
+
 	ui.actionPapers->setChecked(true);
     ui.stackedWidget->setCurrentIndex(PAGE_PAPERS);
     ui.actionImportRef->setVisible(true);
@@ -157,6 +161,9 @@ void MainWindow::onPapers()
 
 void MainWindow::onQuotes()
 {
+    if (_currentPage != 0)
+        _currentPage->saveGeometry();
+
 	ui.actionQuotes->setChecked(true);
     ui.stackedWidget->setCurrentIndex(PAGE_QUOTES);
     ui.actionImportRef->setVisible(false);
@@ -171,6 +178,9 @@ void MainWindow::onQuotes()
 
 void MainWindow::onDictionary()
 {
+    if (_currentPage != 0)
+        _currentPage->saveGeometry();
+
 	ui.actionDictionary->setChecked(true);
     ui.stackedWidget->setCurrentIndex(PAGE_DICTIONARY);
     ui.actionImportRef->setVisible(false);

@@ -11,6 +11,7 @@ class PageQuotes : public Page
 
 public:
 	PageQuotes(QWidget *parent = 0);
+    void saveGeometry();
 	
     void addRecord();
     void delRecord();

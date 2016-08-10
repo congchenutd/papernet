@@ -179,7 +179,7 @@ void PaperDlg::onTypeChanged(const QString& typeName)
 void PaperDlg::onGoogle() {
 	if(!ui.leTitle->text().isEmpty())
 		QDesktopServices::openUrl(
-					QUrl("http://www.google.com/search?q=" + ui.leTitle->text()));
+                    QUrl("http://scholar.google.com/scholar?q=" + ui.leTitle->text()));
 }
 
 void PaperDlg::onAddPDF()

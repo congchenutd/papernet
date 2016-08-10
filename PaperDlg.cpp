@@ -177,9 +177,11 @@ void PaperDlg::onTypeChanged(const QString& typeName)
 }
 
 void PaperDlg::onGoogle() {
-	if(!ui.leTitle->text().isEmpty())
+    if(!ui.leTitle->text().isEmpty()) {
 		QDesktopServices::openUrl(
                     QUrl("http://scholar.google.com/scholar?q=" + ui.leTitle->text()));
+        reject();   // close the dlg without saving
+    }
 }
 
 void PaperDlg::onAddPDF()

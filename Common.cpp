@@ -158,7 +158,8 @@ bool addAttachment(int paperID, const QString& attachmentName, const QString& fi
 		return false;
 
 	QString dir = getAttachmentDir(paperID);
-	QDir::current().mkdir(dir);  // make attachment dir for this paper
+    if (!QDir::current().mkdir(dir))  // make attachment dir for this paper
+        return false;
 
 	QString targetFilePath = autoRename(dir + "/" + attachmentName);
 	if(attachmentName.toLower().endsWith(".pdf"))   // create full text for pdf
@@ -234,7 +235,7 @@ QString makeFileSystemCompatibleTitle(const QString& title)
 		return title;
 
 	QString result = title;
-	result.replace(QRegExp("[:|?|*]"), "-");
+    result.replace(QRegExp("[:|?|*|\\/|\\\\]"), "-");
 	result.remove('\"');
 	result.remove('\'');
 	return result;

@@ -5,6 +5,7 @@
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QSqlQuery>
+#include <QSqlError>
 
 TagsWidget::TagsWidget(QWidget* parent) : WordCloudWidget(parent)
 {
@@ -114,6 +115,7 @@ void TagsWidget::addTagToItem(int tagID, int itemID)
 	QSqlQuery query;
 	query.exec(tr("insert into %1 values(%2, %3)")
 			   .arg(relationTableName).arg(itemID).arg(tagID));
+    qDebug() << query.lastError().text();
     updateTagSize(tagID);                // recalculate tag size
     highLight(getTagsOfPaper(itemID));   // highlight the affected paper
 }

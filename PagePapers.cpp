@@ -419,10 +419,10 @@ void PagePapers::onNewTag()
 void PagePapers::onAddTagToPaper()
 {
 	QModelIndexList rows = ui.tvPapers->selectionModel()->selectedRows(PAPER_ID);
+    QList<WordLabel*> tags = ui.widgetTags->getSelected();
 	foreach(QModelIndex idx, rows)  // for all selected papers
 	{
 		int paperID = _model.data(idx).toInt();
-		QList<WordLabel*> tags = ui.widgetTags->getSelected();
 		foreach(WordLabel* tag, tags)   // add all selected tags to selected papers
 			ui.widgetTags->addTagToItem(getTagID("Tags", tag->text()), paperID);
 	}
@@ -432,10 +432,10 @@ void PagePapers::onAddTagToPaper()
 void PagePapers::onDelTagFromPaper()
 {
 	QModelIndexList rows = ui.tvPapers->selectionModel()->selectedRows(PAPER_ID);
+    QList<WordLabel*> tags = ui.widgetTags->getSelected();
 	foreach(QModelIndex idx, rows)
 	{
 		int paperID = _model.data(idx).toInt();
-		QList<WordLabel*> tags = ui.widgetTags->getSelected();
 		foreach(WordLabel* tag, tags)
 			ui.widgetTags->removeTagFromItem(getTagID("Tags", tag->text()), paperID);
 	}
